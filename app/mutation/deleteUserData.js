@@ -1,6 +1,6 @@
 export const DELETE_USER_DATA_MUTATION = `
-   mutation deleteUserData($id: String!) {
-    deleteUserData(id: String!) {
+   mutation deleteUserData($id: ID!) {
+    deleteUserData(id: $id) {
       id
     }
   }
