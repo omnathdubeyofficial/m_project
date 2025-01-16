@@ -20,3 +20,10 @@ model usersdata {
   email String @unique(map: "UsersData_email_key")
   age   Int
 }
+
+model admin_data {
+  z_id  String @id @db.VarChar(255)
+  name  String @db.VarChar(255)
+  email String @db.VarChar(255)
+  age   String @db.VarChar(255)
+}
