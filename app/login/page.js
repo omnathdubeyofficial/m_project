@@ -9,7 +9,6 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(""); // General error message
   const [usernameError, setUsernameError] = useState(""); // Username specific error
   const [passwordError, setPasswordError] = useState(""); // Password specific error
   const router = useRouter();
