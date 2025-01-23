@@ -1,7 +1,9 @@
+"use client";
+
 import React, { useState } from 'react';
 import { executeMutation } from '../graphqlClient';
 import { CREATE_USER_DATA_MUTATION } from '../mutation/createUserData';
-
+import withAuth from '../hoc/withAuth'; // Import HOC
 
 const UserData = () => {
   const [name, setName] = useState('');
@@ -11,30 +13,17 @@ const UserData = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log('Form submitted.');
-    console.log('Name:', name);
-    console.log('Email:', email);
-    console.log('Age:', age);
-
     try {
-      console.log('Preparing mutation with variables...');
       const variables = {
         name,
         email,
         age: parseInt(age, 10),
       };
-      console.log('Variables:', variables);
 
-      console.log('Executing mutation...');
       const response = await executeMutation(CREATE_USER_DATA_MUTATION, variables);
-
-      console.log('Mutation executed successfully.');
-      console.log('Response:', response);
 
       if (response?.createUserData) {
         console.log('Saved data:', response.createUserData);
-      } else {
-        console.log('No data returned from the mutation.');
       }
     } catch (error) {
       console.error('Error during mutation execution:', error);
@@ -69,4 +58,4 @@ const UserData = () => {
   );
 };
 
-export default UserData;
+export default withAuth(UserData); // Wrap with HOC
