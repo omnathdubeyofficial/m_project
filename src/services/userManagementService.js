@@ -25,6 +25,7 @@ async function verifyPassword(plainPassword, hashedPassword) {
 }
 
 const login = async ({ userid, password }) => {
+  let error_msg = ""
   try {
     const user = await prisma.user_management.findFirst({
       where: { userid },
@@ -38,7 +39,7 @@ const login = async ({ userid, password }) => {
         const success_msg = "Login successfully."
         return { ...user, success_msg };
       } else {
-        let error_msg = 'Invalid password'
+        error_msg = 'Invalid password'
         console.log(error_msg);
         return { error_msg }
       }
