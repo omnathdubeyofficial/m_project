@@ -27,6 +27,8 @@ mutation  updateUserManagementData( $z_id: String, $first_name: String, $middle_
       occupation
       address
       nationality
+      success_msg
+      error_msg
     }
   }
     `;

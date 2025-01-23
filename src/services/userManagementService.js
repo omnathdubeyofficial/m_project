@@ -7,8 +7,8 @@ import { setUserDate, setUserTime } from './dateTimeService.js';
 // Get all users
 const getUserManagementData = async () => {
   try {
-    const getData = await prisma.user_management.findMany()
-    return getData;
+    let getData = await prisma.user_management.findMany()
+    return getData
 
   } catch (err) {
     console.error("Error while fetching user management data:", err)
@@ -73,12 +73,14 @@ const createUserManagementData = async ({ first_name, middle_name, last_name, ge
     });
 
     const success_msg = "Data created successfully."
-    userData = { ...userData, success_msg }
     console.log(userData)
-    return userData
+    return { ...userData, success_msg }
 
   } catch (e) {
-    console.error("Error while creating data user management data:", e)
+    const error_msg = `Error while creating user management data: ${e.message || e}`;
+    console.error(error_msg);
+    return { error_msg };
+
   } finally {
     prisma.$disconnect()
   }
@@ -89,12 +91,18 @@ const updateUserManagementData = async ({ z_id, first_name, middle_name, last_na
 
   try {
 
-    return await prisma.user_management.update({
+    let updateData = await prisma.user_management.update({
       where: { z_id },
       data: { first_name, middle_name, last_name, gender, email, password, contact_no, role, status, subject_specialization, class_assigned, teacher_id, admin_id, joining_date, qualification, enrollment_no, date_of_birth, standard, section, parent_id, admission_date, children_id, occupation, address, nationality, udate: setUserDate(), utime: setUserTime() },
     });
+    const success_msg = "User management data updated successfully."
+    updateData = { ...updateData, success_msg }
+    return updateData;
+
   } catch (e) {
-    console.error("Error while updating user management data:", e)
+    const error_msg = `Error while updating user management data: ${e.message || e}`
+    console.error("Error while updating user management data:", error_msg)
+    return { error_msg }
   } finally {
     prisma.$disconnect()
   }
@@ -104,11 +112,16 @@ const updateUserManagementData = async ({ z_id, first_name, middle_name, last_na
 // Delete a user by ID
 const deleteUserManagementData = async ({ z_id }) => {
   try {
-    return await prisma.user_management.delete({
+    let deleteData = await prisma.user_management.delete({
       where: { z_id },
     });
+    const success_msg = "User management data deleted successfully."
+    deleteData = { ...deleteData, success_msg }
+    return deleteData;
   } catch (e) {
-    console.error("Error while deleting user management data:", e)
+    const error_msg = `Error while deleting user management data: ${e.message || e}`
+    console.error("Error while deleting user management data:", error_msg)
+    return { error_msg }
   } finally {
     prisma.$disconnect()
   }
