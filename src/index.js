@@ -8,6 +8,8 @@ import userResolver from './resolvers/userResolver.js';
 import userDataResolver from './resolvers/userDataResolver.js';
 import adminDataResolver from './resolvers/AdminDataResolver.js';
 import adminDataType from './types/AdminDataTypes.js';
+import userManagementType from './types/userManagementTypes.js';
+import userManagementResolver from './resolvers/userManagementResolver.js';
 
 const app = express();
 
@@ -19,8 +21,8 @@ app.use(cors({
 
 // Combine all type definitions and resolvers
 const schema = makeExecutableSchema({
-  typeDefs: [userType, userDataType, adminDataType], // Combine all type definitions
-  resolvers: [userResolver, userDataResolver, adminDataResolver], // Combine all resolvers
+  typeDefs: [userType, userDataType, adminDataType, userManagementType], // Combine all type definitions
+  resolvers: [userResolver, userDataResolver, adminDataResolver, userManagementResolver], // Combine all resolvers
 });
 
 // GraphQL endpoint
