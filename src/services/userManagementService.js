@@ -35,15 +35,22 @@ const login = async ({ userid, password }) => {
       const isMatch = await verifyPassword(password, user.password);
       if (isMatch) {
         console.log('Login successful');
-        return user;
+        const success_msg = "Login successfully."
+        return { ...user, success_msg };
       } else {
-        console.log('Invalid password');
+        let error_msg = 'Invalid password'
+        console.log(error_msg);
+        return { error_msg }
       }
     } else {
-      console.log('User not found');
+      error_msg = "User not found"
+      console.log(error_msg);
+      return { error_msg }
     }
   } catch (err) {
-    console.error("Facing error while login:", err)
+    error_msg = `Facing error while login: ${err.message || err}`
+    console.error(error_msg)
+    return { error_msg }
   } finally {
     prisma.$disconnect()
   }

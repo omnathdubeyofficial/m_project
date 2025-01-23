@@ -5,6 +5,8 @@ export const GET_LOGIN_DATA = gql`
     login ( userid : $userid, password : $password){
       userid 
       password
+      success_msg
+      error_msg
     }
   }
 `;
