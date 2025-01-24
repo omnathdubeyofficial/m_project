@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { executeQuery } from "../graphqlClient"; // Path to your Apollo Client setup
+import { GET_LOGIN_DATA } from "../query/loginQuery";
 import Image from "next/image";
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 
@@ -9,8 +11,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(true);
-  const [usernameError, setUsernameError] = useState(""); // Username specific error
-  const [passwordError, setPasswordError] = useState(""); // Password specific error
+  const [errorMsg, setErrorMsg] = useState(""); // To handle errors
   const router = useRouter();
 
   useEffect(() => {
@@ -22,36 +23,39 @@ const Login = () => {
     }
   }, [router]);
 
-  const handleLogin = () => {
-    const validUsername = "admin";
-    const validPassword = "password";
-    let isValid = true;
-
-    if (username === "") {
-      setUsernameError("Username is required");
-      isValid = false;
-    } else if (username !== validUsername) {
-      setUsernameError("Invalid username");
-      isValid = false;
-    } else {
-      setUsernameError("");
-    }
-
-    if (password === "") {
-      setPasswordError("Password is required");
-      isValid = false;
-    } else if (password !== validPassword) {
-      setPasswordError("Invalid password");
-      isValid = false;
-    } else {
-      setPasswordError("");
-    }
-
-    if (isValid) {
-      localStorage.setItem("authToken", "your-auth-token");
-      router.push("/dashboard");
+  const handleLogin = async () => {
+    setErrorMsg(""); // Clear previous errors before executing login
+  
+    // Hardcoded values for username and password
+    const variables = {
+      userid: username, // Hardcoded username
+      password: password, // Hardcoded password
+    };
+  
+    console.log('Username:', variables.userid);  // Check karein agar username sahi set ho raha ho
+    console.log('Password:', variables.password);  // Check karein agar password sahi set ho raha ho
+  
+    console.log("************", variables)
+  
+    try {
+      // Execute the GraphQL query for login
+      const result = await executeQuery(GET_LOGIN_DATA, variables);
+  
+      if (result?.login?.success_msg) {
+        localStorage.setItem("authToken", "your-auth-token");
+        setErrorMsg(""); // Clear error message
+        alert("Login Successful!"); // Display success message
+        router.push("/dashboard");
+      } else if (result?.login?.error_msg) {
+        // If there is an error message, display it
+        setErrorMsg(result?.login?.error_msg || "Login failed");
+      }
+    } catch (error) {
+      setErrorMsg("An error occurred during login");
     }
   };
+  
+  
 
   if (loading) {
     return (
@@ -93,16 +97,14 @@ const Login = () => {
                 Username
               </label>
               <input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="mt-2 w-full rounded-md border-2 border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 px-4 py-3"
-                placeholder="Enter your username"
-              />
-              {usernameError && (
-                <div className="text-red-500 text-sm mt-1">{usernameError}</div>
-              )}
+  id="username"
+  type="text"
+  value={username}
+  onChange={(e) => setUsername(e.target.value)} // This should update 'username' state correctly
+  className="mt-2 w-full rounded-md border-2 border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 px-4 py-3"
+  placeholder="Enter your username"
+/>
+
             </div>
 
             <div>
@@ -120,9 +122,6 @@ const Login = () => {
                 className="mt-2 w-full rounded-md border-2 border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 px-4 py-3"
                 placeholder="Enter your password"
               />
-              {passwordError && (
-                <div className="text-red-500 text-sm mt-1">{passwordError}</div>
-              )}
             </div>
 
             <button
@@ -132,6 +131,12 @@ const Login = () => {
             >
               Login
             </button>
+
+            {errorMsg && (
+              <div className="text-red-500 text-sm mt-2 text-center">
+                {errorMsg}
+              </div>
+            )}
 
             <div className="text-center mt-4">
               <a href="/forgot-password" className="text-indigo-600 hover:underline">
