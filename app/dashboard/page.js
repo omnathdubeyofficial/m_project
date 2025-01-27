@@ -82,7 +82,7 @@ const Dashboard = () => {
           </h1>
         </div>
   
-       {/* Profile Section */}
+    {/* Profile Section */}
 {user && (
   <div className="flex items-center space-x-4 pt-4 md:pt-8">
     <div className="text-center md:text-right">
@@ -105,6 +105,7 @@ const Dashboard = () => {
     />
   </div>
 )}
+
 
       </div>
   
