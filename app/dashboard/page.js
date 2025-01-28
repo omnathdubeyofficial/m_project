@@ -126,7 +126,7 @@ const Dashboard = () => {
       {/* Corners Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mt-6">
         <div
-          onClick={() => router.push('/university')}
+          onClick={() => router.push('/components/university')}
           className="p-4 sm:p-6 bg-gradient-to-r from-blue-100 to-blue-200 rounded-xl shadow-lg hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer"
         >
           <FaUniversity className="text-3xl sm:text-4xl text-blue-800" />
