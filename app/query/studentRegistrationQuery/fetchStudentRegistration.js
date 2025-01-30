@@ -1,4 +1,4 @@
-export const GET_LOGIN_DATA = `
+export const GET_STUDENT_REGISTRATION_DATA = `
 query {
     getStudentRegistration {
       z_id
