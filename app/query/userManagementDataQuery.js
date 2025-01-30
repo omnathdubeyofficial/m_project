@@ -1,12 +1,11 @@
-import { gql } from '@apollo/client';
-
-export const GET_USER_MANAGEMENT_DATA = gql`
-  query {
+export const GET_USER_MANAGEMENT_DATA = `
+query {
     getUserManagementData {
-      z_id
+           z_id
       first_name
       middle_name
       last_name
+      userid
       gender
       email
       password

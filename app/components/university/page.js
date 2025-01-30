@@ -1,81 +1,125 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { FaBuilding, FaChalkboardTeacher, FaBookOpen, FaUserFriends, FaClipboardList, FaCalendarAlt } from 'react-icons/fa';
-import Image from 'next/image'; 
+import { useState, useEffect } from "react";
+import { 
+  FaSearch, FaMoon, FaSun, FaCalendarAlt, FaUsers, FaRegCalendarAlt, 
+  FaTrophy, FaHeartbeat, FaClipboardList, FaGraduationCap, FaClipboard 
+} from "react-icons/fa";
+import Image from "next/image";
+import Link from "next/link"; // For navigation
+
 const UniversityPage = () => {
+  const [darkMode, setDarkMode] = useState(false);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Fetch user data or set static data
-    const userData = {
-      profileImg: '/img/om.webp', // Replace with actual image path
-      username: 'Omnath Dubey',
-      profession: 'Super Admin',
-      userId: '123456',
-    };
-    setUser(userData);
+    setUser({
+      username: "Omnath Dubey",
+      profession: "Super Admin",
+      profileImg: "/img/om.webp",
+    });
   }, []);
 
   const services = [
-    { name: "List of Holiday", description: "Details of all university holidays." },
-    { name: "Phone Directory", description: "Contact information of university staff." },
-    { name: "Academic Calendar", description: "Important academic dates and events." },
-    { name: "Registration for Membership of Court Sabha", description: "Process for registration for membership." },
-    { name: "Yuva Mahotsav", description: "Details about the youth festival." },
-    { name: "Affiliation", description: "University affiliation and related details." },
-    { name: "Sport Council", description: "Information regarding sports and activities." },
-    { name: "Vishwavidyalaya Masik e-Patrika", description: "Monthly university newsletter." },
-    { name: "University Health Center", description: "Services provided by the university health center." },
-    { name: "Sanitizing Support Service & Gardening", description: "Cleaning and gardening services on campus." },
-    { name: "Women Grievance & Welfare Cell", description: "Support for women's welfare and grievances." },
-    { name: "Begum Akhtar Bhartiya Sangeet Kala Akademi", description: "Music and arts academy details." },
-    { name: "Hostel Admin", description: "Hostel administration and management." },
-    { name: "Convocation", description: "Details about upcoming convocations." },
-    { name: "Placement Cell", description: "Placement opportunities for students." },
-    { name: "Central Library", description: "Information about the central library and services." },
-    { name: "Proceedings of Meetings", description: "Records of meetings and discussions." },
-    { name: "Affiliated Colleges", description: "Information about colleges affiliated with the university." },
-    { name: "Practical Marks Entry", description: "Process for entering practical exam marks." },
-    { name: "Absent / UFM Entry", description: "Procedure for entering absentee and UFM records." },
+    { name: "List of Holiday", icon: <FaCalendarAlt />, path: "/holiday-list" },
+    { name: "Phone Directory", icon: <FaUsers />, path: "/phone-directory" },
+    { name: "Academic Calendar", icon: <FaRegCalendarAlt />, path: "/academic-calendar" },
+    { name: "Admin Registration", icon: <FaClipboardList />, path: "/components/admin-registration" },
+    { name: "Yuva Mahotsav", icon: <FaTrophy />, path: "/yuva-mahotsav" },
+    { name: "Affiliation", icon: <FaClipboard />, path: "/affiliation" },
+    { name: "Sport Council", icon: <FaHeartbeat />, path: "/sport-council" },
+    { name: "Health Center", icon: <FaHeartbeat />, path: "/health-center" },
+    { name: "Convocation", icon: <FaGraduationCap />, path: "/convocation" },
+    { name: "Placement Cell", icon: <FaClipboardList />, path: "/placement-cell" },
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-50 to-gray-100">
-      <div className="w-full max-w-6xl p-8 bg-white shadow-2xl rounded-2xl">
-        
-        {/* Profile Section */}
-        {user && (
-          <div className="flex flex-col items-center mb-8 space-y-4">
-            <Image
-              src={user.profileImg}
-              alt="Profile"
-              width={96} // equivalent to 24rem (adjust based on your preference)
-              height={96} // equivalent to 24rem (adjust based on your preference)
-              className="w-24 h-24 rounded-full border-2 border-gray-300"
-            />
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-gray-800">{user.username}</h2>
-              <p className="text-gray-600">{user.profession}</p>
-              <p className="text-gray-500">User ID: {user.userId}</p>
+    <div className={`${darkMode ? "bg-gray-900 text-gray-200" : "bg-green-100 text-gray-800"} min-h-screen transition-colors duration-500`}>
+      {/* Header */}
+      <header className="sticky top-0 flex items-center justify-between px-6 py-4 shadow-md bg-opacity-90 backdrop-blur-md z-10 border-b border-gray-300">
+        {/* Logo */}
+        <div className="flex items-center space-x-4">
+          <Image
+            src="/img/image.png"
+            alt="University Logo"
+            width={50}
+            height={50}
+            className="object-contain"
+          />
+          <h1 className="text-xl  hidden sm:block">
+            Dr. Ram Manohar Lohia Avadh University
+          </h1>
+        </div>
+
+        {/* Right Section */}
+        <div className="flex items-center space-x-6">
+          {/* Profile Section */}
+          {user && (
+            <div className="flex items-center space-x-3">
+              <Image
+                src={user.profileImg}
+                alt="Profile"
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+              <div>
+                <p className="text-sm font-medium">{user.username}</p>
+                <p className="text-xs">{user.profession}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Dark Mode Toggle */}
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="p-2 rounded-full focus:outline-none hover:scale-105 transition-transform duration-300"
+          >
+            {darkMode ? (
+              <FaSun className="text-yellow-400 text-2xl" />
+            ) : (
+              <FaMoon className="text-gray-600 text-2xl" />
+            )}
+          </button>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="py-8 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex justify-between items-center mb-6">
+            {/* Search Bar */}
+            <div className="relative w-full max-w-sm">
+              <input
+                type="text"
+                placeholder="Search..."
+                className={`${
+                  darkMode ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"
+                } px-4 py-2 w-full rounded-full shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-400 transition`}
+              />
+              <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
             </div>
           </div>
-        )}
 
-        {/* University Services Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className="p-6 bg-gradient-to-r from-blue-100 to-blue-200 rounded-xl shadow-md hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer"
-            >
-              <FaBuilding className="text-3xl text-blue-800" />
-              <h3 className="text-xl font-bold text-blue-800 mt-4">{service.name}</h3>
-              <p className="text-gray-700 mt-2">{service.description}</p>
-            </div>
-          ))}
+          {/* Services Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {services.map((service, index) => (
+              <Link href={service.path} key={index}>
+                <div
+                  className={`p-6 rounded-xl shadow-lg transform hover:scale-105 transition-transform ${
+                    darkMode
+                      ? "bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-gray-100"
+                      : "bg-gradient-to-r from-green-100 via-green-200 to-green-300 text-green-900"
+                  } flex flex-col items-center cursor-pointer`}
+                >
+                  <div className="text-4xl mb-4">{service.icon}</div>
+                  <h3 className="text-lg ">{service.name}</h3>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
