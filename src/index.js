@@ -14,6 +14,8 @@ import studentRegistrationTypes from './types/studentRegistrationType.js';
 import studentRegistrationResolver from './resolvers/studentRegistrationResolver.js';
 import attendanceTypes from './types/attendanceType.js';
 import attendanceResolver from './resolvers/attendanceResolver.js';
+import admissionFormType from './types/admissionFormTypes.js';
+import admssionFormResolver from './resolvers/admissionFormResolver.js'
 const app = express();
 
 // Use CORS middleware
@@ -24,8 +26,8 @@ app.use(cors({
 
 // Combine all type definitions and resolvers
 const schema = makeExecutableSchema({
-  typeDefs: [userType, userDataType, adminDataType, userManagementType, studentRegistrationTypes, attendanceTypes], // Combine all type definitions
-  resolvers: [userResolver, userDataResolver, adminDataResolver, userManagementResolver, studentRegistrationResolver, attendanceResolver], // Combine all resolvers
+  typeDefs: [userType, userDataType, adminDataType, userManagementType, studentRegistrationTypes, attendanceTypes, admissionFormType], // Combine all type definitions
+  resolvers: [userResolver, userDataResolver, adminDataResolver, userManagementResolver, studentRegistrationResolver, attendanceResolver, admssionFormResolver], // Combine all resolvers
 });
 
 // GraphQL endpoint
