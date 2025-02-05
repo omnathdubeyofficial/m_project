@@ -21,7 +21,10 @@ const createStudentRegistration = async ({ first_name, middle_name, last_name, e
     const error_msg = `${e}`
     console.error(error_msg)
     return { error_msg }
+  } finally {
+    prisma.$disconnect()
   }
+
 };
 
 // Update an existing user by ID
@@ -38,6 +41,8 @@ const updateStudentRegistration = async ({ z_id, first_name, middle_name, last_n
     const error_msg = `${err}`
     console.error(error_msg)
     return { error_msg }
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -55,6 +60,8 @@ const deleteStudentRegistration = async ({ z_id }) => {
     const error_msg = `${err}`
     console.error(error_msg)
     return { error_msg }
+  } finally {
+    prisma.$disconnect()
   }
 };
 
