@@ -88,7 +88,6 @@ model student_registration {
   utime                 String? @db.VarChar(100)
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model attendance {
   z_id                 String  @id @db.VarChar(100)
   date                 String? @db.VarChar(100)

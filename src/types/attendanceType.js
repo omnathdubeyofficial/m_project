@@ -34,9 +34,9 @@ const attendanceType = gql`
     ): Attendance
 
     updateAttendanceData(
-      z_id: String!, student_name: String, date: String, roll_no: String,standard: String, division: String, subject: String, time_in: String, time_out: String, attendance_status: String, attendance_marked_by: String, udate: String, utime: String): Attendance
+      z_id: String, student_name: String, date: String, roll_no: String,standard: String, division: String, subject: String, time_in: String, time_out: String, attendance_status: String, attendance_marked_by: String, udate: String, utime: String): Attendance
 
-    deleteAttendanceData(z_id: String!): Attendance
+    deleteAttendanceData(z_id: String): Attendance
   }
 `;
 
