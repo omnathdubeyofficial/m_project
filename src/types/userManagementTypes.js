@@ -35,7 +35,8 @@ const userDataType = gql`
     udate : String
     utime : String
     success_msg : String,
-    error_msg : String
+    error_msg : String,
+    token : String
   }
 
   # Query type for fetching users

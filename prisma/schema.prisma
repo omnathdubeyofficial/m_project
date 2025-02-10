@@ -86,6 +86,7 @@ model student_registration {
   ctime                 String? @db.VarChar(100)
   udate                 String? @db.VarChar(100)
   utime                 String? @db.VarChar(100)
+  student_id            String? @db.VarChar(100)
 }
 
 model attendance {

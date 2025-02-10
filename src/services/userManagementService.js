@@ -3,6 +3,13 @@ const prisma = new PrismaClient();
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { setUserDate, setUserTime } from './dateTimeService.js';
+// const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
+
+
+
+const SECRET_KEY = process.env.JWT_SECRET;
+
 
 // Get all users
 const getUserManagementData = async () => {
@@ -25,37 +32,80 @@ async function verifyPassword(plainPassword, hashedPassword) {
 }
 
 const login = async ({ userid, password }) => {
-  let error_msg = ""
+  let error_msg = "";
   try {
     const user = await prisma.user_management.findFirst({
       where: { userid },
     });
 
     if (user) {
-      console.log("The user data is :", user)
+      console.log("The user data is :", user);
       const isMatch = await verifyPassword(password, user.password);
       if (isMatch) {
-        console.log('Login successful');
-        const success_msg = "Login successfully."
-        return { ...user, success_msg };
+        console.log("Login successful");
+
+        // Generate JWT token
+        const token = jwt.sign(
+          { userid: user.userid, role: user.role }, // Include role in the payload
+          SECRET_KEY,
+          { expiresIn: '6h' } // Set expiration time
+        );
+
+        const success_msg = "Login successfully.";
+        console.log("The token is:", token)
+        return { token, success_msg }; // Return token along with user info
       } else {
-        error_msg = 'Invalid password'
+        error_msg = "Invalid password";
         console.log(error_msg);
-        return { error_msg }
+        return { error_msg };
       }
     } else {
-      error_msg = "User not found"
+      error_msg = "Invalid Username";
       console.log(error_msg);
-      return { error_msg }
+      return { error_msg };
     }
   } catch (err) {
-    error_msg = `Facing error while login: ${err.message || err}`
-    console.error(error_msg)
-    return { error_msg }
+    error_msg = `Facing error while login: ${err.message || err}`;
+    console.error(error_msg);
+    return { error_msg };
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
-}
+};
+
+
+// const login = async ({ userid, password }) => {
+//   let error_msg = ""
+//   try {
+//     const user = await prisma.user_management.findFirst({
+//       where: { userid },
+//     });
+
+//     if (user) {
+//       console.log("The user data is :", user)
+//       const isMatch = await verifyPassword(password, user.password);
+//       if (isMatch) {
+//         console.log('Login successful');
+//         const success_msg = "Login successfully."
+//         return { ...user, success_msg };
+//       } else {
+//         error_msg = 'Invalid password'
+//         console.log(error_msg);
+//         return { error_msg }
+//       }
+//     } else {
+//       error_msg = "Invalid Username"
+//       console.log(error_msg);
+//       return { error_msg }
+//     }
+//   } catch (err) {
+//     error_msg = `Facing error while login: ${err.message || err}`
+//     console.error(error_msg)
+//     return { error_msg }
+//   } finally {
+//     prisma.$disconnect()
+//   }
+// }
 
 
 // Function to hash a password

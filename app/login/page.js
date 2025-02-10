@@ -7,6 +7,7 @@ import { GET_LOGIN_DATA } from "../query/loginQuery";
 import Image from "next/image";
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import { FaCheckCircle } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
 
 
 const Login = () => {
@@ -21,12 +22,34 @@ const Login = () => {
 
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
-    if (authToken) {
+    const tokenDetail = getTokenDetails()
+
+    if (authToken && tokenDetail.role.toLowerCase() == "admin") {
       router.push("/dashboard");
-    } else {
+    }
+    else if (authToken && tokenDetail.role.toLowerCase() == "student") {
+      router.push("/components/dash_board_chart");
+    }
+    else if (authToken && tokenDetail.role.toLowerCase() == "parent") {
+      router.push("/dash_board_chart");
+    }
+    else {
       setLoading(false);
     }
   }, [router]);
+
+  const getTokenDetails = () => {
+    const token = localStorage.getItem("authToken"); // Retrieve the token
+    if (token) {
+      const decoded = jwtDecode(token);
+      const userid = decoded.userid;
+      const role = decoded.role;
+      return { userid, role };
+    } else {
+      // console.error("No token found!");
+      return null;
+    }
+  };
 
   const handleLogin = async () => {
     setErrorMsg("");
@@ -51,11 +74,29 @@ const Login = () => {
       const result = await executeQuery(GET_LOGIN_DATA, variables);
 
       if (result?.login?.success_msg) {
-        localStorage.setItem("authToken", "your-auth-token");
+        localStorage.setItem("authToken", result.login.token);
+        // localStorage.setItem("authToken", "your-auth-token");
+        const userDetails = getTokenDetails();
+        if (userDetails) {
+          console.log(`Logged in`);
+        }
         setSuccessMsg(result.login.success_msg); // Success message सेट करना
-        setTimeout(() => {
-          router.push("/dashboard"); // 2 सेकंड बाद रीडायरेक्ट
-        }, 2000);
+        if (userDetails.role.toLowerCase() == "admin") {
+
+          setTimeout(() => {
+            router.push("/dashboard"); // 2 सेकंड बाद रीडायरेक्ट
+          }, 2000);
+        }
+        else if (userDetails.role.toLowerCase() == "student") {
+          setTimeout(() => {
+            router.push("/components/dash_board_chart"); // 2 सेकंड बाद रीडायरेक्ट
+          }, 2000);
+        }
+        else if (userDetails.role.toLowerCase() == "parent") {
+          setTimeout(() => {
+            router.push("dash_board_chart"); // 2 सेकंड बाद रीडायरेक्ट
+          }, 2000);
+        }
       }
       else if (result?.login?.error_msg) {
         setErrorMsg(result.login.error_msg);
@@ -65,8 +106,8 @@ const Login = () => {
     }
   };
 
-  
-  
+
+
 
   if (loading) {
     return (
@@ -92,17 +133,17 @@ const Login = () => {
       </div>
 
       {successMsg && (
-  <div className="absolute top-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg flex items-center space-x-2 animate-fade-in">
-    <FaCheckCircle className="w-6 h-6 text-white" />
-    <span className="font-semibold text-lg">{successMsg}</span>
-  </div>
-)}
+        <div className="absolute top-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg flex items-center space-x-2 animate-fade-in">
+          <FaCheckCircle className="w-6 h-6 text-white" />
+          <span className="font-semibold text-lg">{successMsg}</span>
+        </div>
+      )}
 
 
 
-          {/* Right Side (Form) */}
-          <div className="flex-grow w-full flex flex-col justify-center items-center bg-gradient-to-r from-blue-700 via-blue-900 to-blue-950 p-8">
-          <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-8 border border-gray-300">
+      {/* Right Side (Form) */}
+      <div className="flex-grow w-full flex flex-col justify-center items-center bg-gradient-to-r from-blue-700 via-blue-900 to-blue-950 p-8">
+        <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-8 border border-gray-300">
           <div className="flex justify-center mb-6">
             <Image src="/img/logo.png" alt="Logo" width={120} height={120} />
           </div>
@@ -110,7 +151,7 @@ const Login = () => {
             Sign In
           </h2>
           <form className="space-y-6">
-          <div>
+            <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
               <input
                 id="username"
