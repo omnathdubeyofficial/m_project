@@ -28,10 +28,10 @@ const Login = () => {
       router.push("/dashboard");
     }
     else if (authToken && tokenDetail.role.toLowerCase() == "student") {
-      router.push("/components/dash_board_chart");
+      router.push("/student_dash");
     }
     else if (authToken && tokenDetail.role.toLowerCase() == "parent") {
-      router.push("/dash_board_chart");
+      router.push("/student_dash");
     }
     else {
       setLoading(false);
@@ -89,12 +89,12 @@ const Login = () => {
         }
         else if (userDetails.role.toLowerCase() == "student") {
           setTimeout(() => {
-            router.push("/components/dash_board_chart"); // 2 सेकंड बाद रीडायरेक्ट
+            router.push("/student_dash"); // 2 सेकंड बाद रीडायरेक्ट
           }, 2000);
         }
         else if (userDetails.role.toLowerCase() == "parent") {
           setTimeout(() => {
-            router.push("dash_board_chart"); // 2 सेकंड बाद रीडायरेक्ट
+            router.push("student_dash"); // 2 सेकंड बाद रीडायरेक्ट
           }, 2000);
         }
       }

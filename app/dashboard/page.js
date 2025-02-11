@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FaUniversity, FaUserGraduate, FaUserTie, FaSignOutAlt } from 'react-icons/fa';
 import Image from 'next/image';
+import Cookies from "js-cookie";
 import './style.css';
 
 const Dashboard = () => {
@@ -20,9 +21,12 @@ const Dashboard = () => {
     setUser(userData);
   }, []);
 
-  const handleLogout = () => {
-    router.push('/login');
-  };
+   const handleLogout = () => {
+     Cookies.remove("authToken"); // Auth token remove karein
+     localStorage.clear(); // Local storage clear karein
+     sessionStorage.clear(); // Session storage clear karein
+     router.replace("/login"); // Login page par redirect karein
+   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen relative">
