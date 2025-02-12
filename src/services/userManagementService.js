@@ -8,9 +8,6 @@ import jwt from 'jsonwebtoken';
 
 
 
-const SECRET_KEY = process.env.JWT_SECRET;
-
-
 // Get all users
 const getUserManagementData = async () => {
   try {
@@ -38,38 +35,57 @@ const login = async ({ userid, password }) => {
       where: { userid },
     });
 
-    if (user) {
-      console.log("The user data is :", user);
-      const isMatch = await verifyPassword(password, user.password);
-      if (isMatch) {
-        console.log("Login successful");
-
-        // Generate JWT token
-        const token = jwt.sign(
-          { userid: user.userid, role: user.role }, // Include role in the payload
-          SECRET_KEY,
-          { expiresIn: '6h' } // Set expiration time
-        );
-
-        const success_msg = "Login successfully.";
-        console.log("The token is:", token)
-        return { token, success_msg }; // Return token along with user info
-      } else {
-        error_msg = "Invalid password";
-        console.log(error_msg);
-        return { error_msg };
-      }
-    } else {
+    if (!user) {
       error_msg = "Invalid Username";
       console.log(error_msg);
       return { error_msg };
     }
+
+    console.log("The user data is:", user);
+    const isMatch = await verifyPassword(password, user.password);
+
+    if (!isMatch) {
+      error_msg = "Invalid password";
+      console.log(error_msg);
+      return { error_msg };
+    }
+
+    console.log("✅ Login successful!");
+
+    const SECRET_KEY = process.env.JWT_SECRET;
+    const JWT_ISSUER = process.env.JWT_ISSUER;
+    const JWT_AUDIENCE = process.env.JWT_AUDIENCE;
+    const JWT_ALGORITHM = process.env.JWT_ALGORITHM || "HS256";
+
+    if (!SECRET_KEY || !JWT_ISSUER || !JWT_AUDIENCE) {
+      throw new Error("Missing JWT_SECRET, ISSUER, or AUDIENCE in environment variables!");
+    }
+
+    // ✅ JWT Token Generate
+    const token = jwt.sign(
+      {
+        userid: user.userid,
+        role: user.role,
+      },
+      SECRET_KEY,
+      {
+        expiresIn: "6h",
+        issuer: process.env.JWT_ISSUER, 
+        audience: process.env.JWT_AUDIENCE, 
+        algorithm: process.env.JWT_ALGORITHM || "HS256",
+      }
+    );
+    
+
+    console.log("🔹 The generated token is:", token);
+
+    return { token, success_msg: "Login successfully." };
   } catch (err) {
-    error_msg = `Facing error while login: ${err.message || err}`;
+    error_msg = `❌ Facing error while login: ${err.message || err}`;
     console.error(error_msg);
     return { error_msg };
   } finally {
-    prisma.$disconnect();
+    await prisma.$disconnect();
   }
 };
 
