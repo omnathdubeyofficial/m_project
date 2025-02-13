@@ -1,13 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState,useEffect } from "react";
 import { executeQuery } from "../graphqlClient";
 import { GET_LOGIN_DATA } from "../query/loginQuery";
 import Image from "next/image";
 import Cookies from "js-cookie";
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube,FaCheckCircle } from "react-icons/fa";
-import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -20,36 +19,16 @@ const Login = () => {
 
   const router = useRouter();
 
+
   useEffect(() => {
-    const authToken = Cookies.get("authToken");
-    const tokenDetail = getTokenDetails();
-
-    if (authToken && tokenDetail?.role?.toLowerCase() === "admin") {
-      router.push("/dashboard");
-    } else if (authToken && ["student", "parent"].includes(tokenDetail?.role?.toLowerCase())) {
-      router.push("/student_dash");
-    } else {
-      setLoading(false);
-    }
-  }, [router]);
-
-  const getTokenDetails = () => {
-    const token = Cookies.get("authToken");
-    if (token) {
-      try {
-        return jwtDecode(token);
-      } catch (error) {
-        console.error("Invalid token");
-        return null;
-      }
-    }
-    return null;
-  };
+    setLoading(false);
+  }, []);
 
   const handleLogin = async () => {
     setErrorMsg("");
     setUsernameError("");
     setPasswordError("");
+
     if (!username) {
       setUsernameError("Username is required");
       return;
@@ -59,27 +38,28 @@ const Login = () => {
       return;
     }
 
+    setLoading(true);
+
     try {
       const result = await executeQuery(GET_LOGIN_DATA, { userid: username, password });
 
       if (result?.login?.success_msg) {
-        Cookies.set("authToken", result.login.token, { expires: 7, path: "/" });
-        setSuccessMsg(result.login.success_msg);
-        const userDetails = getTokenDetails();
-        if (userDetails) {
-          console.log(`Logged in as ${userDetails.role}`);
-        }
+        Cookies.set("authToken", result.login.token, {
+          expires: 7,
+          path: "/",
+          secure: true,
+          sameSite: "Strict",
+        });
 
-        if (userDetails.role.toLowerCase() === "admin") {
-          router.push("/dashboard");
-        } else {
-          router.push("/student_dash");
-        }
+        setSuccessMsg(result.login.success_msg);
+        router.refresh();
       } else {
         setErrorMsg(result?.login?.error_msg || "Login failed");
       }
     } catch (error) {
       setErrorMsg("An error occurred during login");
+    } finally {
+      setLoading(false); 
     }
   };
 

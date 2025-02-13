@@ -1,24 +1,39 @@
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
+const PUBLIC_ROUTES = ["/signup", "/login"]; 
+
+// ✅ Role-Based Access Control (RBAC)
+const ROLE_PERMISSIONS = {
+  admin: ["/dashboard", "/manage_users", "/reports"],
+  student: ["/student_dash", "/view_courses"],
+  parent: ["/parents_dash", "/child_progress"],
+  teacher: ["/teacher_dash", "/manage_classes"],
+  staff: ["/staff_dash", "/attendance"],
+};
+
 export async function middleware(req) {
   console.log("🔹 Middleware triggered!");
-
-  const token = req.cookies.get("authToken")?.value;
-  console.log("🟡 Token received:", token);
 
   const { pathname } = req.nextUrl;
   console.log("🔹 Requested Path:", pathname);
 
-  const JWT_SECRET = process.env.JWT_SECRET;
-  const JWT_ISSUER = process.env.JWT_ISSUER;
-  const JWT_AUDIENCE = process.env.JWT_AUDIENCE;
 
-  if (!JWT_SECRET || !JWT_ISSUER || !JWT_AUDIENCE) {
-    console.error("❌ JWT_SECRET, ISSUER, or AUDIENCE is missing in environment variables!");
-    return NextResponse.redirect(new URL("/error", req.url));
+  if (PUBLIC_ROUTES.includes(pathname)) {
+    console.log("🟢 Public route accessed. Allowing without authentication.");
+    
+
+    const token = req.cookies.get("authToken")?.value;
+    if (token && pathname === "/login") {
+      console.log("🔹 Already logged in! Redirecting to dashboard.");
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+
+    return NextResponse.next();
   }
 
+
+  const token = req.cookies.get("authToken")?.value;
   if (!token) {
     console.warn("⚠️ No token found! Redirecting to login.");
     return NextResponse.redirect(new URL("/login", req.url));
@@ -26,36 +41,30 @@ export async function middleware(req) {
 
   try {
     console.log("🟢 Verifying token...");
-
-    const secretKey = new TextEncoder().encode(JWT_SECRET);
+    const secretKey = new TextEncoder().encode(process.env.JWT_SECRET);
     const { payload } = await jwtVerify(token, secretKey);
 
     console.log("✅ Token Verified! User:", payload);
 
-    // 🔹 Issuer और Audience Validate करें  
-    if (payload.iss !== JWT_ISSUER || payload.aud !== JWT_AUDIENCE) {
-      console.warn("⛔ Invalid issuer or audience! Possible attack detected.");
+
+    if (payload.iss !== process.env.JWT_ISSUER || payload.aud !== process.env.JWT_AUDIENCE) {
+      console.warn("⛔ Invalid token issuer or audience! Redirecting to unauthorized.");
       return NextResponse.redirect(new URL("/unauthorized", req.url));
     }
 
-    console.log("🔹 User Role:", payload.role);
-    if (!payload.role) {
+    const userRole = payload.role;
+    if (!userRole) {
       console.warn("⚠️ User role not found! Redirecting to login.");
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
-    // 🔹 Role-based access control
-    const rolePermissions = {
-      admin: ["/dashboard"],
-      student: ["/student_dash"],
-      parent: ["/student_dash"],
-    };
+    console.log("🔹 User Role:", userRole);
 
-    console.log("🔹 Allowed Routes for", payload.role, ":", rolePermissions[payload.role]);
 
-    const allowedRoutes = rolePermissions[payload.role] || [];
+    const allowedRoutes = ROLE_PERMISSIONS[userRole] || [];
     const isAllowed = allowedRoutes.some((route) => pathname.startsWith(route));
 
+    console.log("🔹 Allowed Routes for", userRole, ":", allowedRoutes);
     console.log("🔹 Is Allowed?", isAllowed);
 
     if (!isAllowed) {
@@ -72,5 +81,18 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/student_dash/:path*"],
+  matcher: [
+    "/login/:path*",
+    "/dashboard/:path*",
+    "/manage_users/:path*",
+    "/reports/:path*",
+    "/student_dash/:path*",
+    "/view_courses/:path*",
+    "/parents_dash/:path*",
+    "/child_progress/:path*",
+    "/teacher_dash/:path*",
+    "/manage_classes/:path*",
+    "/staff_dash/:path*",
+    "/attendance/:path*",
+  ], 
 };
