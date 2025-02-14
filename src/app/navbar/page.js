@@ -141,6 +141,10 @@ export default function SchoolNavbar({ role }) {
           <div className="absolute right-0 top-12 w-48 bg-white text-gray-800 shadow-lg rounded-lg p-3">
             <h3 className="font-semibold mb-2">Profile</h3>
             <ul className="text-sm">
+            <li className="flex items-center gap-2 py-2 border-b hover:bg-gray-100 p-2">
+            <User className="w-5 h-5" />
+                <Link href="/profile/edit">User ID - <span className='text-blue-600'>783993</span></Link>
+              </li>
               <li className="flex items-center gap-2 py-2 border-b hover:bg-gray-100 p-2">
                 <Edit className="w-4 h-4" />
                 <Link href="/profile/edit">Edit Profile</Link>
