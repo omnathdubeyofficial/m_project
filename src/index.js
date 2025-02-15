@@ -4,6 +4,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import cors from 'cors'; // Import CORS middleware
 import userType from './types/userType.js';
 import userDataType from './types/userDataType.js';
+import authTokantTypes from './types/authTokantTypes.js';
 import userResolver from './resolvers/userResolver.js';
 import userDataResolver from './resolvers/userDataResolver.js';
 import adminDataResolver from './resolvers/AdminDataResolver.js';
@@ -15,7 +16,8 @@ import studentRegistrationResolver from './resolvers/studentRegistrationResolver
 import attendanceTypes from './types/attendanceType.js';
 import attendanceResolver from './resolvers/attendanceResolver.js';
 import admissionFormType from './types/admissionFormTypes.js';
-import admssionFormResolver from './resolvers/admissionFormResolver.js'
+import admssionFormResolver from './resolvers/admissionFormResolver.js';
+import authTokanResolver from './resolvers/authTokanResolver.js'
 const app = express();
 
 // Use CORS middleware
@@ -26,8 +28,8 @@ app.use(cors({
 
 // Combine all type definitions and resolvers
 const schema = makeExecutableSchema({
-  typeDefs: [userType, userDataType, adminDataType, userManagementType, studentRegistrationTypes, attendanceTypes, admissionFormType], // Combine all type definitions
-  resolvers: [userResolver, userDataResolver, adminDataResolver, userManagementResolver, studentRegistrationResolver, attendanceResolver, admssionFormResolver], // Combine all resolvers
+  typeDefs: [userType, userDataType, adminDataType, userManagementType, studentRegistrationTypes, attendanceTypes, admissionFormType,authTokantTypes], // Combine all type definitions
+  resolvers: [userResolver, userDataResolver, adminDataResolver, userManagementResolver, studentRegistrationResolver, attendanceResolver, admssionFormResolver,authTokanResolver], // Combine all resolvers
 });
 
 // GraphQL endpoint
