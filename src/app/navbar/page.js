@@ -42,7 +42,7 @@ export default function SchoolNavbar({ role }) {
   }, []);
 
   return (
-<nav className="fixed top-0 left-0 w-full bg-blue-600 text-white p-4 shadow-md flex justify-between items-center  z-50">
+<nav className="fixed top-0 left-0 w-full bg-blue-600 text-white p-2 shadow-md flex justify-between items-center  z-50">
 {/* School Logo & Name */}
       <div className="flex items-center gap-2">
   <Image src="/img/logo.png" alt="School Logo" width={90} height={90} className="rounded-full" />
@@ -123,18 +123,32 @@ export default function SchoolNavbar({ role }) {
         )}
 
         {/* Profile */}
+
+
+      
         <button 
-          ref={profileRef}
-          onClick={(e) => { 
-            e.stopPropagation();
-            setShowProfileMenu(!showProfileMenu);
-            setShowNotifications(false);
-            setShowMessages(false);
-          }}
-          className="p-2 bg-white text-blue-600 rounded-full shadow-md"
-        >
-          <User className="w-5 h-5" />
-        </button>
+  ref={profileRef}
+  onClick={(e) => { 
+    e.stopPropagation();
+    setShowProfileMenu(!showProfileMenu);
+    setShowNotifications(false);
+    setShowMessages(false);
+  }}
+  className="w-[50px] h-[50px] rounded-full overflow-hidden"
+>
+  <Image 
+    src="/img/q.png" 
+    alt="Profile" 
+    width={85}  
+    height={85} 
+    className="rounded-full object-cover object-center w-full h-full"
+  />
+</button>
+
+
+
+
+
 
         {/* Profile Dropdown */}
         {showProfileMenu && (

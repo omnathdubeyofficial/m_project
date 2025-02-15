@@ -1,27 +1,43 @@
 "use client";
 
 import { useState } from "react";
-import { FaSun, FaMoon } from "react-icons/fa";
-import Image from "next/image";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { executeMutation } from "../../graphqlClient";
 import { CREATE_USER_MANAGEMENT_DATA_MUTATION } from "../../mutation/createUserManagementData";
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import Navber from "../../navbar/page";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const AdminRegistrationPage = () => {
-  const [darkMode, setDarkMode] = useState(false);
   const [formData, setFormData] = useState({
     first_name: "",
+    middle_name: "",
     last_name: "",
+    gender: "",
     email: "",
+    confirm_password: "",
+    contact_no: "",
     role: "",
+    status: "",
+    subject_specialization: "",
+    class_assigned: "",
+    teacher_id: "",
+    admin_id: "",
+    joining_date: "",
+    qualification: "",
+    enrollment_no: "",
+    date_of_birth: "",
+    standard: "",
+    section: "",
+    parent_id: "",
+    admission_date: "",
+    children_id: "",
+    occupation: "",
+    address: "",
+    nationality: "",
     password: "",
   });
   const [message, setMessage] = useState(null);
-  const [user, setUser] = useState({
-    username: "Admin User",
-    profileImg: "/img/om.webp",
-    profession: "Super Admin",
-  });
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -30,148 +46,103 @@ const AdminRegistrationPage = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password !== formData.confirm_password) {
+      setMessage({ type: "error", text: "Passwords do not match!" });
+      setTimeout(() => setMessage(null), 3000);
+      return;
+    }
     try {
       const response = await executeMutation(CREATE_USER_MANAGEMENT_DATA_MUTATION, formData);
-      const successMsg = response?.createUserManagementData?.success_msg;
-      setMessage({ type: "success", text: successMsg || "Admin created successfully!" });
-      setFormData({ first_name: "", last_name: "", email: "", role: "", password: "" });
-
-      // Automatically hide the popup after 3 seconds
-      setTimeout(() => setMessage(null), 3000);
+      setMessage({ type: "success", text: response?.createUserManagementData?.success_msg || "Admin created successfully!" });
+      setFormData({
+        first_name: "",
+        middle_name: "",
+        last_name: "",
+        gender: "",
+        email: "",
+        confirm_password: "",
+        contact_no: "",
+        role: "",
+        status: "",
+        subject_specialization: "",
+        class_assigned: "",
+        teacher_id: "",
+        admin_id: "",
+        joining_date: "",
+        qualification: "",
+        enrollment_no: "",
+        date_of_birth: "",
+        standard: "",
+        section: "",
+        parent_id: "",
+        admission_date: "",
+        children_id: "",
+        occupation: "",
+        address: "",
+        nationality: "",
+        password: "",
+      });
     } catch (error) {
       setMessage({ type: "error", text: "Failed to create admin. Please try again." });
-
-      // Automatically hide the popup after 3 seconds
-      setTimeout(() => setMessage(null), 3000);
     }
+    setTimeout(() => setMessage(null), 3000);
   };
 
   return (
-    <div
-      className={`${
-        darkMode ? "bg-gray-900 text-gray-200" : "bg-white text-gray-800"
-      } min-h-screen transition-colors duration-500`}
-    >
-      {/* Header */}
-      <header className="sticky top-0 flex items-center justify-between px-6 py-4 shadow-md bg-opacity-90 backdrop-blur-md z-10 border-b border-gray-300">
-        <div className="flex items-center space-x-4">
-          <Image
-            src="/img/image.png" // Replace with your logo path
-            alt="University Logo"
-            width={50}
-            height={50}
-            className="object-contain"
-          />
-          <h1 className="text-xl hidden sm:block">Dr. Ram Manohar Lohia Avadh University</h1>
-        </div>
-        <div className="flex items-center space-x-6">
-          {user && (
-            <div className="flex items-center space-x-3">
-              <Image src={user.profileImg} alt="Profile" width={40} height={40} className="rounded-full" />
-              <div>
-                <p className="text-sm font-medium">{user.username}</p>
-                <p className="text-xs">{user.profession}</p>
-              </div>
-            </div>
-          )}
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="p-2 rounded-full focus:outline-none hover:scale-105 transition-transform duration-300"
-          >
-            {darkMode ? <FaSun className="text-yellow-400 text-2xl" /> : <FaMoon className="text-gray-600 text-2xl" />}
-          </button>
-        </div>
-      </header>
+    <div className="bg-gray-100 min-h-screen flex flex-col items-center">
+      <Navber />
+      {message && (
+  <div
+    className={`fixed top-4 left-1/2 transform -translate-x-1/2 p-4 rounded-lg shadow-lg z-50 text-center flex items-center gap-2 ${
+      message.type === "success"
+        ? "bg-green-100 text-green-700"
+        : "bg-red-100 text-red-700"
+    }`}
+  >
+    {message.type === "success" ? (
+      <FaCheckCircle className="text-green-600 text-2xl" />
+    ) : (
+      <FaTimesCircle className="text-red-600 text-2xl" />
+    )}
+    <p className="font-medium">{message.text}</p>
+  </div>
+)}
 
-      {/* Form Section */}
-      <main className="py-8 px-6">
-        <div className="max-w-4xl mx-auto mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Add New Admin</h2>
-          {message && (
-            <div
-              className={`mb-4 p-4 rounded-lg shadow-md flex items-center space-x-4 fixed bottom-4 left-1/2 transform -translate-x-1/2 ${
-                message.type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-              }`}
-            >
-              <div className="flex-shrink-0">
-                {message.type === "success" ? (
-                  <FaCheckCircle className="text-green-600 text-2xl" />
-                ) : (
-                  <FaTimesCircle className="text-red-600 text-2xl" />
-                )}
-              </div>
-              <div className="flex-1">
-                <p className="font-medium">{message.text}</p>
-              </div>
-            </div>
-          )}
-
-          <form onSubmit={handleFormSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="col-span-1">
-              <input
-                type="text"
-                name="first_name"
-                value={formData.first_name}
-                onChange={handleFormChange}
-                placeholder="First Name"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                required
-              />
-            </div>
-            <div className="col-span-1">
-              <input
-                type="text"
-                name="last_name"
-                value={formData.last_name}
-                onChange={handleFormChange}
-                placeholder="Last Name"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                required
-              />
-            </div>
-            <div className="col-span-1">
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleFormChange}
-                placeholder="Email"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                required
-              />
-            </div>
-            <div className="col-span-1">
-              <input
-                type="text"
-                name="role"
-                value={formData.role}
-                onChange={handleFormChange}
-                placeholder="Role"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                required
-              />
-            </div>
-            <div className="col-span-1">
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleFormChange}
-                placeholder="Password"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                required
-              />
-            </div>
-            <div className="col-span-1 sm:col-span-2 lg:col-span-4">
-              <button
-                type="submit"
-                className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
-        </div>
+      <main className="py-10 px-6 w-full max-w-7xl pt-32">
+        <h2 className="text-3xl font-semibold text-center mb-6">Add New Admin</h2>
+        <form onSubmit={handleFormSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {Object.keys(formData).map((field) => (
+            field !== "confirm_password" ? (
+              field === "role" ? (
+                <select key={field} name={field} value={formData[field]} onChange={handleFormChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+                  <option value="">Select Role</option>
+                  <option value="admin">Admin</option>
+                  <option value="student">Student</option>
+                  <option value="parent">Parent</option>
+                </select>
+              ) : field === "address" ? (
+<textarea 
+  key={field} 
+  name={field} 
+  value={formData[field]} 
+  onChange={handleFormChange} 
+  placeholder={field.replace("_", " ").toLowerCase().replace(/\b\w/, c => c.toUpperCase())} 
+  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none h-24 col-span-4" 
+  required 
+/>
+              ) : (
+                <input key={field} type={field === "password" ? "password" : "text"} name={field} value={formData[field]} onChange={handleFormChange} placeholder={field.replace("_", " ").toLowerCase().replace(/\b\w/, c => c.toUpperCase())} className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none" required />
+              )
+            ) : null
+          ))}
+          <input type="password" name="confirm_password" value={formData.confirm_password} onChange={handleFormChange} placeholder="Confirm Password" className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none" required />
+          <div className="col-span-1 md:col-span-2 lg:col-span-4 flex justify-center">
+  <button type="submit" className="w-40 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300">
+    Submit
+  </button>
+</div>
+ 
+        </form>
       </main>
     </div>
   );

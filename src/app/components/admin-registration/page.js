@@ -1,85 +1,64 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { FaSearch, FaEdit, FaTrash, FaSun,FaChevronRight,FaChevronLeft, FaPlus, FaMoon, FaDownload } from "react-icons/fa";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { FaSearch, FaEdit, FaTrash, FaChevronRight, FaChevronLeft, FaPlus, FaDownload } from "react-icons/fa";
 import Image from "next/image";
 import * as XLSX from "xlsx";
 import { GET_USER_MANAGEMENT_DATA } from "../../query/userManagementDataQuery";
 import { DELETE_USER_MANAGEMENT_DATA_MUTATION } from "../../mutation/deleteUserManagementData";
 import { executeQuery, executeMutation } from "../../graphqlClient";
 import Link from "next/link";
+import Navbar from "../../navbar/page";
+
+const Button = ({ onClick, className, icon: Icon, children }) => (
+  <button onClick={onClick} className={`btn ${className} flex items-center px-4 py-2 rounded-lg`}>
+    <Icon className="mr-2" /> {children}
+  </button>
+);
 
 const AdminRegistrationPage = () => {
-  const [darkMode, setDarkMode] = useState(false);
   const [admins, setAdmins] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredAdmins, setFilteredAdmins] = useState([]);
-  const [user, setUser] = useState({
-    username: "Admin User",
-    profileImg: "/img/om.webp",
-    profession: "Super Admin",
-  });
   const [successMessage, setSuccessMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
-  
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [adminsPerPage] = useState(10);
+  const adminsPerPage = 10;
 
-  // Fetch data using GET_USER_MANAGEMENT_DATA
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
         const response = await executeQuery(GET_USER_MANAGEMENT_DATA);
-        const data = response?.getUserManagementData || [];
-        setAdmins(data);
-        setFilteredAdmins(data);
+        setAdmins(response?.getUserManagementData || []);
       } catch (error) {
         console.error("Error fetching admin data:", error);
       }
     };
-
     fetchAdmins();
   }, []);
 
-  // Filter admins based on search query
-  useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setFilteredAdmins(admins);
-    } else {
-      setFilteredAdmins(
-        admins.filter((admin) =>
-          admin.userid?.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      );
-    }
-  }, [searchQuery, admins]);
+  const filteredAdmins = useMemo(() =>
+    searchQuery.trim() === ""
+      ? admins
+      : admins.filter(admin => admin.userid?.toLowerCase().includes(searchQuery.toLowerCase()))
+  , [searchQuery, admins]);
 
-  // Pagination logic
-  const indexOfLastAdmin = currentPage * adminsPerPage;
-  const indexOfFirstAdmin = indexOfLastAdmin - adminsPerPage;
-  const currentAdmins = filteredAdmins.slice(indexOfFirstAdmin, indexOfLastAdmin);
+  const totalPages = Math.ceil(filteredAdmins.length / adminsPerPage);
+  const totalAdmins = filteredAdmins.length;
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const currentAdmins = useMemo(() => {
+    const indexOfLastAdmin = currentPage * adminsPerPage;
+    const indexOfFirstAdmin = indexOfLastAdmin - adminsPerPage;
+    return filteredAdmins.slice(indexOfFirstAdmin, indexOfLastAdmin);
+  }, [currentPage, filteredAdmins]);
 
-  const handleEdit = (id) => {
-    console.log("Edit admin with ID:", id);
-  };
-
-  const handleDelete = async (id) => {
+  const handleDelete = useCallback(async (id) => {
     try {
-      const response = await executeMutation(DELETE_USER_MANAGEMENT_DATA_MUTATION, {
-        z_id: id,
-      });
-
+      const response = await executeMutation(DELETE_USER_MANAGEMENT_DATA_MUTATION, { z_id: id });
       if (response?.deleteUserManagementData?.success_msg) {
-        setAdmins(admins.filter((admin) => admin.z_id !== id));
-        setSuccessMessage(response?.deleteUserManagementData?.success_msg);
+        setAdmins(prev => prev.filter(admin => admin.z_id !== id));
+        setSuccessMessage(response.deleteUserManagementData.success_msg);
         setShowPopup(true);
-
-        setTimeout(() => {
-          setShowPopup(false);
-        }, 3000);
+        setTimeout(() => setShowPopup(false), 3000);
       } else {
         alert("Failed to delete admin: " + response?.deleteUserManagementData?.error_msg);
       }
@@ -87,7 +66,7 @@ const AdminRegistrationPage = () => {
       console.error("Error deleting admin:", error);
       alert("An error occurred while deleting the admin.");
     }
-  };
+  }, []);
 
   const handleDownloadExcel = () => {
     const ws = XLSX.utils.json_to_sheet(currentAdmins);
@@ -96,219 +75,67 @@ const AdminRegistrationPage = () => {
     XLSX.writeFile(wb, "admins.xlsx");
   };
 
-  // Get total number of pages
-  const totalPages = Math.ceil(filteredAdmins.length / adminsPerPage);
-
   return (
-    <div className={`${darkMode ? "bg-gray-900 text-gray-200" : "bg-white text-gray-800"} min-h-screen transition-colors duration-500`}>
-      {/* Header */}
-      <header className="sticky top-0 flex items-center justify-between px-6 py-4 shadow-md bg-opacity-90 backdrop-blur-md z-10 border-b border-gray-300">
-        <div className="flex items-center space-x-4">
-          <Image
-            src="/img/image.png"
-            alt="University Logo"
-            width={50}
-            height={50}
-            className="object-contain"
-          />
-          <h1 className="text-xl hidden sm:block">Dr. Ram Manohar Lohia Avadh University</h1>
-        </div>
-
-        <div className="flex items-center space-x-6">
-          {user && (
-            <div className="flex items-center space-x-3">
-              <Image
-                src={user.profileImg}
-                alt="Profile"
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-              <div>
-                <p className="text-sm font-medium">{user.username}</p>
-                <p className="text-xs">{user.profession}</p>
-              </div>
-            </div>
-          )}
-
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="p-2 rounded-full focus:outline-none hover:scale-105 transition-transform duration-300"
-          >
-            {darkMode ? (
-              <FaSun className="text-yellow-400 text-2xl" />
-            ) : (
-              <FaMoon className="text-gray-600 text-2xl" />
-            )}
-          </button>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="py-8 px-6">
-        <div className="mx-auto">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-6 space-y-4 sm:space-y-0 sm:space-x-6">
-            <div className="relative w-full max-w-sm">
-              <input
-                type="text"
-                placeholder="Search by User ID..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={`${
-                  darkMode ? "bg-gray-800 text-gray-200" : "bg-gray-100 text-gray-800"
-                } px-4 py-2 w-full rounded-full shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-400 transition`}
-              />
-              <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            </div>
-
-            <div className="flex flex-wrap justify-start items-center mb-6 space-x-4">
-              <button
-                onClick={handleDownloadExcel}
-                className="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition-colors flex items-center"
-              >
-                <FaDownload className="mr-2 text-lg" />
-                Download Excel
-              </button>
-
-              <Link href="/components/adminform">
-                <button
-                  onClick={() => console.log("Add new admin")}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors flex items-center"
-                >
-                  <FaPlus className="mr-2 text-lg" />
-                  Add New
-                </button>
-              </Link>
-            </div>
+    <div className="bg-gray-100 min-h-screen">
+      <Navbar />
+      <main className="container mx-auto py-32 px-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+          <div className="relative w-full max-w-sm">
+            <input
+              type="text"
+              placeholder="Search by User ID..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg shadow focus:outline-none"
+            />
+            <FaSearch className="absolute right-4 top-3 text-gray-400" />
           </div>
-
-          {/* Admins Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full table-auto border-collapse">
-              <thead>
-                <tr className="border-b bg-gray-100 dark:bg-gray-700">
-                  <th className="py-3 px-6 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap">Profile</th>
-                  <th className="py-3 px-6 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap">Name</th>
-                  <th className="py-3 px-6 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap">Email</th>
-                  <th className="py-3 px-6 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap">Role</th>
-                  <th className="py-3 px-6 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap">User ID</th>
-                  <th className="py-3 px-6 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap">Actions</th>
+          <div className="flex space-x-4 mt-4 sm:mt-0">
+            <Button onClick={handleDownloadExcel} className="bg-green-600 text-white" icon={FaDownload}>Download</Button>
+            <Link href="/components/adminform" className="btn bg-blue-600 text-white flex items-center px-4 py-2 rounded-lg">
+              <FaPlus className="mr-2" /> Add New
+            </Link>
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full table-auto bg-white shadow rounded-lg overflow-hidden">
+            <thead>
+              <tr className="bg-gray-200 text-left">
+                <th className="px-6 py-3">Profile</th>
+                <th className="px-6 py-3">Name</th>
+                <th className="px-6 py-3">Email</th>
+                <th className="px-6 py-3">Role</th>
+                <th className="px-6 py-3">User ID</th>
+                <th className="px-6 py-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentAdmins.map((admin) => (
+                <tr key={admin.z_id} className="border-b">
+                  <td className="px-6 py-3">
+                    <Image src={admin.profile_image || "/img/q.png"} width={40} height={40} className="rounded-full object-cover w-10 h-10" alt="Profile" />
+                  </td>
+                  <td className="px-6 py-3">{`${admin.first_name} ${admin.last_name}`}</td>
+                  <td className="px-6 py-3">{admin.email}</td>
+                  <td className="px-6 py-3">{admin.role || "N/A"}</td>
+                  <td className="px-6 py-3">{admin.userid || "N/A"}</td>
+                  <td className="px-6 py-3 flex space-x-2">
+                    <button className="text-blue-500"><FaEdit /></button>
+                    <button onClick={() => handleDelete(admin.z_id)} className="text-red-500"><FaTrash /></button>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {currentAdmins.map((admin) => (
-                  <tr key={admin.z_id} className="border-b">
-                    <td className="py-3 px-6 whitespace-nowrap">
-                      <Image
-                        src={admin.profile_image || "/img/default-profile.png"}
-                        alt="Profile"
-                        width={40}
-                        height={40}
-                        className="rounded-full"
-                      />
-                    </td>
-                    <td className="py-3 px-6 whitespace-nowrap">{`${admin.first_name} ${admin.last_name}`}</td>
-                    <td className="py-3 px-6 whitespace-nowrap">{admin.email}</td>
-                    <td className="py-3 px-6 whitespace-nowrap">{admin.role || "N/A"}</td>
-                    <td className="py-3 px-6 whitespace-nowrap">{admin.userid || "N/A"}</td>
-                    <td className="py-3 px-6 whitespace-nowrap">
-                      <div className="flex space-x-4">
-                        <button
-                          onClick={() => handleEdit(admin.z_id)}
-                          className="text-blue-500 hover:text-blue-700 transition-transform transform hover:scale-110"
-                          title="Edit"
-                        >
-                          <FaEdit className="text-xl" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(admin.z_id)}
-                          className="text-red-500 hover:text-red-700 transition-transform transform hover:scale-110"
-                          title="Delete"
-                        >
-                          <FaTrash className="text-xl" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Pagination */}
-<div className="flex justify-between items-center mt-4">
-  <div className="text-sm text-gray-600 dark:text-gray-400">
-    Total Entries: {filteredAdmins.length}
-  </div>
-  
-  <div className="flex space-x-2">
-    {/* Previous Button */}
-    <button
-      onClick={() => paginate(currentPage - 1)}
-      disabled={currentPage === 1}
-      className={`px-4 py-2 rounded-full flex items-center justify-center ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"} transition-colors`}
-      aria-label="Previous page"
-    >
-      <FaChevronLeft className="text-lg" />
-    </button>
-    
-    {/* Page Numbers */}
-    {currentPage > 2 && (
-      <>
-        <button
-          onClick={() => paginate(1)}
-          className="px-4 py-2 rounded-full bg-gray-300 text-gray-600 hover:bg-gray-400 transition-colors"
-        >
-          1
-        </button>
-        <span className="px-2 py-2 text-gray-600">...</span>
-      </>
-    )}
-    {Array.from({ length: totalPages }, (_, index) => {
-      const pageNumber = index + 1;
-      return (
-        pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1 && (
-          <button
-            key={pageNumber}
-            onClick={() => paginate(pageNumber)}
-            className={`px-4 py-2 rounded-full ${currentPage === pageNumber ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-600 hover:bg-gray-300"} transition-colors`}
-          >
-            {pageNumber}
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="flex justify-center items-center mt-4 space-x-4 text-gray-700 text-lg">
+          <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} className="px-4 py-2 bg-gray-300 rounded-lg">
+            <FaChevronLeft />
           </button>
-        )
-      );
-    })}
-    {currentPage < totalPages - 1 && (
-      <>
-        <span className="px-2 py-2 text-gray-600">...</span>
-        <button
-          onClick={() => paginate(totalPages)}
-          className="px-4 py-2 rounded-full bg-gray-300 text-gray-600 hover:bg-gray-400 transition-colors"
-        >
-          {totalPages}
-        </button>
-      </>
-    )}
-    
-    {/* Next Button */}
-    <button
-      onClick={() => paginate(currentPage + 1)}
-      disabled={currentPage === totalPages}
-      className={`px-4 py-2 rounded-full flex items-center justify-center ${currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"} transition-colors`}
-      aria-label="Next page"
-    >
-      <FaChevronRight className="text-lg" />
-    </button>
-  </div>
-</div>
-
-
-          {/* Success Popup */}
-          {showPopup && (
-            <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-full shadow-lg">
-              {successMessage}
-            </div>
-          )}
+          <span>Page {currentPage} of {totalPages} (Total: {totalAdmins} admins)</span>
+          <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} className="px-4 py-2 bg-gray-300 rounded-lg">
+            <FaChevronRight />
+          </button>
         </div>
       </main>
     </div>
