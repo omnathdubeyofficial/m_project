@@ -11,7 +11,7 @@ const UniversityPage = () => {
 
 
   const services = [
-    { name: "List of Holiday", icon: <FaCalendarAlt />, path: "/holiday-list" },
+    { name: "List of Holiday", icon: <FaCalendarAlt />, path: "/student_dash/students_forms/holiday_list" },
     { name: "Phone Directory", icon: <FaUsers />, path: "/phone-directory" },
     { name: "Academic Calendar", icon: <FaRegCalendarAlt />, path: "/academic-calendar" },
     { name: "Admin Registration", icon: <FaClipboardList />, path: "/components/admin-registration" },

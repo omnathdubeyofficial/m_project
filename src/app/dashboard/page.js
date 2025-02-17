@@ -106,13 +106,13 @@ const Dashboard = () => {
             <p className="text-gray-700 text-sm sm:text-base mt-1 sm:mt-2">Manage university operations and settings.</p>
           </div>
           
-          <div onClick={() => router.push('/student_dash')} className="p-4 sm:p-6 bg-gradient-to-r from-green-100 to-green-200 rounded-xl shadow-lg hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer">
+          <div onClick={() => router.push('/student_dash/students_forms/admission_form')} className="p-4 sm:p-6 bg-gradient-to-r from-green-100 to-green-200 rounded-xl shadow-lg hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer">
             <FaUserGraduate className="text-3xl sm:text-4xl text-green-800" />
             <h2 className="text-lg sm:text-xl font-semibold text-green-800 mt-2 sm:mt-4">Student Corner</h2>
             <p className="text-gray-700 text-sm sm:text-base mt-1 sm:mt-2">View and manage student profiles and progress.</p>
           </div>
 
-          <div onClick={() => router.push('/parent')} className="p-4 sm:p-6 bg-gradient-to-r from-purple-100 to-purple-200 rounded-xl shadow-lg hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer">
+          <div onClick={() => router.push('/student_dash/students_forms/attendance_form')} className="p-4 sm:p-6 bg-gradient-to-r from-purple-100 to-purple-200 rounded-xl shadow-lg hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer">
             <FaUserTie className="text-3xl sm:text-4xl text-purple-800" />
             <h2 className="text-lg sm:text-xl font-semibold text-purple-800 mt-2 sm:mt-4">Parent Corner</h2>
             <p className="text-gray-700 text-sm sm:text-base mt-1 sm:mt-2">Access reports and communication tools for parents.</p>
