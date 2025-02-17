@@ -9,10 +9,13 @@ const getAttendanceData = async () => {
 };
 
 // Create a new user
-const createAttendanceData = async ({ student_name, roll_no, date, standard, division, subject, time_in, time_out, attendance_status, attendance_marked_by }) => {
+const createAttendanceData = async ({ student_name, roll_no, date, standard, division, subject, time_in, time_out, attendance_status, attendance_marked_by, attendance_marked_by_role }) => {
   try {
+    if (attendance_status.toLowerCase() != "absent" && subject.toLowerCase() == "morning_arrival") {
+      time_in = setUserTime()
+    }
     const createdData = await prisma.attendance.create({
-      data: { z_id: uuidv4(), student_name, roll_no, date, standard, division, subject, time_in, time_out, attendance_status, attendance_marked_by, cdate: setUserDate(), ctime: setUserTime() },
+      data: { z_id: uuidv4(), student_name, roll_no, date, standard, division, subject, time_in, time_out, attendance_status, attendance_marked_by, attendance_marked_by_role, cdate: setUserDate(), ctime: setUserTime() },
     });
     const success_msg = "Attendance created successfully."
     return { ...createdData, success_msg }
@@ -27,13 +30,16 @@ const createAttendanceData = async ({ student_name, roll_no, date, standard, div
 };
 
 // Update an existing user by ID
-const updateAttendanceData = async ({ z_id, student_name, roll_no, date, standard, division, subject, time_in, time_out, attendance_status, attendance_marked_by }) => {
+const updateAttendanceData = async ({ z_id, student_name, roll_no, date, standard, division, subject, time_in, time_out, attendance_status, attendance_marked_by, attendance_marked_by_role }) => {
   try {
-
+    if (attendance_status.toLowerCase() != "absent" && subject.toLowerCase() == "evening_session") {
+      time_out = setUserTime()
+    }
     const updatedData = await prisma.attendance.update({
       where: { z_id },
-      data: { student_name, roll_no, date, standard, division, subject, time_in, time_out, attendance_status, attendance_marked_by, udate: setUserDate(), utime: setUserTime() },
+      data: { student_name, roll_no, date, standard, division, subject, time_in, time_out, attendance_status, attendance_marked_by, attendance_marked_by_role, udate: setUserDate(), utime: setUserTime() },
     });
+
     const success_msg = "Attendance updated successfully."
     return { ...updatedData, success_msg }
   } catch (err) {
