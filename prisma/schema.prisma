@@ -90,21 +90,22 @@ model student_registration {
 }
 
 model attendance {
-  z_id                 String  @id @db.VarChar(100)
-  date                 String? @db.VarChar(100)
-  student_name         String? @db.VarChar(300)
-  roll_no              String? @db.VarChar(100)
-  standard             String? @db.VarChar(100)
-  division             String? @db.VarChar(100)
-  subject              String? @db.VarChar(100)
-  time_in              String? @db.VarChar(100)
-  time_out             String? @db.VarChar(100)
-  attendance_status    String? @db.VarChar(100)
-  attendance_marked_by String? @db.VarChar(200)
-  cdate                String? @db.VarChar(100)
-  ctime                String? @db.VarChar(100)
-  udate                String? @db.VarChar(100)
-  utime                String? @db.VarChar(100)
+  z_id                      String  @id @db.VarChar(100)
+  date                      String? @db.VarChar(100)
+  student_name              String? @db.VarChar(300)
+  roll_no                   String? @db.VarChar(100)
+  standard                  String? @db.VarChar(100)
+  division                  String? @db.VarChar(100)
+  subject                   String? @db.VarChar(100)
+  time_in                   String? @db.VarChar(100)
+  time_out                  String? @db.VarChar(100)
+  attendance_status         String? @db.VarChar(100)
+  attendance_marked_by      String? @db.VarChar(200)
+  cdate                     String? @db.VarChar(100)
+  ctime                     String? @db.VarChar(100)
+  udate                     String? @db.VarChar(100)
+  utime                     String? @db.VarChar(100)
+  attendance_marked_by_role String? @db.VarChar(100)
 }
 
 model admission_form {

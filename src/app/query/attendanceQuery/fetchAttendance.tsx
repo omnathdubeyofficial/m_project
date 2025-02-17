@@ -10,6 +10,7 @@ query {
     subject
     attendance_status
     attendance_marked_by
+    attendance_marked_by_role
     cdate
     ctime
     udate
