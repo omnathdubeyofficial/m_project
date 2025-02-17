@@ -6,16 +6,59 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Bell, LogOut, User, Settings, Edit, MessageSquare } from 'lucide-react';
 import Cookies from "js-cookie";
+import { GET_TOKAN_MANAGEMENT_DATA } from "../query/authTokanQuery";
+import { executeQuery } from "../graphqlClient";
 
 export default function SchoolNavbar({ role }) {
   const router = useRouter();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showMessages, setShowMessages] = useState(false);
-
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
   const messageRef = useRef(null);
+
+
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      let authToken = Cookies.get("authToken");
+  
+      if (!authToken) {
+        router.replace("/login");
+        return;
+      }
+  
+      authToken = String(authToken);
+      const variables = { authToken };
+  
+      try {
+        const response = await executeQuery(GET_TOKAN_MANAGEMENT_DATA, variables);
+  
+        if (!response || !response.getUserDataFromToken) {
+          return;
+        }
+  
+        const userData = response.getUserDataFromToken;
+        const formattedUserId = `${userData.userid || ""}`;
+  
+        setUser({ ...userData, userid: formattedUserId });
+        setLoading(false);
+      } catch (error) {
+        console.error("Error Fetching User Data:", error);
+        setLoading(false);
+      }
+    };
+  
+    fetchUserData();
+  }, [router]);
+
+
+
+
+
 
   const closeAllMenus = (event) => {
     if (
@@ -40,6 +83,15 @@ export default function SchoolNavbar({ role }) {
     document.addEventListener("click", closeAllMenus);
     return () => document.removeEventListener("click", closeAllMenus);
   }, []);
+
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <h1 className="text-xl font-semibold text-gray-700">Loading...</h1>
+      </div>
+    );
+  }
 
   return (
 <nav className="fixed top-0 left-0 w-full bg-blue-600 text-white p-2 shadow-md flex justify-between items-center  z-50">
@@ -151,30 +203,35 @@ export default function SchoolNavbar({ role }) {
 
 
         {/* Profile Dropdown */}
-        {showProfileMenu && (
-          <div className="absolute right-0 top-12 w-48 bg-white text-gray-800 shadow-lg rounded-lg p-3">
-            <h3 className="font-semibold mb-2">Profile</h3>
-            <ul className="text-sm">
-            <li className="flex items-center gap-2 py-2 border-b hover:bg-gray-100 p-2">
-            <User className="w-5 h-5" />
-                <Link href="/profile/edit">User ID - <span className='text-blue-600'>783993</span></Link>
-              </li>
-              <li className="flex items-center gap-2 py-2 border-b hover:bg-gray-100 p-2">
-                <Edit className="w-4 h-4" />
-                <Link href="/profile/edit">Edit Profile</Link>
-              </li>
-              <li className="flex items-center gap-2 py-2 border-b hover:bg-gray-100 p-2">
-                <Settings className="w-4 h-4" />
-                <Link href="/settings">Settings</Link>
-              </li>
-              <li className="flex items-center gap-2 py-2 text-red-600 hover:bg-gray-100 p-2">
-  <LogOut className="w-4 h-4" />
-  <button onClick={handleLogout} className="text-red-600">Logout</button>
-</li>
+       {/* Profile Dropdown */}
+{showProfileMenu && user && (
+  <div className="absolute right-0 top-12 w-48 bg-white text-gray-800 shadow-lg rounded-lg p-3">
+    <h3 className="font-semibold mb-2">Profile</h3>
+    <ul className="text-sm">
+      <li className="flex flex-col gap-1 py-2 border-b p-2">
+        <span className="text-blue-600 font-semibold">{user.first_name} {user.last_name}</span>
+        <span className="text-gray-500 text-xs">{user.email}</span>
+      </li>
+      <li className="flex items-center gap-2 py-2 border-b hover:bg-gray-100 p-2">
+        <User className="w-5 h-5" />
+        <span>User ID - <span className='text-blue-600'>{user.userid} {user.role} </span></span>
+      </li>
+      <li className="flex items-center gap-2 py-2 border-b hover:bg-gray-100 p-2">
+        <Edit className="w-4 h-4" />
+        <Link href="/profile/edit">Edit Profile</Link>
+      </li>
+      <li className="flex items-center gap-2 py-2 border-b hover:bg-gray-100 p-2">
+        <Settings className="w-4 h-4" />
+        <Link href="/settings">Settings</Link>
+      </li>
+      <li className="flex items-center gap-2 py-2 text-red-600 hover:bg-gray-100 p-2">
+        <LogOut className="w-4 h-4" />
+        <button onClick={handleLogout} className="text-red-600">Logout</button>
+      </li>
+    </ul>
+  </div>
+)}
 
-            </ul>
-          </div>
-        )}
       </div>
     </nav>
   );

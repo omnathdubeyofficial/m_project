@@ -34,7 +34,7 @@ const Dashboard = () => {
         }
   
         const userData = response.getUserDataFromToken;
-        const formattedUserId = `${userData.first_name || ""}${userData.userid || ""}`;
+        const formattedUserId = `${userData.userid || ""}`;
   
         setUser({ ...userData, userid: formattedUserId });
         setLoading(false);
