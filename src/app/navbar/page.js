@@ -20,7 +20,7 @@ export default function SchoolNavbar({ role }) {
 
 
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -45,10 +45,10 @@ export default function SchoolNavbar({ role }) {
         const formattedUserId = `${userData.userid || ""}`;
   
         setUser({ ...userData, userid: formattedUserId });
-        setLoading(false);
+        // setLoading(false);
       } catch (error) {
         console.error("Error Fetching User Data:", error);
-        setLoading(false);
+        // setLoading(false);
       }
     };
   
@@ -85,20 +85,20 @@ export default function SchoolNavbar({ role }) {
   }, []);
 
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <h1 className="text-xl font-semibold text-gray-700">Loading...</h1>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex items-center justify-center min-h-screen bg-gray-100">
+  //       <h1 className="text-xl font-semibold text-gray-700">Loading...</h1>
+  //     </div>
+  //   );
+  // }
 
   return (
-<nav className="fixed top-0 left-0 w-full bg-blue-600 text-white p-2 shadow-md flex justify-between items-center  z-50">
+<nav className="fixed top-0 left-0 w-full bg-gradient-to-r from-blue-900 via-blue-600 to-blue-900 text-white p-4 shadow-lg flex justify-between items-center z-50 backdrop-blur-md bg-opacity-90 border-b border-white/10">
 {/* School Logo & Name */}
       <div className="flex items-center gap-2">
   <Image src="/img/logo.png" alt="School Logo" width={90} height={90} className="rounded-full" />
-  <h1 className="text-lg font-bold hidden md:block">VaeKon InfoTech School</h1>
+  {/* <h1 className="text-lg font-bold hidden md:block">VaeKon InfoTech School</h1> */}
 </div>
 
 
@@ -119,23 +119,30 @@ export default function SchoolNavbar({ role }) {
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">3</span>
         </button>
 
-        {/* Notification Dropdown */}
-        {showNotifications && (
-          <div className="absolute right-20 top-12 w-64 bg-white text-gray-800 shadow-lg rounded-lg p-3">
-            <h3 className="font-semibold mb-2">Notifications</h3>
-            <ul className="text-sm">
-              <li className="py-2 border-b hover:bg-gray-100 p-2">
-                <Link href="/homework">New homework assigned</Link>
-              </li>
-              <li className="py-2 border-b hover:bg-gray-100 p-2">
-                <Link href="/events">Upcoming PTM on March 5</Link>
-              </li>
-              <li className="py-2 hover:bg-gray-100 p-2">
-                <Link href="/results">Exam results available</Link>
-              </li>
-            </ul>
-          </div>
-        )}
+       {/* Notification Dropdown */}
+{showNotifications && (
+  <div className="absolute right-20 top-14 w-64 sm:w-72 bg-white text-gray-800 shadow-lg rounded-lg p-4 z-50 border border-gray-200">
+    <h3 className="font-semibold text-lg mb-3 text-gray-700">Notifications</h3>
+    <ul className="text-sm space-y-2">
+      <li className="py-3 border-b hover:bg-gray-100 p-2 rounded-md transition">
+        <Link href="/homework" className="text-gray-700 text-sm flex-1 truncate">
+          📌 New homework assigned
+        </Link>
+      </li>
+      <li className="py-3 border-b hover:bg-gray-100 p-2 rounded-md transition">
+        <Link href="/events" className="text-gray-700 text-sm flex-1 truncate">
+          📅 Upcoming PTM on March 5
+        </Link>
+      </li>
+      <li className="py-3 hover:bg-gray-100 p-2 rounded-md transition">
+        <Link href="/results" className="text-gray-700 text-sm flex-1 truncate">
+          🎯 Exam results available
+        </Link>
+      </li>
+    </ul>
+  </div>
+)}
+
 
         {/* Messages */}
         <button 
@@ -153,26 +160,33 @@ export default function SchoolNavbar({ role }) {
 
         </button>
 
-        {/* Messages Dropdown */}
-        {showMessages && (
-          <div className="absolute right-10 top-12 w-64 bg-white text-gray-800 shadow-lg rounded-lg p-3">
-            <h3 className="font-semibold mb-2">Teachers</h3>
-            <ul className="text-sm">
-              <li className="flex items-center gap-2 py-2 border-b hover:bg-gray-100 p-2">
-                <Image src="/teacher1.jpg" alt="Teacher" width={24} height={24} className="rounded-full" />
-                <Link href="/chat/mr-sharma">Mr. Sharma</Link>
-              </li>
-              <li className="flex items-center gap-2 py-2 border-b hover:bg-gray-100 p-2">
-                <Image src="/teacher2.jpg" alt="Teacher" width={24} height={24} className="rounded-full" />
-                <Link href="/chat/ms-gupta">Ms. Gupta</Link>
-              </li>
-              <li className="flex items-center gap-2 py-2 hover:bg-gray-100 p-2">
-                <Image src="/teacher3.jpg" alt="Teacher" width={24} height={24} className="rounded-full" />
-                <Link href="/chat/dr-verma">Dr. Verma</Link>
-              </li>
-            </ul>
-          </div>
-        )}
+       {/* Messages Dropdown */}
+{showMessages && (
+  <div className="absolute right-10 top-14 w-64 sm:w-72 bg-white text-gray-800 shadow-lg rounded-lg p-4 z-50 border border-gray-200">
+    <h3 className="font-semibold text-lg mb-3 text-gray-700">Teachers</h3>
+    <ul className="text-sm space-y-2">
+      <li className="flex items-center gap-3 py-3 border-b hover:bg-gray-100 p-2 rounded-md transition">
+        <Image src="/teacher1.jpg" alt="Teacher" width={32} height={32} className="rounded-full" />
+        <Link href="/chat/mr-sharma" className="text-gray-700 text-sm flex-1 truncate">
+          Mr. Sharma
+        </Link>
+      </li>
+      <li className="flex items-center gap-3 py-3 border-b hover:bg-gray-100 p-2 rounded-md transition">
+        <Image src="/teacher2.jpg" alt="Teacher" width={32} height={32} className="rounded-full" />
+        <Link href="/chat/ms-gupta" className="text-gray-700 text-sm flex-1 truncate">
+          Ms. Gupta
+        </Link>
+      </li>
+      <li className="flex items-center gap-3 py-3 hover:bg-gray-100 p-2 rounded-md transition">
+        <Image src="/teacher3.jpg" alt="Teacher" width={32} height={32} className="rounded-full" />
+        <Link href="/chat/dr-verma" className="text-gray-700 text-sm flex-1 truncate">
+          Dr. Verma
+        </Link>
+      </li>
+    </ul>
+  </div>
+)}
+
 
         {/* Profile */}
 
@@ -202,35 +216,35 @@ export default function SchoolNavbar({ role }) {
 
 
 
-        {/* Profile Dropdown */}
-       {/* Profile Dropdown */}
+     {/* Profile Dropdown */}
 {showProfileMenu && user && (
-  <div className="absolute right-0 top-12 w-48 bg-white text-gray-800 shadow-lg rounded-lg p-3">
-    <h3 className="font-semibold mb-2">Profile</h3>
-    <ul className="text-sm">
-      <li className="flex flex-col gap-1 py-2 border-b p-2">
-        <span className="text-blue-600 font-semibold">{user.first_name} {user.last_name}</span>
-        <span className="text-gray-500 text-xs">{user.email}</span>
+  <div className="absolute right-0 top-14 w-64 sm:w-72 bg-white text-gray-800 shadow-lg rounded-lg p-4 z-50 border border-gray-200">
+    <h3 className="font-semibold text-lg mb-3 text-gray-700">Profile</h3>
+    <ul className="text-sm space-y-2">
+      <li className="flex flex-col gap-1 py-3 border-b p-2">
+        <span className="text-blue-600 font-semibold text-base truncate">{user.first_name} {user.last_name}</span>
+        <span className="text-gray-500 text-xs truncate">{user.email}</span>
       </li>
-      <li className="flex items-center gap-2 py-2 border-b hover:bg-gray-100 p-2">
-        <User className="w-5 h-5" />
-        <span>User ID - <span className='text-blue-600'>{user.userid} {user.role} </span></span>
+      <li className="flex items-center gap-3 py-3 border-b hover:bg-gray-100 p-2 rounded-md transition">
+        <User className="w-5 h-5 text-blue-600" />
+        <span className="text-sm flex-1 truncate">User ID - <span className="text-blue-600">{user.userid}</span></span>
       </li>
-      <li className="flex items-center gap-2 py-2 border-b hover:bg-gray-100 p-2">
-        <Edit className="w-4 h-4" />
-        <Link href="/profile/edit">Edit Profile</Link>
+      <li className="flex items-center gap-3 py-3 border-b hover:bg-gray-100 p-2 rounded-md transition">
+        <Edit className="w-4 h-4 text-gray-600" />
+        <Link href="/profile/edit" className="flex-1 truncate">Edit Profile</Link>
       </li>
-      <li className="flex items-center gap-2 py-2 border-b hover:bg-gray-100 p-2">
-        <Settings className="w-4 h-4" />
-        <Link href="/settings">Settings</Link>
+      <li className="flex items-center gap-3 py-3 border-b hover:bg-gray-100 p-2 rounded-md transition">
+        <Settings className="w-4 h-4 text-gray-600" />
+        <Link href="/settings" className="flex-1 truncate">Settings</Link>
       </li>
-      <li className="flex items-center gap-2 py-2 text-red-600 hover:bg-gray-100 p-2">
-        <LogOut className="w-4 h-4" />
-        <button onClick={handleLogout} className="text-red-600">Logout</button>
+      <li className="flex items-center gap-3 py-3 text-red-600 hover:bg-gray-100 p-2 rounded-md transition">
+        <LogOut className="w-4 h-4 text-red-600" />
+        <button onClick={handleLogout} className="text-red-600 ">Logout</button>
       </li>
     </ul>
   </div>
 )}
+
 
       </div>
     </nav>
