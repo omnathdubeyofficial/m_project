@@ -18,7 +18,7 @@ const Dashboard = () => {
     { name: 'Parents Management', icon: FaUserTie, link: '/parents', bg: 'bg-yellow-100', text: 'text-yellow-800' },
     { name: 'Staff Management', icon: FaUsers, link: '/staff', bg: 'bg-red-100', text: 'text-red-800' },
     { name: 'Transport Drivers', icon: FaBus, link: '/transport-drivers', bg: 'bg-orange-100', text: 'text-orange-800' },
-    { name: 'Transport Vehicles', icon: FaCogs, link: '/transport-vehicles', bg: 'bg-teal-100', text: 'text-teal-800' },
+    { name: 'Transport Vehicles', icon: FaCogs, link: '/transport_vhicles/transportVehiclesData', bg: 'bg-teal-100', text: 'text-teal-800' },
     { name: 'Library Management', icon: FaBook, link: '/library', bg: 'bg-pink-100', text: 'text-pink-800' },
     { name: 'Lab Management', icon: FaFlask, link: '/lab', bg: 'bg-indigo-100', text: 'text-indigo-800' },
     { name: 'Computer Section', icon: FaDesktop, link: '/computer-section', bg: 'bg-cyan-100', text: 'text-cyan-800' },
