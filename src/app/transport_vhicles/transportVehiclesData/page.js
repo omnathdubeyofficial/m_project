@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { FaSearch, FaEdit, FaTrash, FaChevronRight, FaChevronLeft, FaPlus, FaDownload } from "react-icons/fa";
+import { FaSearch, FaEdit, FaTrash, FaChevronRight, FaChevronLeft, FaPlus, FaArrowLeft, FaDownload, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import Image from "next/image";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
@@ -10,26 +10,16 @@ import { GET_USER_MANAGEMENT_DATA } from "../../query/userManagementDataQuery";
 import { DELETE_USER_MANAGEMENT_DATA_MUTATION } from "../../mutation/deleteUserManagementData";
 import { executeQuery, executeMutation } from "../../graphqlClient";
 import Link from "next/link";
-import { 
-    FaUniversity, FaUserGraduate, FaUserTie,FaArrowLeft, FaChartBar, FaUsers, FaFileAlt, 
-    FaBus, FaCogs, FaBook, FaFlask, FaDesktop, FaBroom, FaShieldAlt, FaClipboardCheck, 
-    FaCalendarAlt, FaFutbol, FaTrophy, FaBell, FaUserPlus, FaMoneyBillWave 
-  } from 'react-icons/fa';
 import Navbar from "../../navbar/page";
-
-const Button = ({ onClick, className, icon: Icon, children }) => (
-  <button onClick={onClick} className={`btn ${className} flex items-center px-4 py-2 rounded-lg`}>
-    <Icon className="mr-2" /> {children}
-  </button>
-);
 
 const TransportVehiclesData = () => {
   const [admins, setAdmins] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [showPopup, setShowPopup] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const adminsPerPage = 10;
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState({ text: "", type: "" });
+
+  const adminsPerPage = 5;
 
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -63,15 +53,22 @@ const TransportVehiclesData = () => {
       const response = await executeMutation(DELETE_USER_MANAGEMENT_DATA_MUTATION, { z_id: id });
       if (response?.deleteUserManagementData?.success_msg) {
         setAdmins(prev => prev.filter(admin => admin.z_id !== id));
-        setSuccessMessage(response.deleteUserManagementData.success_msg);
+
+        // ✅ Success popup
+        setPopupMessage({ text: response.deleteUserManagementData.success_msg, type: "success" });
         setShowPopup(true);
         setTimeout(() => setShowPopup(false), 3000);
       } else {
-        alert("Failed to delete admin: " + response?.deleteUserManagementData?.error_msg);
+        // ❌ Error popup
+        setPopupMessage({ text: "Failed to delete: " + response?.deleteUserManagementData?.error_msg, type: "error" });
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 3000);
       }
     } catch (error) {
       console.error("Error deleting admin:", error);
-      alert("An error occurred while deleting the admin.");
+      setPopupMessage({ text: "An error occurred while deleting.", type: "error" });
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 3000);
     }
   }, []);
 
@@ -98,76 +95,144 @@ const TransportVehiclesData = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-gray-100 min-h-screen pt-14">
       <Navbar />
-      <main className="container mx-auto py-32 px-4">
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+      <main className="container mx-auto py-16 px-4 ">
+
+      {showPopup && (
+          <div className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg text-white flex items-center gap-2 shadow-lg text-lg 
+            ${popupMessage.type === "success" ? "bg-green-600" : "bg-red-600"}`}>
+            {popupMessage.type === "success" ? <FaCheckCircle /> : <FaTimesCircle />}
+            {popupMessage.text}
+          </div>
+        )}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+        
+        {/* Back Button */}
         <Link href="/dashboard" passHref>
-  <button 
-    className="bg-blue-500 text-white px-4 py-2 shadow-md hover:bg-blue-600 transition duration-200 flex items-center gap-2"
-  >
-    <FaArrowLeft className="text-white" />
-    Go Back
-  </button>
-</Link>  
-          <div className="relative w-full max-w-sm">
-            <input
-              type="text"
-              placeholder="Search by User ID..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg shadow focus:outline-none"
-            />
-            <FaSearch className="absolute right-4 top-3 text-gray-400" />
-          </div>
-          <div className="flex space-x-4 mt-4 sm:mt-0">
-            <Button onClick={handleDownloadExcel} className="bg-green-600 text-white" icon={FaDownload}>Download Excel</Button>
-            <Button onClick={handleDownloadPDF} className="bg-red-600 text-white" icon={FaDownload}>Download PDF</Button>
-            <Link href="/components/adminform" className="btn bg-blue-600 text-white flex items-center px-4 py-2 rounded-lg">
-              <FaPlus className="mr-2" /> Add New
-            </Link>
-          </div>
+          <button className="bg-blue-500 text-white px-4 py-2 shadow-md hover:bg-blue-600 transition duration-200 flex items-center gap-2 ">
+            <FaArrowLeft className="text-white" />
+            Go Back
+          </button>
+        </Link>
+
+  
+
+        {/* Action Buttons */}
+        <div className="flex flex-wrap justify-center sm:justify-end gap-2">
+              {/* Search Bar */}
+        <div className="relative flex items-center border w-full sm:w-80">
+              <FaSearch className="absolute left-3 text-gray-500" />
+              <input
+                type="text"
+                placeholder="Search by User ID..."
+                className="w-full pl-10 pr-4 py-2 rounded focus:outline-none"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          <button onClick={handleDownloadExcel} className="bg-green-600 text-white px-4 py-2  flex items-center gap-2 hover:bg-green-700 transition">
+            <FaDownload /> Excel
+          </button>
+          <button onClick={handleDownloadPDF} className="bg-red-600 text-white px-4 py-2  flex items-center gap-2 hover:bg-red-700 transition">
+            <FaDownload /> PDF
+          </button>
+          <Link href="/components/adminform" className="bg-blue-600 text-white flex items-center px-4 py-2  hover:bg-blue-700 transition">
+            <FaPlus className="mr-2" /> Add New
+          </Link>
         </div>
+
+      </div>
+
         <div className="overflow-x-auto">
-          <table className="w-full table-auto bg-white shadow rounded-lg overflow-hidden">
-            <thead>
-              <tr className="bg-gray-200 text-left">
-                <th className="px-6 py-3">Profile</th>
-                <th className="px-6 py-3">Name</th>
-                <th className="px-6 py-3">Email</th>
-                <th className="px-6 py-3">Role</th>
-                <th className="px-6 py-3">User ID</th>
-                <th className="px-6 py-3">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentAdmins.map((admin) => (
-                <tr key={admin.z_id} className="border-b">
-                  <td className="px-6 py-3">
-                    <Image src={admin.profile_image || "/img/q.png"} width={40} height={40} className="rounded-full object-cover w-10 h-10" alt="Profile" />
-                  </td>
-                  <td className="px-6 py-3">{`${admin.first_name} ${admin.last_name}`}</td>
-                  <td className="px-6 py-3">{admin.email}</td>
-                  <td className="px-6 py-3">{admin.role || "N/A"}</td>
-                  <td className="px-6 py-3">{admin.userid || "N/A"}</td>
-                  <td className="px-6 py-3 flex space-x-2">
-                    <button className="text-blue-500"><FaEdit /></button>
-                    <button onClick={() => handleDelete(admin.z_id)} className="text-red-500"><FaTrash /></button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="flex justify-center items-center mt-4 space-x-4 text-gray-700 text-lg">
-          <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} className="px-4 py-2 bg-gray-300 rounded-lg">
-            <FaChevronLeft />
-          </button>
-          <span>Page {currentPage} of {totalPages} (Total: {totalAdmins} admins)</span>
-          <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} className="px-4 py-2 bg-gray-300 rounded-lg">
-            <FaChevronRight />
-          </button>
-        </div>
+      <div className="min-w-full inline-block align-middle">
+             <div className="overflow-hidden border border-gray-300 shadow-lg">
+         <table className="min-w-full bg-white border border-gray-300">
+           <thead className="bg-gradient-to-r from-blue-900 via-blue-600 to-blue-900 border border-gray-300">
+             <tr className="text-white text-sm font-semibold border border-gray-300">
+               <th className="px-6 py-3 text-left border border-gray-300">Profile</th>
+               <th className="px-6 py-3 text-left border border-gray-300">Name</th>
+               <th className="px-6 py-3 text-left border border-gray-300">Email</th>
+               <th className="px-6 py-3 text-left border border-gray-300">Role</th>
+               <th className="px-6 py-3 text-left border border-gray-300">User ID</th>
+               <th className="px-6 py-3 text-center border border-gray-300">Actions</th>
+             </tr>
+           </thead>
+           <tbody className="divide-y divide-gray-300 border border-gray-300">
+             {currentAdmins.map((admin) => (
+               <tr key={admin.z_id} className="hover:bg-gray-50 transition duration-200 border border-gray-300">
+                 <td className="px-6 py-4 border border-gray-300">
+                   <Image
+                     src={admin.profile_image || "/img/q.png"}
+                     width={40}
+                     height={40}
+                     className="rounded-full object-cover w-10 h-10 border border-gray-300"
+                     alt="Profile"
+                   />
+                 </td>
+                 <td className="px-6 py-4 whitespace-nowrap border border-gray-300">
+                   <span className="font-medium text-gray-900">{`${admin.first_name} ${admin.last_name}`}</span>
+                 </td>
+                 <td className="px-6 py-4 truncate max-w-[200px] border border-gray-300">
+                   <span className="text-gray-600">{admin.email}</span>
+                 </td>
+                 <td className="px-6 py-4 whitespace-nowrap border border-gray-300">
+                   <span className="px-2 py-1 text-xs font-semibold text-white bg-blue-500 rounded">
+                     {admin.role || "N/A"}
+                   </span>
+                 </td>
+                 <td className="px-6 py-4 whitespace-nowrap text-gray-700 border border-gray-300">
+                   {admin.userid || "N/A"}
+                 </td>
+                 <td className="px-6 py-4 flex justify-center space-x-4  ">
+                   <button className="text-blue-500 hover:text-blue-700">
+                     <FaEdit size={16} />
+                   </button>
+                   <button
+                     onClick={() => handleDelete(admin.z_id)}
+                     className="text-red-500 hover:text-red-700"
+                   >
+                     <FaTrash size={16} />
+                   </button>
+                 </td>
+               </tr>
+             ))}
+           </tbody>
+         </table>
+       </div>
+      </div>
+    </div>
+    <div className="flex flex-wrap justify-center items-center mt-6 gap-3 sm:gap-6 text-gray-700 text-sm sm:text-lg">
+      
+      {/* Previous Button */}
+      <button
+        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+        disabled={currentPage === 1}
+        className={`px-4 py-2 rounded-lg flex items-center gap-2 text-sm sm:text-base font-medium transition-all duration-200 
+          ${currentPage === 1 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-blue-900 via-blue-600 to-blue-900 hover:bg-gray-400 text-white"}
+        `}
+      >
+        <FaChevronLeft className="text-base" /> Prev
+      </button>
+
+      {/* Page Info */}
+      <span className=" text-gray-700">
+        Page {currentPage} of {totalPages}  
+        <span className=" text-gray-600"> (Total: {totalAdmins})</span>
+      </span>
+
+      {/* Next Button */}
+      <button
+        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+        disabled={currentPage === totalPages}
+        className={`px-4 py-2 rounded-lg flex items-center gap-2 text-sm sm:text-base font-medium transition-all duration-200 
+          ${currentPage === totalPages ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-blue-900 via-blue-600 to-blue-900 hover:bg-gray-400 text-white"}
+        `}
+      >
+        Next <FaChevronRight className="text-base" />
+      </button>
+
+    </div>
       </main>
     </div>
   );
