@@ -60,35 +60,36 @@ const HousekeepingStaffForm = () => {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-5">
             <button
               onClick={() => router.push("/dashboard")}
-              className="bg-blue-500 text-white px-3 py-2  flex items-center gap-2 hover:bg-blue-700"
+              className="bg-blue-500 text-white px-3 py-2 flex items-center gap-2 hover:bg-blue-700"
             >
               <FaArrowLeft /> Go Back
             </button>
-            <h2 className="text-2xl  text-center text-gray-800">Housekeeping Staff Registration</h2>
+            <h2 className="text-2xl text-center text-gray-800">Housekeeping Staff Registration</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="grid gap-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[ 
-                { name: "name", placeholder: "Staff Name", type: "text" },
-                { name: "phone", placeholder: "Phone Number", type: "text" },
-                { name: "email", placeholder: "Email Address", type: "email" },
-                { name: "address", placeholder: "Address", type: "text" },
-                { name: "aadharNumber", placeholder: "Aadhar Number", type: "text" },
-                { name: "dateOfBirth", placeholder: "Date of Birth", type: "date" },
-                { name: "gender", placeholder: "Gender", type: "text" },
-                { name: "emergencyContact", placeholder: "Emergency Contact", type: "text" },
-                { name: "joiningDate", placeholder: "Joining Date", type: "date" },
+                { name: "name", label: "Staff Name", type: "text" },
+                { name: "phone", label: "Phone Number", type: "text" },
+                { name: "email", label: "Email Address", type: "email" },
+                { name: "address", label: "Address", type: "text" },
+                { name: "aadharNumber", label: "Aadhar Number", type: "text" },
+                { name: "dateOfBirth", label: "Date of Birth", type: "date" },
+                { name: "gender", label: "Gender", type: "text" },
+                { name: "emergencyContact", label: "Emergency Contact", type: "text" },
+                { name: "joiningDate", label: "Joining Date", type: "date" },
               ].map((field, index) => (
-                <input
-                  key={index}
-                  type={field.type}
-                  name={field.name}
-                  placeholder={field.placeholder}
-                  className="border p-3 rounded w-full"
-                  onChange={handleChange}
-                  required
-                />
+                <div key={index} className="flex flex-col">
+                  <label className="font-semibold mb-1">{field.label}</label>
+                  <input
+                    type={field.type}
+                    name={field.name}
+                    className="border p-3 rounded w-full"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
               ))}
             </div>
 

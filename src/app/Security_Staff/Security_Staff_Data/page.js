@@ -139,7 +139,7 @@ const TransportVehiclesData = () => {
           <button onClick={handleDownloadPDF} className="bg-red-600 text-white px-4 py-2  flex items-center gap-2 hover:bg-red-700 transition">
             <FaDownload /> PDF
           </button>
-          <Link href="/components/adminform" className="bg-blue-600 text-white flex items-center px-4 py-2  hover:bg-blue-700 transition">
+          <Link href="/Security_Staff/Security_Staff_Form" className="bg-blue-600 text-white flex items-center px-4 py-2  hover:bg-blue-700 transition">
             <FaPlus className="mr-2" /> Add New
           </Link>
         </div>

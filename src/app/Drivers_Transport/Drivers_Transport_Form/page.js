@@ -62,33 +62,34 @@ const Drivers_Transport_Form = () => {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-5">
             <button
               onClick={() => router.push("/dashboard")}
-              className="bg-blue-500 text-white px-3 py-2  flex items-center gap-2 hover:bg-blue-700"
+              className="bg-blue-500 text-white px-3 py-2 flex items-center gap-2 hover:bg-blue-700"
             >
               <FaArrowLeft /> Go Back
             </button>
-            <h2 className="text-2xl  text-center text-gray-800">Transport Driver Registration</h2>
+            <h2 className="text-2xl text-center text-gray-800">Transport Driver Registration</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="grid gap-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
-                { name: "name", placeholder: "Driver's Name" },
-                { name: "phone", placeholder: "Phone Number" },
-                { name: "email", placeholder: "Email Address" },
-                { name: "address", placeholder: "Address" },
-                { name: "licenseNumber", placeholder: "Driver License Number" },
-                { name: "aadharNumber", placeholder: "Aadhar Number" },
-                { name: "vehicleNumber", placeholder: "Vehicle Number" },
+                { name: "name", label: "Driver's Name" },
+                { name: "phone", label: "Phone Number" },
+                { name: "email", label: "Email Address" },
+                { name: "address", label: "Address" },
+                { name: "licenseNumber", label: "Driver License Number" },
+                { name: "aadharNumber", label: "Aadhar Number" },
+                { name: "vehicleNumber", label: "Vehicle Number" },
               ].map((field, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  name={field.name}
-                  placeholder={field.placeholder}
-                  className="border p-3 rounded w-full"
-                  onChange={handleChange}
-                  required
-                />
+                <div key={index} className="flex flex-col">
+                  <label className="font-semibold text-gray-700 mb-1">{field.label}</label>
+                  <input
+                    type="text"
+                    name={field.name}
+                    className="border p-3 rounded w-full"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
               ))}
             </div>
 
@@ -133,7 +134,7 @@ const Drivers_Transport_Form = () => {
             <div className="flex justify-center mt-6">
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-6 py-3 flex items-center justify-center gap-2 hover:bg-blue-700 text-lg "
+                className="bg-blue-600 text-white px-6 py-3 flex items-center justify-center gap-2 hover:bg-blue-700 text-lg"
               >
                 <FaSave /> Save Record
               </button>

@@ -5,29 +5,27 @@ import { useRouter } from "next/navigation";
 import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
 import Navbar from "../../navbar/page";
 
-const TransportVehiclesForm = () => {
+const Security_Staff_Form = () => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    vehicleNumber: "",
-    vehicleType: "",
-    model: "",
-    seatingCapacity: "",
-    insuranceNumber: "",
-    pollutionCertificate: "",
-    registrationDate: "",
-    fitnessCertificate: "",
-    ownerName: "",
-    ownerContact: "",
-    vehicleImage: null,
-    insuranceImage: null,
-    pollutionImage: null,
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+    dateOfBirth: "",
+    aadharNumber: "",
+    securityID: "",
+    joiningDate: "",
+    profileImage: null,
+    aadharImageFront: null,
+    aadharImageBack: null,
   });
 
   const fileInputRefs = {
-    vehicleImage: useRef(null),
-    insuranceImage: useRef(null),
-    pollutionImage: useRef(null),
+    profileImage: useRef(null),
+    aadharImageFront: useRef(null),
+    aadharImageBack: useRef(null),
   };
 
   const handleChange = (e) => {
@@ -56,7 +54,7 @@ const TransportVehiclesForm = () => {
   return (
     <div className="bg-gray-50 min-h-screen w-full flex flex-col">
       <Navbar />
-      <div className="container mx-auto py-10 px-4 sm:px-6 md:px-8 max-w-7xl pt-32">
+      <div className="container mx-auto py-10 px-4 sm:px-6 md:px-8 max-w-8xl pt-32">
         <div className="bg-white shadow-lg p-6 sm:p-8 w-full relative ">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-5">
             <button
@@ -65,25 +63,23 @@ const TransportVehiclesForm = () => {
             >
               <FaArrowLeft /> Go Back
             </button>
-            <h2 className="text-2xl text-center text-gray-800">Transport Vehicle Registration</h2>
+            <h2 className="text-2xl font-semibold text-gray-800">Security Staff Registration</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="grid gap-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[ 
-                { name: "vehicleNumber", label: "Vehicle Number", type: "text" },
-                { name: "vehicleType", label: "Vehicle Type", type: "text" },
-                { name: "model", label: "Model", type: "text" },
-                { name: "seatingCapacity", label: "Seating Capacity", type: "number" },
-                { name: "insuranceNumber", label: "Insurance Number", type: "text" },
-                { name: "pollutionCertificate", label: "Pollution Certificate", type: "text" },
-                { name: "registrationDate", label: "Registration Date", type: "date" },
-                { name: "fitnessCertificate", label: "Fitness Certificate", type: "text" },
-                { name: "ownerName", label: "Owner Name", type: "text" },
-                { name: "ownerContact", label: "Owner Contact", type: "text" },
+              {[    
+                { name: "name", label: "Staff Name", type: "text" },
+                { name: "phone", label: "Phone Number", type: "text" },
+                { name: "email", label: "Email Address", type: "text" },
+                { name: "address", label: "Address", type: "text" },
+                { name: "dateOfBirth", label: "Date of Birth", type: "date" },
+                { name: "aadharNumber", label: "Aadhar Number", type: "text" },
+                { name: "securityID", label: "Security ID", type: "text" },
+                { name: "joiningDate", label: "Joining Date", type: "date" },
               ].map((field, index) => (
                 <div key={index} className="flex flex-col">
-                  <label className="font-semibold mb-1">{field.label}</label>
+                  <label className="font-semibold text-gray-700 mb-1">{field.label}</label>
                   <input
                     type={field.type}
                     name={field.name}
@@ -96,10 +92,10 @@ const TransportVehiclesForm = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-t pt-6">
-              {[
-                { key: "vehicleImage", label: "Vehicle Image" },
-                { key: "insuranceImage", label: "Insurance Image" },
-                { key: "pollutionImage", label: "Pollution Image" },
+              {[    
+                { key: "profileImage", label: "Profile Image" },
+                { key: "aadharImageFront", label: "Aadhar Image Front" },
+                { key: "aadharImageBack", label: "Aadhar Image Back" },
               ].map(({ key, label }, index) => (
                 <div key={index} className="flex flex-col items-center border p-4 rounded-lg w-full relative">
                   <span className="font-semibold text-lg">{label}</span>
@@ -146,4 +142,4 @@ const TransportVehiclesForm = () => {
   );
 };
 
-export default TransportVehiclesForm;
+export default Security_Staff_Form;

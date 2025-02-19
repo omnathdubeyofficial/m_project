@@ -5,19 +5,21 @@ import { useRouter } from "next/navigation";
 import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
 import Navbar from "../../navbar/page";
 
-const LibraryManagementForm = () => {
+const ComputerSectionForm = () => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    bookTitle: "",
-    author: "",
-    publisher: "",
-    isbn: "",
-    genre: "",
-    publicationYear: "",
-    totalCopies: "",
-    availableCopies: "",
-    bookCover: null,
+    computerID: "",
+    brand: "",
+    model: "",
+    processor: "",
+    ram: "",
+    storage: "",
+    os: "",
+    purchaseDate: "",
+    assignedTo: "",
+    status: "",
+    computerImage: null,
   });
 
   const fileInputRef = useRef(null);
@@ -29,12 +31,12 @@ const LibraryManagementForm = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData({ ...formData, bookCover: URL.createObjectURL(file) });
+      setFormData({ ...formData, computerImage: URL.createObjectURL(file) });
     }
   };
 
   const handleClearFile = () => {
-    setFormData({ ...formData, bookCover: null });
+    setFormData({ ...formData, computerImage: null });
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -49,7 +51,7 @@ const LibraryManagementForm = () => {
     <div className="bg-gray-50 min-h-screen w-full flex flex-col">
       <Navbar />
       <div className="container mx-auto py-10 px-4 sm:px-6 md:px-8 max-w-7xl pt-32">
-        <div className="bg-white shadow-lg p-6 sm:p-8 w-full relative">
+        <div className="bg-white shadow-lg p-6 sm:p-8 w-full relative ">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-5">
             <button
               onClick={() => router.push("/dashboard")}
@@ -57,20 +59,22 @@ const LibraryManagementForm = () => {
             >
               <FaArrowLeft /> Go Back
             </button>
-            <h2 className="text-2xl text-center text-gray-800">Library Management</h2>
+            <h2 className="text-2xl text-center text-gray-800">Computer Section Registration</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="grid gap-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[ 
-                { name: "bookTitle", label: "Book Title", type: "text" },
-                { name: "author", label: "Author", type: "text" },
-                { name: "publisher", label: "Publisher", type: "text" },
-                { name: "isbn", label: "ISBN", type: "text" },
-                { name: "genre", label: "Genre", type: "text" },
-                { name: "publicationYear", label: "Publication Year", type: "number" },
-                { name: "totalCopies", label: "Total Copies", type: "number" },
-                { name: "availableCopies", label: "Available Copies", type: "number" },
+                { name: "computerID", label: "Computer ID", type: "text" },
+                { name: "brand", label: "Brand", type: "text" },
+                { name: "model", label: "Model", type: "text" },
+                { name: "processor", label: "Processor", type: "text" },
+                { name: "ram", label: "RAM (GB)", type: "text" },
+                { name: "storage", label: "Storage (GB)", type: "text" },
+                { name: "os", label: "Operating System", type: "text" },
+                { name: "purchaseDate", label: "Purchase Date", type: "date" },
+                { name: "assignedTo", label: "Assigned To", type: "text" },
+                { name: "status", label: "Status", type: "text" },
               ].map((field, index) => (
                 <div key={index} className="flex flex-col">
                   <label className="font-semibold mb-1">{field.label}</label>
@@ -85,14 +89,14 @@ const LibraryManagementForm = () => {
               ))}
             </div>
 
-            <div className="border-t pt-6">
+            <div className="grid grid-cols-1 gap-4 border-t pt-6">
               <div className="flex flex-col items-center border p-4 rounded-lg w-full relative">
-                <span className="font-semibold text-lg">Book Cover</span>
+                <span className="font-semibold text-lg">Computer Image</span>
                 <label className="border p-2 rounded w-full flex items-center gap-2 cursor-pointer bg-gray-200 hover:bg-gray-300 mt-2">
-                  <FaUpload /> Upload Book Cover
+                  <FaUpload /> Upload Image
                   <input
                     type="file"
-                    name="bookCover"
+                    name="computerImage"
                     ref={fileInputRef}
                     className="hidden"
                     accept="image/*"
@@ -100,9 +104,9 @@ const LibraryManagementForm = () => {
                     required
                   />
                 </label>
-                {formData.bookCover && (
+                {formData.computerImage && (
                   <div className="relative mt-2">
-                    <img src={formData.bookCover} alt="Book Cover" className="w-32 h-32 rounded-lg border object-cover" />
+                    <img src={formData.computerImage} alt="Computer" className="w-32 h-32 rounded-lg border object-cover" />
                     <button
                       type="button"
                       onClick={handleClearFile}
@@ -130,4 +134,4 @@ const LibraryManagementForm = () => {
   );
 };
 
-export default LibraryManagementForm;
+export default ComputerSectionForm;
