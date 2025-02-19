@@ -19,7 +19,7 @@ const TransportVehiclesData = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState({ text: "", type: "" });
 
-  const adminsPerPage = 5;
+  const adminsPerPage = 10;
 
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -95,9 +95,12 @@ const TransportVehiclesData = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen pt-14">
-      <Navbar />
-      <main className="container mx-auto py-16 px-4 ">
+    <div>
+       <Navbar />
+
+    <div className="min-h-screen bg-gray-100 items-center p-6 w-full pt-28">
+     
+      <main className=" bg-white p-6  shadow-md  mx-auto py-8 px-8  ">
 
       {showPopup && (
           <div className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg text-white flex items-center gap-2 shadow-lg text-lg 
@@ -234,6 +237,7 @@ const TransportVehiclesData = () => {
 
     </div>
       </main>
+    </div>
     </div>
   );
 };
