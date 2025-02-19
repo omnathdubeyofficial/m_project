@@ -19,7 +19,7 @@ const TransportVehiclesData = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState({ text: "", type: "" });
 
-  const adminsPerPage = 5;
+  const adminsPerPage = 10;
 
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -95,9 +95,12 @@ const TransportVehiclesData = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen pt-28">
-      <Navbar />
-      <main className="container  bg-white p-6  shadow-md  mx-auto py-8 px-8 ">
+    <div>
+       <Navbar />
+
+    <div className="min-h-screen bg-gray-100 items-center p-6 w-full pt-28">
+     
+      <main className=" bg-white p-6  shadow-md  mx-auto py-8 px-8  ">
 
       {showPopup && (
           <div className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg text-white flex items-center gap-2 shadow-lg text-lg 
@@ -117,8 +120,6 @@ const TransportVehiclesData = () => {
         </Link>
 
   
-        <h1 className="text-3xl  text-gray-800">
-        Transport Vehicles List</h1>
 
         {/* Action Buttons */}
         <div className="flex flex-wrap justify-center sm:justify-end gap-2">
@@ -139,7 +140,7 @@ const TransportVehiclesData = () => {
           <button onClick={handleDownloadPDF} className="bg-red-600 text-white px-4 py-2  flex items-center gap-2 hover:bg-red-700 transition">
             <FaDownload /> PDF
           </button>
-          <Link href="/transport_vhicles/transportVehiclesform" className="bg-blue-600 text-white flex items-center px-4 py-2  hover:bg-blue-700 transition">
+          <Link href="/components/adminform" className="bg-blue-600 text-white flex items-center px-4 py-2  hover:bg-blue-700 transition">
             <FaPlus className="mr-2" /> Add New
           </Link>
         </div>
@@ -236,6 +237,7 @@ const TransportVehiclesData = () => {
 
     </div>
       </main>
+    </div>
     </div>
   );
 };

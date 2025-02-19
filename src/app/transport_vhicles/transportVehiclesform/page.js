@@ -1,0 +1,148 @@
+"use client";
+
+import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
+import Navbar from "../../navbar/page";
+
+const TransportDriverForm = () => {
+  const router = useRouter();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+    licenseNumber: "",
+    aadharNumber: "",
+    vehicleNumber: "",
+    profileImage: null,
+    licenseImageFront: null,
+    licenseImageBack: null,
+    aadharImageFront: null,
+    aadharImageBack: null,
+  });
+
+  const fileInputRefs = {
+    profileImage: useRef(null),
+    licenseImageFront: useRef(null),
+    licenseImageBack: useRef(null),
+    aadharImageFront: useRef(null),
+    aadharImageBack: useRef(null),
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData({ ...formData, [e.target.name]: URL.createObjectURL(file) });
+    }
+  };
+
+  const handleClearFile = (key) => {
+    setFormData({ ...formData, [key]: null });
+    if (fileInputRefs[key].current) {
+      fileInputRefs[key].current.value = "";
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form Data Submitted:", formData);
+  };
+
+  return (
+    <div className="bg-gray-50 min-h-screen w-full flex flex-col">
+      <Navbar />
+      <div className="container mx-auto py-10 px-4 sm:px-6 md:px-8 max-w-7xl pt-32">
+        <div className="bg-white shadow-lg p-6 sm:p-8 w-full relative ">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-5">
+            <button
+              onClick={() => router.push("/dashboard")}
+              className="bg-blue-500 text-white px-3 py-2  flex items-center gap-2 hover:bg-blue-700"
+            >
+              <FaArrowLeft /> Go Back
+            </button>
+            <h2 className="text-2xl font-semibold text-gray-800">Transport Driver Registration</h2>
+          </div>
+
+          <form onSubmit={handleSubmit} className="grid gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                { name: "name", placeholder: "Driver's Name" },
+                { name: "phone", placeholder: "Phone Number" },
+                { name: "email", placeholder: "Email Address" },
+                { name: "address", placeholder: "Address" },
+                { name: "licenseNumber", placeholder: "Driver License Number" },
+                { name: "aadharNumber", placeholder: "Aadhar Number" },
+                { name: "vehicleNumber", placeholder: "Vehicle Number" },
+              ].map((field, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  name={field.name}
+                  placeholder={field.placeholder}
+                  className="border p-3 rounded w-full"
+                  onChange={handleChange}
+                  required
+                />
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-t pt-6">
+              {[
+                { key: "profileImage", label: "Profile Image" },
+                { key: "licenseImageFront", label: "License Image Front" },
+                { key: "licenseImageBack", label: "License Image Back" },
+                { key: "aadharImageFront", label: "Aadhar Image Front" },
+                { key: "aadharImageBack", label: "Aadhar Image Back" },
+              ].map(({ key, label }, index) => (
+                <div key={index} className="flex flex-col items-center border p-4 rounded-lg w-full relative">
+                  <span className="font-semibold text-lg">{label}</span>
+                  <label className="border p-2 rounded w-full flex items-center gap-2 cursor-pointer bg-gray-200 hover:bg-gray-300 mt-2">
+                    <FaUpload /> Upload {label}
+                    <input
+                      type="file"
+                      name={key}
+                      ref={fileInputRefs[key]}
+                      className="hidden"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      required
+                    />
+                  </label>
+                  {formData[key] && (
+                    <div className="relative mt-2">
+                      <img src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => handleClearFile(key)}
+                        className="absolute top-0 right-0 bg-red-600 text-white p-1 rounded-full"
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-center mt-6">
+              <button
+                type="submit"
+                className="bg-blue-600 text-white px-6 py-3 flex items-center justify-center gap-2 hover:bg-blue-700 text-lg "
+              >
+                <FaSave /> Save Record
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TransportDriverForm;

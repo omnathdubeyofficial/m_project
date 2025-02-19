@@ -116,9 +116,8 @@ const TransportVehiclesData = () => {
           </button>
         </Link>
 
-  
-        <h1 className="text-3xl  text-gray-800">
-        Transport Vehicles List</h1>
+        <h1 className="text-3xl  text-gray-800">Housekeeping Staff Data Lists</h1>
+
 
         {/* Action Buttons */}
         <div className="flex flex-wrap justify-center sm:justify-end gap-2">
@@ -139,7 +138,7 @@ const TransportVehiclesData = () => {
           <button onClick={handleDownloadPDF} className="bg-red-600 text-white px-4 py-2  flex items-center gap-2 hover:bg-red-700 transition">
             <FaDownload /> PDF
           </button>
-          <Link href="/transport_vhicles/transportVehiclesform" className="bg-blue-600 text-white flex items-center px-4 py-2  hover:bg-blue-700 transition">
+          <Link href="/Housekeeping_Staff/Housekeeping_Staff_Form" className="bg-blue-600 text-white flex items-center px-4 py-2  hover:bg-blue-700 transition">
             <FaPlus className="mr-2" /> Add New
           </Link>
         </div>

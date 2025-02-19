@@ -12,7 +12,7 @@ import { executeQuery, executeMutation } from "../../graphqlClient";
 import Link from "next/link";
 import Navbar from "../../navbar/page";
 
-const UserDataLists = () => {
+const TransportVehiclesData = () => {
   const [admins, setAdmins] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -95,12 +95,9 @@ const UserDataLists = () => {
   };
 
   return (
-     <div>
-        <Navbar />
- 
-     <div className="min-h-screen bg-gray-100 items-center p-6 w-full pt-28">
-      
-       <main className=" bg-white p-6  shadow-md  mx-auto py-8 px-8  ">
+    <div className="bg-gray-100 min-h-screen pt-28">
+      <Navbar />
+      <main className="container  bg-white p-6  shadow-md  mx-auto py-8 px-8 ">
 
       {showPopup && (
           <div className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg text-white flex items-center gap-2 shadow-lg text-lg 
@@ -119,11 +116,12 @@ const UserDataLists = () => {
           </button>
         </Link>
 
-   
+        <h1 className="text-3xl  text-gray-800">Users Lists</h1>
+
+
         {/* Action Buttons */}
         <div className="flex flex-wrap justify-center sm:justify-end gap-2">
-
-               {/* Search Bar */}
+              {/* Search Bar */}
         <div className="relative flex items-center border w-full sm:w-80">
               <FaSearch className="absolute left-3 text-gray-500" />
               <input
@@ -149,61 +147,60 @@ const UserDataLists = () => {
 
         <div className="overflow-x-auto">
       <div className="min-w-full inline-block align-middle">
-      <div className="overflow-hidden border border-gray-300 shadow-lg">
-  <table className="min-w-full bg-white border border-gray-300">
-    <thead className="bg-gradient-to-r from-blue-900 via-blue-600 to-blue-900 border border-gray-300">
-      <tr className="text-white text-sm font-semibold border border-gray-300">
-        <th className="px-6 py-3 text-left border border-gray-300">Profile</th>
-        <th className="px-6 py-3 text-left border border-gray-300">Name</th>
-        <th className="px-6 py-3 text-left border border-gray-300">Email</th>
-        <th className="px-6 py-3 text-left border border-gray-300">Role</th>
-        <th className="px-6 py-3 text-left border border-gray-300">User ID</th>
-        <th className="px-6 py-3 text-center border border-gray-300">Actions</th>
-      </tr>
-    </thead>
-    <tbody className="divide-y divide-gray-300 border border-gray-300">
-      {currentAdmins.map((admin) => (
-        <tr key={admin.z_id} className="hover:bg-gray-50 transition duration-200 border border-gray-300">
-          <td className="px-6 py-4 border border-gray-300">
-            <Image
-              src={admin.profile_image || "/img/q.png"}
-              width={40}
-              height={40}
-              className="rounded-full object-cover w-10 h-10 border border-gray-300"
-              alt="Profile"
-            />
-          </td>
-          <td className="px-6 py-4 whitespace-nowrap border border-gray-300">
-            <span className="font-medium text-gray-900">{`${admin.first_name} ${admin.last_name}`}</span>
-          </td>
-          <td className="px-6 py-4 truncate max-w-[200px] border border-gray-300">
-            <span className="text-gray-600">{admin.email}</span>
-          </td>
-          <td className="px-6 py-4 whitespace-nowrap border border-gray-300">
-            <span className="px-2 py-1 text-xs font-semibold text-white bg-blue-500 rounded">
-              {admin.role || "N/A"}
-            </span>
-          </td>
-          <td className="px-6 py-4 whitespace-nowrap text-gray-700 border border-gray-300">
-            {admin.userid || "N/A"}
-          </td>
-          <td className="px-6 py-4 flex justify-center space-x-4  ">
-            <button className="text-blue-500 hover:text-blue-700">
-              <FaEdit size={16} />
-            </button>
-            <button
-              onClick={() => handleDelete(admin.z_id)}
-              className="text-red-500 hover:text-red-700"
-            >
-              <FaTrash size={16} />
-            </button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
-
+             <div className="overflow-hidden border border-gray-300 shadow-lg">
+         <table className="min-w-full bg-white border border-gray-300">
+           <thead className="bg-gradient-to-r from-blue-900 via-blue-600 to-blue-900 border border-gray-300">
+             <tr className="text-white text-sm font-semibold border border-gray-300">
+               <th className="px-6 py-3 text-left border border-gray-300">Profile</th>
+               <th className="px-6 py-3 text-left border border-gray-300">Name</th>
+               <th className="px-6 py-3 text-left border border-gray-300">Email</th>
+               <th className="px-6 py-3 text-left border border-gray-300">Role</th>
+               <th className="px-6 py-3 text-left border border-gray-300">User ID</th>
+               <th className="px-6 py-3 text-center border border-gray-300">Actions</th>
+             </tr>
+           </thead>
+           <tbody className="divide-y divide-gray-300 border border-gray-300">
+             {currentAdmins.map((admin) => (
+               <tr key={admin.z_id} className="hover:bg-gray-50 transition duration-200 border border-gray-300">
+                 <td className="px-6 py-4 border border-gray-300">
+                   <Image
+                     src={admin.profile_image || "/img/q.png"}
+                     width={40}
+                     height={40}
+                     className="rounded-full object-cover w-10 h-10 border border-gray-300"
+                     alt="Profile"
+                   />
+                 </td>
+                 <td className="px-6 py-4 whitespace-nowrap border border-gray-300">
+                   <span className="font-medium text-gray-900">{`${admin.first_name} ${admin.last_name}`}</span>
+                 </td>
+                 <td className="px-6 py-4 truncate max-w-[200px] border border-gray-300">
+                   <span className="text-gray-600">{admin.email}</span>
+                 </td>
+                 <td className="px-6 py-4 whitespace-nowrap border border-gray-300">
+                   <span className="px-2 py-1 text-xs font-semibold text-white bg-blue-500 rounded">
+                     {admin.role || "N/A"}
+                   </span>
+                 </td>
+                 <td className="px-6 py-4 whitespace-nowrap text-gray-700 border border-gray-300">
+                   {admin.userid || "N/A"}
+                 </td>
+                 <td className="px-6 py-4 flex justify-center space-x-4  ">
+                   <button className="text-blue-500 hover:text-blue-700">
+                     <FaEdit size={16} />
+                   </button>
+                   <button
+                     onClick={() => handleDelete(admin.z_id)}
+                     className="text-red-500 hover:text-red-700"
+                   >
+                     <FaTrash size={16} />
+                   </button>
+                 </td>
+               </tr>
+             ))}
+           </tbody>
+         </table>
+       </div>
       </div>
     </div>
     <div className="flex flex-wrap justify-center items-center mt-6 gap-3 sm:gap-6 text-gray-700 text-sm sm:text-lg">
@@ -239,8 +236,7 @@ const UserDataLists = () => {
     </div>
       </main>
     </div>
-    </div>
   );
 };
 
-export default UserDataLists;
+export default TransportVehiclesData;
