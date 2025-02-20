@@ -1,50 +1,50 @@
 "use client";
 
 import { useState } from "react";
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-import { executeMutation } from "../../graphqlClient";
-import { CREATE_USER_MANAGEMENT_DATA_MUTATION } from "../../mutation/createUserManagementData";
-import Navber from "../../navbar/page";
+import { useRouter } from "next/navigation";
+import { FaSave, FaArrowLeft, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Navbar from "../../navbar/page";
+import { executeMutation } from "../../graphqlClient";
+import { CREATE_USER_MANAGEMENT_DATA_MUTATION } from "../../mutation/createUserManagementData";
 
 const AdminRegistrationPage = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     first_name: "",
     middle_name: "",
     last_name: "",
     gender: "",
     email: "",
-    confirm_password: "",
     contact_no: "",
     role: "",
     status: "",
-    subject_specialization: "",
-    class_assigned: "",
-    teacher_id: "",
-    admin_id: "",
-    joining_date: "",
+    joining_date: new Date(),
     qualification: "",
     enrollment_no: "",
-    date_of_birth: "",
+    date_of_birth: new Date(),
     standard: "",
     section: "",
     parent_id: "",
-    admission_date: "",
-    children_id: "",
+    admission_date: new Date(),
     occupation: "",
     address: "",
     nationality: "",
     password: "",
+    confirm_password: ""
   });
   const [message, setMessage] = useState(null);
 
-  const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleFormSubmit = async (e) => {
+  const handleDateChange = (date, name) => {
+    setFormData({ ...formData, [name]: date });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirm_password) {
       setMessage({ type: "error", text: "Passwords do not match!" });
@@ -54,96 +54,87 @@ const AdminRegistrationPage = () => {
     try {
       const response = await executeMutation(CREATE_USER_MANAGEMENT_DATA_MUTATION, formData);
       setMessage({ type: "success", text: response?.createUserManagementData?.success_msg || "Admin created successfully!" });
+      setTimeout(() => setMessage(null), 3000);
       setFormData({
         first_name: "",
         middle_name: "",
         last_name: "",
         gender: "",
         email: "",
-        confirm_password: "",
         contact_no: "",
         role: "",
         status: "",
-        subject_specialization: "",
-        class_assigned: "",
-        teacher_id: "",
-        admin_id: "",
-        joining_date: "",
+        joining_date: new Date(),
         qualification: "",
         enrollment_no: "",
-        date_of_birth: "",
+        date_of_birth: new Date(),
         standard: "",
         section: "",
         parent_id: "",
-        admission_date: "",
-        children_id: "",
+        admission_date: new Date(),
         occupation: "",
         address: "",
         nationality: "",
         password: "",
+        confirm_password: ""
       });
     } catch (error) {
       setMessage({ type: "error", text: "Failed to create admin. Please try again." });
+      setTimeout(() => setMessage(null), 3000);
     }
-    setTimeout(() => setMessage(null), 3000);
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col items-center">
-      <Navber />
+    <div className="bg-gray-50 min-h-screen w-full flex flex-col">
+      <Navbar />
       {message && (
-  <div
-    className={`fixed top-4 left-1/2 transform -translate-x-1/2 p-4 rounded-lg shadow-lg z-50 text-center flex items-center gap-2 ${
-      message.type === "success"
-        ? "bg-green-100 text-green-700"
-        : "bg-red-100 text-red-700"
-    }`}
-  >
-    {message.type === "success" ? (
-      <FaCheckCircle className="text-green-600 text-2xl" />
-    ) : (
-      <FaTimesCircle className="text-red-600 text-2xl" />
-    )}
-    <p className="font-medium">{message.text}</p>
-  </div>
-)}
-
-      <main className="py-10 px-6 w-full max-w-7xl pt-32">
-        <h2 className="text-3xl font-semibold text-center mb-6">Add New Admin</h2>
-        <form onSubmit={handleFormSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {Object.keys(formData).map((field) => (
-            field !== "confirm_password" ? (
-              field === "role" ? (
-                <select key={field} name={field} value={formData[field]} onChange={handleFormChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
-                  <option value="">Select Role</option>
-                  <option value="admin">Admin</option>
-                  <option value="student">Student</option>
-                  <option value="parent">Parent</option>
-                </select>
-              ) : field === "address" ? (
-<textarea 
-  key={field} 
-  name={field} 
-  value={formData[field]} 
-  onChange={handleFormChange} 
-  placeholder={field.replace("_", " ").toLowerCase().replace(/\b\w/, c => c.toUpperCase())} 
-  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none h-24 col-span-4" 
-  required 
-/>
-              ) : (
-                <input key={field} type={field === "password" ? "password" : "text"} name={field} value={formData[field]} onChange={handleFormChange} placeholder={field.replace("_", " ").toLowerCase().replace(/\b\w/, c => c.toUpperCase())} className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none" required />
-              )
-            ) : null
-          ))}
-          <input type="password" name="confirm_password" value={formData.confirm_password} onChange={handleFormChange} placeholder="Confirm Password" className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400 focus:outline-none" required />
-          <div className="col-span-1 md:col-span-2 lg:col-span-4 flex justify-center">
-  <button type="submit" className="w-40 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300">
-    Submit
-  </button>
-</div>
- 
-        </form>
-      </main>
+        <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 p-4 rounded-lg shadow-lg z-50 text-center flex items-center gap-2 ${message.type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+          {message.type === "success" ? <FaCheckCircle className="text-green-600 text-2xl" /> : <FaTimesCircle className="text-red-600 text-2xl" />}
+          <p className="font-medium">{message.text}</p>
+        </div>
+      )}
+      <div className="container mx-auto py-10 px-4 sm:px-6 md:px-8 max-w-8xl pt-32">
+        <div className="bg-white shadow-lg p-6 sm:p-8 w-full relative">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-5">
+            <button onClick={() => router.push("/dashboard")} className="bg-blue-500 text-white px-3 py-2 flex items-center gap-2 hover:bg-blue-700">
+              <FaArrowLeft /> Go Back
+            </button>
+            <h2 className="text-2xl text-center text-gray-800">Admin Registration Form</h2>
+          </div>
+          <form onSubmit={handleSubmit} className="grid gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Object.keys(formData).map((field, index) => (
+                <div key={index} className="flex flex-col">
+                  <label className="font-semibold mb-1">{field.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</label>
+                  {field.includes("date") ? (
+                    <DatePicker
+                      selected={formData[field]}
+                      onChange={(date) => handleDateChange(date, field)}
+                      className="border p-3 rounded w-full"
+                      dateFormat="yyyy-MM-dd"
+                      required
+                    />
+                  ) : (
+                    <input
+                      type={field.includes("password") ? "password" : "text"}
+                      name={field}
+                      className="border p-3 rounded w-full"
+                      value={formData[field]}
+                      onChange={handleChange}
+                      required
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-center mt-6">
+              <button type="submit" className="bg-blue-600 text-white px-6 py-3 flex items-center justify-center gap-2 hover:bg-blue-700 text-lg">
+                <FaSave /> Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
