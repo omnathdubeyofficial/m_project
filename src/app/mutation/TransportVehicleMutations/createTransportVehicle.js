@@ -47,6 +47,8 @@ export const CREATE_TRANSPORT_VEHICLE_MUTATION = `
     bank_branch_name
     success_msg
     error_msg
+    cdate
+    ctime
     }
   }
 `;

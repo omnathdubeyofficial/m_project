@@ -44,8 +44,10 @@ mutation  updateTransportVehicleRegistration( $z_id: String, $vehicle_id : Strin
     bank_account_num
     bank_branch_code
     bank_branch_name
-      success_msg
-      error_msg
+    udate
+    utime
+    success_msg
+    error_msg
     }
   }
     `;
