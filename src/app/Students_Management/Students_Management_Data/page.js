@@ -118,7 +118,7 @@ const TransportVehiclesData = () => {
 
   
         <h1 className="text-3xl  text-gray-800">
-        Students_Management_Data List</h1>
+        Students_Management List</h1>
 
         {/* Action Buttons */}
         <div className="flex flex-wrap justify-center sm:justify-end gap-2">
