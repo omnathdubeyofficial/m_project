@@ -20,7 +20,8 @@ import admssionFormResolver from './resolvers/admissionFormResolver.js';
 import authTokanResolver from './resolvers/authTokanResolver.js';
 import securityType from './types/securityType.js';
 import securityResolver from './resolvers/securityResolver.js';
-
+import transportVehicleRegistrationType from './types/transportVehicleTypes.js';
+import transportVehicleResolver from './resolvers/transportVehicleResolver.js';
 const app = express();
 
 // Use CORS middleware
@@ -31,8 +32,8 @@ app.use(cors({
 
 // Combine all type definitions and resolvers
 const schema = makeExecutableSchema({
-  typeDefs: [userType, userDataType, adminDataType, userManagementType, studentRegistrationTypes, attendanceTypes, admissionFormType, authTokantTypes, securityType], // Combine all type definitions
-  resolvers: [userResolver, userDataResolver, adminDataResolver, userManagementResolver, studentRegistrationResolver, attendanceResolver, admssionFormResolver, authTokanResolver, securityResolver], // Combine all resolvers
+  typeDefs: [userType, userDataType, adminDataType, userManagementType, studentRegistrationTypes, attendanceTypes, admissionFormType, authTokantTypes, securityType, transportVehicleRegistrationType], // Combine all type definitions
+  resolvers: [userResolver, userDataResolver, adminDataResolver, userManagementResolver, studentRegistrationResolver, attendanceResolver, admssionFormResolver, authTokanResolver, securityResolver, transportVehicleResolver], // Combine all resolvers
 });
 
 // GraphQL endpoint
