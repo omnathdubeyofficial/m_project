@@ -1,7 +1,11 @@
 import express from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import cors from 'cors'; // Import CORS middleware
+import cors from 'cors';
+import cookieParser from 'cookie-parser'; // Import cookie parser
+import dotenv from 'dotenv';
+dotenv.config();
+
 import userType from './types/userType.js';
 import userDataType from './types/userDataType.js';
 import authTokantTypes from './types/authTokantTypes.js';
@@ -22,31 +26,45 @@ import securityType from './types/securityType.js';
 import securityResolver from './resolvers/securityResolver.js';
 import transportVehicleRegistrationType from './types/transportVehicleTypes.js';
 import transportVehicleResolver from './resolvers/transportVehicleResolver.js';
+
 const app = express();
 
-// Use CORS middleware
+// ✅ CORS Configuration (Allow Credentials for Cookies)
 app.use(cors({
-  origin: 'http://localhost:3000', // Allow only your frontend
-  credentials: true, // Allow cookies if needed
+  origin: 'http://localhost:3000', // Allow frontend origin
+  credentials: true, // Allow cookies
 }));
 
-// Combine all type definitions and resolvers
+// ✅ Middleware for Cookies
+app.use(cookieParser());
+app.use(express.json());
+
+// ✅ GraphQL Schema
 const schema = makeExecutableSchema({
-  typeDefs: [userType, userDataType, adminDataType, userManagementType, studentRegistrationTypes, attendanceTypes, admissionFormType, authTokantTypes, securityType, transportVehicleRegistrationType], // Combine all type definitions
-  resolvers: [userResolver, userDataResolver, adminDataResolver, userManagementResolver, studentRegistrationResolver, attendanceResolver, admssionFormResolver, authTokanResolver, securityResolver, transportVehicleResolver], // Combine all resolvers
+  typeDefs: [
+    userType, userDataType, adminDataType, userManagementType, 
+    studentRegistrationTypes, attendanceTypes, admissionFormType, 
+    authTokantTypes, securityType, transportVehicleRegistrationType
+  ], 
+  resolvers: [
+    userResolver, userDataResolver, adminDataResolver, 
+    userManagementResolver, studentRegistrationResolver, attendanceResolver, 
+    admssionFormResolver, authTokanResolver, securityResolver, transportVehicleResolver
+  ], 
 });
 
-// GraphQL endpoint
+// ✅ GraphQL Endpoint with Express
 app.use(
   '/graphql',
-  graphqlHTTP({
+  graphqlHTTP((req, res) => ({
     schema,
-    graphiql: true, // Enable GraphiQL UI for testing
-  })
+    graphiql: true, 
+    context: { req, res },  // 👈 Pass `res` here so resolvers can use it
+  }))
 );
 
-// Start the server
+// ✅ Start Server
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}/graphql`);
+  console.log(`🚀 Server running on http://localhost:${PORT}/graphql`);
 });

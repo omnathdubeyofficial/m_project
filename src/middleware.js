@@ -12,7 +12,7 @@ const ROLE_DASHBOARD = {
 };
 
 const ROLE_PERMISSIONS = {
-  admin: ["/dashboard", "/student_dash/students_forms/admission_form", "/student_dash/students_forms/attendance_form", "/student_dash/students_forms/holiday_list"],
+  admin: ["/dashboard","/dashboard/admin_dashboard", "/student_dash/students_forms/admission_form", "/student_dash/students_forms/attendance_form", "/student_dash/students_forms/holiday_list"],
   student: ["/student_dash", "/view_courses"],
   parent: ["/parents_dash", "/child_progress"],
   teacher: ["/teacher_dash", "/manage_classes"],

@@ -44,13 +44,6 @@ const Login = () => {
       const result = await executeQuery(GET_LOGIN_DATA, { userid: username, password });
 
       if (result?.login?.success_msg) {
-        Cookies.set("authToken", result.login.token, {
-          expires: 7,
-          path: "/",
-          secure: true,
-          sameSite: "Strict",
-        });
-
         setSuccessMsg(result.login.success_msg);
         router.refresh();
       } else {

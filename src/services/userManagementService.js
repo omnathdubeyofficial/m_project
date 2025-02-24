@@ -28,40 +28,39 @@ async function verifyPassword(plainPassword, hashedPassword) {
   return isMatch;
 }
 
-const login = async ({ userid, password }) => {
+const login = async (_, { userid, password }, { res }) => {
   let error_msg = "";
   try {
-    const user = await prisma.user_management.findFirst({
-      where: { userid },
-    });
+    console.log("🔹 Login attempt for userid:", userid);
+
+    const user = await prisma.user_management.findFirst({ where: { userid } });
+    console.log("🔹 User fetched from DB:", user ? "User found" : "User not found");
 
     if (!user) {
-      error_msg = "Invalid Username";
-      console.log(error_msg);
-      return { error_msg };
+      console.log("❌ Invalid Username");
+      return { error_msg: "Invalid Username", token: null };
     }
 
-    console.log("The user data is:", user);
     const isMatch = await verifyPassword(password, user.password);
+    console.log("🔹 Password match status:", isMatch);
 
     if (!isMatch) {
-      error_msg = "Invalid password";
-      console.log(error_msg);
-      return { error_msg };
+      console.log("❌ Invalid password");
+      return { error_msg: "Invalid password", token: null };
     }
-
-    console.log("✅ Login successful!");
 
     const SECRET_KEY = process.env.JWT_SECRET;
     const JWT_ISSUER = process.env.JWT_ISSUER;
     const JWT_AUDIENCE = process.env.JWT_AUDIENCE;
     const JWT_ALGORITHM = process.env.JWT_ALGORITHM || "HS256";
 
+    console.log("🔹 JWT Config Loaded");
+
     if (!SECRET_KEY || !JWT_ISSUER || !JWT_AUDIENCE) {
       throw new Error("Missing JWT_SECRET, ISSUER, or AUDIENCE in environment variables!");
     }
 
-    // ✅ JWT Token Generate
+    // ✅ Token Generation
     const token = jwt.sign(
       {
         userid: user.userid,
@@ -70,24 +69,40 @@ const login = async ({ userid, password }) => {
       SECRET_KEY,
       {
         expiresIn: "6h",
-        issuer: process.env.JWT_ISSUER, 
-        audience: process.env.JWT_AUDIENCE, 
-        algorithm: process.env.JWT_ALGORITHM || "HS256",
+        issuer: JWT_ISSUER,
+        audience: JWT_AUDIENCE,
+        algorithm: JWT_ALGORITHM,
       }
     );
-    
 
-    console.log("🔹 The generated token is:", token);
+    console.log("✅ JWT Token Generated");
 
-    return { token, success_msg: "Login successfully." };
+    // ✅ Ensure Cookie is Set Immediately
+    res.cookie("authToken", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      secure: true,
+      maxAge: 6 * 60 * 60 * 1000,
+    });
+
+    console.log("✅ Cookie Set Successfully");
+
+    // ✅ Force Cookie to be Sent Before Returning Response
+    await new Promise((resolve) => setTimeout(resolve, 10)); 
+    console.log("✅ Delay Added to Ensure Cookie Transmission");
+
+    console.log("✅ Login Successful");
+    return { success_msg: "Login successful", token };  
+
   } catch (err) {
-    error_msg = `❌ Facing error while login: ${err.message || err}`;
-    console.error(error_msg);
-    return { error_msg };
-  } finally {
-    await prisma.$disconnect();
+    console.error("❌ Error during login:", err.message || err);
+    return { error_msg: `❌ Error during login: ${err.message || err}`, token: null };
   }
 };
+
+
+
 
 
 // const login = async ({ userid, password }) => {

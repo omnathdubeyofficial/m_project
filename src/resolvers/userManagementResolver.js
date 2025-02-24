@@ -5,7 +5,24 @@ import { getUserManagementData, createUserManagementData, updateUserManagementDa
 const userResolver = {
   Query: {
     getUserManagementData: createResolver(getUserManagementData),
-    login: createResolver(login),
+    login: async (_, args, context) => {
+      console.log("📌 [Resolver] Login Attempt with args:", args);
+    
+      if (!context || !context.res) {
+        console.error("❌ [Resolver] Context or Response object is missing!");
+        throw new Error("Internal Server Error: Missing response object");
+      }
+    
+      // ✅ Ensure args are correctly passed
+      const { userid, password } = args;
+      console.log(`🔍 Extracted userid: ${userid}, password: ${password ? '******' : 'MISSING'}`);
+    
+      if (!userid || !password) {
+        return { error_msg: "Userid or Password missing!" };
+      }
+    
+      return await login(_, { userid, password }, context);
+    },
   },
   Mutation: {
     createUserManagementData: createResolver(createUserManagementData),
