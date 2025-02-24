@@ -20,41 +20,24 @@ export default function SchoolNavbar({ role }) {
 
 
   const [user, setUser] = useState(null);
-  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      let authToken = Cookies.get("authToken");
-  
-      if (!authToken) {
-        router.replace("/login");
-        return;
-      }
-  
-      authToken = String(authToken);
-      const variables = { authToken };
-  
       try {
-        const response = await executeQuery(GET_TOKAN_MANAGEMENT_DATA, variables);
+        const response = await executeQuery(GET_TOKAN_MANAGEMENT_DATA);
   
-        if (!response || !response.getUserDataFromToken) {
-          return;
+        if (response && response.getUserDataFromToken) {
+          const userData = response.getUserDataFromToken;
+          setUser(userData); 
         }
-  
-        const userData = response.getUserDataFromToken;
-        const formattedUserId = `${userData.userid || ""}`;
-  
-        setUser({ ...userData, userid: formattedUserId });
-        // setLoading(false);
       } catch (error) {
         console.error("Error Fetching User Data:", error);
-        // setLoading(false);
       }
     };
   
     fetchUserData();
   }, [router]);
-
+  
 
 
 

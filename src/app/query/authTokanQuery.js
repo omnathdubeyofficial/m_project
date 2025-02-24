@@ -1,6 +1,6 @@
 export const GET_TOKAN_MANAGEMENT_DATA = `
-query getUserDataFromToken($authToken: String) {
-  getUserDataFromToken(authToken: $authToken) {
+query getUserDataFromToken {
+  getUserDataFromToken {
  z_id
       first_name
       middle_name

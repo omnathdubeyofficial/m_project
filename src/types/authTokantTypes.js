@@ -34,12 +34,11 @@ const userDataType = gql`
     ctime : String
     udate : String
     utime : String
-    authToken : String
   }
 
   # Query type for fetching users
   type Query {
-    getUserDataFromToken(authToken: String): getUserDataFromTokentype
+    getUserDataFromToken : getUserDataFromTokentype
   }
 
 

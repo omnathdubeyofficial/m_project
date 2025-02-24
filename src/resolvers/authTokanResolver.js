@@ -1,11 +1,20 @@
 // userResolver.js
-import { createResolver } from './resolverUtil.js';  // Import the utility function
-import { getUserDataFromToken } from '../services/authTokanService.js';  // Import the service functions
+import { getUserDataFromToken } from '../services/authTokanService.js';
 
 const authTokenResolver = {
   Query: {
-    getUserDataFromToken: createResolver(getUserDataFromToken),
-  }
+    getUserDataFromToken: async (parent, args, context) => {
+      const { authToken } = context; // Ensure context is defined
+      if (!authToken) {
+        throw new Error("No authToken provided");
+      }
+
+      // Call your function to get user data
+      const userData = await getUserDataFromToken(context.req);
+      return userData;
+    },
+  },
 };
+
 
 export default authTokenResolver;
