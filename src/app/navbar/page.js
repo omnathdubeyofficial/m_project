@@ -5,15 +5,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Bell, LogOut, User, Settings, Edit, MessageSquare } from 'lucide-react';
-import Cookies from "js-cookie";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { GET_TOKAN_MANAGEMENT_DATA } from "../query/authTokanQuery";
-import { executeQuery } from "../graphqlClient";
+import {LOGOUT_MUTATION} from "../mutation/logoutMutation/logoutMutation"
+import { executeQuery,executeMutation } from "../graphqlClient";
 
 export default function SchoolNavbar({ role }) {
   const router = useRouter();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showMessages, setShowMessages] = useState(false);
+  const [logoutMessage, setLogoutMessage] = useState('');
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
   const messageRef = useRef(null);
@@ -55,11 +58,20 @@ export default function SchoolNavbar({ role }) {
     }
   };
 
-  const handleLogout = () => {
-    Cookies.remove("authToken"); // Auth token remove karein
-    localStorage.clear(); // Local storage clear karein
-    sessionStorage.clear(); // Session storage clear karein
-    router.replace("/login"); // Login page par redirect karein
+  const handleLogout = async () => {
+    try {
+      const response = await executeMutation(LOGOUT_MUTATION);
+      
+      if (response ) {
+        setLogoutMessage('' + response.logout.message);
+        
+        setTimeout(() => {
+          window.location.reload(); 
+        }, 1000);
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   useEffect(() => {
@@ -228,6 +240,13 @@ export default function SchoolNavbar({ role }) {
   </div>
 )}
 
+
+{logoutMessage && (
+        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded shadow-lg flex items-center space-x-2 z-50">
+          <FontAwesomeIcon icon={faSignOutAlt} />
+          <span>{logoutMessage}</span>
+        </div>
+      )}
 
       </div>
     </nav>
