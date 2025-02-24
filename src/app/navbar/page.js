@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import {useMemo, useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -24,22 +24,23 @@ export default function SchoolNavbar({ role }) {
 
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
+  const fetchUserData = useMemo(() => {
+    return async () => {
       try {
         const response = await executeQuery(GET_TOKAN_MANAGEMENT_DATA);
-  
         if (response && response.getUserDataFromToken) {
           const userData = response.getUserDataFromToken;
-          setUser(userData); 
+          setUser(userData);
         }
       } catch (error) {
         console.error("Error Fetching User Data:", error);
       }
     };
-  
+  }, []); 
+
+  useEffect(() => {
     fetchUserData();
-  }, [router]);
+  }, [fetchUserData, router]);
   
 
 
