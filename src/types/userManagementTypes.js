@@ -10,7 +10,7 @@ const userDataType = gql`
     last_name: String
     gender : String
     email : String
-    password : String
+    # password : String
     contact_no : String
     role : String
     status : String
@@ -36,7 +36,7 @@ const userDataType = gql`
     utime : String
     success_msg : String,
     error_msg : String,
-    token : String
+    # token : String
   }
 
   # Query type for fetching users

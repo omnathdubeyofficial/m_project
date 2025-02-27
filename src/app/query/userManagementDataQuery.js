@@ -8,7 +8,7 @@ query {
       userid
       gender
       email
-      password
+
       contact_no
       role
       status
