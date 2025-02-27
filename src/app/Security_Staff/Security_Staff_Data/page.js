@@ -6,8 +6,8 @@ import Image from "next/image";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { GET_USER_MANAGEMENT_DATA } from "../../query/userManagementDataQuery";
-import { DELETE_USER_MANAGEMENT_DATA_MUTATION } from "../../mutation/deleteUserManagementData";
+import { GET_SECURITY_FORM_DATA } from "../../query/SecurityFormQuery/fetchSecurityForm";
+import { DELETE_SECURITY_FORM_MUTATION } from "../../mutation/SecurityFormMutation/deleteSecurityForm";
 import { executeQuery, executeMutation } from "../../graphqlClient";
 import Link from "next/link";
 import Navbar from "../../navbar/page";
@@ -24,8 +24,8 @@ const TransportVehiclesData = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const response = await executeQuery(GET_USER_MANAGEMENT_DATA);
-        setAdmins(response?.getUserManagementData || []);
+        const response = await executeQuery(GET_SECURITY_FORM_DATA);
+        setAdmins(response?.getSecurity || []);
       } catch (error) {
         console.error("Error fetching admin data:", error);
       }
@@ -50,7 +50,7 @@ const TransportVehiclesData = () => {
 
   const handleDelete = useCallback(async (id) => {
     try {
-      const response = await executeMutation(DELETE_USER_MANAGEMENT_DATA_MUTATION, { z_id: id });
+      const response = await executeMutation(DELETE_SECURITY_FORM_MUTATION, { z_id: id });
       if (response?.deleteUserManagementData?.success_msg) {
         setAdmins(prev => prev.filter(admin => admin.z_id !== id));
 
@@ -165,7 +165,7 @@ const TransportVehiclesData = () => {
                <tr key={admin.z_id} className="hover:bg-gray-50 transition duration-200 border border-gray-300">
                  <td className="px-6 py-4 border border-gray-300">
                    <Image
-                     src={admin.profile_image || "/img/q.png"}
+                     src={admin.profile_img || "/img/q.png"}
                      width={40}
                      height={40}
                      className="rounded-full object-cover w-10 h-10 border border-gray-300"
@@ -184,7 +184,7 @@ const TransportVehiclesData = () => {
                    </span>
                  </td>
                  <td className="px-6 py-4 whitespace-nowrap text-gray-700 border border-gray-300">
-                   {admin.userid || "N/A"}
+                   {admin.profile_img || "N/A"}
                  </td>
                  <td className="px-6 py-4 flex justify-center space-x-4  ">
                    <button className="text-blue-500 hover:text-blue-700">

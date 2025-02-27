@@ -4,10 +4,11 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
 import Navbar from "../../navbar/page";
+import { CREATE_SECURITY_FORM_MUTATION } from "../../mutation/SecurityFormMutation/createSecurityForm";
+import { executeMutation } from "../../graphqlClient";
 
 const Security_Staff_Form = () => {
   const router = useRouter();
-
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -32,12 +33,32 @@ const Security_Staff_Form = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData({ ...formData, [e.target.name]: URL.createObjectURL(file) });
-    }
-  };
+  // const handleFileChange = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+  
+  //   const formData = new FormData();
+  //   formData.append("image", file);
+  
+  //   try {
+  //     const response = await fetch("/api/upload", {
+  //       method: "POST",
+  //       body: formData,
+  //     });
+  
+  //     const data = await response.json();
+  //     console.log("Upload Response:", data); // Debugging Response
+  
+  //     if (data.imageUrl) {
+  //       setFormData({ ...formData, [e.target.name]: data.imageUrl });
+  //     } else {
+  //       console.error("Upload failed, no imageUrl returned.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error uploading file:", error);
+  //   }
+  // };
+  
 
   const handleClearFile = (key) => {
     setFormData({ ...formData, [key]: null });
@@ -46,16 +67,83 @@ const Security_Staff_Form = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Data Submitted:", formData);
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+  
+    const formDataUpload = new FormData();
+    formDataUpload.append("image", file);
+  
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formDataUpload,
+      });
+  
+      const data = await response.json();
+      console.log("Upload Response:", data);
+  
+      if (data.imageUrl) {
+        setFormData((prev) => ({
+          ...prev,
+          [e.target.name]: data.imageUrl,  // ✅ URL set
+        }));
+      } else {
+        console.error("Upload failed, no imageUrl returned.");
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
   };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    // ✅ Ensure all images are uploaded before submitting
+    if (!formData.profileImage || !formData.aadharImageFront || !formData.aadharImageBack) {
+      alert("Please wait, images are still uploading...");
+      return;
+    }
+  
+    try {
+      const variables = {
+        security_id: formData.securityID,
+        first_name: formData.name.split(" ")[0] || "",
+        last_name: formData.name.split(" ")[1] || "",
+        address: formData.address,
+        adhar_num: formData.aadharNumber,
+        pan_num: "",
+        gender: "",
+        contact_num: formData.phone,
+        email: formData.email,
+        date_of_birth: formData.dateOfBirth,
+        age: "",
+        qualification: "",
+        profile_img: formData.profileImage,
+        adhar_img: formData.aadharImageFront,
+        pan_img: formData.aadharImageBack,
+      };
+  
+      const response = await executeMutation(CREATE_SECURITY_FORM_MUTATION, variables);
+      console.log("Mutation Response:", response);
+  
+      if (response.createSecurity?.success_msg) {
+        alert("Form submitted successfully!");
+      } else {
+        alert("Error: " + response.createSecurity?.error_msg);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("Failed to submit form.");
+    }
+  };
+  
 
   return (
     <div className="bg-gray-50 min-h-screen w-full flex flex-col">
       <Navbar />
       <div className="container mx-auto py-10 px-4 sm:px-6 md:px-8 max-w-8xl pt-32">
-        <div className="bg-white shadow-lg p-6 sm:p-8 w-full relative ">
+        <div className="bg-white shadow-lg p-6 sm:p-8 w-full relative">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-5">
             <button
               onClick={() => router.push("/dashboard")}
@@ -68,7 +156,7 @@ const Security_Staff_Form = () => {
 
           <form onSubmit={handleSubmit} className="grid gap-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[    
+              {[
                 { name: "name", label: "Staff Name", type: "text" },
                 { name: "phone", label: "Phone Number", type: "text" },
                 { name: "email", label: "Email Address", type: "text" },
@@ -92,7 +180,7 @@ const Security_Staff_Form = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-t pt-6">
-              {[    
+              {[
                 { key: "profileImage", label: "Profile Image" },
                 { key: "aadharImageFront", label: "Aadhar Image Front" },
                 { key: "aadharImageBack", label: "Aadhar Image Back" },
@@ -130,7 +218,7 @@ const Security_Staff_Form = () => {
             <div className="flex justify-center mt-6">
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-6 py-3 flex items-center justify-center gap-2 hover:bg-blue-700 text-lg "
+                className="bg-blue-600 text-white px-6 py-3 flex items-center justify-center gap-2 hover:bg-blue-700 text-lg"
               >
                 <FaSave /> Save Record
               </button>
