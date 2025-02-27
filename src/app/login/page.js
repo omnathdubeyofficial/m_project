@@ -5,7 +5,6 @@ import { useState,useEffect } from "react";
 import { executeQuery } from "../graphqlClient";
 import { GET_LOGIN_DATA } from "../query/loginQuery";
 import Image from "next/image";
-import Cookies from "js-cookie";
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube,FaCheckCircle } from "react-icons/fa";
 
 const Login = () => {
