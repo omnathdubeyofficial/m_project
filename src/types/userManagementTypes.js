@@ -10,7 +10,7 @@ const userDataType = gql`
     last_name: String
     gender : String
     email : String
-    # password : String
+    password : String
     contact_no : String
     role : String
     status : String
