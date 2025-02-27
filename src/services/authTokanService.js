@@ -21,7 +21,7 @@ const getUserDataFromToken = async (req) => {
     const authToken = req.cookies?.authToken;
 
     if (!authToken) {
-      throw new Error("No authToken provided in cookies");
+      // throw new Error("No authToken provided in cookies");
     }
 
     console.log("Received authToken:", authToken);

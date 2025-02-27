@@ -6,7 +6,7 @@ const authTokenResolver = {
     getUserDataFromToken: async (parent, args, context) => {
       const { authToken } = context; // Ensure context is defined
       if (!authToken) {
-        throw new Error("No authToken provided");
+        // throw new Error("No authToken provided");
       }
 
       // Call your function to get user data
