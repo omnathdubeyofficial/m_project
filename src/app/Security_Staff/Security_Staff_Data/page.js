@@ -164,13 +164,13 @@ const TransportVehiclesData = () => {
              {currentAdmins.map((admin) => (
                <tr key={admin.z_id} className="hover:bg-gray-50 transition duration-200 border border-gray-300">
                  <td className="px-6 py-4 border border-gray-300">
-                   <Image
-                     src={admin.profile_img || "/img/q.png"}
-                     width={40}
-                     height={40}
-                     className="rounded-full object-cover w-10 h-10 border border-gray-300"
-                     alt="Profile"
-                   />
+                 <Image
+  src={admin.profile_img ? admin.profile_img : "/img/q.png"}
+  width={40}
+  height={40}
+  className="rounded-full object-cover w-10 h-10 border border-gray-300"
+  alt="Profile"
+/>
                  </td>
                  <td className="px-6 py-4 whitespace-nowrap border border-gray-300">
                    <span className="font-medium text-gray-900">{`${admin.first_name} ${admin.last_name}`}</span>

@@ -50,3 +50,60 @@ export async function POST(req) {
     });
   }
 }
+
+
+
+
+
+
+// import { v2 as cloudinary } from "cloudinary";
+
+// cloudinary.config({
+//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//   api_key: process.env.CLOUDINARY_API_KEY,
+//   api_secret: process.env.CLOUDINARY_API_SECRET,
+// });
+
+// export async function POST(req) {
+//   try {
+//     const formData = await req.formData();
+//     const file = formData.get("image");
+
+//     if (!file) {
+//       return new Response(JSON.stringify({ error: "No file uploaded" }), {
+//         status: 400,
+//       });
+//     }
+
+//     // ✅ 1. Validate MIME type (Only allow images)
+//     const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"];
+//     if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+//       return new Response(JSON.stringify({ error: "Invalid file type" }), {
+//         status: 400,
+//       });
+//     }
+
+//     // ✅ 2. Convert file to buffer
+//     const bytes = await file.arrayBuffer();
+//     const buffer = Buffer.from(bytes);
+
+//     // ✅ 3. Upload to Cloudinary (SECURE WAY)
+//     const uploadResponse = await new Promise((resolve, reject) => {
+//       cloudinary.uploader.upload_stream(
+//         { folder: "uploads", resource_type: "image" }, // Cloudinary में `uploads` फोल्डर
+//         (error, result) => {
+//           if (error) reject(error);
+//           else resolve(result);
+//         }
+//       ).end(buffer);
+//     });
+
+//     return new Response(JSON.stringify({ imageUrl: uploadResponse.secure_url }), {
+//       status: 200,
+//     });
+//   } catch (error) {
+//     return new Response(JSON.stringify({ error: error.message }), {
+//       status: 500,
+//     });
+//   }
+// }
