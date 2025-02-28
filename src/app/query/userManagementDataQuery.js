@@ -28,6 +28,7 @@ query {
       occupation
       address
       nationality
+      profile_img
       cdate
       ctime
       udate

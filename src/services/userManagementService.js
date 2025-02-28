@@ -89,11 +89,11 @@ const login = async (_, { userid, password }, { res }) => {
     console.log("✅ Cookie Set Successfully");
 
     // ✅ Force Cookie to be Sent Before Returning Response
-    await new Promise((resolve) => setTimeout(resolve, 10)); 
+    await new Promise((resolve) => setTimeout(resolve, 10));
     console.log("✅ Delay Added to Ensure Cookie Transmission");
 
     console.log("✅ Login Successful");
-    return { success_msg: "Login successful", token };  
+    return { success_msg: "Login successful", token };
 
   } catch (err) {
     console.error("❌ Error during login:", err.message || err);
@@ -147,7 +147,7 @@ async function hashPassword(plainPassword) {
 }
 
 // Create a new user
-const createUserManagementData = async ({ first_name, middle_name, last_name, gender, email, password, contact_no, role, status, subject_specialization, class_assigned, teacher_id, admin_id, joining_date, qualification, enrollment_no, date_of_birth, standard, section, parent_id, admission_date, children_id, occupation, address, nationality }) => {
+const createUserManagementData = async ({ first_name, middle_name, last_name, gender, email, password, contact_no, role, status, subject_specialization, class_assigned, teacher_id, admin_id, joining_date, qualification, enrollment_no, date_of_birth, standard, section, parent_id, admission_date, children_id, occupation, address, nationality, profile_img }) => {
 
   try {
     const hashedPassword = await hashPassword(password)
@@ -158,7 +158,7 @@ const createUserManagementData = async ({ first_name, middle_name, last_name, ge
     }
     //  user data created successfully
     let userData = await prisma.user_management.create({
-      data: { z_id: uuidv4(), userid: userId(first_name, date_of_birth), first_name, middle_name, last_name, gender, email, password: hashedPassword, contact_no, role, status, subject_specialization, class_assigned, teacher_id, admin_id, joining_date, qualification, enrollment_no, date_of_birth, standard, section, parent_id, admission_date, children_id, occupation, address, nationality, cdate: setUserDate(), ctime: setUserTime() },
+      data: { z_id: uuidv4(), userid: userId(first_name, date_of_birth), first_name, middle_name, last_name, gender, email, password: hashedPassword, contact_no, role, status, subject_specialization, class_assigned, teacher_id, admin_id, joining_date, qualification, enrollment_no, date_of_birth, standard, section, parent_id, admission_date, children_id, occupation, address, nationality, profile_img, cdate: setUserDate(), ctime: setUserTime() },
     });
 
     const success_msg = "Data created successfully."
@@ -176,13 +176,13 @@ const createUserManagementData = async ({ first_name, middle_name, last_name, ge
 };
 
 // Update an existing user by ID
-const updateUserManagementData = async ({ z_id, first_name, middle_name, last_name, gender, email, password, contact_no, role, status, subject_specialization, class_assigned, teacher_id, admin_id, joining_date, qualification, enrollment_no, date_of_birth, standard, section, parent_id, admission_date, children_id, occupation, address, nationality }) => {
+const updateUserManagementData = async ({ z_id, first_name, middle_name, last_name, gender, email, password, contact_no, role, status, subject_specialization, class_assigned, teacher_id, admin_id, joining_date, qualification, enrollment_no, date_of_birth, standard, section, parent_id, admission_date, children_id, occupation, address, nationality, profile_img }) => {
 
   try {
 
     let updateData = await prisma.user_management.update({
       where: { z_id },
-      data: { first_name, middle_name, last_name, gender, email, password, contact_no, role, status, subject_specialization, class_assigned, teacher_id, admin_id, joining_date, qualification, enrollment_no, date_of_birth, standard, section, parent_id, admission_date, children_id, occupation, address, nationality, udate: setUserDate(), utime: setUserTime() },
+      data: { first_name, middle_name, last_name, gender, email, password, contact_no, role, status, subject_specialization, class_assigned, teacher_id, admin_id, joining_date, qualification, enrollment_no, date_of_birth, standard, section, parent_id, admission_date, children_id, occupation, address, nationality, profile_img, udate: setUserDate(), utime: setUserTime() },
     });
     const success_msg = "User management data updated successfully."
     updateData = { ...updateData, success_msg }
