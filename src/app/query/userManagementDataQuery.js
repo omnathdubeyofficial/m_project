@@ -8,7 +8,6 @@ query {
       userid
       gender
       email
-
       contact_no
       role
       status
@@ -29,6 +28,9 @@ query {
       address
       nationality
       profile_img
+      adhar_card_front_img
+      adhar_card_back_img
+      pan_card_img
       cdate
       ctime
       udate
