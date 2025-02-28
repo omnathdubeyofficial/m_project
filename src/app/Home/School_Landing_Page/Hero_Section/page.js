@@ -1,33 +1,49 @@
-"use client"
+"use client";
 import Image from 'next/image';
 import Link from 'next/link';
+import { PlayCircle } from "lucide-react";
 
 const Hero = () => {
     return (
-        <section id="home-section" className='bg-gray-50'>
-            <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4 pt-20">
-                <div className='grid grid-cols-1 lg:grid-cols-12 items-center'>
-                    <div className='col-span-6'>
-                        <h1 className="text-4xl lg:text-7xl font-semibold mb-5 text-black md:4px lg:text-start text-center">
-                            Cook anything with the experts
+        <section id="home-section" className="bg-gray-50 py-44">
+            <div className="container mx-auto px-6 md:px-12 lg:px-16 max-w-screen-xl">
+                <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-10">
+                    {/* Left Content */}
+                    <div className="text-center lg:text-left">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold mb-6 text-black">
+                            Custom School Management Solutions 🚀
                         </h1>
-                        <p className='text-black/55 lg:text-lg font-normal mb-10 lg:text-start text-center'>Sed ut perspiciatis unde omnis iste natus error sit voluptatem <br /> accusantium doloremque laudantium, totam</p>
-                        <div className='md:flex align-middle justify-center lg:justify-start'>
-                            <Link href='#cook-section' className='text-xl w-full md:w-auto font-medium rounded-full text-white py-5 px-6 bg-primary hover:text-primary lg:px-14 mr-6 border border-primary hover:bg-transparent'>Lets cook</Link>
-                            <Link href='#about-section' className='flex border w-full md:w-auto mt-5 md:mt-0 border-primary justify-center rounded-full text-xl font-medium items-center py-5 px-10 text-primary hover:text-white hover:bg-primary'>Explore now</Link>
+                        <p className="text-black/60 text-lg md:text-xl leading-relaxed mb-8">
+                            Empower your institution with a fully customized school management system. Automate attendance, streamline fee collection, enhance communication, and manage academics—all in one tailor-made solution. Built to fit your school's unique needs!
+                        </p>
+                        {/* CTA Buttons */}
+                        <div className="flex flex-col md:flex-row items-center md:justify-center lg:justify-start gap-4">
+                            <Link href="/dashboard" className="text-lg font-medium rounded-full text-white py-4 px-8 bg-primary hover:bg-primary-dark border border-primary transition">
+                                Go To Dashboard
+                            </Link>
+                            <Link href="#about-section" className="flex items-center gap-2 text-lg font-medium py-4 px-8 border border-primary text-primary rounded-full hover:bg-primary hover:text-white transition">
+                                <PlayCircle className="w-6 h-6" />
+                                Explore now
+                            </Link>
                         </div>
                     </div>
-                    <div className='col-span-6 flex justify-center relative'>
-                        <div className='flex bg-white p-2 gap-5 items-center bottom-10 left-10 rounded-xl absolute'>
-                            <Image src={'/images/hero/pizza.svg'} alt="pizza-image" width={68} height={68} />
-                            <p className='text-lg font-normal'>More than 500+ <br /> recipes.</p>
+                    
+                    {/* Right Content */}
+                    <div className="relative flex justify-center">
+                        {/* Floating Info Box */}
+                        <div className="absolute bottom-5 left-5 md:left-10 bg-white shadow-md p-3 md:p-4 rounded-xl flex items-center gap-4">
+                            <Image src="/images/hero/pizza.svg" alt="icon" width={50} height={50} />
+                            <p className="text-sm md:text-base font-medium">
+                                More than 500+ <br className="hidden md:block" /> recipes.
+                            </p>
                         </div>
-                        <Image src="/images/hero/banner-image.png" alt="nothing" width={1000} height={805} />
+                        {/* Hero Image */}
+                        <Image src="/images/hero/banner-image.png" alt="Hero Image" width={600} height={500} className="w-full h-auto max-w-sm md:max-w-md lg:max-w-lg" />
                     </div>
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
 export default Hero;

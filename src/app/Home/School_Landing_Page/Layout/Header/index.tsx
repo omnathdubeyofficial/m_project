@@ -82,15 +82,12 @@ const Header: React.FC = () => {
             />
             +1(909) 235-9814
           </Link> */}
-          <Link
-            href="#"
+          {/* <Link
+            href="/login"
             className="hidden lg:block text-primary bg-primary/15 hover:text-white hover:bg-primary font-medium text-lg py-4 px-8 rounded-full"
-            onClick={() => {
-              setIsSignInOpen(true);
-            }}
           >
-            Sign In
-          </Link>
+            Sign In 
+          </Link> */}
           {isSignInOpen && (
             <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
               <div
@@ -118,7 +115,7 @@ const Header: React.FC = () => {
               setIsSignUpOpen(true);
             }}
           >
-            Sign Up
+          Register Now
           </Link>
           {isSignUpOpen && (
             <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
