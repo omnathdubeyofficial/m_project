@@ -221,3 +221,16 @@ model transport_vehicle_registration {
   utime                           String? @db.VarChar(100)
   owner_profile_img               String? @db.VarChar(100)
 }
+
+model holiday_lists {
+  z_id         String  @id @db.VarChar(100)
+  from_date    String? @db.VarChar(100)
+  to_date      String? @db.VarChar(100)
+  day          String? @db.VarChar(200)
+  holiday_name String? @db.VarChar(300)
+  details      String? @db.Text
+  cdate        String? @db.VarChar(100)
+  ctime        String? @db.VarChar(100)
+  udate        String? @db.VarChar(100)
+  utime        String? @db.VarChar(100)
+}

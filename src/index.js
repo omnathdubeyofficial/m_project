@@ -28,6 +28,8 @@ import securityResolver from './resolvers/securityResolver.js';
 import transportVehicleRegistrationType from './types/transportVehicleTypes.js';
 import transportVehicleResolver from './resolvers/transportVehicleResolver.js';
 import logoutResolver from './resolvers/logoutResolver.js';
+import holidayListType from './types/holidayListTypes.js';
+import holidayListResolver from './resolvers/holidayListResolver.js';
 
 const app = express();
 
@@ -44,15 +46,15 @@ app.use(express.json());
 // ✅ GraphQL Schema
 const schema = makeExecutableSchema({
   typeDefs: [
-    userType, userDataType, adminDataType, userManagementType, 
-    studentRegistrationTypes, attendanceTypes, admissionFormType, 
-    authTokantTypes, securityType, transportVehicleRegistrationType,logoutTypes
-  ], 
+    userType, userDataType, adminDataType, userManagementType,
+    studentRegistrationTypes, attendanceTypes, admissionFormType,
+    authTokantTypes, securityType, transportVehicleRegistrationType, logoutTypes, holidayListType
+  ],
   resolvers: [
-    userResolver, userDataResolver, adminDataResolver, 
-    userManagementResolver, studentRegistrationResolver, attendanceResolver, 
-    admssionFormResolver, authTokanResolver, securityResolver, transportVehicleResolver,logoutResolver
-  ], 
+    userResolver, userDataResolver, adminDataResolver,
+    userManagementResolver, studentRegistrationResolver, attendanceResolver,
+    admssionFormResolver, authTokanResolver, securityResolver, transportVehicleResolver, logoutResolver, holidayListResolver
+  ],
 });
 
 app.use(
@@ -62,7 +64,7 @@ app.use(
     console.log("🍪 Cookies Received:", req.cookies);
 
     // Check if authToken is present in cookies
-    const authToken = req.cookies.authToken || null; 
+    const authToken = req.cookies.authToken || null;
     console.log("🔑 Extracted authToken from Cookies:", authToken);
 
     // Return the schema and context
