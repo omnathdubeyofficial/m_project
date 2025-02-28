@@ -5,17 +5,18 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { executeMutation } from "../../graphqlClient";
 import SchoolNavbar from "../../navbar/page";
-import { CREATE_PHONE_DIRECTORY_MUTATION } from "../../mutation/phoneDirectoryMutation/createPhoneDirectoryMutation";
+import { CREATE_ACADEMIC_CALENDAR_MUTATION } from "../../mutation/AcademicCalendarMutation/createAcademicCalendarMutation";
 
-const PhoneDirectoryForm = () => {
+const AcademicCalendarForm = () => {
   const router = useRouter();
-  const [contact, setContact] = useState({
-    full_name: "",
-    contact_no: "",
-    whatsapp_no: "",
-    email: "",
-    profession: "",
-    status: "",
+  const [calendar, setCalendar] = useState({
+    program: "",
+    from_date: "",
+    to_date: "",
+    start_time: "",
+    end_time: "",
+    program_details: "",
+    host: "",
   });
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -29,23 +30,23 @@ const PhoneDirectoryForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setContact((prev) => ({ ...prev, [name]: value }));
+    setCalendar((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
-  
+
     try {
-      const response = await executeMutation(CREATE_PHONE_DIRECTORY_MUTATION, contact);
+      const response = await executeMutation(CREATE_ACADEMIC_CALENDAR_MUTATION, calendar);
       setLoading(false);
-  
-      if (response?.createPhoneDirectory?.success_msg) {
-        setMessage({ text: "✅ Contact added successfully!", type: "success" });
-        setContact({ full_name: "", contact_no: "", whatsapp_no: "", email: "", profession: "", status: "" });
+
+      if (response?.createAcademicCalendar?.success_msg) {
+        setMessage({ text: "✅ Academic Calendar added successfully!", type: "success" });
+        setCalendar({ program: "", from_date: "", to_date: "", start_time: "", end_time: "", program_details: "", host: "" });
       } else {
-        throw new Error(response?.createPhoneDirectory?.error_msg || "Failed to add contact.");
+        throw new Error(response?.createAcademicCalendar?.error_msg || "Failed to add academic calendar.");
       }
     } catch (error) {
       setLoading(false);
@@ -57,34 +58,46 @@ const PhoneDirectoryForm = () => {
     <div className="bg-gray-50 min-h-screen">
       <SchoolNavbar />
       <div className="mt-16 flex flex-col items-center justify-center py-10 px-6">
-        <div className="w-full max-w-5xl bg-white p-8 shadow-xl border border-gray-200 rounded-lg">
+        <div className="w-full max-w-5xl bg-white p-8 shadow-xl border border-gray-200 ">
           <div className="flex justify-between items-center mb-6">
-          <button 
+            <button 
               onClick={() => router.back()} 
-             className="bg-blue-500 text-white px-4 py-2 shadow-md hover:bg-blue-600 transition duration-200 flex items-center gap-2 "
+              className="bg-blue-500 text-white px-4 py-2 shadow-md hover:bg-blue-600 transition duration-200 flex items-center gap-2 "
             >
-              <FaArrowLeft />Go Back
+              <FaArrowLeft /> Go Back
             </button>
-            <h3 className="text-2xl  text-gray-800">Academic Calendar Form</h3>
+            <h3 className="text-2xl text-gray-800">Academic Calendar Form</h3>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {["full_name", "contact_no", "whatsapp_no", "email", "profession", "status"].map((field) => (
+              {["program", "from_date", "to_date", "start_time", "end_time", "host"].map((field) => (
                 <div key={field} className="w-full">
-<label className="block text-gray-700 font-medium mb-1">
-  {field.replace("_", " ").toLowerCase().replace(/^\w/, (c) => c.toUpperCase())}:
-</label>
+                  <label className="block text-gray-700 font-medium mb-1">
+                    {field.replace("_", " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())}:
+                  </label>
                   <input 
-                    type={field === "email" ? "email" : "text"} 
+                    type={field.includes("date") ? "date" : field.includes("time") ? "time" : "text"} 
                     name={field}
-                    value={contact[field]} 
+                    value={calendar[field]} 
                     onChange={handleChange} 
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300 shadow-sm" 
                     required 
                   />
                 </div>
               ))}
+            </div>
+
+            <div className="w-full">
+              <label className="block text-gray-700 font-medium mb-1">Program Details:</label>
+              <textarea 
+                name="program_details"
+                value={calendar.program_details}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300 shadow-sm"
+                rows="7"
+                required
+              ></textarea>
             </div>
 
             <button 
@@ -107,4 +120,4 @@ const PhoneDirectoryForm = () => {
   );
 };
 
-export default PhoneDirectoryForm;
+export default AcademicCalendarForm;

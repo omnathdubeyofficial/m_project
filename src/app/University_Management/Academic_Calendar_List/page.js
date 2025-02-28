@@ -6,8 +6,8 @@ import { FaSearch, FaEdit, FaTrash, FaChevronRight, FaChevronLeft, FaPlus, FaArr
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { GET_PHONE_DIRECTORY_DATA } from "../../query/PhoneDirectoryQuery/fetchPhoneDirectory";
-import { DELETE_PHONE_DIRECTORY_MUTATION } from "../../mutation/PhoneDirectoryMutation/deletePhoneDirectoryMutation";
+import { GET_ACADEMIC_CALENDAR_DATA } from "../../query/AcademicCalendarQuery/fetchAcademicCalendar";
+import { DELETE_ACADEMIC_CALENDAR_MUTATION } from "../../mutation/AcademicCalendarMutation/deleteAcademicCalendarMutation";
 import { executeQuery, executeMutation } from "../../graphqlClient";
 import Link from "next/link";
 import Navbar from "../../navbar/page";
@@ -24,8 +24,8 @@ const Academic_Calendar_List = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const response = await executeQuery(GET_PHONE_DIRECTORY_DATA);
-        setAdmins(response?.getPhoneDirectory || []);
+        const response = await executeQuery(GET_ACADEMIC_CALENDAR_DATA);
+        setAdmins(response?.getAcademicCalendar || []);
       } catch (error) {
         console.error("Error fetching admin data:", error);
       }
@@ -50,17 +50,17 @@ const Academic_Calendar_List = () => {
 
   const handleDelete = useCallback(async (id) => {
     try {
-      const response = await executeMutation(DELETE_PHONE_DIRECTORY_MUTATION, { z_id: id });
-      if (response?.deletePhoneDirectory?.success_msg) {
+      const response = await executeMutation(DELETE_ACADEMIC_CALENDAR_MUTATION, { z_id: id });
+      if (response?.deleteAcademicCalendar?.success_msg) {
         setAdmins(prev => prev.filter(admin => admin.z_id !== id));
 
         // ✅ Success popup
-        setPopupMessage({ text: response.deletePhoneDirectory.success_msg, type: "success" });
+        setPopupMessage({ text: response.deleteAcademicCalendar.success_msg, type: "success" });
         setShowPopup(true);
         setTimeout(() => setShowPopup(false), 3000);
       } else {
         // ❌ Error popup
-        setPopupMessage({ text: "Failed to delete: " + response?.deletePhoneDirectory?.error_msg, type: "error" });
+        setPopupMessage({ text: "Failed to delete: " + response?.deleteAcademicCalendar?.error_msg, type: "error" });
         setShowPopup(true);
         setTimeout(() => setShowPopup(false), 3000);
       }
@@ -153,12 +153,12 @@ const Academic_Calendar_List = () => {
          <table className="min-w-full bg-white border border-gray-300">
            <thead className="bg-gradient-to-r from-blue-900 via-blue-600 to-blue-900 border border-gray-300">
              <tr className="text-white text-sm font-semibold border border-gray-300">
-               <th className="px-6 py-3 text-left border border-gray-300">Name</th>
-               <th className="px-6 py-3 text-left border border-gray-300">Mobile Number</th>
-               <th className="px-6 py-3 text-left border border-gray-300">Whatsapp Number</th>
-               <th className="px-6 py-3 text-left border border-gray-300">Email</th>
-               <th className="px-6 py-3 text-left border border-gray-300">Profession</th>
-               <th className="px-6 py-3 text-left border border-gray-300">Status</th>
+               <th className="px-6 py-3 text-left border border-gray-300">program</th>
+               <th className="px-6 py-3 text-left border border-gray-300">from_date</th>
+               <th className="px-6 py-3 text-left border border-gray-300">to_date</th>
+               <th className="px-6 py-3 text-left border border-gray-300">start_time</th>
+               <th className="px-6 py-3 text-left border border-gray-300">end_time</th>
+               <th className="px-6 py-3 text-left border border-gray-300">program_details</th>
                <th className="px-6 py-3 text-center border border-gray-300">Actions</th>
              </tr>
            </thead>
@@ -167,24 +167,24 @@ const Academic_Calendar_List = () => {
                <tr key={admin.z_id} className="hover:bg-gray-50 transition duration-200 border border-gray-300">
              
                  <td className="px-6 py-4 truncate max-w-[200px] border border-gray-300">
-                   <span className="text-gray-600">{admin.full_name}</span>
+                   <span className="text-gray-600">{admin.program}</span>
                  </td>
                  <td className="px-6 py-4 whitespace-nowrap border border-gray-300">
                    <span className="px-2 py-1 text-xs font-semibold text-white bg-blue-500 rounded">
-                     {admin.contact_no || "N/A"}
+                     {admin.from_date || "N/A"}
                    </span>
                  </td>
                  <td className="px-6 py-4 whitespace-nowrap text-gray-700 border border-gray-300">
-                   {admin.whatsapp_no|| "N/A"}
+                   {admin.to_date|| "N/A"}
                  </td>
                  <td className="px-6 py-4 whitespace-nowrap text-gray-700 border border-gray-300">
-                   {admin.email || "N/A"}
+                   {admin.start_time || "N/A"}
                  </td>
                  <td className="px-6 py-4 whitespace-nowrap text-gray-700 border border-gray-300">
-                   {admin.profession || "N/A"}
+                   {admin.end_time || "N/A"}
                  </td>
                  <td className="px-6 py-4 whitespace-nowrap text-gray-700 border border-gray-300">
-                   {admin.status || "N/A"}
+                   {admin.program_details || "N/A"}
                  </td>
                  <td className="px-6 py-4 flex justify-center space-x-4  ">
                    <button className="text-blue-500 hover:text-blue-700">
