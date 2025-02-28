@@ -2,12 +2,17 @@
 
 import { 
   FaSearch, FaCalendarAlt, FaUsers, FaRegCalendarAlt, 
-  FaTrophy, FaHeartbeat, FaClipboardList, FaGraduationCap, FaClipboard 
+  FaTrophy, FaHeartbeat,FaArrowLeft, FaClipboardList, FaGraduationCap, FaClipboard 
 } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+
 import Link from "next/link";
 import Navber from "../../navbar/page";
 
 const UniversityPage = () => {
+
+  const router = useRouter();
+
 
 
   const services = [
@@ -15,12 +20,6 @@ const UniversityPage = () => {
     { name: "Phone Directory", icon: <FaUsers />, path: "/phone-directory" },
     { name: "Academic Calendar", icon: <FaRegCalendarAlt />, path: "/academic-calendar" },
     { name: "Admin Registration", icon: <FaClipboardList />, path: "/components/admin-registration" },
-    { name: "Yuva Mahotsav", icon: <FaTrophy />, path: "/yuva-mahotsav" },
-    { name: "Affiliation", icon: <FaClipboard />, path: "/affiliation" },
-    { name: "Sport Council", icon: <FaHeartbeat />, path: "/sport-council" },
-    { name: "Health Center", icon: <FaHeartbeat />, path: "/health-center" },
-    { name: "Convocation", icon: <FaGraduationCap />, path: "/convocation" },
-    { name: "Placement Cell", icon: <FaClipboardList />, path: "/placement-cell" },
   ];
 
   return (
@@ -28,15 +27,11 @@ const UniversityPage = () => {
       <Navber/>
       <main className="py-12 px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-center mb-10">
-            <div className="relative w-full max-w-md">
-              <input
-                type="text"
-                placeholder="Search services..."
-                className="bg-white text-gray-900 border border-gray-300 px-4 py-3 w-full rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 transition"
-              />
-              <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500" />
-            </div>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-5">
+            <button onClick={() => router.push("/dashboard")} className="bg-blue-500 text-white px-3 py-2 flex items-center gap-2 hover:bg-blue-700">
+              <FaArrowLeft /> Go Back
+            </button>
+            <h2 className="text-2xl text-center text-gray-800">University Management</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
