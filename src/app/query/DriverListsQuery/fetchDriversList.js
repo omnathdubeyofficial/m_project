@@ -1,0 +1,46 @@
+export const GET_DRIVER_LISTS_DATA = `
+query {
+    getDriverLists {
+      z_id
+    driver_id
+    first_name
+    middle_name
+    last_name
+    email
+    phone_no
+    whatsapp_no
+    alternate_no
+    blood_group
+    permanent_address
+    current_address
+    gender
+    dob
+    status
+    shift
+    registration_date
+    joining_date
+    adhar_card_num
+    pan_num
+    license_number
+    license_expiry
+    license_img
+    adhar_card_front_img
+    adhar_card_back_img
+    pan_card_img
+    last_eye_checkup_date
+    eye_test_result
+    visually_impared
+    eye_disorder
+    bank_name
+    bank_account_num
+    account_holder_name
+    ifsc_code
+    bank_branch_name
+    bank_passbook_img
+    cdate
+    ctime
+    udate
+    utime
+    }
+  }
+`;
