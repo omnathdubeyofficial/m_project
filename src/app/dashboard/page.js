@@ -21,7 +21,7 @@ const Dashboard = () => {
     { name: 'Staff Management', icon: FaUsers, link: '/Staff_Management/Staff_Management_Data' },
     { name: 'Transport Drivers', icon: FaBus, link: '/Drivers_Transport/Drivers_Transport_Data' },
 
-    { name: 'Computer Section', icon: FaDesktop, link: '/Computer_Section/Computer_Section_Data' },
+    { name: 'Computer Management', icon: FaDesktop, link: '/components/Computer_Dashboard' },
     { name: 'Housekeeping Staff', icon: FaBroom, link: '/Housekeeping_Staff/Housekeeping_Staff_Data' },
     { name: 'Security Staff', icon: FaShieldAlt, link: '/Security_Staff/Security_Staff_Data' },
     { name: 'Exam Management', icon: FaClipboardCheck, link: '/Exam_Management/Exam_Management_Data' },
