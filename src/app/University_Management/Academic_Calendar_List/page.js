@@ -8,6 +8,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { GET_ACADEMIC_CALENDAR_DATA } from "../../query/AcademicCalendarQuery/fetchAcademicCalendar";
 import { DELETE_ACADEMIC_CALENDAR_MUTATION } from "../../mutation/AcademicCalendarMutation/deleteAcademicCalendarMutation";
+import { UPDATE_ACADEMIC_CALENDAR_MUTATION } from "../../mutation/AcademicCalendarMutation/updateAcademicCalendardMutation";
 import { executeQuery, executeMutation } from "../../graphqlClient";
 import Link from "next/link";
 import Navbar from "../../navbar/page";
@@ -18,8 +19,60 @@ const Academic_Calendar_List = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState({ text: "", type: "" });
+  const [showupdatePopup, setShowupdatePopup] = useState(null); // Initially null
   const router = useRouter();
   const adminsPerPage = 5;
+
+  const [showEditPopup, setShowEditPopup] = useState(false);
+const [selectedAdmin, setSelectedAdmin] = useState(null);
+
+const handleEditClick = (admin) => {
+  setSelectedAdmin(admin);
+  setShowEditPopup(true);
+};
+
+
+
+const handleUpdate = async () => {
+  try {
+    const response = await executeMutation(UPDATE_ACADEMIC_CALENDAR_MUTATION, {
+      z_id: selectedAdmin.z_id,
+      program: selectedAdmin.program,
+      from_date: selectedAdmin.from_date,
+      to_date: selectedAdmin.to_date,
+      start_time: selectedAdmin.start_time,
+      end_time: selectedAdmin.end_time,
+      program_details: selectedAdmin.program_details,
+    });
+
+    if (response?.updateAcademicCalendar?.success_msg) {
+      setAdmins((prev) =>
+        prev.map((admin) =>
+          admin.z_id === selectedAdmin.z_id ? selectedAdmin : admin
+        )
+      );
+      setShowEditPopup(false);
+      setShowupdatePopup({ text: response.updateAcademicCalendar.success_msg, type: "success" });
+
+    } else {
+      setShowupdatePopup({ 
+        text: "Update failed: " + (response?.updateAcademicCalendar?.error_msg || "Unknown error"), 
+        type: "error" 
+      });
+    }
+
+    // Popup को 3 सेकंड बाद Hide कर दो
+    setTimeout(() => setShowupdatePopup(null), 3000);
+    
+  } catch (error) {
+    console.error("Error updating admin:", error);
+    setShowupdatePopup({ text: "An unexpected error occurred.", type: "error" });
+
+    setTimeout(() => setShowupdatePopup(null), 3000);
+  }
+};
+
+
 
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -107,6 +160,14 @@ const Academic_Calendar_List = () => {
             {popupMessage.text}
           </div>
         )}
+
+{showupdatePopup && (
+          <div className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg text-white flex items-center gap-2 shadow-lg text-lg 
+            ${showupdatePopup.type === "success" ? "bg-green-600" : "bg-red-600"}`}>
+            {showupdatePopup.type === "success" ? <FaCheckCircle /> : <FaTimesCircle />}
+            {showupdatePopup.text}
+          </div>
+        )}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
         
         {/* Back Button */}
@@ -187,9 +248,10 @@ const Academic_Calendar_List = () => {
                    {admin.program_details || "N/A"}
                  </td>
                  <td className="px-6 py-4 flex justify-center space-x-4  ">
-                   <button className="text-blue-500 hover:text-blue-700">
-                     <FaEdit size={16} />
-                   </button>
+                 <button onClick={() => handleEditClick(admin)} className="text-blue-500 hover:text-blue-700">
+  <FaEdit size={16} />
+</button>
+
                    <button
                      onClick={() => handleDelete(admin.z_id)}
                      className="text-red-500 hover:text-red-700"
@@ -236,6 +298,90 @@ const Academic_Calendar_List = () => {
 
     </div>
       </main>
+
+      {showEditPopup && selectedAdmin && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
+    <h2 className="text-2xl font-semibold flex items-center gap-2 text-green-700 mb-4">
+          <FaEdit className="text-green-700" /> Edit Academic Calendar
+        </h2>
+
+      {/* Grid Layout for Inputs */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label className="block mb-1">Program:</label>
+          <input
+            type="text"
+            className="w-full p-2 border rounded"
+            value={selectedAdmin.program}
+            onChange={(e) => setSelectedAdmin({ ...selectedAdmin, program: e.target.value })}
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1">From Date:</label>
+          <input
+            type="date"
+            className="w-full p-2 border rounded"
+            value={selectedAdmin.from_date}
+            onChange={(e) => setSelectedAdmin({ ...selectedAdmin, from_date: e.target.value })}
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1">To Date:</label>
+          <input
+            type="date"
+            className="w-full p-2 border rounded"
+            value={selectedAdmin.to_date}
+            onChange={(e) => setSelectedAdmin({ ...selectedAdmin, to_date: e.target.value })}
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1">Start Time:</label>
+          <input
+            type="time"
+            className="w-full p-2 border rounded"
+            value={selectedAdmin.start_time}
+            onChange={(e) => setSelectedAdmin({ ...selectedAdmin, start_time: e.target.value })}
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1">End Time:</label>
+          <input
+            type="time"
+            className="w-full p-2 border rounded"
+            value={selectedAdmin.end_time}
+            onChange={(e) => setSelectedAdmin({ ...selectedAdmin, end_time: e.target.value })}
+          />
+        </div>
+
+        <div className="md:col-span-3">
+          <label className="block mb-1">Program Details:</label>
+          <textarea
+            className="w-full h-64 p-2 border rounded"
+            value={selectedAdmin.program_details}
+            onChange={(e) => setSelectedAdmin({ ...selectedAdmin, program_details: e.target.value })}
+          />
+        </div>
+      </div>
+
+      {/* Buttons */}
+      <div className="flex justify-end gap-4 mt-4">
+        <button onClick={() => setShowEditPopup(false)} className="px-4 py-2 bg-red-500 text-white">
+          Cancel
+        </button>
+        <button onClick={handleUpdate} className="px-4 py-2 bg-green-700 text-white ">
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 };
