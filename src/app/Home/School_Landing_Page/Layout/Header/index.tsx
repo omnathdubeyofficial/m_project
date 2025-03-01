@@ -111,9 +111,6 @@ const Header: React.FC = () => {
           <Link
             href="#"
             className="hidden lg:block bg-primary text-white hover:bg-primary/15 hover:text-primary font-medium text-lg py-4 px-8 rounded-full "
-            onClick={() => {
-              setIsSignUpOpen(true);
-            }}
           >
           Register Now
           </Link>
