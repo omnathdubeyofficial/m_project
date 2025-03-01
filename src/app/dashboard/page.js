@@ -17,9 +17,10 @@ const Dashboard = () => {
     { name: 'Parents Management', icon: FaUserTie, link: '/Parents_Management/Parents_Management_Data' },
     { name: 'Transport Management', icon: FaCogs, link: '/components/Transport_Dashboard' },
     { name: 'Library Management', icon: FaBook, link: '/components/Librarian_Dashboard' },
+    { name: 'Lab Management', icon: FaFlask, link: '/components/Lab_Dashboard' },
     { name: 'Staff Management', icon: FaUsers, link: '/Staff_Management/Staff_Management_Data' },
     { name: 'Transport Drivers', icon: FaBus, link: '/Drivers_Transport/Drivers_Transport_Data' },
-    { name: 'Lab Management', icon: FaFlask, link: '/components/Lab_Dashboard' },
+
     { name: 'Computer Section', icon: FaDesktop, link: '/Computer_Section/Computer_Section_Data' },
     { name: 'Housekeeping Staff', icon: FaBroom, link: '/Housekeeping_Staff/Housekeeping_Staff_Data' },
     { name: 'Security Staff', icon: FaShieldAlt, link: '/Security_Staff/Security_Staff_Data' },
