@@ -350,3 +350,24 @@ model add_new_book {
   utime               String? @db.VarChar(100)
   bookid              String? @db.VarChar(100)
 }
+
+model issued_books {
+  z_id        String  @id @db.VarChar(100)
+  book_id     String? @db.VarChar(100)
+  student_id  String? @db.VarChar(100)
+  issued_by   String? @db.VarChar(100)
+  issue_date  String? @db.VarChar(100)
+  issue_time  String? @db.VarChar(100)
+  due_date    String? @db.VarChar(100)
+  return_date String? @db.VarChar(100)
+  return_time String? @db.VarChar(100)
+  status      String? @db.VarChar(100)
+  fine_amount String? @db.VarChar(100)
+  remarks     String? @db.Text
+  cdate       String? @db.VarChar(100)
+  ctime       String? @db.VarChar(100)
+  udate       String? @db.VarChar(100)
+  utime       String? @db.VarChar(100)
+  teacher_id  String? @db.VarChar(100)
+  guest_id    String? @db.VarChar(100)
+}
