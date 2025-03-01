@@ -28,12 +28,12 @@ const createDriverLists = async ({ driver_id, first_name, email, phone_no, whats
 };
 
 // Update an existing user by ID
-const updateDriverLists = async ({ z_id, driver_id, first_name, email, phone_no, whatsapp_no, alternate_no, blood_group, permanent_address, gender, dob, status, shift, registration_date, joining_date, adhar_card_num, pan_num, license_number, license_expiry, license_img, adhar_card_front_img, adhar_card_back_img, pan_card_img, last_eye_checkup_date, eye_test_result, visually_impared, eye_disorder, bank_name, bank_account_num, account_holder_name, ifsc_code, bank_branch_name, bank_passbook_img, middle_name, last_name, current_address, joining_salary, current_salary }) => {
+const updateDriverLists = async ({ z_id, first_name, email, phone_no, whatsapp_no, alternate_no, blood_group, permanent_address, gender, dob, status, shift, registration_date, joining_date, adhar_card_num, pan_num, license_number, license_expiry, license_img, adhar_card_front_img, adhar_card_back_img, pan_card_img, last_eye_checkup_date, eye_test_result, visually_impared, eye_disorder, bank_name, bank_account_num, account_holder_name, ifsc_code, bank_branch_name, bank_passbook_img, middle_name, last_name, current_address, joining_salary, current_salary }) => {
   try {
 
     const updatedData = await prisma.drivers_list.update({
       where: { z_id },
-      data: { driver_id, first_name, email, phone_no, whatsapp_no, alternate_no, blood_group, permanent_address, gender, dob, status, shift, registration_date, joining_date, adhar_card_num, pan_num, license_number, license_expiry, license_img, adhar_card_front_img, adhar_card_back_img, pan_card_img, last_eye_checkup_date, eye_test_result, visually_impared, eye_disorder, bank_name, bank_account_num, account_holder_name, ifsc_code, bank_branch_name, bank_passbook_img, middle_name, last_name, current_address, joining_salary, current_salary, udate: setUserDate(), utime: setUserTime() },
+      data: { first_name, email, phone_no, whatsapp_no, alternate_no, blood_group, permanent_address, gender, dob, status, shift, registration_date, joining_date, adhar_card_num, pan_num, license_number, license_expiry, license_img, adhar_card_front_img, adhar_card_back_img, pan_card_img, last_eye_checkup_date, eye_test_result, visually_impared, eye_disorder, bank_name, bank_account_num, account_holder_name, ifsc_code, bank_branch_name, bank_passbook_img, middle_name, last_name, current_address, joining_salary, current_salary, udate: setUserDate(), utime: setUserTime() },
     });
     const success_msg = "Driver list updated successfully."
     return { ...updatedData, success_msg }

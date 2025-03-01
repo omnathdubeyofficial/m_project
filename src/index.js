@@ -36,6 +36,8 @@ import academicCalendarType from './types/academicCalendarTypes.js';
 import academicCalendarResolver from './resolvers/academicCalendarResolver.js';
 import driversListType from './types/driversListTypes.js';
 import driversListResolver from './resolvers/driverListResolver.js';
+import addNewBookType from './types/addNewBookTypes.js';
+import addNewBookResolver from './resolvers/addNewBookResolver.js'
 
 const app = express();
 
@@ -54,12 +56,12 @@ const schema = makeExecutableSchema({
   typeDefs: [
     userType, userDataType, adminDataType, userManagementType,
     studentRegistrationTypes, attendanceTypes, admissionFormType,
-    authTokantTypes, securityType, transportVehicleRegistrationType, logoutTypes, holidayListType, phoneDirectoryType, academicCalendarType, driversListType
+    authTokantTypes, securityType, transportVehicleRegistrationType, logoutTypes, holidayListType, phoneDirectoryType, academicCalendarType, driversListType, addNewBookType
   ],
   resolvers: [
     userResolver, userDataResolver, adminDataResolver,
     userManagementResolver, studentRegistrationResolver, attendanceResolver,
-    admssionFormResolver, authTokanResolver, securityResolver, transportVehicleResolver, logoutResolver, holidayListResolver, phoneDirectoryResolver, academicCalendarResolver, driversListResolver
+    admssionFormResolver, authTokanResolver, securityResolver, transportVehicleResolver, logoutResolver, holidayListResolver, phoneDirectoryResolver, academicCalendarResolver, driversListResolver, addNewBookResolver
   ],
 });
 

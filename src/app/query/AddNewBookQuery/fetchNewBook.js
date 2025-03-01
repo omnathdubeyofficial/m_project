@@ -1,0 +1,41 @@
+export const GET_NEW_BOOK_DATA = `
+query {
+    getNewBook {
+      z_id
+    title
+    author
+    bookid
+    isbn
+    publisher
+    publication_year
+    category
+    language
+    pages
+    price
+    stock
+    cover_image
+    back_image
+    description
+    added_date
+    edition
+    format
+    genre
+    availability_status
+    rating
+    reviews_count
+    supplier
+    discount
+    keywords
+    barcode
+    shelf_location
+    digital_copy_url
+    license_type
+    borrowed_status
+    borrowed_by
+    cdate
+    ctime
+    udate
+    utime
+    }
+  }
+`;
