@@ -30,6 +30,8 @@ const Header: React.FC = () => {
     setSticky(window.scrollY >= 20);
   };
 
+
+  
   const handleClickOutside = (event: MouseEvent) => {
     if (
       mobileMenuRef.current &&
@@ -116,72 +118,77 @@ useEffect(() => {
 
 
         </nav>
-        <div className="flex items-center gap-4">
+        <div className='flex items-center gap-4'>
       {!user?.userid ? (
         <>
           <Link
-            href="/login"
-            className="bg-primary text-white hover:bg-primary/15 hover:text-primary font-medium text-lg py-4 px-8 rounded-full"
+            href='/login'
+            className='bg-primary text-white hover:bg-primary/15 hover:text-primary font-medium text-lg py-4 px-8 rounded-full transition-all duration-300'
           >
             Login
           </Link>
           <Link
-            href="/register"
-            className="bg-primary text-white hover:bg-primary/15 hover:text-primary font-medium text-lg py-4 px-8 rounded-full"
+            href='/register'
+            className='bg-primary text-white hover:bg-primary/15 hover:text-primary font-medium text-lg py-4 px-8 rounded-full transition-all duration-300'
           >
             Register
           </Link>
         </>
       ) : (
-        <div className="flex items-center gap-4 relative">
+        <div className='relative'>
           <div
-            className="w-14 h-14 rounded-full bg-gray-200 cursor-pointer overflow-hidden profile-menu"
+            className='w-14 h-14 rounded-full bg-gray-200 cursor-pointer overflow-hidden profile-menu'
             onClick={() => setIsProfileOpen(!isProfileOpen)}
           >
             <Image
-              src="/img/q.png"
-              alt="Profile"
+              src='/img/q.png'
+              alt='Profile'
               width={500}
               height={500}
-              className="w-full h-full object-cover"
+              className='w-full h-full object-cover transition-transform duration-200 hover:scale-105'
             />
           </div>
 
+        
           {isProfileOpen && (
-            <div className="absolute top-16 right-0 bg-white shadow-lg rounded-lg p-4 z-50 w-48 transition-all duration-200 ease-in-out transform">
-              <p className="flex items-center gap-2 mb-2 font-semibold text-gray-700">
-                <Icon icon="tabler:id" className="text-gray-500" />
-                {user.userid}
-              </p>
-              <Link href="/profile" className="flex items-center gap-2 mb-2 hover:bg-gray-100 p-2 rounded-md">
-                <Icon icon="tabler:user" className="text-gray-500" />
-                Profile
-              </Link>
-              <Link href="/settings" className="flex items-center gap-2 mb-2 hover:bg-gray-100 p-2 rounded-md">
-                <Icon icon="tabler:settings" className="text-gray-500" />
-                Settings
-              </Link>
-              <Link href="/help" className="flex items-center gap-2 mb-2 hover:bg-gray-100 p-2 rounded-md">
-                <Icon icon="tabler:help-circle" className="text-gray-500" />
-                Help
-              </Link>
-              <Link href="/notifications" className="flex items-center gap-2 mb-2 hover:bg-gray-100 p-2 rounded-md">
-                <Icon icon="tabler:bell" className="text-gray-500" />
-                Notifications
-              </Link>
-              <Link href="/support" className="flex items-center gap-2 mb-2 hover:bg-gray-100 p-2 rounded-md">
-                <Icon icon="tabler:lifebuoy" className="text-gray-500" />
-                Support
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 w-full text-left hover:bg-gray-100 p-2 rounded-md"
-              >
-                <Icon icon="tabler:logout" className="text-gray-500" />
-                Logout
-              </button>
-            </div>
-          )}
+  <div className='absolute top-16 right-0 bg-white shadow-2xl rounded-2xl p-4 z-50 w-64 transition-all duration-300 ease-in-out transform scale-95 hover:scale-100 animate-fade-in'>
+    <div className='flex items-center gap-3 mb-4 p-3 bg-gradient-to-r from-green-500 to-green-700 text-white rounded-xl shadow-md'>
+      <Icon icon='tabler:id' className='text-white' />
+      <div className='flex-1 overflow-hidden'>
+        <span className='block font-semibold truncate'>{user.userid}</span>
+        <span className='block text-sm opacity-80'>User ID</span>
+      </div>
+    </div>
+    <Link href='/profile' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
+      <Icon icon='tabler:user' className='text-green-500' />
+      <span className='text-gray-800 font-medium'>Profile</span>
+    </Link>
+    <Link href='/settings' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
+      <Icon icon='tabler:settings' className='text-green-500' />
+      <span className='text-gray-800 font-medium'>Settings</span>
+    </Link>
+    <Link href='/help' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
+      <Icon icon='tabler:help-circle' className='text-green-500' />
+      <span className='text-gray-800 font-medium'>Help</span>
+    </Link>
+    <Link href='/notifications' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
+      <Icon icon='tabler:bell' className='text-green-500' />
+      <span className='text-gray-800 font-medium'>Notifications</span>
+    </Link>
+    <Link href='/support' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
+      <Icon icon='tabler:lifebuoy' className='text-green-500' />
+      <span className='text-gray-800 font-medium'>Support</span>
+    </Link>
+    <button
+      onClick={handleLogout}
+      className='flex items-center gap-3 w-full text-left p-3 rounded-xl bg-gray-50 hover:bg-red-50 transition-all'
+    >
+      <Icon icon='tabler:logout' className='text-red-500' />
+      <span className='text-red-600 font-medium'>Logout</span>
+    </button>
+  </div>
+)}
+
         </div>
       )}
 
