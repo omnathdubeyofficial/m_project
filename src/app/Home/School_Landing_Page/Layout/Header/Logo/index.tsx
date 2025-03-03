@@ -3,16 +3,16 @@ import Link from 'next/link';
 
 const Logo: React.FC = () => {
   return (
-    <Link href="/" className='flex items-center text-black text-2xl font-semibold gap-4'>
+    <Link href="/" className='flex items-center text-black text-6xl font-semibold gap-4'>
       <Image
-        src="/images/Logo/Logo.svg"
+        src="/images/Logo/image.png"
         alt="logo"
-        width={160}
-        height={50}
+        width={60}
+        height={60}
         style={{ width: 'auto', height: 'auto' }}
         quality={100}
       />
-      Chef's Kitchen.
+      <span className='mb-2'>SMS.</span>
     </Link>
   );
 };

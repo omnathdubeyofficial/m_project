@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { HeaderItem } from "../../../../types/menu";
 import { usePathname } from "next/navigation";
 
 const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
@@ -55,7 +54,7 @@ const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
             <Link
               key={index}
               href={subItem.href}
-              className={`block px-4 py-2 ${path === subItem.href ? "bg-primary text-white" : "text-black hover:bg-primary"}`}
+              className={`block px-4 py-2 ${path === subItem.href ? "bg-primary text-white" : "text-black hover:bg-blue-800 hover:text-white"}`}
             >
               {subItem.label}
             </Link>
