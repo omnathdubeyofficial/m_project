@@ -12,7 +12,7 @@ const Logo: React.FC = () => {
         style={{ width: 'auto', height: 'auto' }}
         quality={100}
       />
-      <span className='mb-2'>SMS.</span>
+     
     </Link>
   );
 };

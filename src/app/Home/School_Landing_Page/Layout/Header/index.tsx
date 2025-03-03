@@ -123,13 +123,13 @@ useEffect(() => {
         <>
           <Link
             href='/login'
-            className='bg-primary text-white hover:bg-primary/15 hover:text-primary font-medium text-lg py-4 px-8 rounded-full transition-all duration-300'
+            className='bg-primary text-white hover:bg-primary/15 hover:text-primary text-lg py-2 px-6 rounded-full transition-all duration-300'
           >
             Login
           </Link>
           <Link
             href='/register'
-            className='bg-primary text-white hover:bg-primary/15 hover:text-primary font-medium text-lg py-4 px-8 rounded-full transition-all duration-300'
+            className='bg-primary text-white hover:bg-primary/15 hover:text-primary  text-lg py-2 px-6 rounded-full transition-all duration-300'
           >
             Register
           </Link>
