@@ -17,7 +17,7 @@ import Header from "./Home/School_Landing_Page/Layout/Header";
 export default function Home() {
   return (
     <div >
-      <Header/>
+      {/* <Header/> */}
       <Hero/>
       <Features/>
       <AboutUs/>

@@ -1,21 +1,29 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useRouter } from 'next/navigation';
+import {useMemo, useState, useEffect, useRef } from 'react';
 import { headerData } from "../Header/Navigation/menuData";
 import Logo from "./Logo";
 import HeaderLink from "../Header/Navigation/HeaderLink";
 import MobileHeaderLink from "../Header/Navigation/MobileHeaderLink";
 import { Icon } from "@iconify/react/dist/iconify.js";
-const Header: React.FC = () => {
+import Image from "next/image";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { GET_TOKAN_MANAGEMENT_DATA } from "../../../../query/authTokanQuery";
+import {LOGOUT_MUTATION} from "../../../../mutation/logoutMutation/logoutMutation"
+import { executeQuery,executeMutation } from "../../../../graphqlClient";
 
+
+const Header: React.FC = () => {
+  const router = useRouter();
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [sticky, setSticky] = useState(false);
-  const [isSignInOpen, setIsSignInOpen] = useState(false);
-  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [logoutMessage, setLogoutMessage] = useState('');
+  const [user, setUser] = useState(null);
 
-  const navbarRef = useRef<HTMLDivElement>(null);
-  const signInRef = useRef<HTMLDivElement>(null);
-  const signUpRef = useRef<HTMLDivElement>(null);
+
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = () => {
@@ -23,18 +31,6 @@ const Header: React.FC = () => {
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (
-      signInRef.current &&
-      !signInRef.current.contains(event.target as Node)
-    ) {
-      setIsSignInOpen(false);
-    }
-    if (
-      signUpRef.current &&
-      !signUpRef.current.contains(event.target as Node)
-    ) {
-      setIsSignUpOpen(false);
-    }
     if (
       mobileMenuRef.current &&
       !mobileMenuRef.current.contains(event.target as Node) &&
@@ -45,21 +41,65 @@ const Header: React.FC = () => {
   };
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await executeQuery(GET_TOKAN_MANAGEMENT_DATA);
+        if (response && response.getUserDataFromToken) {
+          setUser(response.getUserDataFromToken);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Error Fetching User Data:", error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
+useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [navbarOpen, isSignInOpen, isSignUpOpen]);
+  }, [navbarOpen]);
 
   useEffect(() => {
-    if (isSignInOpen || isSignUpOpen || navbarOpen) {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.profile-menu')) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
+
+    const handleLogout = async () => {
+      try {
+        const response = await executeMutation(LOGOUT_MUTATION);
+        
+        if (response ) {
+          setLogoutMessage('' + response.logout.message);
+          
+          setTimeout(() => {
+            window.location.reload(); 
+          }, 1000);
+        }
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    };
+
+
+  useEffect(() => {
+    if ( navbarOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
-  }, [isSignInOpen, isSignUpOpen, navbarOpen]);
+  }, [ navbarOpen]);
 
   return (
     <header
@@ -72,68 +112,80 @@ const Header: React.FC = () => {
         <nav className="hidden lg:flex flex-grow items-center gap-8 justify-center">
           {headerData.map((item, index) => (
             <HeaderLink key={index} item={item} />
-          ))}
+          ))} 
+
+
         </nav>
         <div className="flex items-center gap-4">
-          {/* <Link href="#" className="text-lg font-medium hover:text-primary">
-            <Icon
-              icon="solar:phone-bold"
-              className="text-primary text-3xl inline-block me-2"
-            />
-            +1(909) 235-9814
-          </Link> */}
-          {/* <Link
-            href="/login"
-            className="hidden lg:block text-primary bg-primary/15 hover:text-white hover:bg-primary font-medium text-lg py-4 px-8 rounded-full"
-          >
-            Sign In 
-          </Link> */}
-          {isSignInOpen && (
-            <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div
-                ref={signInRef}
-                className="relative mx-auto w-full max-w-md overflow-hidden rounded-lg px-8 pt-14 pb-8 text-center bg-white bg-opacity-90 backdrop-blur-md"
-              >
-                <button
-                  onClick={() => setIsSignInOpen(false)}
-                  className="absolute top-0 right-0 mr-8 mt-8"
-                  aria-label="Close Sign In Modal"
-                >
-                  <Icon
-                    icon="tabler:currency-xrp"
-                    className="text-black hover:text-primary text-24 inline-block me-2"
-                  />
-                </button>
-                <Signin />
-              </div>
-            </div>
-          )}
+      {!user?.userid ? (
+        <>
           <Link
-            href="#"
-            className="hidden lg:block bg-primary text-white hover:bg-primary/15 hover:text-primary font-medium text-lg py-4 px-8 rounded-full "
+            href="/login"
+            className="bg-primary text-white hover:bg-primary/15 hover:text-primary font-medium text-lg py-4 px-8 rounded-full"
           >
-          Register Now
+            Login
           </Link>
-          {isSignUpOpen && (
-            <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div
-                ref={signUpRef}
-                className="relative mx-auto w-full max-w-md overflow-hidden rounded-lg bg-opacity-90 backdrop-blur-md px-8 pt-14 pb-8 text-center"
+          <Link
+            href="/register"
+            className="bg-primary text-white hover:bg-primary/15 hover:text-primary font-medium text-lg py-4 px-8 rounded-full"
+          >
+            Register
+          </Link>
+        </>
+      ) : (
+        <div className="flex items-center gap-4 relative">
+          <div
+            className="w-14 h-14 rounded-full bg-gray-200 cursor-pointer overflow-hidden profile-menu"
+            onClick={() => setIsProfileOpen(!isProfileOpen)}
+          >
+            <Image
+              src="/img/q.png"
+              alt="Profile"
+              width={500}
+              height={500}
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          {isProfileOpen && (
+            <div className="absolute top-16 right-0 bg-white shadow-lg rounded-lg p-4 z-50 w-48 transition-all duration-200 ease-in-out transform">
+              <p className="flex items-center gap-2 mb-2 font-semibold text-gray-700">
+                <Icon icon="tabler:id" className="text-gray-500" />
+                {user.userid}
+              </p>
+              <Link href="/profile" className="flex items-center gap-2 mb-2 hover:bg-gray-100 p-2 rounded-md">
+                <Icon icon="tabler:user" className="text-gray-500" />
+                Profile
+              </Link>
+              <Link href="/settings" className="flex items-center gap-2 mb-2 hover:bg-gray-100 p-2 rounded-md">
+                <Icon icon="tabler:settings" className="text-gray-500" />
+                Settings
+              </Link>
+              <Link href="/help" className="flex items-center gap-2 mb-2 hover:bg-gray-100 p-2 rounded-md">
+                <Icon icon="tabler:help-circle" className="text-gray-500" />
+                Help
+              </Link>
+              <Link href="/notifications" className="flex items-center gap-2 mb-2 hover:bg-gray-100 p-2 rounded-md">
+                <Icon icon="tabler:bell" className="text-gray-500" />
+                Notifications
+              </Link>
+              <Link href="/support" className="flex items-center gap-2 mb-2 hover:bg-gray-100 p-2 rounded-md">
+                <Icon icon="tabler:lifebuoy" className="text-gray-500" />
+                Support
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 w-full text-left hover:bg-gray-100 p-2 rounded-md"
               >
-                <button
-                  onClick={() => setIsSignUpOpen(false)}
-                  className="absolute top-0 right-0 mr-8 mt-8"
-                  aria-label="Close Sign Up Modal"
-                >
-                  <Icon
-                    icon="tabler:currency-xrp"
-                    className="text-black hover:text-primary text-24 inline-block me-2"
-                  />
-                </button>
-                <SignUp />
-              </div>
+                <Icon icon="tabler:logout" className="text-gray-500" />
+                Logout
+              </button>
             </div>
           )}
+        </div>
+      )}
+
+          
           <button
             onClick={() => setNavbarOpen(!navbarOpen)}
             className="block lg:hidden p-2 rounded-lg"
@@ -183,31 +235,17 @@ const Header: React.FC = () => {
           {headerData.map((item, index) => (
             <MobileHeaderLink key={index} item={item} />
           ))}
-          <div className="mt-4 flex flex-col space-y-4 w-full">
-            <Link
-              href="#"
-              className="bg-transparent border border-primary text-primary px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white"
-              onClick={() => {
-                setIsSignInOpen(true);
-                setNavbarOpen(false);
-              }}
-            >
-              Sign In
-            </Link>
-            <Link
-              href="#"
-              className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-              onClick={() => {
-                setIsSignUpOpen(true);
-                setNavbarOpen(false);
-              }}
-            >
-              Sign Up
-            </Link>
-          </div>
+          
         </nav>
       </div>
     </div>
+
+    {logoutMessage && (
+            <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded shadow-lg flex items-center space-x-2 z-50">
+              <FontAwesomeIcon icon={faSignOutAlt} />
+              <span>{logoutMessage}</span>
+            </div>
+          )}
   </header>
 
   );

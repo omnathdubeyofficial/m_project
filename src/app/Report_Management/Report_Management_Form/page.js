@@ -49,7 +49,7 @@ const Report_Management_Form = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen w-full flex flex-col">
-      <Navbar />
+       {/* <Navbar /> */}
       <div className="container mx-auto py-10 px-4 sm:px-6 md:px-8 max-w-8xl pt-32">
         <div className="bg-white shadow-lg p-6 sm:p-8 w-full relative">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-5">

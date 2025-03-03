@@ -36,7 +36,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Navbar />
+       {/* <Navbar /> */}
       <div className="flex flex-col flex-1 p-6 pt-24 bg-white min-h-screen">
         <div className="w-full mx-auto p-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

@@ -150,7 +150,7 @@ const handleUpdate = async () => {
 
   return (
     <div className="bg-gray-100 min-h-screen pt-28">
-      <Navbar />
+       {/* <Navbar /> */}
       <main className="container  bg-white p-6  shadow-md  mx-auto py-8 px-8 ">
 
       {showPopup && (

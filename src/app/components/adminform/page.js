@@ -86,7 +86,7 @@ const AdminRegistrationPage = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen w-full flex flex-col">
-      <Navbar />
+       {/* <Navbar /> */}
       {message && (
         <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 p-4 rounded-lg shadow-lg z-50 text-center flex items-center gap-2 ${message.type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
           {message.type === "success" ? <FaCheckCircle className="text-green-600 text-2xl" /> : <FaTimesCircle className="text-red-600 text-2xl" />}
