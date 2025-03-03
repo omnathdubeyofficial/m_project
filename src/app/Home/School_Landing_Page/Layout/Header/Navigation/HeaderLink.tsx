@@ -68,7 +68,7 @@ const HeaderLink: React.FC<{ item: HeaderItem & { icon?: IconType } }> = ({ item
                 className={`block px-4 py-2 flex items-center justify-between ${
                   path === subItem.href
                     ? "bg-primary text-white"
-                    : "text-black hover:bg-blue-800 hover:text-white"
+                    : "text-black hover:bg-primary hover:text-white"
                 }`}
               >
                 <div className="flex items-center">
@@ -86,7 +86,7 @@ const HeaderLink: React.FC<{ item: HeaderItem & { icon?: IconType } }> = ({ item
                       className={`block px-4 py-2 flex items-center ${
                         path === nestedItem.href
                           ? "bg-primary text-white"
-                          : "text-black hover:bg-blue-800 hover:text-white"
+                          : "text-black hover:bg-primary hover:text-white"
                       }`}
                     >
                       {nestedItem.icon && <nestedItem.icon className="mr-2" />}
