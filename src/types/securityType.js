@@ -7,7 +7,23 @@ const securityType = gql`
     security_id : String
     first_name : String
     last_name : String
-    address : String
+    permanent_address : String
+    current_address : String
+    state : String
+    pincode : String
+    country : String
+    city : String
+    whatsapp_num : String
+    bank_account_num : String
+    bank_name : String
+    account_holder_name : String
+    bank_branch_name : String
+    ifsc_code : String
+    bank_passbook_img : String
+    joining_date : String
+    joining_salary : String
+    current_salary : String
+    previous_work_description : String
     adhar_num : String
     pan_num : String
     gender : String
@@ -30,16 +46,17 @@ const securityType = gql`
 
   # Query type for fetching users
   type Query {
-    getSecurity: [securityTypes]
+    getSecurityList: [securityTypes]
   }
 
   # Mutation types for creating, updating, and deleting users
   type Mutation {
-    createSecurity(security_id : String, first_name : String, last_name : String, address : String, adhar_num : String, pan_num : String, gender : String, contact_num : String, email : String, date_of_birth : String, age : String,qualification : String, s_date : String, profile_img : String, adhar_img : String, pan_img : String): securityTypes
+    createSecurityForm(first_name : String, last_name : String, permanent_address : String, current_address : String, state : String, pincode : String,country : String, city : String, whatsapp_num : String, bank_account_num : String, bank_name : String, account_holder_name : String, bank_branch_name : String, ifsc_code : String, bank_passbook_img : String, joining_date : String, joining_salary : String, current_salary : String, previous_work_description : String, adhar_num : String, pan_num : String, gender : String, contact_num : String, email : String, date_of_birth : String, age : String,qualification : String, s_date : String, profile_img : String, adhar_img : String, pan_img : String): securityTypes
 
-    updateSecurity(z_id : String, security_id : String, first_name : String, last_name : String, address : String, adhar_num : String, pan_num : String, gender : String, contact_num : String, email : String, date_of_birth : String, age : String,qualification : String,s_date : String, profile_img : String, adhar_img : String, pan_img : String): securityTypes
+    updateSecurityList(z_id : String, security_id : String, first_name : String, last_name : String, permanent_address : String, current_address : String, state : String, pincode : String, country : String, city : String, whatsapp_num : String, bank_account_num : String, bank_name : String, account_holder_name : String, bank_branch_name : String, ifsc_code : String, bank_passbook_img : String, joining_date : String, joining_salary : String, current_salary : String
+    previous_work_description : String, adhar_num : String, pan_num : String, gender : String, contact_num : String, email : String, date_of_birth : String, age : String,qualification : String,s_date : String, profile_img : String, adhar_img : String, pan_img : String): securityTypes
 
-    deleteSecurity(z_id : String): securityTypes
+    deleteSecurityList(z_id : String): securityTypes
   }
 `;
 

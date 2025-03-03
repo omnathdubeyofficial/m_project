@@ -1,6 +1,6 @@
 export const GET_DRIVER_LISTS_DATA = `
 query {
-    getDriverLists {
+    getDriverList {
       z_id
     driver_id
     first_name
@@ -37,6 +37,11 @@ query {
     ifsc_code
     bank_branch_name
     bank_passbook_img
+    state
+    pincode
+    country
+    city
+    previous_work_description
     cdate
     ctime
     udate

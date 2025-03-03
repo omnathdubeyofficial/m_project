@@ -1,0 +1,49 @@
+
+export const CREATE_HOUSEKEEPING_LIST_MUTATION = `
+  mutation createHouseKeepingForm($first_name : String, $middle_name : String, $last_name : String, $gender : String, $contact_no : String, $whatsapp_no : String, $email : String, $adhar_no : String, $pan_no : String, $joining_date : String, $work_description : String, $start_time : String, $end_time : String, $assigned_by : String, $supervisor_comments : String, $feedback : String, $permanent_address : String, $current_address : String, $state : String, $pincode : String, $country : String, $city : String, $previous_work_description : String, $joining_salary : String, $current_salary : String, $bank_account_num : String, $bank_name : String, $account_holder_name : String, $bank_branch_name : String, $ifsc_code : String, $bank_passbook_img : String, $adhar_front_img : String, $adhar_back_img : String, $pan_img : String ) {
+    createHouseKeepingForm(first_name : $first_name, middle_name : $middle_name, last_name : $last_name, gender : $gender, contact_no : $contact_no, whatsapp_no : $whatsapp_no, email : $email, adhar_no : $adhar_no, pan_no : $pan_no, joining_date : $joining_date, work_description : $work_description, start_time : $start_time, end_time : $end_time, assigned_by : $assigned_by, supervisor_comments : $supervisor_comments, feedback : $feedback, permanent_address : $permanent_address, current_address : $current_address, state : $state, pincode : $pincode, country : $country, city : $city, previous_work_description : $previous_work_description, joining_salary : $joining_salary, current_salary : $current_salary, bank_account_num : $bank_account_num, bank_name : $bank_name, account_holder_name : $account_holder_name, bank_branch_name : $bank_branch_name, ifsc_code : $ifsc_code, bank_passbook_img : $bank_passbook_img, adhar_front_img : $adhar_front_img, adhar_back_img : $adhar_back_img, pan_img : $pan_img) {
+      z_id
+    staff_id
+    first_name
+    middle_name
+    last_name
+    gender
+    contact_no
+    whatsapp_no
+    email
+    adhar_no
+    pan_no
+    joining_date
+    work_description
+    start_time
+    end_time
+    assigned_by
+    supervisor_comments
+    feedback
+    permanent_address
+    current_address
+    state
+    pincode
+    country
+    city
+    previous_work_description
+    joining_salary
+    current_salary
+    bank_account_num
+    bank_name
+    account_holder_name
+    bank_branch_name
+    ifsc_code
+    bank_passbook_img
+    adhar_front_img
+    adhar_back_img
+    pan_img
+      cdate
+    ctime
+    udate
+    utime
+      success_msg
+      error_msg
+    }
+  }
+`;

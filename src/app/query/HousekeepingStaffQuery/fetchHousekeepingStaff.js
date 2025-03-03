@@ -1,0 +1,46 @@
+export const GET_HOUSEKEEPING_LIST_DATA = `
+query {
+    getHouseKeepingList {
+      z_id
+    staff_id
+    first_name
+    middle_name
+    last_name
+    gender
+    contact_no
+    whatsapp_no
+    email
+    adhar_no
+    pan_no
+    joining_date
+    work_description
+    start_time
+    end_time
+    assigned_by
+    supervisor_comments
+    feedback
+    permanent_address
+    current_address
+    state
+    pincode
+    country
+    city
+    previous_work_description
+    joining_salary
+    current_salary
+    bank_account_num
+    bank_name
+    account_holder_name
+    bank_branch_name
+    ifsc_code
+    bank_passbook_img
+    adhar_front_img
+    adhar_back_img
+    pan_img
+    cdate
+    ctime
+    udate
+    utime
+    }
+  }
+`;

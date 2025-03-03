@@ -1,11 +1,27 @@
 export const GET_SECURITY_FORM_DATA = `
 query {
-    getSecurity {
+    getSecurityList {
      z_id
     security_id 
     first_name
     last_name
-    address
+    permanent_address
+    current_address
+    state
+    pincode
+    country
+    city
+    whatsapp_num
+    bank_account_num
+    bank_name
+    account_holder_name
+    bank_branch_name
+    ifsc_code
+    bank_passbook_img
+    joining_date
+    joining_salary
+    current_salary
+    previous_work_description
     adhar_num 
     pan_num
     gender

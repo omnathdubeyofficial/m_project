@@ -4,21 +4,19 @@ import { setUserDate, setUserTime } from './dateTimeService.js';
 import { v4 as uuidv4 } from 'uuid';
 
 // Get all users
-const getSecurity = async () => {
+const getSecurityList = async () => {
   return await prisma.security_form.findMany();
 };
 
 // Create a new user
-const createSecurity = async ({ security_id, first_name, last_name, address, adhar_num, pan_num, gender, contact_num, email, date_of_birth, age, qualification, profile_img, adhar_img, pan_img }) => {
+const createSecurityForm = async ({ first_name, last_name, permanent_address, current_address, state, pincode, country, city, whatsapp_num, bank_account_num, bank_name, account_holder_name, bank_branch_name, ifsc_code, bank_passbook_img, joining_date, joining_salary, current_salary, previous_work_description, adhar_num, pan_num, gender, contact_num, email, date_of_birth, age, qualification, profile_img, adhar_img, pan_img }) => {
   try {
-    // To generate student_id as first two letters of first_name then date of birth and then last letter of first_name
-
-    const generateSecurityId = `${first_name.toLowerCase().slice(0, 4)}${adhar_num.slice(adhar_num.length - 4, adhar_num.length)}${first_name.toLowerCase().slice(first_name.length - 2, first_name.length)}`
+    const generateSecurityId = `${first_name.toUpperCase().slice(0, 3)}${Math.floor(Math.random() * 10000)}${first_name.toUpperCase().slice(first_name.length - 2, first_name.length)}`
 
     console.log("The security id is:", generateSecurityId)
 
     const createdData = await prisma.security_form.create({
-      data: { z_id: uuidv4(), security_id: generateSecurityId, first_name, last_name, address, adhar_num, pan_num, gender, contact_num, email, date_of_birth, age, qualification, profile_img, adhar_img, pan_img, cdate: setUserDate(), ctime: setUserTime() },
+      data: { z_id: uuidv4(), security_id: generateSecurityId, first_name, last_name, permanent_address, current_address, state, pincode, country, city, whatsapp_num, bank_account_num, bank_name, account_holder_name, bank_branch_name, ifsc_code, bank_passbook_img, joining_date, joining_salary, current_salary, previous_work_description, adhar_num, pan_num, gender, contact_num, email, date_of_birth, age, qualification, profile_img, adhar_img, pan_img, cdate: setUserDate(), ctime: setUserTime() },
     });
     const success_msg = "Security form completed successfully."
     return { ...createdData, success_msg }
@@ -33,12 +31,12 @@ const createSecurity = async ({ security_id, first_name, last_name, address, adh
 };
 
 // Update an existing user by ID
-const updateSecurity = async ({ z_id, security_id, first_name, last_name, address, adhar_num, pan_num, gender, contact_num, email, date_of_birth, age, qualification, profile_img, adhar_img, pan_img }) => {
+const updateSecurityList = async ({ z_id, security_id, first_name, last_name, permanent_address, current_address, state, pincode, country, city, whatsapp_num, bank_account_num, bank_name, account_holder_name, bank_branch_name, ifsc_code, bank_passbook_img, joining_date, joining_salary, current_salary, previous_work_description, adhar_num, pan_num, gender, contact_num, email, date_of_birth, age, qualification, profile_img, adhar_img, pan_img }) => {
   try {
 
     const updatedData = await prisma.security_form.update({
       where: { z_id },
-      data: { security_id, first_name, last_name, address, adhar_num, pan_num, gender, contact_num, email, date_of_birth, age, qualification, profile_img, adhar_img, pan_img, udate: setUserDate(), utime: setUserTime() },
+      data: { security_id, first_name, last_name, permanent_address, current_address, state, pincode, country, city, whatsapp_num, bank_account_num, bank_name, account_holder_name, bank_branch_name, ifsc_code, bank_passbook_img, joining_date, joining_salary, current_salary, previous_work_description, adhar_num, pan_num, gender, contact_num, email, date_of_birth, age, qualification, profile_img, adhar_img, pan_img, udate: setUserDate(), utime: setUserTime() },
     });
     const success_msg = "Security form updated successfully."
     return { ...updatedData, success_msg }
@@ -53,7 +51,7 @@ const updateSecurity = async ({ z_id, security_id, first_name, last_name, addres
 
 
 // Delete a user by ID
-const deleteSecurity = async ({ z_id }) => {
+const deleteSecurityList = async ({ z_id }) => {
   try {
     console.log("z_id :", z_id)
     const deletedData = await prisma.security_form.delete({
@@ -70,4 +68,4 @@ const deleteSecurity = async ({ z_id }) => {
   }
 };
 
-export { getSecurity, createSecurity, updateSecurity, deleteSecurity };
+export { getSecurityList, createSecurityForm, updateSecurityList, deleteSecurityList };
