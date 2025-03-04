@@ -435,3 +435,25 @@ model housekeeping_list {
   udate                     String? @db.VarChar(100)
   utime                     String? @db.VarChar(100)
 }
+
+model blog_list {
+  z_id             String  @id @db.VarChar(100)
+  title            String? @db.Text
+  slug             String? @db.Text
+  date_time_zone   String? @db.VarChar(100)
+  author_name      String? @db.Text
+  content          String? @db.Text
+  tags             String? @db.Text
+  category         String? @db.Text
+  featured_image   String? @db.Text
+  views            String? @db.Text
+  likes            String? @db.Text
+  comments         String? @db.Text
+  meta_title       String? @db.Text
+  meta_description String? @db.Text
+  meta_keywords    String? @db.Text
+  cdate            String? @db.VarChar(100)
+  ctime            String? @db.VarChar(100)
+  udate            String? @db.VarChar(100)
+  utime            String? @db.VarChar(100)
+}
