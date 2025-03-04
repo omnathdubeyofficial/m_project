@@ -92,8 +92,8 @@ const Login = () => {
 
 
       {/* Right Side (Form) */}
-      <div className="flex-grow w-full flex flex-col justify-center items-center bg-gradient-to-r from-blue-700 via-blue-900 to-blue-950 p-8">
-        <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-8 border border-gray-300">
+      <div className="flex-grow w-full flex flex-col justify-center items-center bg-gradient-to-r from-blue-200 via-blue-600 to-blue-900 p-8">
+      <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-8 border border-gray-300">
           <div className="flex justify-center mb-6">
             <Image src="/img/logo.png" alt="Logo" width={120} height={120} />
           </div>
