@@ -71,7 +71,7 @@ const COLORS = ['#4CAF50', '#FF9800', '#F44336', '#2196F3'];
 export default function StudentDashboard() {
   return (
     <div className="min-h-screen bg-gray-100 p-4 pt-24">
-      <Navber/>
+      {/* <Navber/> */}
       
       {/* Main Dashboard */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">

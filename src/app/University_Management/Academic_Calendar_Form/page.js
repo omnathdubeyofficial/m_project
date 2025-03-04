@@ -55,8 +55,8 @@ const AcademicCalendarForm = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <SchoolNavbar />
+    <div className="bg-gray-50 min-h-screen py-16">
+      {/* <SchoolNavbar /> */}
       <div className="mt-16 flex flex-col items-center justify-center py-10 px-6">
         <div className="w-full max-w-5xl bg-white p-8 shadow-xl border border-gray-200 ">
           <div className="flex justify-between items-center mb-6">

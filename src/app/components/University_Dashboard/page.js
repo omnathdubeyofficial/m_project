@@ -20,7 +20,7 @@ const UniversityPage = () => {
 
   return (
     <div className="bg-gradient-to-r from-blue-50 to-blue-100 text-gray-800 min-h-screen transition-colors duration-500 pt-32">
-      <Navber />
+      {/* <Navber /> */}
       <main className="py-12 px-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-5">
