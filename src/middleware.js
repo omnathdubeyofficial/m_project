@@ -11,7 +11,7 @@ const ROLE_DASHBOARD = {
 };
 
 const ROLE_PERMISSIONS = {
-  admin: new Set(["/dashboard", "/dashboard/admin_dashboard", "/student_dash/students_forms/admission_form", "/student_dash/students_forms/attendance_form", "/student_dash/students_forms/holiday_list"]),
+  admin: new Set(["/dashboard","/ProfilePage_Management/Admin_Profile", "/dashboard/admin_dashboard", "/student_dash/students_forms/admission_form", "/student_dash/students_forms/attendance_form", "/student_dash/students_forms/holiday_list", "/components/University_Dashboard", "/Exam_Management/Exam_Management_Page","/Event_Management/Event_Management_Page", "/Sports_Management/Sports_Management_Page","/Competition_Management/Competition_Management_Page","/components/University_Dashboard","/dashboard/admin_dashboard"]),
   student: new Set(["/student_dash", "/view_courses"]),
   parent: new Set(["/parents_dash", "/child_progress"]),
   teacher: new Set(["/teacher_dash", "/manage_classes"]),
@@ -82,6 +82,14 @@ export const config = {
   matcher: [
     "/login/:path*",
     "/dashboard/:path*",
+    "/dashboard/admin_dashboard/:path*",
+    "/components/University_Dashboard/:path*",
+    "/Exam_Management/Exam_Management_Page/:path*",
+    "/Event_Management/Event_Management_Page/:path*",
+    "/Sports_Management/Sports_Management_Page/:path*",
+    "/Competition_Management/Competition_Management_Page/:path*",
+    "/components/University_Dashboard/:path*",
+    "/dashboard/admin_dashboard/:path*",
     "/manage_users/:path*",
     "/reports/:path*",
     "/student_dash/:path*",
@@ -92,5 +100,6 @@ export const config = {
     "/manage_classes/:path*",
     "/staff_dash/:path*",
     "/attendance/:path*",
+    "/ProfilePage_Management/Admin_Profile/:path*",
   ],
 };

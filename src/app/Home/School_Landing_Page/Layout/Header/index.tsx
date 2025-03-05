@@ -165,7 +165,7 @@ useEffect(() => {
       <Icon icon='tabler:user' className='text-green-500' />
       <span className='text-gray-800 font-medium'>Profile</span>
     </Link>
-    <Link href='/settings' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
+    <Link href='/ProfilePage_Management/Settings_Page' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
       <Icon icon='tabler:settings' className='text-green-500' />
       <span className='text-gray-800 font-medium'>Settings</span>
     </Link>
