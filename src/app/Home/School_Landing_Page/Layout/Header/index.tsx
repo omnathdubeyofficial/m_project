@@ -169,7 +169,7 @@ useEffect(() => {
       <Icon icon='tabler:settings' className='text-green-500' />
       <span className='text-gray-800 font-medium'>Settings</span>
     </Link>
-    <Link href='/help' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
+    <Link href='/ProfilePage_Management/Help_Page' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
       <Icon icon='tabler:help-circle' className='text-green-500' />
       <span className='text-gray-800 font-medium'>Help</span>
     </Link>
@@ -177,7 +177,7 @@ useEffect(() => {
       <Icon icon='tabler:bell' className='text-green-500' />
       <span className='text-gray-800 font-medium'>Notifications</span>
     </Link>
-    <Link href='/support' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
+    <Link href='/ProfilePage_Management/Support_Page' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
       <Icon icon='tabler:lifebuoy' className='text-green-500' />
       <span className='text-gray-800 font-medium'>Support</span>
     </Link>
