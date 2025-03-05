@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import {useMemo, useState, useEffect, useRef } from 'react';
 import { headerData } from "../Header/Navigation/menuData";
 import Logo from "./Logo";
@@ -17,6 +17,7 @@ import { executeQuery,executeMutation } from "../../../../graphqlClient";
 
 const Header: React.FC = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [sticky, setSticky] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -45,18 +46,19 @@ const Header: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await executeQuery(GET_TOKAN_MANAGEMENT_DATA);
-        if (response && response.getUserDataFromToken) {
-          setUser(response.getUserDataFromToken);
-        } else {
-          setUser(null);
+        if (!user) { // Avoid redundant API calls
+          const response = await executeQuery(GET_TOKAN_MANAGEMENT_DATA);
+          if (response && response.getUserDataFromToken) {
+            setUser(response.getUserDataFromToken);
+          }
         }
       } catch (error) {
         console.error("Error Fetching User Data:", error);
       }
     };
+
     fetchUserData();
-  }, []);
+  }, [user]);
 
 useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -159,7 +161,7 @@ useEffect(() => {
         <span className='block text-sm opacity-80'>User ID</span>
       </div>
     </div>
-    <Link href='/profile' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
+    <Link href='/ProfilePage_Management/Admin_Profile' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
       <Icon icon='tabler:user' className='text-green-500' />
       <span className='text-gray-800 font-medium'>Profile</span>
     </Link>
@@ -247,10 +249,12 @@ useEffect(() => {
       </div>
     </div>
 
-    {logoutMessage && (
-            <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded shadow-lg flex items-center space-x-2 z-50">
-              <FontAwesomeIcon icon={faSignOutAlt} />
-              <span>{logoutMessage}</span>
+
+{logoutMessage && (
+            <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg flex items-center space-x-2 animate-fade-in">
+
+              <FontAwesomeIcon icon={faSignOutAlt} className="w-6 h-6 text-white"  />
+              <span className="font-semibold text-lg">{logoutMessage}</span>
             </div>
           )}
   </header>

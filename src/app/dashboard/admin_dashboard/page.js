@@ -364,7 +364,7 @@ const feesCollectionData = [
 export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50 p-8 pt-28">
-      <Navber />
+      {/* <Navber /> */}
 
       <Link href="/dashboard" passHref>
   <button 
