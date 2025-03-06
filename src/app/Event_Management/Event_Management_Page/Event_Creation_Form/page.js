@@ -149,7 +149,7 @@ const Event_Creation_Form = () => {
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
-                            rows={3}
+                            rows={8}
                             required
                             className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
