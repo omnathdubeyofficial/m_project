@@ -12,10 +12,10 @@ const ROLE_DASHBOARD = {
 
 const ROLE_PERMISSIONS = {
   admin: new Set(["/dashboard","/ProfilePage_Management/Admin_Profile", "/dashboard/admin_dashboard", "/student_dash/students_forms/admission_form", "/student_dash/students_forms/attendance_form", "/student_dash/students_forms/holiday_list", "/components/University_Dashboard", "/Exam_Management/Exam_Management_Page","/Event_Management/Event_Management_Page", "/Sports_Management/Sports_Management_Page","/Competition_Management/Competition_Management_Page","/components/University_Dashboard","/dashboard/admin_dashboard"]),
-  student: new Set(["/student_dash", "/view_courses"]),
-  parent: new Set(["/parents_dash", "/child_progress"]),
-  teacher: new Set(["/teacher_dash", "/manage_classes"]),
-  staff: new Set(["/staff_dash", "/attendance"]),
+  student: new Set(["/student_dash","/ProfilePage_Management/Admin_Profile", "/view_courses"]),
+  parent: new Set(["/parents_dash","/ProfilePage_Management/Admin_Profile", "/child_progress"]),
+  teacher: new Set(["/teacher_dash","/ProfilePage_Management/Admin_Profile", "/manage_classes"]),
+  staff: new Set(["/staff_dash","/ProfilePage_Management/Admin_Profile", "/attendance"]),
 };
 
 // Token Cache (For Fast Access)
