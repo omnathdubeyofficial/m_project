@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { setUserDate, setUserTime } from './dateTimeService.js';
+import { setUserDate, setUserTime, unique_id } from './dateTimeService.js';
 import { v4 as uuidv4 } from 'uuid';
 
 // Get all users
@@ -13,7 +13,7 @@ const createHouseKeepingForm = async ({ first_name, middle_name, last_name, gend
   try {
     const unique_staff_id = `${first_name.toUpperCase().slice(0, 3)}${Math.floor(Math.random() * 100000)}${first_name.toUpperCase().slice(first_name.length - 1, first_name.length)}`
     const createdData = await prisma.housekeeping_list.create({
-      data: { z_id: uuidv4(), staff_id: unique_staff_id, first_name, middle_name, last_name, gender, contact_no, whatsapp_no, email, adhar_no, pan_no, joining_date, work_description, start_time, end_time, assigned_by, supervisor_comments, feedback, permanent_address, current_address, state, pincode, country, city, previous_work_description, joining_salary, current_salary, bank_account_num, bank_name, account_holder_name, bank_branch_name, ifsc_code, bank_passbook_img, adhar_front_img, adhar_back_img, pan_img, cdate: setUserDate(), ctime: setUserTime() },
+      data: { z_id: uuidv4(), staff_id: unique_id(first_name), first_name, middle_name, last_name, gender, contact_no, whatsapp_no, email, adhar_no, pan_no, joining_date, work_description, start_time, end_time, assigned_by, supervisor_comments, feedback, permanent_address, current_address, state, pincode, country, city, previous_work_description, joining_salary, current_salary, bank_account_num, bank_name, account_holder_name, bank_branch_name, ifsc_code, bank_passbook_img, adhar_front_img, adhar_back_img, pan_img, cdate: setUserDate(), ctime: setUserTime() },
     });
     const success_msg = "Housekeeping form created successfully."
     return { ...createdData, success_msg }

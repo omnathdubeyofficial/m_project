@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { setUserDate, setUserTime } from './dateTimeService.js';
+import { setUserDate, setUserTime, unique_id } from './dateTimeService.js';
 import { v4 as uuidv4 } from 'uuid';
 
 // Get all users
@@ -13,12 +13,10 @@ const createStudentRegistration = async ({ first_name, middle_name, last_name, e
   try {
     // To generate student_id as first two letters of first_name then date of birth and then last letter of first_name
 
-    const generateStudentId = `${first_name.toLowerCase().slice(0, 2)}${date_of_birth}${first_name.toLowerCase().slice(first_name.length - 1, first_name.length)}`
-
-    console.log("The first name is:", generateStudentId)
+    // const generateStudentId = `${first_name.toLowerCase().slice(0, 2)}${date_of_birth}${first_name.toLowerCase().slice(first_name.length - 1, first_name.length)}`
 
     const createdData = await prisma.student_registration.create({
-      data: { z_id: uuidv4(), student_id: generateStudentId, first_name, middle_name, last_name, email, date_of_birth, adhar_no, gender, contact_no, address, previous_school, highest_qualification, percentage, entrance_exam_score, parent_name, parent_contact_no, parent_email, relationship, profile_image, cdate: setUserDate(), ctime: setUserTime() },
+      data: { z_id: uuidv4(), student_id: unique_id(first_name), first_name, middle_name, last_name, email, date_of_birth, adhar_no, gender, contact_no, address, previous_school, highest_qualification, percentage, entrance_exam_score, parent_name, parent_contact_no, parent_email, relationship, profile_image, cdate: setUserDate(), ctime: setUserTime() },
     });
     const success_msg = "Registration completed successfully."
     return { ...createdData, success_msg }

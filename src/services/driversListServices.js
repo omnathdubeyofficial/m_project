@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { setUserDate, setUserTime } from './dateTimeService.js';
+import { setUserDate, setUserTime, unique_id } from './dateTimeService.js';
 import { v4 as uuidv4 } from 'uuid';
 
 // Get all users
@@ -11,9 +11,9 @@ const getDriverList = async () => {
 // Create a new user
 const createDriverForm = async ({ first_name, email, phone_no, whatsapp_no, alternate_no, blood_group, permanent_address, gender, dob, status, shift, registration_date, joining_date, adhar_card_num, pan_num, license_number, license_expiry, license_img, adhar_card_front_img, adhar_card_back_img, pan_card_img, last_eye_checkup_date, eye_test_result, visually_impared, eye_disorder, bank_name, bank_account_num, account_holder_name, ifsc_code, bank_branch_name, bank_passbook_img, middle_name, last_name, current_address, joining_salary, current_salary, state, pincode, country, city, previous_work_description }) => {
   try {
-    const unique_driver_id = `${first_name.toUpperCase().slice(0, 3)}${Math.floor(Math.random() * 100000)}${first_name.toUpperCase().slice(first_name.length - 1, first_name.length)}`
+    // const unique_driver_id = `${first_name.toUpperCase().slice(0, 3)}${Math.floor(Math.random() * 100000)}${first_name.toUpperCase().slice(first_name.length - 1, first_name.length)}`
     const createdData = await prisma.drivers_list.create({
-      data: { z_id: uuidv4(), driver_id: unique_driver_id, first_name, email, phone_no, whatsapp_no, alternate_no, blood_group, permanent_address, gender, dob, status, shift, registration_date, joining_date, adhar_card_num, pan_num, license_number, license_expiry, license_img, adhar_card_front_img, adhar_card_back_img, pan_card_img, last_eye_checkup_date, eye_test_result, visually_impared, eye_disorder, bank_name, bank_account_num, account_holder_name, ifsc_code, bank_branch_name, bank_passbook_img, middle_name, last_name, current_address, joining_salary, current_salary, state, pincode, country, city, previous_work_description, cdate: setUserDate(), ctime: setUserTime() },
+      data: { z_id: uuidv4(), driver_id: unique_id(first_name), first_name, email, phone_no, whatsapp_no, alternate_no, blood_group, permanent_address, gender, dob, status, shift, registration_date, joining_date, adhar_card_num, pan_num, license_number, license_expiry, license_img, adhar_card_front_img, adhar_card_back_img, pan_card_img, last_eye_checkup_date, eye_test_result, visually_impared, eye_disorder, bank_name, bank_account_num, account_holder_name, ifsc_code, bank_branch_name, bank_passbook_img, middle_name, last_name, current_address, joining_salary, current_salary, state, pincode, country, city, previous_work_description, cdate: setUserDate(), ctime: setUserTime() },
     });
     const success_msg = "Driver form created successfully."
     return { ...createdData, success_msg }
