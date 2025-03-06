@@ -6,9 +6,13 @@ import {
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useState, useEffect } from 'react';
+import Loading from '../../Loader/page'; 
+
 
 const Event_Management_Page = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
   const services = [
     { name: "Event Creation Form", icon: <FaCalendarAlt />, path: "/University_Management/Holiday_List" },
@@ -24,6 +28,23 @@ const Event_Management_Page = () => {
     { name: "Transport and Logistics ", icon: <FaTruck />, path: "/components/admin-registration" },
     { name: "Risk Management Form", icon: <FaExclamationTriangle />, path: "/components/admin-registration" },
   ];
+
+  useEffect(() => {
+    const handleLoad = () => {
+      setIsLoading(false);
+    };
+
+    if (document.readyState === 'complete') {
+      handleLoad();
+    } else {
+      window.addEventListener('load', handleLoad);
+    }
+
+    return () => window.removeEventListener('load', handleLoad);
+  }, []);
+
+  if (isLoading) return <Loading />;
+
 
   return (
     <div className="bg-gradient-to-r from-blue-50 to-blue-100 min-h-screen pt-32">

@@ -5,6 +5,7 @@ import { GET_TOKAN_MANAGEMENT_DATA } from '../../query/authTokanQuery';
 import { UPDATE_USER_MANAGEMENT_DATA_MUTATION } from '../../mutation/updateUserManagementData';
 import { executeQuery, executeMutation } from '../../graphqlClient';
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube, FaCheckCircle, FaSync, FaEdit, FaSave, FaTimesCircle } from "react-icons/fa";
+import Loading from '../../Loader/page'; 
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null);
@@ -57,13 +58,22 @@ export default function ProfilePage() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Image src='/gif_loading/loading.gif' alt='Loading' width={100} height={100} />
-      </div>
-    );
-  }
+  useEffect(() => {
+    const handleLoad = () => {
+      setIsLoading(false);
+    };
+
+    if (document.readyState === 'complete') {
+      handleLoad();
+    } else {
+      window.addEventListener('load', handleLoad);
+    }
+
+    return () => window.removeEventListener('load', handleLoad);
+  }, []);
+
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="max-w-5xl mx-auto p-6 rounded-2xl bg-white shadow-lg mt-40">

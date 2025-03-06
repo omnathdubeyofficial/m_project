@@ -5,10 +5,33 @@ import {
   FaCalendarAlt, FaFutbol, FaTrophy, FaBell, FaUserPlus, FaMoneyBillWave 
 } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
-import Navbar from '../navbar/page';
+import { useState, useEffect } from 'react';
+import Loading from '../Loader/page'; 
 
 const Dashboard = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setIsLoading(false);
+  //   }, 500);
+  // }, []);
+
+
+  useEffect(() => {
+    const handleLoad = () => {
+      setIsLoading(false);
+    };
+
+    if (document.readyState === 'complete') {
+      handleLoad();
+    } else {
+      window.addEventListener('load', handleLoad);
+    }
+
+    return () => window.removeEventListener('load', handleLoad);
+  }, []);
 
   const menuItems = [
     { name: 'Dashboard', icon: FaChartBar, link: '/dashboard/admin_dashboard' },
@@ -20,7 +43,6 @@ const Dashboard = () => {
     { name: 'Lab Management', icon: FaFlask, link: '/components/Lab_Dashboard' },
     { name: 'Staff Management', icon: FaUsers, link: '/Staff_Management/Staff_Management_Data' },
     { name: 'Transport Drivers', icon: FaBus, link: '/Drivers_Transport/Drivers_Transport_Data' },
-
     { name: 'Computer Management', icon: FaDesktop, link: '/components/Computer_Dashboard' },
     { name: 'Housekeeping Staff', icon: FaBroom, link: '/Housekeeping_Staff/Housekeeping_Staff_Data' },
     { name: 'Security Staff', icon: FaShieldAlt, link: '/Security_Staff/Security_Staff_Data' },
@@ -34,9 +56,10 @@ const Dashboard = () => {
     { name: 'Fee Management', icon: FaMoneyBillWave, link: '/Fee_Management/Fee_Management_Data' },
   ];
 
+  if (isLoading) return <Loading />;
+
   return (
     <div>
-       {/* <Navbar /> */}
       <div className="flex flex-col flex-1 p-6 pt-24 bg-white min-h-screen">
         <div className="w-full mx-auto p-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -44,7 +67,7 @@ const Dashboard = () => {
               <div 
                 key={index} 
                 onClick={() => router.push(item.link)} 
-                className="p-6 bg-green-50 text-gray-800 shadow-md hover:shadow-lg transition-all transform hover:scale-105 cursor-pointer  border border-gray-200 flex flex-col items-center justify-center"
+                className="p-6 bg-green-50 text-gray-800 shadow-md hover:shadow-lg transition-all transform hover:scale-105 cursor-pointer border border-gray-200 flex flex-col items-center justify-center"
               >
                 <item.icon className="text-5xl mb-4 text-gray-600" />
                 <h2 className="text-lg font-medium">{item.name}</h2>

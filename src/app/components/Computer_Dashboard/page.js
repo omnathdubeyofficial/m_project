@@ -50,7 +50,7 @@ const ComputerDashboard = () => {
 
   return (
     <div>
-      <SchoolNavbar />
+      {/* <SchoolNavbar /> */}
       <div className="min-h-screen bg-gray-50 py-32 p-8 font-sans">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-8">
           {[{ title: "Total Computers", value: stats.totalComputers, icon: <FaDesktop /> },
