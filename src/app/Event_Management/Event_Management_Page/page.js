@@ -15,7 +15,7 @@ const Event_Management_Page = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const services = [
-    { name: "Event Creation Form", icon: <FaCalendarAlt />, path: "/University_Management/Holiday_List" },
+    { name: "Event Creation Form", icon: <FaCalendarAlt />, path: "/Event_Management/Event_Management_Page/Event_Creation_Form" },
     { name: "Registration Form", icon: <FaUsers />, path: "/University_Management/Phone_Directory_List" },
     { name: "Budget Request Form", icon: <FaRupeeSign />, path: "/University_Management/Academic_Calendar_List" },
     { name: "Feedback Form", icon: <FaClipboard />, path: "/components/admin-registration" },

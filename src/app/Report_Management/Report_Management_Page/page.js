@@ -1,0 +1,57 @@
+"use client";
+
+import { 
+  FaFileAlt, FaChartBar, FaClipboardList, FaUsers, FaClipboard, FaAward, FaExclamationTriangle
+} from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+const Report_Management_Page = () => {
+  const router = useRouter();
+
+  const reportServices = [
+    { name: "Generate Reports", icon: <FaFileAlt />, path: "/reports/generate" },
+    { name: "View Reports", icon: <FaChartBar />, path: "/reports/view" },
+    { name: "Attendance Reports", icon: <FaClipboardList />, path: "/reports/attendance" },
+    { name: "Student Performance Reports", icon: <FaUsers />, path: "/reports/student-performance" },
+    { name: "Financial Reports", icon: <FaClipboard />, path: "/reports/financial" },
+    { name: "Awards and Achievements Reports", icon: <FaAward />, path: "/reports/awards-achievements" },
+    { name: "Risk Management Reports", icon: <FaExclamationTriangle />, path: "/reports/risk-management" }
+  ];
+
+  return (
+    <div className="bg-gradient-to-r from-green-50 to-green-100 min-h-screen pt-32">
+      <main className="py-12 px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 p-4 bg-white border-2 border-gray-300 shadow-md">
+            <button 
+              onClick={() => router.push("/dashboard")}
+              className="bg-green-600 text-white px-6 py-2 flex items-center gap-2 shadow-md hover:bg-green-700 transition-all"
+            >
+              Go Back
+            </button>
+            <h2 className="text-3xl text-center flex items-center gap-3 text-gray-800 font-semibold">
+              <FaFileAlt className="text-green-500 text-3xl animate-pulse" />
+              Report Management
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {reportServices.map((service, index) => (
+              <Link href={service.path} key={index}>
+                <div
+                  className="p-8 shadow-lg flex flex-col items-center cursor-pointer border border-gray-300 bg-white transition-transform hover:scale-105 hover:shadow-2xl rounded-lg text-gray-900 hover:bg-green-50 hover:border-green-400"
+                >
+                  <div className="text-5xl mb-4 text-green-700">{service.icon}</div>
+                  <h3 className="text-lg font-semibold text-center">{service.name}</h3>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default Report_Management_Page;

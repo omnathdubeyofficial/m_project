@@ -11,7 +11,7 @@ const ROLE_DASHBOARD = {
 };
 
 const ROLE_PERMISSIONS = {
-  admin: new Set(["/dashboard","/ProfilePage_Management/Admin_Profile", "/dashboard/admin_dashboard", "/student_dash/students_forms/admission_form", "/student_dash/students_forms/attendance_form", "/student_dash/students_forms/holiday_list", "/components/University_Dashboard", "/Exam_Management/Exam_Management_Page","/Event_Management/Event_Management_Page", "/Sports_Management/Sports_Management_Page","/Competition_Management/Competition_Management_Page","/components/University_Dashboard","/dashboard/admin_dashboard"]),
+  admin: new Set(["/dashboard","/ProfilePage_Management/Admin_Profile","/Security_Staff/Security_Staff_Page", "/dashboard/admin_dashboard", "/student_dash/students_forms/admission_form", "/student_dash/students_forms/attendance_form", "/student_dash/students_forms/holiday_list", "/components/University_Dashboard", "/Exam_Management/Exam_Management_Page","/Event_Management/Event_Management_Page", "/Sports_Management/Sports_Management_Page","/Competition_Management/Competition_Management_Page","/components/University_Dashboard","/dashboard/admin_dashboard","/Lab_Management/Lab_Management_Page","/Library_Management/Library_Management_Page","/Transport_Management/Transport_Management_Page", "/Parents_Management/Parents_Management_Page", "/Students_Management/Students_Management_Page","/Computer_Section/Computer_Management_Page", "/Housekeeping_Staff/Housekeeping_Staff_Page", "/Report_Management/Report_Management_Page", "/Notification_Management/Notification_Management_Page", "/Fee_Management/Fee_Management_Page", "/Admission_Management/Admission_Management_Page", "/Event_Management/Event_Management_Page/Event_Creation_Form"]),
   student: new Set(["/student_dash","/ProfilePage_Management/Admin_Profile", "/view_courses"]),
   parent: new Set(["/parents_dash","/ProfilePage_Management/Admin_Profile", "/child_progress"]),
   teacher: new Set(["/teacher_dash","/ProfilePage_Management/Admin_Profile", "/manage_classes"]),
@@ -101,5 +101,18 @@ export const config = {
     "/staff_dash/:path*",
     "/attendance/:path*",
     "/ProfilePage_Management/Admin_Profile/:path*",
+    "/Security_Staff/Security_Staff_Page/:path*",
+    "/Lab_Management/Lab_Management_Page/:path*",
+    "/Library_Management/Library_Management_Page/:path*",
+    "/Transport_Management/Transport_Management_Page/:path*",
+    "/Parents_Management/Parents_Management_Page/:path*",
+    "/Students_Management/Students_Management_Page/:path*",
+    "/Computer_Section/Computer_Management_Page/:path*",
+    "/Housekeeping_Staff/Housekeeping_Staff_Page/:path*",
+    "/Report_Management/Report_Management_Page/:path*",
+    "/Notification_Management/Notification_Management_Page/:path*",
+    "/Fee_Management/Fee_Management_Page/:path*",
+    "/Admission_Management/Admission_Management_Page/:path*",
+    "/Event_Management/Event_Management_Page/Event_Creation_Form/:path*"
   ],
 };
