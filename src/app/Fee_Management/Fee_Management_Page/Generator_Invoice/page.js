@@ -106,72 +106,58 @@ const InvoiceGenerator = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br mt-32 from-blue-50 to-blue-200 p-8">
-            <div className="max-w-5xl mx-auto bg-white shadow-xl p-8 rounded-xl">
-                <h2 className="text-3xl font-bold mb-6 text-blue-600">School Invoice Generator</h2>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {['company'].map((section) => (
-                            <div key={section}>
-                                <h3 className="text-xl font-semibold mb-2">{section.charAt(0).toUpperCase() + section.slice(1)} Details</h3>
-                                {['name', 'address', 'gstNumber', 'phone', 'email'].map((field) => (
-                                    <div key={field} className="mb-2">
-                                        <label className="block mb-1">{section.charAt(0).toUpperCase() + section.slice(1)} {field}</label>
-                                        <input type="text" name={field} placeholder={`${field}`} value={formData[section][field]} onChange={(e) => handleChange(e, section)} required className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-                    </div>
-                    <div className="space-y-4">
-                        <h3 className="text-xl font-semibold mb-2">Student Details</h3>
-                        {['name', 'class', 'rollNumber'].map((field) => (
-                            <div key={field} className="mb-2">
-                                <label className="block mb-1">Student {field.charAt(0).toUpperCase() + field.slice(1)}</label>
-                                <input type="text" name={field} placeholder={`Student ${field}`} value={formData.student[field]} onChange={(e) => handleChange(e, 'student')} required className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
-                            </div>
-                        ))}
-                    </div>
-                    <div className="space-y-4">
-                        <h3 className="text-xl font-semibold mb-2">Items</h3>
-                        {formData.items.map((item, index) => (
-                            <div key={index} className="grid grid-cols-6 gap-2 items-end">
-                                {['description', 'quantity', 'price', 'cgst', 'sgst'].map((field) => (
-                                    <div key={field}>
-                                        <label className="block mb-1">{field.toUpperCase()}</label>
-                                        <input type="text" name={field} value={item[field]} onChange={(e) => handleChange(e, null, index)} placeholder={field} className="w-full p-2 border rounded-md" />
-                                    </div>
-                                ))}
-                                <button type="button" onClick={() => removeItem(index)} className="p-2 bg-red-500 text-white rounded-md">Remove</button>
-                            </div>
-                        ))}
-                        <button type="button" onClick={addItem} className="p-2 bg-green-500 text-white rounded-md">Add Item</button>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block mb-1">Invoice Date</label>
-                            <DatePicker
-                                selected={formData.invoiceDate}
-                                onChange={(date) => setFormData({ ...formData, invoiceDate: date })}
-                                className="w-full p-2 border rounded-md"
-                            />
+           <div className="max-w-5xl mx-auto bg-white shadow-xl p-8 rounded-xl">
+            <h2 className="text-3xl font-bold mb-6 text-blue-600">School Invoice Generator</h2>
+            <form onSubmit={handleSubmit} className="space-y-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 className="text-xl font-semibold mb-2">Company Details</h3>
+                    {['name', 'address', 'gstNumber', 'phone', 'email'].map((field) => (
+                        <div key={field} className="mb-2">
+                            <label className="block mb-1">{field.charAt(0).toUpperCase() + field.slice(1)}</label>
+                            <input type="text" name={field} placeholder={field} value={formData.company[field]} onChange={(e) => handleChange(e, 'company')} required className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
                         </div>
-                        <div>
-                            <label className="block mb-1">Due Date</label>
-                            <DatePicker
-                                selected={formData.dueDate}
-                                onChange={(date) => setFormData({ ...formData, dueDate: date })}
-                                className="w-full p-2 border rounded-md"
-                            />
+                    ))}
+                </div>
+
+                <div>
+                    <h3 className="text-xl font-semibold mb-2">Student Details</h3>
+                    {['name', 'class', 'rollNumber'].map((field) => (
+                        <div key={field} className="mb-2">
+                            <label className="block mb-1">Student {field.charAt(0).toUpperCase() + field.slice(1)}</label>
+                            <input type="text" name={field} placeholder={`Student ${field}`} value={formData.student[field]} onChange={(e) => handleChange(e, 'student')} required className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
                         </div>
-                    </div>
-                    <div className="text-right mt-4">
-                        <h3 className="text-xl font-bold">Total Amount: ₹{totalAmount.toFixed(2)}</h3>
-                    </div>
-                    <div className="flex justify-end">
-                        <button type="submit" className="p-3 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 transition">Generate Invoice</button>
-                    </div>
-                </form>
-            </div>
+                    ))}
+                </div>
+
+                <div className="col-span-2">
+                    <h3 className="text-xl font-semibold mb-2">Items</h3>
+                    {formData.items.map((item, index) => (
+                        <div key={index} className="grid grid-cols-6 gap-2 items-end">
+                            {['description', 'quantity', 'price', 'cgst', 'sgst'].map((field) => (
+                                <div key={field}>
+                                    <label className="block mb-1">{field.toUpperCase()}</label>
+                                    <input type="text" name={field} value={item[field]} onChange={(e) => handleChange(e, null, index)} placeholder={field} className="w-full p-2 border rounded-md" />
+                                </div>
+                            ))}
+                            <button type="button" onClick={() => removeItem(index)} className="p-2 bg-red-500 text-white rounded-md">Remove</button>
+                        </div>
+                    ))}
+                    <button type="button" onClick={addItem} className="p-2 bg-green-500 text-white rounded-md mt-2">Add Item</button>
+                </div>
+
+                <div>
+                    <label className="block mb-1">Invoice Date</label>
+                    <input type="date" name="invoiceDate" value={formData.invoiceDate} onChange={(e) => setFormData({ ...formData, invoiceDate: e.target.value })} required className="w-full p-2 border rounded-md" />
+                </div>
+
+                <div>
+                    <label className="block mb-1">Due Date</label>
+                    <input type="date" name="dueDate" value={formData.dueDate} onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })} required className="w-full p-2 border rounded-md" />
+                </div>
+
+                <button type="submit" className="p-3 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 transition col-span-2">Generate Invoice</button>
+            </form>
+        </div>
 
             {showPopup && (
                 <div className="min-h-screen bg-gradient-to-br mt-32 from-blue-50 to-blue-200 p-8">
@@ -190,8 +176,8 @@ const InvoiceGenerator = () => {
                                 <div>
                                     <h2 className="text-2xl font-bold text-blue-800">INVOICE #</h2>
                                     <p><strong>Invoice Number:</strong> {formData.invoiceNumber}</p>
-                                    <p><strong>Invoice Date:</strong> {formData.invoiceDate.toLocaleDateString()}</p>
-                                    <p><strong>Due Date:</strong> {formData.dueDate.toLocaleDateString()}</p>
+                                    <p><strong>Invoice Date:</strong> {formData.invoiceDate}</p>
+                                    <p><strong>Due Date:</strong> {formData.dueDate}</p>
                                 </div>
                             </div>
 
