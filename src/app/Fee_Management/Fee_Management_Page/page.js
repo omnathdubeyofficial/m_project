@@ -11,9 +11,9 @@ const Fee_Management_Page = () => {
 
   const feeServices = [
     { name: "Fee Collection", icon: <FaRupeeSign />, path: "/fee/collection" },
-    { name: "Fee Structure Management", icon: <FaClipboardList />, path: "/fee/structure" },
-    { name: "Student Fee Records", icon: <FaUsers />, path: "/fee/student-records" },
-    { name: "Generate Invoices", icon: <FaFileInvoiceDollar />, path: "/fee/invoices" },
+    { name: "Fee Structure Management", icon: <FaClipboardList />, path: "/Fee_Management/Fee_Management_Page/Fee_Structure_Management" },
+    { name: "Student Fee Records", icon: <FaUsers />, path: "/Fee_Management/Fee_Management_Page/Student_Fee_Record_Data" },
+    { name: "Generate Invoices", icon: <FaFileInvoiceDollar />, path: "/Fee_Management/Fee_Management_Page/Generator_Invoice" },
     { name: "Fee Calculator", icon: <FaCalculator />, path: "/fee/calculator" },
     { name: "Communication on Dues", icon: <FaBullhorn />, path: "/fee/communication" }
   ];
