@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { executeMutation } from "../../../graphqlClient";
 import { CREATE_STUDENT_REGISTRATION_MUTATION } from "../../../mutation/studentRegistrationMutations/createStudentRegistration";
+import { ArrowLeft, FileText, File, Trash2, Edit, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const StudentAdmissionForm = () => {
   const [formData, setFormData] = useState({
@@ -74,10 +75,27 @@ const StudentAdmissionForm = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 flex justify-center mt-32">
       <form onSubmit={handleSubmit} className="max-w-4xl w-full bg-white p-8 rounded-lg shadow-xl border border-gray-200">
-        <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Student Admission Form</h1>
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+  {/* Go Back Button */}
+  <button 
+    onClick={() => window.history.back()} 
+    className="flex items-center gap-1 p-2 pr-4 bg-red-500 text-white hover:bg-red-600 transition"
+  >
+    <ArrowLeft size={20} />
+    Go Back
+  </button>
+
+  {/* Heading */}
+  <h1 className="text-2xl">
+    Student Fee Record Data
+  </h1>
+</div>
+
+
+
 
         {/* Personal Information Section */}
-        <div className="mb-8">
+        <div className="mb-8 mt-10">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">Personal Information</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
