@@ -10,12 +10,10 @@ const Fee_Management_Page = () => {
   const router = useRouter();
 
   const feeServices = [
-    { name: "Fee Collection", icon: <FaRupeeSign />, path: "/fee/collection" },
+    { name: "Fee Collection", icon: <FaRupeeSign />, path: "/Fee_Management/Fee_Management_Page/Fee_Collection_Data" },
     { name: "Fee Structure Management", icon: <FaClipboardList />, path: "/Fee_Management/Fee_Management_Page/Fee_Structure_Management" },
     { name: "Student Fee Records", icon: <FaUsers />, path: "/Fee_Management/Fee_Management_Page/Student_Fee_Record_Data" },
     { name: "Generate Invoices", icon: <FaFileInvoiceDollar />, path: "/Fee_Management/Fee_Management_Page/Generator_Invoice" },
-    { name: "Fee Calculator", icon: <FaCalculator />, path: "/fee/calculator" },
-    { name: "Communication on Dues", icon: <FaBullhorn />, path: "/fee/communication" }
   ];
 
   return (

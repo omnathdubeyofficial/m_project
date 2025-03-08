@@ -11,7 +11,7 @@ const ROLE_DASHBOARD = {
 };
 
 const ROLE_PERMISSIONS = {
-  admin: new Set(["/dashboard","/ProfilePage_Management/Admin_Profile","/Security_Staff/Security_Staff_Page", "/dashboard/admin_dashboard", "/student_dash/students_forms/admission_form", "/student_dash/students_forms/attendance_form", "/student_dash/students_forms/holiday_list", "/components/University_Dashboard", "/Exam_Management/Exam_Management_Page","/Event_Management/Event_Management_Page", "/Sports_Management/Sports_Management_Page","/Competition_Management/Competition_Management_Page","/components/University_Dashboard","/dashboard/admin_dashboard","/Lab_Management/Lab_Management_Page","/Library_Management/Library_Management_Page","/Transport_Management/Transport_Management_Page", "/Parents_Management/Parents_Management_Page", "/Students_Management/Students_Management_Page","/Computer_Section/Computer_Management_Page", "/Housekeeping_Staff/Housekeeping_Staff_Page", "/Report_Management/Report_Management_Page", "/Notification_Management/Notification_Management_Page", "/Fee_Management/Fee_Management_Page", "/Admission_Management/Admission_Management_Page", "/Event_Management/Event_Management_Page/Event_Creation_Form","/Fee_Management/Fee_Management_Page/Generator_Invoice","/Fee_Management/Fee_Management_Page/Student_Fee_Record_Data","/Fee_Management/Fee_Management_Page/Fee_Structure_Management"]),
+  admin: new Set(["/dashboard","/ProfilePage_Management/Admin_Profile","/Security_Staff/Security_Staff_Page", "/dashboard/admin_dashboard", "/student_dash/students_forms/admission_form", "/student_dash/students_forms/attendance_form", "/student_dash/students_forms/holiday_list", "/components/University_Dashboard", "/Exam_Management/Exam_Management_Page","/Event_Management/Event_Management_Page", "/Sports_Management/Sports_Management_Page","/Competition_Management/Competition_Management_Page","/components/University_Dashboard","/dashboard/admin_dashboard","/Lab_Management/Lab_Management_Page","/Library_Management/Library_Management_Page","/Transport_Management/Transport_Management_Page", "/Parents_Management/Parents_Management_Page", "/Students_Management/Students_Management_Page","/Computer_Section/Computer_Management_Page", "/Housekeeping_Staff/Housekeeping_Staff_Page", "/Report_Management/Report_Management_Page", "/Notification_Management/Notification_Management_Page", "/Fee_Management/Fee_Management_Page", "/Admission_Management/Admission_Management_Page", "/Event_Management/Event_Management_Page/Event_Creation_Form","/Fee_Management/Fee_Management_Page/Generator_Invoice","/Fee_Management/Fee_Management_Page/Student_Fee_Record_Data","/Fee_Management/Fee_Management_Page/Fee_Structure_Management","/Fee_Management/Fee_Management_Page/Fee_Collection_Data"]),
   student: new Set(["/student_dash","/ProfilePage_Management/Admin_Profile", "/view_courses"]),
   parent: new Set(["/parents_dash","/ProfilePage_Management/Admin_Profile", "/child_progress"]),
   teacher: new Set(["/teacher_dash","/ProfilePage_Management/Admin_Profile", "/manage_classes"]),
@@ -116,6 +116,7 @@ export const config = {
     "/Event_Management/Event_Management_Page/Event_Creation_Form/:path*",
     "/Fee_Management/Fee_Management_Page/Generator_Invoice/:path*",
     "/Fee_Management/Fee_Management_Page/Student_Fee_Record_Data/:path*",
-    "/Fee_Management/Fee_Management_Page/Fee_Structure_Management/:path*"
+    "/Fee_Management/Fee_Management_Page/Fee_Structure_Management/:path*",
+    "/Fee_Management/Fee_Management_Page/Fee_Collection_Data/:path*",
   ],
 };
