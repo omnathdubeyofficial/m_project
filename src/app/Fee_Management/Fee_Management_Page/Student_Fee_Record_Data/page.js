@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { ArrowLeft, FileText, File, Trash2, Edit } from 'lucide-react';
+import { ArrowLeft, FileText, File, Trash2, Edit, ChevronLeft, ChevronRight } from 'lucide-react';
 import { FaWhatsapp, FaEnvelope,FaCreditCard, FaMoneyBillWave, FaFileInvoice } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 
@@ -11,6 +11,7 @@ import 'jspdf-autotable';
 const StudentFeeRecord = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedClass, setSelectedClass] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -29,11 +30,11 @@ const StudentFeeRecord = () => {
 
   const filteredData = feeData.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-    (selectedClass ? item.class === selectedClass : true)
+    (selectedClass ? item.class === selectedClass : true) &&
+    (selectedMonth ? item.feeMonth.includes(selectedMonth) : true)
   );
 
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
 
   const downloadCSV = () => {
     const csvContent = [
@@ -77,6 +78,16 @@ const StudentFeeRecord = () => {
       window.open(`https://wa.me/${item.mobileNumber}?text=${encodeURIComponent(message)}`);
     } else if (platform === 'email') {
       window.location.href = `mailto:${item.email}?subject=Pending Fee Alert&body=${encodeURIComponent(message)}`;
+    }
+  };
+
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
     }
   };
 
@@ -138,7 +149,20 @@ const StudentFeeRecord = () => {
       ))}
     </select>
   </div>
+  <div className="flex items-center border pr-3 min-w-[250px] sm:min-w-[150px]">
 
+
+  <select
+        value={selectedMonth}
+        onChange={(e) => setSelectedMonth(e.target.value)}
+        className="p-2 flex-grow border-0 focus:outline-none"
+        >
+        <option value="">Filter by Month</option>
+        {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((month) => (
+          <option key={month} value={month}>{month}</option>
+        ))}
+      </select>
+</div>
   {/* Download to Excel Button */}
   <button 
     onClick={downloadCSV} 
@@ -241,6 +265,24 @@ const StudentFeeRecord = () => {
           ))}
         </tbody>
       </table>
+   
+    </div>
+    <div className="flex items-center justify-center gap-2 mt-4">
+      <button 
+        onClick={() => handlePageChange(currentPage - 1)} 
+        className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
+      >
+        <ChevronLeft size={24} />
+      </button>
+      <span className="text-lg ">
+        Page {currentPage} of {totalPages}
+      </span>
+      <button 
+        onClick={() => handlePageChange(currentPage + 1)} 
+        className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
+      >
+        <ChevronRight size={24} />
+      </button>
     </div>
       </div>
     </div>
