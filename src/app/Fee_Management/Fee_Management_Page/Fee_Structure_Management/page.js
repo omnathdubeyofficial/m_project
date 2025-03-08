@@ -29,7 +29,8 @@ const AdvancedFeeStructureForm = () => {
     id_card_fee : "",
     medical_fee : "",
     exam_admit_card: "",
-    otherFees: ""
+    platform_fee: "",
+    other_fee: ""
   });
 
   const handleChange = (e) => {
@@ -133,18 +134,18 @@ const AdvancedFeeStructureForm = () => {
 </div>
 
 
-            {/* <div>
-              <label className="block text-gray-700 mb-2">Class Section</label>
+            <div>
+              <label className="block text-gray-700 mb-2">Platform Fee</label>
               <input
                 type="text"
-                name="class_section"
-                value={formData.class_section}
+                name="platform_fee"
+                value={formData.platform_fee}
                 onChange={handleChange}
                 placeholder="Enter class section"
                 className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 required
               />
-            </div> */}
+            </div>
 
             <div>
               <label className="block text-gray-700 mb-2">Academic Year</label>
@@ -165,7 +166,7 @@ const AdvancedFeeStructureForm = () => {
               </select>
             </div>
 
-            {["Admission Fee", "Library Fee", "Uniform Fee", "Lab Fee", "Computer Class Fee", "Annual Fee", "Sports Fee", "Activity Fee", "Examination Fee", "Hostel Fee", "Transport Fee Per Km", "Sibling Discount", "Early Payment Discount", "Scholarship Amount", "ID Card Fee", "Medical Fee", "Exam Admit Card Fee"].map((label) => {
+            {["Admission Fee", "Library Fee", "Uniform Fee", "Lab Fee", "Computer Class Fee", "Annual Fee", "Sports Fee", "Activity Fee", "Examination Fee", "Hostel Fee", "Transport Fee Per Km", "Sibling Discount", "Early Payment Discount", "Scholarship Amount", "ID Card Fee", "Medical Fee", "Exam Admit Card"].map((label) => {
               const name = label.toLowerCase().replace(/\s+/g, "_");
               return (
                 <div key={name}>
@@ -187,8 +188,8 @@ const AdvancedFeeStructureForm = () => {
           <div>
             <label className="block text-gray-700 mb-2">Other Fees:</label>
             <textarea
-              name="otherFees"
-              value={formData.otherFees}
+              name="other_fee"
+              value={formData.other_fee}
               onChange={handleChange}
               placeholder="Enter other applicable fees"
               className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
