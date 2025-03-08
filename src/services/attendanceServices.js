@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { setUserDate, setUserTime } from './dateTimeService.js';
+import { setUserDate, setUserTime, setDateFormat } from './dateTimeService.js';
 import { v4 as uuidv4 } from 'uuid';
 
 // Get all users
@@ -15,7 +15,7 @@ const createAttendanceData = async ({ student_name, roll_no, date, standard, div
       time_in = setUserTime()
     }
     const createdData = await prisma.attendance.create({
-      data: { z_id: uuidv4(), student_name, roll_no, date, standard, division, subject, time_in, time_out, attendance_status, attendance_marked_by, attendance_marked_by_role, cdate: setUserDate(), ctime: setUserTime() },
+      data: { z_id: uuidv4(), student_name, roll_no, date: setDateFormat(date), standard, division, subject, time_in, time_out, attendance_status, attendance_marked_by, attendance_marked_by_role, cdate: setUserDate(), ctime: setUserTime() },
     });
     const success_msg = "Attendance created successfully."
     return { ...createdData, success_msg }
@@ -37,7 +37,7 @@ const updateAttendanceData = async ({ z_id, student_name, roll_no, date, standar
     }
     const updatedData = await prisma.attendance.update({
       where: { z_id },
-      data: { student_name, roll_no, date, standard, division, subject, time_in, time_out, attendance_status, attendance_marked_by, attendance_marked_by_role, udate: setUserDate(), utime: setUserTime() },
+      data: { student_name, roll_no, date: setDateFormat(date), standard, division, subject, time_in, time_out, attendance_status, attendance_marked_by, attendance_marked_by_role, udate: setUserDate(), utime: setUserTime() },
     });
 
     const success_msg = "Attendance updated successfully."

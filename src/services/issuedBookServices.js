@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { setUserDate, setUserTime } from './dateTimeService.js';
+import { setUserDate, setUserTime, setDateFormat } from './dateTimeService.js';
 import { v4 as uuidv4 } from 'uuid';
 
 // Get all users
@@ -13,7 +13,7 @@ const createIssuedBook = async ({ book_id, student_id, teacher_id,
   guest_id, issued_by, issue_date, issue_time, due_date, return_date, return_time, status, fine_amount, remarks }) => {
   try {
     const createdData = await prisma.issued_books.create({
-      data: { z_id: uuidv4(), book_id, student_id, teacher_id, guest_id, issued_by, issue_date, issue_time, due_date, return_date, return_time, status, fine_amount, remarks, cdate: setUserDate(), ctime: setUserTime() },
+      data: { z_id: uuidv4(), book_id, student_id, teacher_id, guest_id, issued_by, issue_date: setDateFormat(issue_date), issue_time, due_date: setDateFormat(due_date), return_date: setDateFormat(return_date), return_time, status, fine_amount, remarks, cdate: setUserDate(), ctime: setUserTime() },
     });
     const success_msg = "Books issued created successfully."
     return { ...createdData, success_msg }
@@ -34,7 +34,7 @@ const updateIssuedBook = async ({ z_id, book_id, student_id, teacher_id,
 
     const updatedData = await prisma.issued_books.update({
       where: { z_id },
-      data: { book_id, student_id, teacher_id, guest_id, issued_by, issue_date, issue_time, due_date, return_date, return_time, status, fine_amount, remarks, udate: setUserDate(), utime: setUserTime() },
+      data: { book_id, student_id, teacher_id, guest_id, issued_by, issue_date: setDateFormat(issue_date), issue_time, due_date: setDateFormat(due_date), return_date: setDateFormat(return_date), return_time, status, fine_amount, remarks, udate: setUserDate(), utime: setUserTime() },
     });
     const success_msg = "Books issued updated successfully."
     return { ...updatedData, success_msg }

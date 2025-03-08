@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { setUserDate, setUserTime, unique_id } from './dateTimeService.js';
+import { setUserDate, setUserTime, unique_id, setDateFormat } from './dateTimeService.js';
 import { v4 as uuidv4 } from 'uuid';
 
 // Get all users
@@ -12,7 +12,7 @@ const getEventCreationList = async () => {
 const createEventForm = async ({ event_name, event_type, event_date, start_time, end_time, venue, organizer_name, organizer_contact_no, organizer_whatsapp_no, organizer_email_id, description, target_audience, max_participants, registration_deadline, event_status, resources_required }) => {
   try {
     const createdData = await prisma.event_creation_form.create({
-      data: { z_id: uuidv4(), event_id: unique_id(event_name), event_name, event_type, event_date, start_time, end_time, venue, organizer_name, organizer_contact_no, organizer_whatsapp_no, organizer_email_id, description, target_audience, max_participants, registration_deadline, event_status, resources_required, cdate: setUserDate(), ctime: setUserTime() },
+      data: { z_id: uuidv4(), event_id: unique_id(event_name), event_name, event_type, event_date: setDateFormat(event_date), start_time, end_time, venue, organizer_name, organizer_contact_no, organizer_whatsapp_no, organizer_email_id, description, target_audience, max_participants, registration_deadline, event_status, resources_required, cdate: setUserDate(), ctime: setUserTime() },
     });
     const success_msg = "Event form created successfully."
     return { ...createdData, success_msg }
@@ -32,7 +32,7 @@ const updateEventList = async ({ z_id, event_name, event_type, event_date, start
 
     const updatedData = await prisma.event_creation_form.update({
       where: { z_id },
-      data: { event_name, event_type, event_date, start_time, end_time, venue, organizer_name, organizer_contact_no, organizer_whatsapp_no, organizer_email_id, description, target_audience, max_participants, registration_deadline, event_status, resources_required, udate: setUserDate(), utime: setUserTime() },
+      data: { event_name, event_type, event_date: setDateFormat(event_date), start_time, end_time, venue, organizer_name, organizer_contact_no, organizer_whatsapp_no, organizer_email_id, description, target_audience, max_participants, registration_deadline, event_status, resources_required, udate: setUserDate(), utime: setUserTime() },
     });
     const success_msg = "Event list updated successfully."
     return { ...updatedData, success_msg }

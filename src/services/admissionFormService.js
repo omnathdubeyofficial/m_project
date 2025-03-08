@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { setUserDate, setUserTime } from './dateTimeService.js';
+import { setUserDate, setUserTime, setDateFormat } from './dateTimeService.js';
 import { v4 as uuidv4 } from 'uuid';
 
 // Get all users
@@ -13,7 +13,7 @@ const createAdmissionForm = async ({ student_name, adhar_number, pan_number, ema
   try {
 
     const createdData = await prisma.admission_form.create({
-      data: { z_id: uuidv4(), student_name, adhar_number, pan_number, email, profile_img, contact_number, date_of_birth, gender, address, city, state, pincode, nationality, course_applied, education_qualification, percentage, bank_name, bank_account_holder_name, bank_branch, account_number, ifsc_code, adhar_card_img, pan_card_img, prev_marksheet, passbook, guardian_name, guardian_contact, admission_status, submission_date, admission_fee, cdate: setUserDate(), ctime: setUserTime() },
+      data: { z_id: uuidv4(), student_name, adhar_number, pan_number, email, profile_img, contact_number, date_of_birth: setDateFormat(date_of_birth), gender, address, city, state, pincode, nationality, course_applied, education_qualification, percentage, bank_name, bank_account_holder_name, bank_branch, account_number, ifsc_code, adhar_card_img, pan_card_img, prev_marksheet, passbook, guardian_name, guardian_contact, admission_status, submission_date: setDateFormat(submission_date), admission_fee, cdate: setUserDate(), ctime: setUserTime() },
     });
     const success_msg = "Admission form completed successfully."
     return { ...createdData, success_msg }
@@ -33,7 +33,7 @@ const updateAdmissionForm = async ({ z_id, student_name, adhar_number, pan_numbe
 
     const updatedData = await prisma.admission_form.update({
       where: { z_id },
-      data: { student_name, adhar_number, pan_number, email, profile_img, contact_number, date_of_birth, gender, address, city, state, pincode, nationality, course_applied, education_qualification, percentage, bank_name, bank_account_holder_name, bank_branch, account_number, ifsc_code, adhar_card_img, pan_card_img, prev_marksheet, passbook, guardian_name, guardian_contact, admission_status, submission_date, admission_fee, udate: setUserDate(), utime: setUserTime() },
+      data: { student_name, adhar_number, pan_number, email, profile_img, contact_number, date_of_birth: setDateFormat(date_of_birth), gender, address, city, state, pincode, nationality, course_applied, education_qualification, percentage, bank_name, bank_account_holder_name, bank_branch, account_number, ifsc_code, adhar_card_img, pan_card_img, prev_marksheet, passbook, guardian_name, guardian_contact, admission_status, submission_date: setDateFormat(submission_date), admission_fee, udate: setUserDate(), utime: setUserTime() },
     });
     const success_msg = "Admission form updated successfully."
     return { ...updatedData, success_msg }

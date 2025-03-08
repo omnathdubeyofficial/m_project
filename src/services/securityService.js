@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { setUserDate, setUserTime, unique_id } from './dateTimeService.js';
+import { setUserDate, setUserTime, unique_id, setDateFormat } from './dateTimeService.js';
 import { v4 as uuidv4 } from 'uuid';
 
 // Get all users
@@ -11,10 +11,9 @@ const getSecurityList = async () => {
 // Create a new user
 const createSecurityForm = async ({ first_name, last_name, permanent_address, current_address, state, pincode, country, city, whatsapp_num, bank_account_num, bank_name, account_holder_name, bank_branch_name, ifsc_code, bank_passbook_img, joining_date, joining_salary, current_salary, previous_work_description, adhar_num, pan_num, gender, contact_num, email, date_of_birth, age, qualification, profile_img, adhar_img, pan_img }) => {
   try {
-    // const generateSecurityId = `${first_name.toUpperCase().slice(0, 3)}${Math.floor(Math.random() * 10000)}${first_name.toUpperCase().slice(first_name.length - 2, first_name.length)}`
 
     const createdData = await prisma.security_form.create({
-      data: { z_id: uuidv4(), security_id: unique_id(first_name), first_name, last_name, permanent_address, current_address, state, pincode, country, city, whatsapp_num, bank_account_num, bank_name, account_holder_name, bank_branch_name, ifsc_code, bank_passbook_img, joining_date, joining_salary, current_salary, previous_work_description, adhar_num, pan_num, gender, contact_num, email, date_of_birth, age, qualification, profile_img, adhar_img, pan_img, cdate: setUserDate(), ctime: setUserTime() },
+      data: { z_id: uuidv4(), security_id: unique_id(first_name), first_name, last_name, permanent_address, current_address, state, pincode, country, city, whatsapp_num, bank_account_num, bank_name, account_holder_name, bank_branch_name, ifsc_code, bank_passbook_img, joining_date: setDateFormat(joining_date), joining_salary, current_salary, previous_work_description, adhar_num, pan_num, gender, contact_num, email, date_of_birth: setDateFormat(date_of_birth), age, qualification, profile_img, adhar_img, pan_img, cdate: setUserDate(), ctime: setUserTime() },
     });
     const success_msg = "Security form completed successfully."
     return { ...createdData, success_msg }
@@ -34,7 +33,7 @@ const updateSecurityList = async ({ z_id, security_id, first_name, last_name, pe
 
     const updatedData = await prisma.security_form.update({
       where: { z_id },
-      data: { security_id, first_name, last_name, permanent_address, current_address, state, pincode, country, city, whatsapp_num, bank_account_num, bank_name, account_holder_name, bank_branch_name, ifsc_code, bank_passbook_img, joining_date, joining_salary, current_salary, previous_work_description, adhar_num, pan_num, gender, contact_num, email, date_of_birth, age, qualification, profile_img, adhar_img, pan_img, udate: setUserDate(), utime: setUserTime() },
+      data: { security_id, first_name, last_name, permanent_address, current_address, state, pincode, country, city, whatsapp_num, bank_account_num, bank_name, account_holder_name, bank_branch_name, ifsc_code, bank_passbook_img, joining_date: setDateFormat(joining_date), joining_salary, current_salary, previous_work_description, adhar_num, pan_num, gender, contact_num, email, date_of_birth: setDateFormat(date_of_birth), age, qualification, profile_img, adhar_img, pan_img, udate: setUserDate(), utime: setUserTime() },
     });
     const success_msg = "Security form updated successfully."
     return { ...updatedData, success_msg }

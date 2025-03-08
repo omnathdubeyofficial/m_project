@@ -46,6 +46,8 @@ import blogListType from './types/blogListTypes.js';
 import blogListResolver from './resolvers/blogListResolver.js';
 import eventCreationType from './types/eventCreationTypes.js';
 import eventCreationResolver from './resolvers/eventCreationListResolver.js'
+import eventRegistrationFormType from './types/eventRegistrationFormTypes.js';
+import eventRegistrationResolver from './resolvers/eventRegistrationFormResolver.js'
 
 const app = express();
 
@@ -64,12 +66,12 @@ const schema = makeExecutableSchema({
   typeDefs: [
     userType, userDataType, adminDataType, userManagementType,
     studentRegistrationTypes, attendanceTypes, admissionFormType,
-    authTokantTypes, securityType, transportVehicleRegistrationType, logoutTypes, holidayListType, phoneDirectoryType, academicCalendarType, driversListType, addNewBookType, issuedBookType, housekeepingListType, blogListType, eventCreationType
+    authTokantTypes, securityType, transportVehicleRegistrationType, logoutTypes, holidayListType, phoneDirectoryType, academicCalendarType, driversListType, addNewBookType, issuedBookType, housekeepingListType, blogListType, eventCreationType, eventRegistrationFormType
   ],
   resolvers: [
     userResolver, userDataResolver, adminDataResolver,
     userManagementResolver, studentRegistrationResolver, attendanceResolver,
-    admssionFormResolver, authTokanResolver, securityResolver, transportVehicleResolver, logoutResolver, holidayListResolver, phoneDirectoryResolver, academicCalendarResolver, driversListResolver, addNewBookResolver, issuedBookResolver, housekeepingListResolver, blogListResolver, eventCreationResolver
+    admssionFormResolver, authTokanResolver, securityResolver, transportVehicleResolver, logoutResolver, holidayListResolver, phoneDirectoryResolver, academicCalendarResolver, driversListResolver, addNewBookResolver, issuedBookResolver, housekeepingListResolver, blogListResolver, eventCreationResolver, eventRegistrationResolver
   ],
 });
 

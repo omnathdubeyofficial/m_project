@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { setUserDate, setUserTime, unique_id } from './dateTimeService.js';
+import { setUserDate, setUserTime, unique_id, setDateFormat } from './dateTimeService.js';
 import { v4 as uuidv4 } from 'uuid';
 
 // Get all users
@@ -9,11 +9,11 @@ const getNewBook = async () => {
 };
 
 // Create a new user
-const createNewBook = async ({ title, author, bookid, isbn, publisher, publication_year, category, language, pages, price, stock, cover_image, back_image, description, added_date, edition, format, genre, availability_status, rating, reviews_count, supplier, discount, keywords, barcode, shelf_location, digital_copy_url, license_type, borrowed_status, borrowed_by }) => {
+const createNewBook = async ({ title, author, isbn, publisher, publication_year, category, language, pages, price, stock, cover_image, back_image, description, added_date, edition, format, genre, availability_status, rating, reviews_count, supplier, discount, keywords, barcode, shelf_location, digital_copy_url, license_type, borrowed_status, borrowed_by }) => {
   try {
     // const unique_book_id = `BOO${Math.floor(Math.random() * 100000)}K`
     const createdData = await prisma.add_new_book.create({
-      data: { z_id: uuidv4(), title, author, bookid: unique_id('book'), isbn, publisher, publication_year, category, language, pages, price, stock, cover_image, back_image, description, added_date, edition, format, genre, availability_status, rating, reviews_count, supplier, discount, keywords, barcode, shelf_location, digital_copy_url, license_type, borrowed_status, borrowed_by, cdate: setUserDate(), ctime: setUserTime() },
+      data: { z_id: uuidv4(), title, author, bookid: unique_id('book'), isbn, publisher, publication_year, category, language, pages, price, stock, cover_image, back_image, description, added_date: setDateFormat(added_date), edition, format, genre, availability_status, rating, reviews_count, supplier, discount, keywords, barcode, shelf_location, digital_copy_url, license_type, borrowed_status, borrowed_by, cdate: setUserDate(), ctime: setUserTime() },
     });
     const success_msg = "New book added successfully."
     return { ...createdData, success_msg }
@@ -33,7 +33,7 @@ const updateNewBook = async ({ z_id, title, author, isbn, publisher, publication
 
     const updatedData = await prisma.add_new_book.update({
       where: { z_id },
-      data: { title, author, isbn, publisher, publication_year, category, language, pages, price, stock, cover_image, back_image, description, added_date, edition, format, genre, availability_status, rating, reviews_count, supplier, discount, keywords, barcode, shelf_location, digital_copy_url, license_type, borrowed_status, borrowed_by, udate: setUserDate(), utime: setUserTime() },
+      data: { title, author, isbn, publisher, publication_year, category, language, pages, price, stock, cover_image, back_image, description, added_date: setDateFormat(added_date), edition, format, genre, availability_status, rating, reviews_count, supplier, discount, keywords, barcode, shelf_location, digital_copy_url, license_type, borrowed_status, borrowed_by, udate: setUserDate(), utime: setUserTime() },
     });
     const success_msg = "New book updated successfully."
     return { ...updatedData, success_msg }
