@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
-import { setUserDate, setUserTime } from './dateTimeService.js';
+import { setUserDate, setUserTime, setDateFormat } from './dateTimeService.js';
 // const jwt = require('jsonwebtoken');
 import jwt from 'jsonwebtoken';
 
@@ -153,12 +153,14 @@ const createUserManagementData = async ({ first_name, middle_name, last_name, ge
     const hashedPassword = await hashPassword(password)
     const userId = (name, date) => {
       if (name != null || name != "" || name != undefined || date != null || date != "" || date != undefined) {
+        console.log(`${name}${date}`)
         return `${name}${date}`
       }
     }
+
     //  user data created successfully
     let userData = await prisma.user_management.create({
-      data: { z_id: uuidv4(), userid: userId(first_name, date_of_birth), first_name, middle_name, last_name, gender, email, password: hashedPassword, contact_no, role, status, subject_specialization, class_assigned, teacher_id, admin_id, joining_date, qualification, enrollment_no, date_of_birth, standard, section, parent_id, admission_date, children_id, occupation, address, nationality, profile_img, adhar_card_front_img, adhar_card_back_img, pan_card_img, cdate: setUserDate(), ctime: setUserTime() },
+      data: { z_id: uuidv4(), userid: userId(first_name, date_of_birth), first_name, middle_name, last_name, gender, email, password: hashedPassword, contact_no, role, status, subject_specialization, class_assigned, teacher_id, admin_id, joining_date: setDateFormat(joining_date), qualification, enrollment_no, date_of_birth: setDateFormat(date_of_birth), standard, section, parent_id, admission_date: setDateFormat(admission_date), children_id, occupation, address, nationality, profile_img, adhar_card_front_img, adhar_card_back_img, pan_card_img, cdate: setUserDate(), ctime: setUserTime() },
     });
 
     const success_msg = "Data created successfully."
@@ -182,7 +184,7 @@ const updateUserManagementData = async ({ z_id, first_name, middle_name, last_na
 
     let updateData = await prisma.user_management.update({
       where: { z_id },
-      data: { first_name, middle_name, last_name, gender, email, password, contact_no, role, status, subject_specialization, class_assigned, teacher_id, admin_id, joining_date, qualification, enrollment_no, date_of_birth, standard, section, parent_id, admission_date, children_id, occupation, address, nationality, profile_img, adhar_card_front_img, adhar_card_back_img, pan_card_img, udate: setUserDate(), utime: setUserTime() },
+      data: { first_name, middle_name, last_name, gender, email, password, contact_no, role, status, subject_specialization, class_assigned, teacher_id, admin_id, joining_date: setDateFormat(joining_date), qualification, enrollment_no, date_of_birth: setDateFormat(date_of_birth), standard, section, parent_id, admission_date: setDateFormat(admission_date), children_id, occupation, address, nationality, profile_img, adhar_card_front_img, adhar_card_back_img, pan_card_img, udate: setUserDate(), utime: setUserTime() },
     });
     const success_msg = "User management data updated successfully."
     updateData = { ...updateData, success_msg }
