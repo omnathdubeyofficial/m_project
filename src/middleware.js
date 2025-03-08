@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
-const PUBLIC_ROUTES = new Set(["/signup", "/login"]);
+const PUBLIC_ROUTES = new Set(["/signup", "/login","/student_dash/students_forms/admission_form"]);
 const ROLE_DASHBOARD = {
   admin: "/dashboard",
   student: "/student_dash",
