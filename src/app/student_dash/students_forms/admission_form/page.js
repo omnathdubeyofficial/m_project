@@ -72,7 +72,7 @@ const StudentAdmissionForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 flex justify-center">
+    <div className="min-h-screen bg-gray-50 py-8 px-4 flex justify-center mt-32">
       <form onSubmit={handleSubmit} className="max-w-4xl w-full bg-white p-8 rounded-lg shadow-xl border border-gray-200">
         <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Student Admission Form</h1>
 

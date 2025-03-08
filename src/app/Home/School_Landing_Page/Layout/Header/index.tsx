@@ -130,10 +130,10 @@ useEffect(() => {
             Login
           </Link>
           <Link
-            href='/register'
+            href='/student_dash/students_forms/admission_form'
             className='bg-primary text-white hover:bg-primary/15 hover:text-primary  text-lg py-2 px-6 rounded-full transition-all duration-300'
           >
-            Register
+            Admission Form
           </Link>
         </>
       ) : (
