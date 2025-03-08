@@ -535,6 +535,8 @@ model fee_structure_data {
   ctime                  String? @db.VarChar(100)
   udate                  String? @db.VarChar(100)
   utime                  String? @db.VarChar(100)
+  platform_fee           String? @db.VarChar(100)
+  other_fee              String? @db.VarChar(100)
 }
 
 model omnath_data {
