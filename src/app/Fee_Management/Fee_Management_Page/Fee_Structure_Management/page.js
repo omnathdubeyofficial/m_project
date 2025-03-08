@@ -146,25 +146,27 @@ const AdvancedFeeStructureForm = () => {
                 required
               />
             </div>
-
             <div>
-              <label className="block text-gray-700 mb-2">Academic Year</label>
-              <select
-                name="academic_year"
-                value={formData.academic_year}
-                onChange={handleChange}
-                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                required
-              >
-                <option value="">Select Year</option>
-                {Array.from({ length: 10 }, (_, i) => {
-                  const year = new Date().getFullYear() + i;
-                  return (
-                    <option key={year} value={year}>{year}-{year + 1}</option>
-                  );
-                })}
-              </select>
-            </div>
+  <label className="block text-gray-700 mb-2">Academic Year</label>
+  <select
+    name="academic_year"
+    value={formData.academic_year || `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`}
+    onChange={handleChange}
+    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+    required
+  >
+    <option value="">Select Year</option>
+    {Array.from({ length: 10 }, (_, i) => {
+      const year = new Date().getFullYear() + i;
+      return (
+        <option key={year} value={`${year}-${year + 1}`}>
+          {year}-{year + 1}
+        </option>
+      );
+    })}
+  </select>
+</div>
+
 
             {["Admission Fee", "Library Fee", "Uniform Fee", "Lab Fee", "Computer Class Fee", "Annual Fee", "Sports Fee", "Activity Fee", "Examination Fee", "Hostel Fee", "Transport Fee Per Km", "Sibling Discount", "Early Payment Discount", "Scholarship Amount", "ID Card Fee", "Medical Fee", "Exam Admit Card"].map((label) => {
               const name = label.toLowerCase().replace(/\s+/g, "_");
