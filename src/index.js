@@ -48,6 +48,8 @@ import eventCreationType from './types/eventCreationTypes.js';
 import eventCreationResolver from './resolvers/eventCreationListResolver.js'
 import eventRegistrationFormType from './types/eventRegistrationFormTypes.js';
 import eventRegistrationResolver from './resolvers/eventRegistrationFormResolver.js'
+import feeStructureDataType from './types/feeStructureDataTypes.js';
+import feeStructureListResolver from './resolvers/feeStructureResolver.js'
 
 const app = express();
 
@@ -66,12 +68,12 @@ const schema = makeExecutableSchema({
   typeDefs: [
     userType, userDataType, adminDataType, userManagementType,
     studentRegistrationTypes, attendanceTypes, admissionFormType,
-    authTokantTypes, securityType, transportVehicleRegistrationType, logoutTypes, holidayListType, phoneDirectoryType, academicCalendarType, driversListType, addNewBookType, issuedBookType, housekeepingListType, blogListType, eventCreationType, eventRegistrationFormType
+    authTokantTypes, securityType, transportVehicleRegistrationType, logoutTypes, holidayListType, phoneDirectoryType, academicCalendarType, driversListType, addNewBookType, issuedBookType, housekeepingListType, blogListType, eventCreationType, eventRegistrationFormType, feeStructureDataType
   ],
   resolvers: [
     userResolver, userDataResolver, adminDataResolver,
     userManagementResolver, studentRegistrationResolver, attendanceResolver,
-    admssionFormResolver, authTokanResolver, securityResolver, transportVehicleResolver, logoutResolver, holidayListResolver, phoneDirectoryResolver, academicCalendarResolver, driversListResolver, addNewBookResolver, issuedBookResolver, housekeepingListResolver, blogListResolver, eventCreationResolver, eventRegistrationResolver
+    admssionFormResolver, authTokanResolver, securityResolver, transportVehicleResolver, logoutResolver, holidayListResolver, phoneDirectoryResolver, academicCalendarResolver, driversListResolver, addNewBookResolver, issuedBookResolver, housekeepingListResolver, blogListResolver, eventCreationResolver, eventRegistrationResolver, feeStructureListResolver
   ],
 });
 
