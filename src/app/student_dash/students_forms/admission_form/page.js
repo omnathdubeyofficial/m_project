@@ -1120,8 +1120,9 @@ const StudentAdmissionForm = () => {
 
         
     <div className="col-span-full mt-6 border p-6">
-      <h2 className="text-3xl  mb-5 text-left text-gray-700">Admission Fee Payment</h2>
-      <div className="border p-6  bg-gray-50 ">
+    <h2 className="text-2xl md:text-3xl mb-5 text-left text-gray-700">Admission Fee Payment</h2>
+
+      <div className="border p-6 bg-gray-50">
         {['Tuition', 'Admission', 'Uniform', 'Books'].map((item, index) => (
           <div key={index} className="flex justify-between mb-2 text-lg">
             <span>{item} Fee</span>
@@ -1141,24 +1142,22 @@ const StudentAdmissionForm = () => {
 
       <div className="flex flex-col items-center">
         <button
-          className="mt-6 w-1/6 bg-green-500 text-white py-2 rounded-md shadow-lg text-base hover:bg-green-600 transition duration-200"
+          className="mt-6 w-full md:w-1/3 bg-green-500 text-white py-2 rounded-md shadow-lg text-base hover:bg-green-600 transition duration-200"
           onClick={handlePayNow}
         >
           Pay Now
         </button>
-        </div>
+      </div>
 
-    </div>
-        {/* Submit Button */}
-        <div className="flex mt-4 flex-col items-center">
-
+      <div className="flex mt-4 flex-col items-center">
         <button
           type="submit"
-          className=" w-1/6 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+          className="w-full md:w-1/3 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
         >
           Submit
         </button>
-        </div>
+      </div>
+    </div>
       </form>
     </div>
   );
