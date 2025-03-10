@@ -129,7 +129,12 @@ useEffect(() => {
           >
             Login
           </Link>
-        
+          <Link
+            href='/student_dash/students_forms/admission_form'
+            className='bg-primary text-white hover:bg-primary/15 hover:text-primary  text-lg py-2 px-6 rounded-full transition-all duration-300'
+          >
+            Admission Form
+          </Link>
         </>
       ) : (
         <div className='relative'>
@@ -239,14 +244,8 @@ useEffect(() => {
           {headerData.map((item, index) => (
             <MobileHeaderLink key={index} item={item} />
           ))}
-            <Link
-            href='/student_dash/students_forms/admission_form'
-            className='bg-primary mt-4 text-white hover:bg-primary/15 hover:text-primary  text-lg py-2 px-6 rounded-full transition-all duration-300'
-          >
-            Admission Form
-          </Link>
+          
         </nav>
-        
       </div>
     </div>
 
