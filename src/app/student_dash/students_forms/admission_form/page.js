@@ -242,7 +242,22 @@ const StudentAdmissionForm = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const newErrors = {};
 
+    ['profileImage', 'aadharImageFront', 'aadharImageBack'].forEach((key) => {
+        if (!formData[key]) {
+            newErrors[key] = `${key.replace(/([A-Z])/g, ' $1')} is required.`;
+        }
+    });
+
+    if (formData.parent_email && !/\S+@\S+\.\S+/.test(formData.parent_email)) {
+      newErrors.parent_email = 'Please enter a valid email address.';
+  }
+
+    if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
+    }
     console.log("Submitting Form Data:", formData);
 
     try {
@@ -318,7 +333,7 @@ const StudentAdmissionForm = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 flex justify-center mt-32">
-      <form onSubmit={handleSubmitpay} className="max-w-5xl w-full bg-white p-8 rounded-lg shadow-xl border border-gray-200">
+      <form onSubmit={handleSubmit} className="max-w-7xl w-full bg-white p-8 rounded-lg shadow-xl border border-gray-200">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
   {/* Go Back Button */}
   <button 
@@ -1069,32 +1084,25 @@ const StudentAdmissionForm = () => {
         { key: 'profileImage', label: 'Student Image' },
         { key: 'aadharImageFront', label: 'Student Aadhar Image Front' },
         { key: 'aadharImageBack', label: 'Student Aadhar Image Back' },
-        { key: 'documentFile', label: 'Upload Document' },
       ].map(({ key, label }, index) => (
-        <div key={index} className="flex flex-col items-center border p-4 rounded-lg w-full relative">
+        <div key={index} className="flex flex-col items-center border p-4  w-full relative">
           <span className="font-semibold text-lg">{label}</span>
-          <label className="border p-2 rounded w-full flex items-center gap-2 cursor-pointer bg-gray-200 hover:bg-gray-300 mt-2">
+          <label className="border p-2  w-full flex items-center gap-2 cursor-pointer bg-gray-200 hover:bg-gray-300 mt-2">
             <FaUpload /> Upload {label}
             <input
-              type="file"
-              name={key}
-              ref={fileInputRefs[key]}
-              className="hidden"
-              accept="image/jpeg,image/png"
-              onChange={handleFileChange}
-              required
-            />
+    type="file"
+    name={key}
+    ref={fileInputRefs[key]}
+    className="hidden"
+    accept="image/jpeg,image/png"
+    onChange={handleFileChange}
+/>
+
           </label>
           {errors[key] && <p className="text-red-600 mt-1">{errors[key]}</p>}
           {formData[key] && (
             <div className="relative mt-2">
-              {key === 'documentFile' ? (
-                <a href={formData[key]} target="_blank" rel="noopener noreferrer" className="text-blue-600">
-                  View Document
-                </a>
-              ) : (
-                <img src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" />
-              )}
+              <img src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" />
               <button
                 type="button"
                 onClick={() => handleClearFile(key)}
@@ -1107,6 +1115,7 @@ const StudentAdmissionForm = () => {
         </div>
       ))}
     </div>
+
 
 
         
