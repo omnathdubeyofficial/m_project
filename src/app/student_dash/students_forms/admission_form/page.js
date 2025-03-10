@@ -332,8 +332,8 @@ const StudentAdmissionForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 flex justify-center mt-32">
-      <form onSubmit={handleSubmit} className="max-w-7xl w-full bg-white p-8 rounded-lg shadow-xl border border-gray-200">
+    <div className="min-h-screen bg-gray-100 py-8 px-4 flex justify-center mt-32">
+      <form onSubmit={handleSubmit} className="max-w-7xl w-full bg-white p-8  shadow-xl border border-gray-200">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
   {/* Go Back Button */}
   <button 
@@ -346,7 +346,7 @@ const StudentAdmissionForm = () => {
 
   {/* Heading */}
   <h1 className="text-2xl">
-    Student Fee Record Data
+  Admission Form
   </h1>
 </div>
 
@@ -1141,7 +1141,7 @@ const StudentAdmissionForm = () => {
 
       <div className="flex flex-col items-center">
         <button
-          className="mt-6 w-1/2 bg-green-500 text-white py-2 rounded-md shadow-lg text-base hover:bg-green-600 transition duration-200"
+          className="mt-6 w-1/6 bg-green-500 text-white py-2 rounded-md shadow-lg text-base hover:bg-green-600 transition duration-200"
           onClick={handlePayNow}
         >
           Pay Now
@@ -1154,9 +1154,9 @@ const StudentAdmissionForm = () => {
 
         <button
           type="submit"
-          className=" w-1/2 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+          className=" w-1/6 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
         >
-          Submit Application
+          Submit
         </button>
         </div>
       </form>
