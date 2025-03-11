@@ -10,7 +10,7 @@ const Students_Management_Page = () => {
   const router = useRouter();
 
   const studentsServices = [
-    { name: "Student Information Management", icon: <FaUserGraduate />, path: "/students/information-management" },
+    { name: "New Admission", icon: <FaUserGraduate />, path: "/Students_Management/New_Admission_Lists" },
     { name: "Attendance Management", icon: <FaClipboardList />, path: "/students/attendance" },
     { name: "Class Scheduling", icon: <FaCalendarCheck />, path: "/students/class-scheduling" },
     { name: "Feedback & Communication", icon: <FaComments />, path: "/students/feedback-communication" },
