@@ -56,12 +56,10 @@ const Students_Management_Form = () => {
       <div className="container mx-auto py-10 px-4 sm:px-6 md:px-8 max-w-8xl pt-32">
         <div className="bg-white shadow-lg p-6 sm:p-8 w-full relative ">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-5">
-            <button
-              onClick={() => router.push("/dashboard")}
-              className="bg-blue-500 text-white px-3 py-2 flex items-center gap-2 hover:bg-blue-700"
-            >
-              <FaArrowLeft /> Go Back
-            </button>
+          <button   onClick={() => window.history.back()}  className="bg-blue-500 text-white px-4 py-2 shadow-md hover:bg-blue-600 transition duration-200 flex items-center gap-2 ">
+            <FaArrowLeft className="text-white" />
+            Go Back
+          </button>
             <h2 className="text-2xl text-center text-gray-800">Students Management Registration</h2>
           </div>
 

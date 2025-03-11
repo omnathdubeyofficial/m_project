@@ -143,12 +143,12 @@ const New_Admission_Lists = () => {
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
         
         {/* Back Button */}
-        <Link href="/dashboard" passHref>
-          <button className="bg-blue-500 text-white px-4 py-2 shadow-md hover:bg-blue-600 transition duration-200 flex items-center gap-2 ">
+
+          <button   onClick={() => window.history.back()}  className="bg-blue-500 text-white px-4 py-2 shadow-md hover:bg-blue-600 transition duration-200 flex items-center gap-2 ">
             <FaArrowLeft className="text-white" />
             Go Back
           </button>
-        </Link>
+
 
   
         <h1 className="text-3xl  text-gray-800">
@@ -188,14 +188,14 @@ const New_Admission_Lists = () => {
           <table className="min-w-full bg-white ">
             <thead className="bg-gray-100 ">
               <tr className="text-gray-700 text-sm font-semibold border border-gray-300">
-                <th className="px-4 py-2 text-left border border-gray-300">Profile</th>
-                <th className="px-4 py-2 text-left border border-gray-300 whitespace-nowrap">Name</th>
-                <th className="px-4 py-2 text-left border border-gray-300 whitespace-nowrap">Gender</th>
-                <th className="px-4 py-2 text-left border border-gray-300 whitespace-nowrap">Student ID</th>
-                <th className="px-4 py-2 text-left border border-gray-300 whitespace-nowrap">Aadhaar</th>
-                <th className="px-4 py-2 text-left border border-gray-300 whitespace-nowrap">Birth Certificate</th>
-                <th className="px-4 py-2 text-center border border-gray-300 whitespace-nowrap">Status</th>
-                <th className="px-4 py-2 text-center border border-gray-300 whitespace-nowrap">Actions</th>
+                <th className="px-4 py-4 text-left border border-gray-300">Profile</th>
+                <th className="px-4 py-4 text-left border border-gray-300 whitespace-nowrap">Name</th>
+                <th className="px-4 py-4 text-left border border-gray-300 whitespace-nowrap">Gender</th>
+                <th className="px-4 py-4 text-left border border-gray-300 whitespace-nowrap">Student ID</th>
+                <th className="px-4 py-4 text-left border border-gray-300 whitespace-nowrap">Aadhaar</th>
+                <th className="px-4 py-4 text-left border border-gray-300 whitespace-nowrap">Birth Certificate</th>
+                <th className="px-4 py-4 text-center border border-gray-300 whitespace-nowrap">Status</th>
+                <th className="px-4 py-4 text-center border border-gray-300 whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-300 border border-gray-300">
