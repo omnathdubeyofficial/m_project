@@ -6,7 +6,12 @@ import AboutUs from "../app/Home/School_Landing_Page/AboutUs/page";
 import Gallery from "../app/Home/School_Landing_Page/Gallery/page";
 import Newsletter from "../app/Home/School_Landing_Page/Newsletter/page";
 import Footer from "./Home/School_Landing_Page/Layout/Footer";
-import Header from "./Home/School_Landing_Page/Layout/Header";
+import School_Grid from "./Home/School_Landing_Page/School_Grid/page";
+import Work_with_us from "./Home/School_Landing_Page/Work_with_us/page";
+import Workflow from "./Home/School_Landing_Page/Workflow/page";
+import CTA_Section from "./Home/School_Landing_Page/CTA_Section/page";
+import Stats from "./Home/School_Landing_Page/Stats/page";
+import Pricing from "./Home/School_Landing_Page/Pricing/page";
 
 
 
@@ -19,6 +24,12 @@ export default function Home() {
     <div >
       {/* <Header/> */}
       <Hero/>
+      <School_Grid/>
+      <Work_with_us/>
+      <CTA_Section/>
+      <Stats/>
+      <Pricing/>
+      <Workflow/>
       <Features/>
       <AboutUs/>
       <Gallery/>

@@ -1,28 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { 
+  FaRupeeSign, FaClipboardList, FaUsers, FaClipboard, FaBullhorn, FaCalculator, FaFileInvoiceDollar
+} from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Loading from "../../Loader/page";
-import { 
-  FaRupeeSign, FaClipboardList, FaUsers, FaFileInvoiceDollar
-} from "react-icons/fa";
 
 const Fee_Management_Page = () => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const handleLoad = () => setIsLoading(false);
-
-    if (document.readyState === "complete") {
-      handleLoad();
-    } else {
-      window.addEventListener("load", handleLoad);
-    }
-
-    return () => window.removeEventListener("load", handleLoad);
-  }, []);
 
   const feeServices = [
     { name: "Fee Collection", icon: <FaRupeeSign />, path: "/Fee_Management/Fee_Management_Page/Fee_Collection_Data" },
@@ -31,19 +16,14 @@ const Fee_Management_Page = () => {
     { name: "Generate Invoices", icon: <FaFileInvoiceDollar />, path: "/Fee_Management/Fee_Management_Page/Generator_Invoice" },
   ];
 
-  if (isLoading) return <Loading />;
-
   return (
     <div className="bg-gradient-to-r from-green-50 to-green-100 min-h-screen pt-32">
       <main className="py-12 px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 p-4 bg-white border-2 border-gray-300">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 p-4 bg-white border-2 border-gray-300 ">
             <button 
-              onClick={() => {
-                setIsLoading(true); 
-                router.push("/dashboard");
-              }}
-              className="bg-green-600 text-white px-6 py-2 flex items-center gap-2 hover:bg-green-700 transition-all"
+              onClick={() => router.push("/dashboard")}
+              className="bg-green-600 text-white px-6 py-2 flex items-center gap-2  hover:bg-green-700 transition-all"
             >
               Go Back
             </button>
@@ -57,8 +37,7 @@ const Fee_Management_Page = () => {
             {feeServices.map((service, index) => (
               <Link href={service.path} key={index}>
                 <div
-                  onClick={() => setIsLoading(true)}
-                  className="p-8 shadow-lg flex flex-col items-center cursor-pointer border border-gray-300 bg-white transition-transform hover:scale-105 text-gray-900 hover:bg-green-50 hover:border-green-400"
+                  className="p-8 shadow-lg flex flex-col items-center cursor-pointer border border-gray-300 bg-white transition-transform hover:scale-105   text-gray-900 hover:bg-green-50 hover:border-green-400"
                 >
                   <div className="text-5xl mb-4 text-green-700">{service.icon}</div>
                   <h3 className="text-lg font-semibold text-center">{service.name}</h3>
