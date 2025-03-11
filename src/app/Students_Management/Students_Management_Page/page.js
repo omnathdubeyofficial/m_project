@@ -11,7 +11,7 @@ const Students_Management_Page = () => {
 
   const studentsServices = [
     { name: "New Admission", icon: <FaUserGraduate />, path: "/Students_Management/New_Admission_Lists" },
-    { name: "Attendance Management", icon: <FaClipboardList />, path: "/students/attendance" },
+    { name: "Attendance Management", icon: <FaClipboardList />, path: "/Students_Management/Students_Management_Page/Id_Card" },
     { name: "Class Scheduling", icon: <FaCalendarCheck />, path: "/students/class-scheduling" },
     { name: "Feedback & Communication", icon: <FaComments />, path: "/students/feedback-communication" },
     { name: "Digital Access Portal", icon: <FaLaptop />, path: "/students/digital-access" },
