@@ -4,6 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import html2canvas from "html2canvas";
 import { Search, ChevronDown, CheckSquare, Square, FileDown, FileArchive } from "lucide-react"
+import { FaSearch, FaEdit, FaTrash,FaPrint,  FaChevronRight, FaChevronLeft, FaPlus, FaArrowLeft, FaDownload, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+
 import jsPDF from "jspdf";
 
 const students = [
@@ -171,6 +173,10 @@ const IDCard = () => {
   return (
     <div className="flex flex-col items-center mt-32 p-12">
         <div className="flex flex-wrap items-center justify-between gap-3 bg-blue-900 text-white p-4  shadow-md mb-6">
+               <button   onClick={() => window.history.back()}  className="bg-blue-500 text-white px-4 py-2 shadow-md hover:bg-blue-600 transition duration-200 flex items-center gap-2 ">
+                      <FaArrowLeft className="text-white" />
+                      Go Back
+                    </button>
   {/* Search Bar */}
   <div className="flex items-center bg-white text-gray-800 p-2   shadow-md">
     <Search className="w-5 h-5 mr-2 text-gray-500" />

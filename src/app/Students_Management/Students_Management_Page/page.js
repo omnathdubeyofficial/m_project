@@ -1,7 +1,7 @@
 "use client";
 
 import { 
-  FaUserGraduate, FaClipboardList,FaArrowLeft, FaCalendarCheck, FaComments, FaLaptop, FaAward, FaRupeeSign, FaBook
+  FaUserGraduate, FaClipboardList,FaArrowLeft,FaAddressCard, FaCalendarCheck, FaComments, FaLaptop, FaAward, FaRupeeSign, FaBook
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -11,8 +11,8 @@ const Students_Management_Page = () => {
 
   const studentsServices = [
     { name: "New Admission", icon: <FaUserGraduate />, path: "/Students_Management/Students_Management_Page/New_Admission_Lists" },
-    { name: "Attendance Management", icon: <FaClipboardList />, path: "/Students_Management/Students_Management_Page/Id_Card" },
-    { name: "Class Scheduling", icon: <FaCalendarCheck />, path: "/students/class-scheduling" },
+    { name: "Admission Completed", icon: <FaClipboardList />, path: "/Students_Management/Students_Management_Page/Admission_Completed_List" },
+    { name: "All Identity Card", icon: <FaAddressCard />, path: "/Students_Management/Students_Management_Page/Id_Card" },
     { name: "Feedback & Communication", icon: <FaComments />, path: "/students/feedback-communication" },
     { name: "Digital Access Portal", icon: <FaLaptop />, path: "/students/digital-access" },
     { name: "Budget Request", icon: <FaRupeeSign />, path: "/students/budget-request" },
