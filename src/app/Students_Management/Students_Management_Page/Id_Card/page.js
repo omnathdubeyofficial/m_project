@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import html2canvas from "html2canvas";
+import { Search, ChevronDown, CheckSquare, Square, FileDown, FileArchive } from "lucide-react"
 import jsPDF from "jspdf";
 
 const students = [
@@ -42,52 +43,66 @@ const students = [
     mobile: "08123456787",
     address: "33 Queen Street, Delhi",
   },
+  {
+    profileImage: "/img/om.webp",
+    schoolLogo: "/img/image.png",
+    // backgroundImage: "/img/card_bg.png",
+    admissionNo: "5680",
+    rollNo: "9878",
+    name: "Jane Smith",
+    classSec: "SS 3 RED",
+    dob: "22/11/2009",
+    mobile: "08123456787",
+    address: "33 Queen Street, Delhi",
+  },
 ];
 
 const IDCard = () => {
   const [selectedCards, setSelectedCards] = useState([]);
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedClass, setSelectedClass] = useState("");
+  const [selectAll, setSelectAll] = useState(false);
   const handleSelectCard = (index) => {
     setSelectedCards((prev) =>
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
   };
 
-  // const handleDownloadPDF = async () => {
-  //   if (selectedCards.length === 0) return alert("Please select at least one card!");
+  const handleDownloadOnaPDF = async () => {
+    if (selectedCards.length === 0) return alert("Please select at least one card!");
   
-  //   const pdf = new jsPDF("landscape", "mm", "a4"); 
-  //   const pageWidth = pdf.internal.pageSize.getWidth(); 
-  //   const pageHeight = pdf.internal.pageSize.getHeight(); 
+    const pdf = new jsPDF("landscape", "mm", "a4"); 
+    const pageWidth = pdf.internal.pageSize.getWidth(); 
+    const pageHeight = pdf.internal.pageSize.getHeight(); 
   
-  //   const imgWidth = (pageWidth - 50) / 2; 
-  //   const imgHeight = pageHeight - 40; 
+    const imgWidth = (pageWidth - 50) / 2; 
+    const imgHeight = pageHeight - 40; 
   
-  //   const marginX = 20; 
-  //   const marginY = 20; 
+    const marginX = 20; 
+    const marginY = 20; 
   
-  //   for (let i = 0; i < selectedCards.length; i++) {
-  //     const cardIndex = selectedCards[i];
-  //     const frontCard = document.getElementById(`card-${cardIndex}`);
-  //     const backCard = document.getElementById(`card-back-${cardIndex}`);
-  //     if (!frontCard || !backCard) continue;
+    for (let i = 0; i < selectedCards.length; i++) {
+      const cardIndex = selectedCards[i];
+      const frontCard = document.getElementById(`card-${cardIndex}`);
+      const backCard = document.getElementById(`card-back-${cardIndex}`);
+      if (!frontCard || !backCard) continue;
   
-  //     const frontCanvas = await html2canvas(frontCard, { scale: 3, useCORS: true, backgroundColor: null });
-  //     const frontImgData = frontCanvas.toDataURL("image/png");
+      const frontCanvas = await html2canvas(frontCard, { scale: 3, useCORS: true, backgroundColor: null });
+      const frontImgData = frontCanvas.toDataURL("image/png");
   
-  //     const backCanvas = await html2canvas(backCard, { scale: 3, useCORS: true, backgroundColor: null });
-  //     const backImgData = backCanvas.toDataURL("image/png");
+      const backCanvas = await html2canvas(backCard, { scale: 3, useCORS: true, backgroundColor: null });
+      const backImgData = backCanvas.toDataURL("image/png");
   
-  //     pdf.addImage(frontImgData, "PNG", marginX, marginY, imgWidth, imgHeight); 
-  //     pdf.addImage(backImgData, "PNG", marginX + imgWidth + 10, marginY, imgWidth, imgHeight); 
+      pdf.addImage(frontImgData, "PNG", marginX, marginY, imgWidth, imgHeight); 
+      pdf.addImage(backImgData, "PNG", marginX + imgWidth + 10, marginY, imgWidth, imgHeight); 
   
-  //     if (i < selectedCards.length - 1) {
-  //       pdf.addPage();
-  //     }
-  //   }
+      if (i < selectedCards.length - 1) {
+        pdf.addPage();
+      }
+    }
   
-  //   pdf.save("ID_Cards.pdf");
-  // };
+    pdf.save("ID_Cards.pdf");
+  };
   
   
   const handleDownloadPDF = async () => {
@@ -136,17 +151,87 @@ const IDCard = () => {
     }
   };
   
-  
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedCards([]);
+    } else {
+      setSelectedCards(filteredStudents.map((_, index) => index));
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const filteredStudents = students.filter(
+    (student) =>
+      (student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        student.rollNo.includes(searchTerm)) &&
+      (selectedClass === "" || student.classSec === selectedClass)
+  );
   
 
   return (
     <div className="flex flex-col items-center mt-32 p-12">
-     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-  {students.map((student, index) => (
-    <div key={index} className="relative cursor-pointer" onClick={() => handleSelectCard(index)}>
-      <div className="absolute top-2 left-2 w-6 h-6 bg-white flex items-center justify-center rounded shadow">
-        {selectedCards.includes(index) && <span className="text-blue-600 font-bold">✔</span>}
-      </div>
+        <div className="flex flex-wrap items-center justify-between gap-3 bg-blue-900 text-white p-4  shadow-md mb-6">
+  {/* Search Bar */}
+  <div className="flex items-center bg-white text-gray-800 p-2   shadow-md">
+    <Search className="w-5 h-5 mr-2 text-gray-500" />
+    <input
+      type="text"
+      placeholder="Search by Name or Roll No"
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="outline-none bg-transparent w-48"
+    />
+  </div>
+
+  {/* Class Filter */}
+  <div className="relative">
+    <select
+      value={selectedClass}
+      onChange={(e) => setSelectedClass(e.target.value)}
+      className="appearance-none bg-white text-gray-800 p-2 pl-4 pr-10  shadow-md cursor-pointer"
+    >
+      <option value="">All Classes</option>
+      {[...new Set(students.map((s) => s.classSec))].map((cls) => (
+        <option key={cls} value={cls}>
+          {cls}
+        </option>
+      ))}
+    </select>
+    <ChevronDown className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500" />
+  </div>
+
+  {/* Select All Button */}
+  <button
+    onClick={handleSelectAll}
+    className="flex items-center bg-green-600 hover:bg-green-700 transition px-4 py-2  shadow-md"
+  >
+    {selectAll ? <CheckSquare className="w-5 h-5 mr-2" /> : <Square className="w-5 h-5 mr-2" />}
+    {selectAll ? "Deselect All" : "Select All"}
+  </button>
+
+  <button
+    onClick={handleDownloadPDF}
+    className="flex items-center gap-2 bg-green-500 hover:bg-green-700 text-white py-2 px-6  shadow-lg transition"
+  >
+    <FileDown className="w-5 h-5" />
+    Download Selected Cards
+  </button>
+
+  {/* Download Selected Cards One PDF */}
+  <button
+    onClick={handleDownloadOnaPDF}
+    className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white py-2 px-6  shadow-lg transition"
+  >
+    <FileArchive className="w-5 h-5" />
+    Download Selected Cards One PDF
+  </button>
+</div>
+     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+     {filteredStudents.map((student, index) => (
+          <div key={index} className="relative cursor-pointer" onClick={() => handleSelectCard(index)}>
+            <div className="absolute top-2 left-2 w-6 h-6 bg-white flex items-center justify-center rounded shadow">
+              {selectedCards.includes(index) && <span className="text-blue-600 font-bold">✔</span>}
+            </div>
 
       {/* Front Side */}
       <div
@@ -250,12 +335,7 @@ const IDCard = () => {
   ))}
 </div>
 
-      <button
-        onClick={handleDownloadPDF}
-        className="mt-5 bg-green-600 text-white py-2 px-6 rounded shadow-lg"
-      >
-        Download Selected Cards
-      </button>
+    
     </div>
   );
 };
