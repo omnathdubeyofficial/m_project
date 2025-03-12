@@ -3,9 +3,8 @@
 import { useState, useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import { executeMutation } from "../../graphqlClient";
-import SchoolNavbar from "../../navbar/page";
-import { CREATE_ACADEMIC_CALENDAR_MUTATION } from "../../mutation/AcademicCalendarMutation/createAcademicCalendarMutation";
+import { executeMutation } from "../../../graphqlClient";
+import { CREATE_ACADEMIC_CALENDAR_MUTATION } from "../../../mutation/AcademicCalendarMutation/createAcademicCalendarMutation";
 
 const AcademicCalendarForm = () => {
   const router = useRouter();

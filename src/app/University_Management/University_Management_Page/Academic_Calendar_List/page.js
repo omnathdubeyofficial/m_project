@@ -6,12 +6,12 @@ import { FaSearch, FaEdit, FaTrash, FaChevronRight, FaChevronLeft, FaPlus, FaArr
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { GET_ACADEMIC_CALENDAR_DATA } from "../../query/AcademicCalendarQuery/fetchAcademicCalendar";
-import { DELETE_ACADEMIC_CALENDAR_MUTATION } from "../../mutation/AcademicCalendarMutation/deleteAcademicCalendarMutation";
-import { UPDATE_ACADEMIC_CALENDAR_MUTATION } from "../../mutation/AcademicCalendarMutation/updateAcademicCalendardMutation";
-import { executeQuery, executeMutation } from "../../graphqlClient";
+import { GET_ACADEMIC_CALENDAR_DATA } from "../../../query/AcademicCalendarQuery/fetchAcademicCalendar";
+import { DELETE_ACADEMIC_CALENDAR_MUTATION } from "../../../mutation/AcademicCalendarMutation/deleteAcademicCalendarMutation";
+import { UPDATE_ACADEMIC_CALENDAR_MUTATION } from "../../../mutation/AcademicCalendarMutation/updateAcademicCalendardMutation";
+import { executeQuery, executeMutation } from "../../../graphqlClient";
 import Link from "next/link";
-import Navbar from "../../navbar/page";
+import Navbar from "../../../navbar/page";
 
 const Academic_Calendar_List = () => {
   const [admins, setAdmins] = useState([]);
@@ -61,7 +61,6 @@ const handleUpdate = async () => {
       });
     }
 
-    // Popup को 3 सेकंड बाद Hide कर दो
     setTimeout(() => setShowupdatePopup(null), 3000);
     
   } catch (error) {
@@ -150,7 +149,6 @@ const handleUpdate = async () => {
 
   return (
     <div className="bg-gray-100 min-h-screen pt-28">
-       {/* <Navbar /> */}
       <main className="container  bg-white p-6  shadow-md  mx-auto py-8 px-8 ">
 
       {showPopup && (
@@ -201,7 +199,7 @@ const handleUpdate = async () => {
           <button onClick={handleDownloadPDF} className="bg-red-600 text-white px-4 py-2  flex items-center gap-2 hover:bg-red-700 transition">
             <FaDownload /> PDF
           </button>
-          <Link href="/University_Management/Academic_Calendar_Form" className="bg-blue-600 text-white flex items-center px-4 py-2  hover:bg-blue-700 transition">
+          <Link href="/University_Management/University_Management_Page/Academic_Calendar_Form" className="bg-blue-600 text-white flex items-center px-4 py-2  hover:bg-blue-700 transition">
             <FaPlus className="mr-2" /> Add New
           </Link>
         </div>

@@ -10,8 +10,8 @@ const University_Management_Page = () => {
   const router = useRouter();
 
   const universityServices = [
-    { name: "University Information Management", icon: <FaUniversity />, path: "/university/information-management" },
-    { name: "Student Management", icon: <FaUserGraduate />, path: "/university/student-management" },
+    { name: "University Information Management", icon: <FaUniversity />, path: "/University_Management/University_Management_Page/Academic_Calendar_List" },
+    { name: "Student Management", icon: <FaUserGraduate />, path: "/University_Management/University_Management_Page/Academic_Calendar_Form" },
     { name: "Faculty Management", icon: <FaChalkboardTeacher />, path: "/university/faculty-management" },
     { name: "Attendance Management", icon: <FaClipboardList />, path: "/university/attendance" },
     { name: "Class Scheduling", icon: <FaCalendarCheck />, path: "/university/class-scheduling" },
