@@ -9,7 +9,7 @@ const students = [
   {
     profileImage: "/img/om.webp",
     schoolLogo: "/img/image.png",
-    backgroundImage: "/img/card_bg.png",
+    // backgroundImage: "/img/card_bg.png",
     admissionNo: "5678",
     rollNo: "9876",
     name: "Omnath Dubey",
@@ -21,7 +21,7 @@ const students = [
   {
     profileImage: "/img/om.webp",
     schoolLogo: "/img/image.png",
-    backgroundImage: "/img/card_bg.png",
+    // backgroundImage: "/img/card_bg.png",
     admissionNo: "5679",
     rollNo: "9877",
     name: "John Doe",
@@ -33,7 +33,7 @@ const students = [
   {
     profileImage: "/img/om.webp",
     schoolLogo: "/img/image.png",
-    backgroundImage: "/img/card_bg.png",
+    // backgroundImage: "/img/card_bg.png",
     admissionNo: "5680",
     rollNo: "9878",
     name: "Jane Smith",
@@ -155,7 +155,7 @@ const IDCard = () => {
           selectedCards.includes(index) ? "border-blue-900" : "border-blue-900"
         }`}
         style={{
-          backgroundImage: `url(${student.backgroundImage})`,
+          // backgroundImage: `url(${student.backgroundImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           borderRadius: "10px",
@@ -212,7 +212,7 @@ const IDCard = () => {
   id={`card-back-${index}`}
   className="w-80 text-black p-6 shadow-lg relative overflow-hidden border-2 border-blue-900 bg-blue-50 rounded-lg mt-2"
   style={{
-    backgroundImage: `url('/img/card_back_pattern.png')`,
+    // backgroundImage: `url('/img/card_back_pattern.png')`,
     backgroundSize: "cover",
     backgroundPosition: "center",
   }}
