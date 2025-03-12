@@ -17,7 +17,7 @@ const students = [
     classSec: "SS 1 BLUE",
     dob: "10/05/2007",
     mobile: "08123456789",
-    address: "11 Park Street, Pune",
+    address: "KPCT MALL, Fatima Nagar, Wanowrie, Pune, Maharashtra 411040",
   },
   {
     profileImage: "/img/om.webp",
@@ -233,69 +233,80 @@ const IDCard = () => {
               {selectedCards.includes(index) && <span className="text-blue-600 font-bold">✔</span>}
             </div>
 
-      {/* Front Side */}
-      <div
-        id={`card-${index}`}
-        className={`w-80 text-white  shadow-lg relative overflow-hidden border-2 ${
-          selectedCards.includes(index) ? "border-blue-900" : "border-blue-900"
-        }`}
-        style={{
-          // backgroundImage: `url(${student.backgroundImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          borderRadius: "10px",
-        }}
-      >
-        <div className="text-center bg-blue-900 bg-opacity-75 p-2 rounded-t-lg">
-          <img src={student.schoolLogo} width={80} height={80} className="mx-auto" alt="School Logo" />
-          <h2 className="text-lg font-bold">AIR FORCE INTERNATIONAL</h2>
-          <h3 className="text-sm font-semibold">NURSERY AND PRIMARY SCHOOL</h3>
-          <p className="text-xs">
-            234 Ahmadu Bello Crescent, Lafia, Nasarawa <br /> <span className="text-xs">Ph: 234567</span>
-          </p>
-        </div>
-        <div className="bg-gray-100 text-gray-800 p-4">
-          <h3 className="text-sm font-semibold text-center text-blue-900">IDENTITY CARD</h3>
-          <div className="flex justify-center mt-3">
-            <img
-              src={student.profileImage}
-              width={85}
-              height={85}
-              className="rounded-lg object-cover border border-gray-300 shadow-md"
-              alt="Student Image"
-            />
-          </div>
-          <div className="text-sm">
-            <span className="font-bold text-blue-900">Admission No:</span> {student.admissionNo} <br />
-            <span className="font-bold text-blue-900">Roll No:</span> {student.rollNo}
-            <br />
-            <span className="font-bold text-blue-900">Name:</span> {student.name}
-            <br />
-            <span className="font-bold text-blue-900">Class & Sec:</span> {student.classSec}
-            <br />
-            <span className="font-bold text-blue-900">Date of Birth:</span> {student.dob}
-            <br />
-            <span className="font-bold text-blue-900">Mobile:</span> {student.mobile}
-            <br />
-            <span className="font-bold text-blue-900">Address:</span> {student.address}
-            <br />
-          </div>
-        </div>
-        <div className="flex justify-between items-center text-xs bg-blue-900 bg-opacity-75 p-2 rounded-b-lg">
-          <div className="text-center">
-            <p>2025-2026</p>
-          </div>
-          <div className="text-center">
-            <p>PRINCIPAL</p>
-          </div>
-        </div>
-      </div>
+{/* Front Side */}
+<div
+  id={`card-${index}`}
+  className={`w-80 text-white shadow-lg relative overflow-hidden border-2 ${
+    selectedCards.includes(index) ? "border-[#001F3F]" : "border-[#001F3F]"
+  }`}
+  style={{
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }}
+>
+  <div className="text-center bg-[#001F3F] bg-opacity-90 p-4 text-white">
+    <img
+      src={student.schoolLogo}
+      width={80}
+      height={80}
+      className="mx-auto"
+      alt="School Logo"
+    />
+    <h2 className="text-lg font-bold">AIR FORCE INTERNATIONAL</h2>
+    <h3 className="text-sm font-semibold">NURSERY AND PRIMARY SCHOOL</h3>
+    <p className="text-xs">
+      234 Ahmadu Bello Crescent, Lafia, Nasarawa <br />
+      <span className="text-xs">Ph: 234567</span>
+    </p>
+  </div>
 
-      {/* Back Side */}
+  <div className="bg-gray-100 text-gray-800 p-2">
+    <h3 className="text-sm font-semibold text-center text-blue-900">
+      IDENTITY CARD
+    </h3>
+    <div className="flex justify-center mt-3">
+      <img
+        src={student.profileImage}
+        width={85}
+        height={85}
+        className="rounded-lg object-cover border border-gray-300 shadow-md"
+        alt="Student Image"
+      />
+    </div>
+    <div className="text-sm mt-2 ">
+      <span className="font-bold text-blue-900">Admission No:</span>{" "}
+      {student.admissionNo} <br />
+      <span className="font-bold text-blue-900">Roll No:</span> {student.rollNo}
+      <br />
+      <span className="font-bold text-blue-900">Name:</span> {student.name}
+      <br />
+      <span className="font-bold text-blue-900">Class & Sec:</span>{" "}
+      {student.classSec}
+      <br />
+      <span className="font-bold text-blue-900">Date of Birth:</span>{" "}
+      {student.dob}
+      <br />
+      <span className="font-bold text-blue-900">Mobile:</span> {student.mobile}
+      <br />
+      <span className="font-bold text-blue-900">Address:</span> {student.address}
+      <br />
+    </div>
+  </div>
+  <div className="flex justify-between items-center text-xs bg-[#001F3F] bg-opacity-90 p-2">
+    <div className="text-center">
+      <p>2025-2026</p>
+    </div>
+    <div className="text-center">
+      <p>PRINCIPAL</p>
+    </div>
+  </div>
+</div>
+
+
    {/* Back Side */}
 <div
   id={`card-back-${index}`}
-  className="w-80 text-black p-6 shadow-lg relative overflow-hidden border-2 border-blue-900 bg-blue-50 rounded-lg mt-2"
+  className="w-80 text-black p-6 shadow-lg relative overflow-hidden border-2 border-blue-900 bg-blue-50  mt-2"
   style={{
     // backgroundImage: `url('/img/card_back_pattern.png')`,
     backgroundSize: "cover",
