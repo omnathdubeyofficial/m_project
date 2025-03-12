@@ -7,9 +7,9 @@ import Image from "next/image";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { GET_STUDENT_REGISTRATION_DATA } from "../../query/studentRegistrationQuery/fetchStudentRegistration";
-import { DELETE_USER_MANAGEMENT_DATA_MUTATION } from "../../mutation/deleteUserManagementData";
-import { executeQuery, executeMutation } from "../../graphqlClient";
+import { GET_STUDENT_REGISTRATION_DATA } from "../../../query/studentRegistrationQuery/fetchStudentRegistration";
+import { DELETE_USER_MANAGEMENT_DATA_MUTATION } from "../../../mutation/deleteUserManagementData";
+import { executeQuery, executeMutation } from "../../../graphqlClient";
 import Link from "next/link";
 
 const New_Admission_Lists = () => {
