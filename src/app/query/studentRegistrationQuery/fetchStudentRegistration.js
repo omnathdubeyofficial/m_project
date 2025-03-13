@@ -2,7 +2,7 @@ export const GET_STUDENT_REGISTRATION_DATA = `
 query {
     getStudentRegistration {
       z_id
-    first_name
+     first_name
     middle_name
     last_name
     student_id
@@ -11,16 +11,57 @@ query {
     email
     date_of_birth
     contact_no
-    address
+    permanent_address
     previous_school
     highest_qualification
     percentage
     entrance_exam_score
-    parent_name
-    parent_contact_no
-    parent_email
+    father_name
+    father_contact_no
+    father_email
     relationship
     profile_image
+    desired_class
+    previous_year_of_passing
+    board
+    father_whatsapp_no
+    father_occupation
+    mother_name
+    mother_occupation
+    guardian_name
+    guardian_contact_no
+    guardian_email
+    guardian_occupation
+    number_of_brothers
+    brother_occupation
+    blood_group
+    religion
+    annual_income
+    category
+    admission_status
+    mother_tongue
+    current_address
+    permanent_address_nearest_police_station
+    current_address_nearest_police_station
+    permanent_address_nearest_landmark
+    current_address_nearest_landmark
+    permanent_address_state
+    current_address_state
+    permanent_address_district
+    current_address_district
+    permanent_address_tehsil
+    current_address_tehsil
+    permanent_address_post_office
+    current_address_post_office
+    permanent_address_pincode
+    permanent_address_type
+    current_address_type
+    nationality
+    country
+    adhar_front_img
+    adhar_back_img
+    previous_year_marksheet
+    income_certificate
     cdate
     ctime
     udate
