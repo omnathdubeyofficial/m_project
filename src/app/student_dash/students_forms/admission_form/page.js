@@ -18,21 +18,63 @@ const StudentAdmissionForm = () => {
     email: "",
     date_of_birth: "",
     contact_no: "",
-    address: "",
+    permanent_address: "",
     previous_school: "",
     highest_qualification: "",
     percentage: "",
     entrance_exam_score: "",
-    parent_name: "",
-    parent_contact_no: "",
-    parent_email: "",
+    father_name: "",
+    father_contact_no: "",
+    father_email: "",
     relationship: "",
+    profile_image: "",
+    desired_class: "",
+    previous_year_of_passing: "",
+    board: "",
+    father_whatsapp_no: "",
+    father_occupation: "",
+    mother_name: "",
+    mother_occupation: "",
+    guardian_name: "",
+    guardian_contact_no: "",
+    guardian_email: "",
+    guardian_occupation: "",
+    number_of_brothers: "",
+    brother_occupation: "",
+    blood_group: "",
+    religion: "",
+    annual_income: "",
+    category: "",
+    admission_status: "",
+    mother_tongue: "",
+    current_address: "",
+    permanent_address_nearest_police_station: "",
+    current_address_nearest_police_station: "",
+    permanent_address_nearest_landmark: "",
+    current_address_nearest_landmark: "",
+    permanent_address_state: "",
+    current_address_state: "",
+    permanent_address_district: "",
+    current_address_district: "",
+    permanent_address_tehsil: "",
+    current_address_tehsil: "",
+    permanent_address_post_office: "",
+    current_address_post_office: "",
+    permanent_address_pincode: "",
+    permanent_address_type: "",
+    current_address_type: "",
+    nationality: "",
+    country: "",
+    adhar_front_img: "",
+    adhar_back_img: "",
+    previous_year_marksheet: "",
+    income_certificate: "",
   });
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value ?? "", // Using ?? for fallback to empty string
+      [e.target.name]: e.target.value ?? "", 
     });
   };
 
@@ -262,21 +304,13 @@ const StudentAdmissionForm = () => {
 
     try {
       const response = await executeMutation(CREATE_STUDENT_REGISTRATION_MUTATION, {
-        first_name: formData.first_name,
-        middle_name: formData.middle_name,
-        last_name: formData.last_name,
+        ...formData,
         gender: formData.gender?.toLowerCase() ?? "other", // Default gender if not provided
-        email: formData.email ?? "", // Default to empty string if no email
-        date_of_birth: formData.date_of_birth ?? "", // Default to empty string if no date of birth
-        contact_no: formData.contact_no ?? "", // Default to empty string if no contact number
-        address: formData.address ?? "", // Default to empty string if no address
-        previous_school: formData.previous_school ?? "", // Default to empty string if no previous school
-        highest_qualification: formData.highest_qualification ?? "", // Default to empty string if no qualification
-        percentage: String(formData.percentage ?? "0"), // Default to "0" if no percentage
-        entrance_exam_score: String(formData.entrance_exam_score ?? "0"), // Default to "0" if no entrance score
-        parent_name: formData.parent_name ?? "", // Default to empty string if no parent name
-        parent_contact_no: formData.parent_contact_no ?? "", // Default to empty string if no parent contact
-        relationship: formData.relationship ?? "", // Default to empty string if no relationship
+        email: formData.email ?? "",
+        date_of_birth: formData.date_of_birth ?? "",
+        contact_no: formData.contact_no ?? "",
+        percentage: String(formData.percentage ?? "0"),
+        entrance_exam_score: String(formData.entrance_exam_score ?? "0"),
       });
 
       console.log("Mutation Response:", response);
@@ -408,7 +442,7 @@ const StudentAdmissionForm = () => {
           <label className="block text-sm font-medium text-gray-600">Date of Birth *</label>
           <input
             type="date"
-            name="dob"
+            name="date_of_birth"
             required
             onChange={handleChange}
             className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
@@ -439,7 +473,7 @@ const StudentAdmissionForm = () => {
           <label className="block text-sm font-medium text-gray-600">Aadhar Number *</label>
           <input
             type="text"
-            name="aadhar_number"
+            name="adhar_no"
             required
             onChange={handleChange}
             className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
@@ -531,7 +565,7 @@ const StudentAdmissionForm = () => {
            <label className="block text-sm font-medium text-gray-600">Previous Year of Passing *</label>
            <input
              type="number"
-             name="previous_year"
+             name="previous_year_of_passing"
              required
              placeholder="e.g., 2022"
              onChange={handleChange}
@@ -567,7 +601,7 @@ const StudentAdmissionForm = () => {
            <label className="block text-sm font-medium text-gray-600">Previous Passing Year Percentage *</label>
            <input
              type="number"
-             name="previous_percentage"
+             name="percentage"
              required
              placeholder="e.g., 85.5"
              step="0.01"
@@ -585,7 +619,7 @@ const StudentAdmissionForm = () => {
          <div>
          <label className="block text-sm font-medium text-gray-600">Board *</label>
          <select
-           name="board_university"
+           name="board"
            required
            onChange={handleChange}
            className="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
@@ -646,7 +680,7 @@ const StudentAdmissionForm = () => {
      <div>
        <label className="block text-sm font-medium text-gray-600">Father's Work *</label>
        <select
-         name="father_work"
+         name="father_occupation"
          required
          onChange={handleChange}
          className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
@@ -662,7 +696,7 @@ const StudentAdmissionForm = () => {
      <div>
        <label className="block text-sm font-medium text-gray-600">Mother's Work *</label>
        <select
-         name="mother_work"
+         name="mother_occupation"
          required
          onChange={handleChange}
          className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
@@ -680,7 +714,7 @@ const StudentAdmissionForm = () => {
        <label className="block text-sm font-medium text-gray-600">Parent WhatsApp Number *</label>
        <input
          type="tel"
-         name="parent_whatsapp_number"
+         name="father_whatsapp_no"
          required
          onChange={handleChange}
          className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
@@ -692,7 +726,7 @@ const StudentAdmissionForm = () => {
        <label className="block text-sm font-medium text-gray-600">Parent Mobile Number *</label>
        <input
          type="tel"
-         name="parent_mobile_number"
+         name="father_contact_no"
          required
          onChange={handleChange}
          className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
@@ -704,7 +738,7 @@ const StudentAdmissionForm = () => {
        <label className="block text-sm font-medium text-gray-600">Parent Email ID *</label>
        <input
          type="email"
-         name="parent_email"
+         name="father_email"
          required
          onChange={handleChange}
          className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
