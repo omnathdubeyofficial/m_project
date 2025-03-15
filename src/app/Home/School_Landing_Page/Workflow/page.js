@@ -1,44 +1,44 @@
-import { CloudArrowUpIcon, LockClosedIcon, ServerIcon } from '@heroicons/react/20/solid'
+import Image from 'next/image';
+import { AcademicCapIcon, ShieldCheckIcon, UsersIcon } from '@heroicons/react/24/solid';
 
 const features = [
   {
-    name: 'Push to deploy.',
+    name: 'Modern Learning Environment',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-    icon: CloudArrowUpIcon,
+      'Vaekon School provides smart classrooms, digital learning tools, and an interactive curriculum for holistic development.',
+    icon: AcademicCapIcon,
   },
   {
-    name: 'SSL certificates.',
-    description: 'Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.',
-    icon: LockClosedIcon,
+    name: 'Safe & Secure Campus',
+    description: 'With 24/7 security, CCTV surveillance, and strict safety protocols, we ensure a safe environment for every student.',
+    icon: ShieldCheckIcon,
   },
   {
-    name: 'Database backups.',
-    description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.',
-    icon: ServerIcon,
+    name: 'Expert Faculty & Guidance',
+    description: 'Our experienced teachers and mentors help students excel academically and prepare for future challenges.',
+    icon: UsersIcon,
   },
-]
+];
 
-export default function Workflow() {
+export default function VaekonSchoolWorkflow() {
   return (
     <div className="overflow-hidden bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
           <div className="lg:pt-4 lg:pr-8">
             <div className="lg:max-w-lg">
-              <h2 className="text-base/7 font-semibold text-indigo-600">Deploy faster</h2>
-              <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">
-                A better workflow
+              <h2 className="text-base/7 font-semibold text-blue-600">Empowering Future Leaders</h2>
+              <p className="mt-2 text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+                Vaekon School - Excellence in Education
               </p>
               <p className="mt-6 text-lg/8 text-gray-600">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque,
-                iste dolor cupiditate blanditiis ratione.
+                Vaekon School, we believe in nurturing young minds with a blend of traditional values and modern education. Our well-structured curriculum and world-class facilities help students reach their full potential.
               </p>
               <dl className="mt-10 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none">
                 {features.map((feature) => (
-                  <div key={feature.name} className="relative pl-9">
+                  <div key={feature.name} className="relative pl-12">
                     <dt className="inline font-semibold text-gray-900">
-                      <feature.icon aria-hidden="true" className="absolute top-1 left-1 size-5 text-indigo-600" />
+                      <feature.icon aria-hidden="true" className="absolute top-0 left-0 size-8 text-blue-600" />
                       {feature.name}
                     </dt>{' '}
                     <dd className="inline">{feature.description}</dd>
@@ -47,15 +47,15 @@ export default function Workflow() {
               </dl>
             </div>
           </div>
-          <img
-            alt="Product screenshot"
-            src="https://tailwindcss.com/plus-assets/img/component-images/dark-project-app-screenshot.png"
-            width={2432}
-            height={1442}
+          <Image
+            alt="Vaekon School Campus"
+            src="/img/students.jpg"
+            width={800}
+            height={500}
             className="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
           />
         </div>
       </div>
     </div>
-  )
+  );
 }
