@@ -13,8 +13,8 @@ import CTA_Section from "./Home/School_Landing_Page/CTA_Section/page";
 import Stats from "./Home/School_Landing_Page/Stats/page";
 import Pricing from "./Home/School_Landing_Page/Pricing/page";
 import ProfessionalCourses from "./Home/School_Landing_Page/ProfessionalCourses/page";
-
-
+import HistoryPage from "./Home/School_Landing_Page/HistoryPage/page";
+import Facilities_Infrastructure from "./Home/School_Landing_Page/Facilities_&_Infrastructure/page";
 
 
 
@@ -25,7 +25,9 @@ export default function Home() {
     <div >
       {/* <Header/> */}
       <Hero/>
+      <Facilities_Infrastructure/>
       <ProfessionalCourses/>
+      <HistoryPage/>
       <School_Grid/>
       <Work_with_us/>
       <CTA_Section/>
