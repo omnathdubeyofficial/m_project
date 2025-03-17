@@ -1,115 +1,112 @@
 "use client";
 
 import { useState } from "react";
+import { School, ClipboardList, Smartphone, BarChart, Video, BookOpen, Globe, Bot } from "lucide-react";
 
 const tabs = [
-  { name: "School ERP", key: "school_erp" },
-  { name: "Mobile App", key: "mobile_app" },
-  { name: "E-Learning", key: "e_learning" },
-  { name: "Website", key: "website" },
-  { name: "Smart Technology", key: "smart_tech" }
+  { name: "School ERP", key: "school_erp", bg: "bg-purple-900" },
+  { name: "Mobile App", key: "mobile_app", bg: "bg-blue-900" },
+  { name: "E-Learning", key: "e_learning", bg: "bg-indigo-900" },
+  { name: "Website", key: "website", bg: "bg-green-900" },
+  { name: "Smart Technology", key: "smart_tech", bg: "bg-gray-900" }
 ];
 
 const services = {
   school_erp: [
     {
       title: "Academics",
-      description:
-        "In this digital era, from banking to education most things have gone online.",
-      icon: "🏫",
-      color: "text-yellow-500"
+      description: "Bring education into the digital age with our School ERP.",
+      icon: <School size={40} className="text-white mx-auto" />
     },
     {
       title: "Administration",
-      description:
-        "Now those complex and time-consuming day-to-day administrative processes can be handled easily.",
-      icon: "📋",
-      color: "text-green-500"
+      description: "Simplify and streamline administrative tasks.",
+      icon: <ClipboardList size={40} className="text-white mx-auto" />
     }
   ],
   mobile_app: [
     {
       title: "Mobile Attendance",
-      description: "Track and manage attendance with a few clicks on mobile.",
-      icon: "📱",
-      color: "text-blue-500"
+      description: "Mark attendance easily through mobile.",
+      icon: <Smartphone size={40} className="text-white mx-auto" />
     },
     {
       title: "Student Performance",
-      description: "Monitor student progress efficiently.",
-      icon: "📊",
-      color: "text-purple-500"
+      description: "Track student progress effectively.",
+      icon: <BarChart size={40} className="text-white mx-auto" />
     }
   ],
   e_learning: [
     {
       title: "Online Classes",
-      description: "Conduct seamless virtual classes.",
-      icon: "🎥",
-      color: "text-indigo-500"
+      description: "Seamless and efficient virtual learning.",
+      icon: <Video size={40} className="text-white mx-auto" />
     },
     {
       title: "Digital Library",
       description: "Access study materials anytime, anywhere.",
-      icon: "📚",
-      color: "text-red-500"
+      icon: <BookOpen size={40} className="text-white mx-auto" />
     }
   ],
   website: [
     {
       title: "School Website",
       description: "Professional website for your institution.",
-      icon: "🌐",
-      color: "text-green-500"
+      icon: <Globe size={40} className="text-white mx-auto" />
     }
   ],
   smart_tech: [
     {
       title: "AI-Powered Analytics",
-      description: "Get insights using AI-powered reports.",
-      icon: "🤖",
-      color: "text-orange-500"
+      description: "Gain insights with AI-driven reports.",
+      icon: <Bot size={40} className="text-white mx-auto" />
     }
   ]
 };
 
 export default function Offerings() {
   const [activeTab, setActiveTab] = useState("school_erp");
+  const activeBg = tabs.find(tab => tab.key === activeTab)?.bg || "bg-gray-900";
 
   return (
-    <div className="p-8 max-w-6xl mx-auto text-center">
-      <h2 className="text-3xl font-bold text-blue-900">Our Comprehensive Offerings</h2>
-      <p className="text-gray-600 mt-2">
-        Join the League of India’s most futuristic and comprehensive School
-        Management Software that meets all your school-specific needs.
-      </p>
-      <div className="flex flex-wrap justify-center space-x-4 mt-6">
-        {tabs.map((tab) => (
-          <button
-            key={tab.key}
-            className={`px-4 py-2 border rounded-full m-2 ${
-              activeTab === tab.key ? "bg-blue-600 text-white" : "border-blue-600 text-blue-600"
-            }`}
-            onClick={() => setActiveTab(tab.key)}
-          >
-            {tab.name}
-          </button>
-        ))}
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-        {services[activeTab].map((service) => (
-          <div
-            key={service.title}
-            className="border rounded-lg p-6 shadow-sm hover:shadow-md transition"
-          >
-            <div className={`text-4xl ${service.color}`}>{service.icon}</div>
-            <h3 className="text-lg font-semibold mt-4">{service.title}</h3>
-            <p className="text-gray-600 mt-2 text-sm">{service.description}</p>
-            <a href="#" className="text-blue-600 mt-3 inline-block font-semibold">
-              Read More →
-            </a>
-          </div>
-        ))}
+    <div className={`w-full min-h-screen ${activeBg} flex justify-center items-center transition-all duration-500 text-white`}>
+      <div className="p-8 py-24 max-w-6xl w-full text-left">
+        <h2 className="text-5xl font-semibold text-white">Vaekon School - The Future of Digital Education</h2>
+        <p className="text-2xl text-white mt-4">
+          Join India’s most advanced and comprehensive School Management Software that fulfills all your institutional needs.
+        </p>
+        <div className="overflow-x-auto flex space-x-4 mt-6 pb-2 scrollbar-hide">
+          {tabs.map((tab) => (
+            <button
+              key={tab.key}
+              className={`px-4 py-2 border whitespace-nowrap rounded-full transition-all duration-300 ease-in-out transform ${
+                activeTab === tab.key ? "bg-white text-black" : "border-white text-white"
+              }`}
+              onClick={() => setActiveTab(tab.key)}
+            >
+              {tab.name}
+            </button>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+          {services[activeTab].map((service) => (
+            <div
+              key={service.title}
+              className="border p-6 shadow-md bg-gray-800 hover:bg-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 text-left"
+            >
+              <div className="flex items-start">
+                <div className="text-4xl mr-3">{service.icon}</div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">{service.title}</h3>
+                  <p className="text-white mt-2 text-sm">{service.description}</p>
+                  <a href="#" className="text-white mt-3 inline-block font-semibold">
+                    Read More →
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
