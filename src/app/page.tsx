@@ -15,6 +15,7 @@ import Pricing from "./Home/School_Landing_Page/Pricing/page";
 import ProfessionalCourses from "./Home/School_Landing_Page/ProfessionalCourses/page";
 import HistoryPage from "./Home/School_Landing_Page/HistoryPage/page";
 import Facilities_Infrastructure from "./Home/School_Landing_Page/Facilities_&_Infrastructure/page";
+import Carousel from "./Home/School_Landing_Page/Carousel_Hero/page";
 
 
 
@@ -24,6 +25,7 @@ export default function Home() {
   return (
     <div >
       {/* <Header/> */}
+      <Carousel/>
       <Hero/>
       <Facilities_Infrastructure/>
       <ProfessionalCourses/>
