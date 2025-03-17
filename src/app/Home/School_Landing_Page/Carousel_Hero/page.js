@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const slides = [
     {
-      color: "bg-[#D6E6F2]", // Lighter Light Navy Blue
+      color: "bg-[#ECF5FC]", // Extra Light Navy Blue
       image: "/img/crsc.png",
       title: "Smart School Management",
       description: "Efficiently manage your school's academics, attendance, and more.",
@@ -13,7 +13,7 @@ const slides = [
       buttonLink: "/about"
     },
     {
-      color: "bg-[#E4F7D2]", // Lighter Light Green
+      color: "bg-[#F4FCE8]", // Extra Light Green
       image: "/img/girl.png",
       title: "Empower Students with Technology",
       description: "Bring digital transformation to your classrooms for better learning.",
@@ -21,7 +21,7 @@ const slides = [
       buttonLink: "/services"
     },
     {
-      color: "bg-[#F0E6F5]", // Lighter Light Purple
+      color: "bg-[#FAF0FA]", // Extra Light Purple
       image: "/img/boy.png",
       title: "Seamless Administration",
       description: "Streamline administration tasks with our AI-powered solutions.",
@@ -29,6 +29,7 @@ const slides = [
       buttonLink: "/contact"
     }
   ];
+  
   
 
 const Carousel = () => {
