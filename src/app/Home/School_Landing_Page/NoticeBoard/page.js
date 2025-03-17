@@ -3,10 +3,10 @@ import { useState, useEffect, useRef } from "react";
 
 export default function NoticeBoard() {
   const notices = [
-    { date: "20240317", subject: "Student Motivation", message: "We continuously strive to ensure students are motivated and appreciated for the work they do which will bring out the best in them. Monthly appreciation certificates in various fields. Eg: Attendance, Aesthetic approach, Weekly performance, etc." },
-    { date: "20240315", subject: "Appreciation Program", message: "We continuously strive to ensure students are motivated and appreciated for the work they do which will bring out the best in them. Monthly appreciation certificates in various fields. Eg: Attendance, Aesthetic approach, Weekly performance, etc." },
-    { date: "20240310", subject: "Performance Recognition", message: "We continuously strive to ensure students are motivated and appreciated for the work they do which will bring out the best in them. Monthly appreciation certificates in various fields. Eg: Attendance, Aesthetic approach, Weekly performance, etc." },
-    { date: "20240228", subject: "Academic Excellence", message: "We continuously strive to ensure students are motivated and appreciated for the work they do which will bring out the best in them. Monthly appreciation certificates in various fields. Eg: Attendance, Aesthetic approach, Weekly performance, etc." }
+    { id: 1, date: "20240317", title: "Student Motivation", description: "We continuously strive to ensure students are motivated and appreciated for the work they do which will bring out the best in them. Monthly appreciation certificates in various fields. Eg: Attendance, Aesthetic approach, Weekly performance, etc.", issuedBy: "Principal", category: "Motivation", audience: "Students" },
+    { id: 2, date: "20240315", title: "Appreciation Program", description: "We continuously strive to ensure students are motivated and appreciated for the work they do which will bring out the best in them. Monthly appreciation certificates in various fields. Eg: Attendance, Aesthetic approach, Weekly performance, etc.", issuedBy: "Admin", category: "Recognition", audience: "Students" },
+    { id: 3, date: "20240310", title: "Performance Recognition", description: "We continuously strive to ensure students are motivated and appreciated for the work they do which will bring out the best in them. Monthly appreciation certificates in various fields. Eg: Attendance, Aesthetic approach, Weekly performance, etc.", issuedBy: "HOD", category: "Achievement", audience: "All" },
+    { id: 4, date: "20240228", title: "Academic Excellence", description: "We continuously strive to ensure students are motivated and appreciated for the work they do which will bring out the best in them. Monthly appreciation certificates in various fields. Eg: Attendance, Aesthetic approach, Weekly performance, etc.", issuedBy: "Principal", category: "Academics", audience: "Parents" }
   ];
 
   const [expanded, setExpanded] = useState(null);
@@ -41,12 +41,12 @@ export default function NoticeBoard() {
 
             return (
               <li 
-                key={index} 
+                key={notice.id} 
                 className="p-4 cursor-pointer hover:bg-gray-700 transition-all duration-300 rounded-lg"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-yellow-400 font-bold">{formatDate(notice.date)} - {notice.subject}:</span> 
+                    <span className="text-yellow-400 font-bold">{formatDate(notice.date)} - {notice.title}:</span> 
                     <div 
                       ref={(el) => (contentRefs.current[index] = el)}
                       className="overflow-hidden transition-all duration-500"
@@ -54,7 +54,7 @@ export default function NoticeBoard() {
                         maxHeight: isExpanded ? `${contentRefs.current[index]?.scrollHeight}px` : "20px"
                       }}
                     >
-                      {notice.message}
+                      {notice.description}
                     </div>
                     <span
                       className="text-blue-400 hover:underline text-sm transition-all duration-300 ease-in-out block mt-1 cursor-pointer"
@@ -71,6 +71,7 @@ export default function NoticeBoard() {
                     </span>
                   )}
                 </div>
+                <div className="text-gray-400 text-xs mt-2">Category: {notice.category} | Issued By: {notice.issuedBy} | Audience: {notice.audience}</div>
               </li>
             );
           })}
