@@ -56,7 +56,7 @@ const Carousel = () => {
       <div className="relative z-10 container mx-auto px-6 md:px-12 lg:px-16 max-w-screen-xl h-full flex flex-col lg:flex-row items-center justify-center gap-10">
         {/* Left Content */}
         <div className="text-center lg:text-left w-full max-w-2xl">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold mb-5 leading-tight text-gray-700">
+          <h2 className="text-4xl md:text-5xl lg:text-7xl font-semibold mb-5 leading-tight text-gray-700">
             {slides[currentIndex].title}
           </h2>
           <p className="text-lg md:text-xl mb-10 leading-relaxed text-gray-500">
