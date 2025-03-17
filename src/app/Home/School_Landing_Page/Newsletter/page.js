@@ -16,10 +16,10 @@ const Newsletter = () => {
 
                             <div>
                                 <div className="relative text-white focus-within:text-white flex flex-row-reverse shadow-fi rounded-full">
-                                    <input type="email" name="q" className="py-6 sm:py-8 text-sm w-full text-black rounded-full pl-4 par-87 focus:outline-none focus:text-black" placeholder="@ enter your email-address" autoComplete="off" />
+                                    <input type="email" name="q" className="py-4 sm:py-4 text-sm w-full text-black rounded-full pl-4 par-87 focus:outline-none focus:text-black" placeholder="@ enter your email-address" autoComplete="off" />
                                     <div className="absolute inset-y-0 right-0 flex items-center pr-2">
                                         <button type="submit" className="p-2 bg-gray-900 hover:scale-110 duration-300 rounded-full">
-                                            <FaChevronRight size={32} className="text-white" />
+                                            <FaChevronRight size={25} className="text-white" />
                                         </button>
                                     </div>
                                 </div>
@@ -28,14 +28,12 @@ const Newsletter = () => {
                     </div>
                     <div className="col-span-5 relative hidden md:block">
                         <div>
-                            <Image src={'/images/Newsletter/soup.png'} alt="soup-image" width={400} height={400} className='-mt-24' />
+                            <Image src={'/img/girl.png'} alt="soup-image" width={400} height={400} className='-mt-24' />
                         </div>
-                        <div className="absolute top-[78%]">
-                            <Image src={'/images/Newsletter/onion.svg'} alt="onion-image" width={300} height={122} />
-                        </div>
-                        <div className="absolute top-[30%] right-[-23%] hidden lg:block">
+                   
+                        {/* <div className="absolute top-[30%] right-[-23%] hidden lg:block">
                             <Image src={'/images/Newsletter/lec.png'} alt="lettuce-image" width={300} height={122} />
-                        </div>
+                        </div> */}
                         <div className="absolute bottom-[10%] left-[0%]">
                             <Image src={'/images/Newsletter/yellow.svg'} alt="yellow-image" width={59} height={59} />
                         </div>

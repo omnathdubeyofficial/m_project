@@ -31,16 +31,16 @@ export default function Home() {
       <Hero/>
       <Facilities_Infrastructure/>
       <ProfessionalCourses/>
-      <HistoryPage/>
-      <School_Grid/>
+      {/* <HistoryPage/> */}
+      {/* <School_Grid/> */}
       <Work_with_us/>
-      <CTA_Section/>
-      <Stats/>
-      <Pricing/>
+      {/* <CTA_Section/> */}
+      {/* <Stats/> */}
+      {/* <Pricing/> */}
       <Workflow/>
       <Features/>
       <AboutUs/>
-      <Gallery/>
+      {/* <Gallery/> */}
       <Newsletter/>
       <Footer/>
     {/* <Login/> */}
