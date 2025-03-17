@@ -17,6 +17,7 @@ import HistoryPage from "./Home/School_Landing_Page/HistoryPage/page";
 import Facilities_Infrastructure from "./Home/School_Landing_Page/Facilities_&_Infrastructure/page";
 import Carousel from "./Home/School_Landing_Page/Carousel_Hero/page";
 import Offerings from "./Home/School_Landing_Page/Offerings/page";
+import NoticeBoard from "./Home/School_Landing_Page/NoticeBoard/page";
 
 
 
@@ -28,6 +29,7 @@ export default function Home() {
       {/* <Header/> */}
       <Carousel/>
       <Offerings/>
+      <NoticeBoard/>
       <Hero/>
       <Facilities_Infrastructure/>
       <ProfessionalCourses/>
