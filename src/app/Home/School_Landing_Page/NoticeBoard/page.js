@@ -32,8 +32,8 @@ export default function NoticeBoard() {
 
   return (
     <div className="w-full h-auto bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 text-white flex flex-col items-center p-10">
-      <h2 className="text-5xl font-semibold mb-10 text-center text-yellow-300">Notice Board</h2>
-      <div className="w-full max-w-4xl bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
+      <h2 className="text-5xl font-semibold mb-10 text-center text-white">Notice Board</h2>
+      <div className="w-full max-w-5xl bg-gray-800 p-6  shadow-lg border border-gray-700">
         <ul className="text-gray-300 divide-y divide-gray-700">
           {notices.map((notice, index) => {
             const isNew = parseInt(notice.date) === latestDate;
@@ -46,7 +46,7 @@ export default function NoticeBoard() {
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-yellow-400 font-semibold">{formatDate(notice.date)} - {notice.title}:</span> 
+                    <span className="text-blue-400  font-semibold">{formatDate(notice.date)} - {notice.title}:</span> 
                     <div 
                       ref={(el) => (contentRefs.current[index] = el)}
                       className="overflow-hidden transition-all duration-500"
