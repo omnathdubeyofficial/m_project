@@ -88,13 +88,13 @@ export default function NoticeBoard() {
                   </div>
                 </div>
                 <div className="text-gray-400 text-xs mt-2">Category: {notice.category} | Issued By: {notice.issued_by} | Audience: {notice.audience}</div>
-                {/* {notice.attachments && notice.attachments.length > 0 && ( */}
+                {notice.attachments && notice.attachments.length > 0 && (
                   <div className="mt-2 flex items-center">
                     <a href={notice.attachments} target="_blank" rel="noopener noreferrer" className="text-yellow-400 flex items-center hover:underline">
                       <FaFilePdf className="mr-1" /> Download PDF
                     </a>
                   </div>
-                {/* )} */}
+                )}
               </li>
             );
           })}
