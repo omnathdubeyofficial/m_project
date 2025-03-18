@@ -3,18 +3,33 @@ import { useState, useEffect, useRef } from "react";
 import { executeQuery } from "../../../graphqlClient";
 import { GET_NOTICE_BOARD_LISTS } from "../../../query/NoticeBoardQuery/fetchNoticeBoard";
 import { FaFilePdf } from "react-icons/fa";
+import "./customScrollbar.css"; // Importing custom scrollbar styles
 
 export default function NoticeBoard() {
   const [notices, setNotices] = useState([]);
   const [expanded, setExpanded] = useState(null);
   const [blink, setBlink] = useState(true);
   const contentRefs = useRef({});
+  const scrollContainerRef = useRef(null);
 
   useEffect(() => {
     const fetchNotices = async () => {
       try {
         const response = await executeQuery(GET_NOTICE_BOARD_LISTS);
-        setNotices(response.getNoticeBoardLists);
+        const allNotices = response.getNoticeBoardLists;
+        
+        // Filter notices from the last one month
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        
+        const filteredNotices = allNotices.filter((notice) => {
+          const noticeDate = new Date(
+            `${notice.notice_date.substring(0, 4)}-${notice.notice_date.substring(4, 6)}-${notice.notice_date.substring(6, 8)}`
+          );
+          return noticeDate >= oneMonthAgo;
+        });
+        
+        setNotices(filteredNotices);
       } catch (error) {
         console.error("Error fetching notices:", error);
       }
@@ -30,39 +45,29 @@ export default function NoticeBoard() {
     return () => clearInterval(interval);
   }, []);
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "Unknown Date";
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const year = dateString.substring(0, 4);
-    const month = months[parseInt(dateString.substring(4, 6)) - 1];
-    const day = dateString.substring(6, 8);
-    return `${day} ${month} ${year}`;
-  };
-
-  const currentDate = new Date();
-  const threeDaysAgo = new Date();
-  threeDaysAgo.setDate(currentDate.getDate() - 3);
-
   return (
     <div className="w-full h-auto bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 text-white flex flex-col items-center p-10">
       <h2 className="text-5xl font-semibold mb-10 text-center text-white">Notice Board</h2>
-      <div className="w-full max-w-5xl bg-gray-800 p-6 shadow-lg border border-gray-700">
+      <div 
+        ref={scrollContainerRef}
+        className={`w-full max-w-5xl bg-gray-800 p-6 shadow-lg border border-gray-700 ${notices.length > 4 ? 'max-h-[650px] overflow-y-auto custom-scrollbar' : ''}`}
+        style={{ scrollbarWidth: "thin", scrollbarColor: "transparent transparent" }}
+        onMouseEnter={(e) => e.currentTarget.style.scrollbarColor = "gray transparent"}
+        onMouseLeave={(e) => e.currentTarget.style.scrollbarColor = "transparent transparent"}
+      >
         <ul className="text-gray-300 divide-y divide-gray-700">
           {notices.map((notice, index) => {
+            const isExpanded = expanded === index;
             const noticeDate = new Date(
               `${notice.notice_date.substring(0, 4)}-${notice.notice_date.substring(4, 6)}-${notice.notice_date.substring(6, 8)}`
             );
-            const isNew = noticeDate >= threeDaysAgo;
-            const isExpanded = expanded === index;
-
+            const isNew = noticeDate >= new Date(new Date().setDate(new Date().getDate() - 3));
+            
             return (
-              <li 
-                key={notice.notice_id} 
-                className="p-4 cursor-pointer hover:bg-gray-700 transition-all duration-300 rounded-lg"
-              >
+              <li key={notice.notice_id} className="p-4 cursor-pointer hover:bg-gray-700 transition-all duration-300 rounded-lg">
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-blue-400 font-semibold">{formatDate(notice.notice_date)} - {notice.title}</span>
+                    <span className="text-blue-400 font-semibold">{notice.notice_date} - {notice.title}</span>
                     {isNew && (
                       <span 
                         className={`ml-2 bg-red-500 text-white px-2 py-1 text-xs rounded transition-all duration-500 ${blink ? "opacity-100" : "opacity-0"}`}
