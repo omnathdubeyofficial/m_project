@@ -232,24 +232,24 @@ const New_Admission_Lists = () => {
                   {/* Aadhaar Image */}
                   <td className="px-3 py-2 border border-gray-300 justify-left">
                     <Image
-                      src={admin.aadhaar_image || "/img/q.png"}
+                      src={admin.adhar_front_img || "/img/q.png"}
                       width={40}
                       height={40}
                       className="rounded object-cover w-10 h-10 cursor-pointer"
                       alt="Aadhaar"
-                      onClick={() => setModalImage(admin.aadhaar_image || "/img/q.png")}
+                      onClick={() => setModalImage(admin.adhar_front_img || "/img/q.png")}
                     />
                   </td>
 
                   {/* Birth Certificate Image */}
                   <td className="px-3 py-2  justify-left">
                     <Image
-                      src={admin.birth_certificate || "/img/q.png"}
+                      src={admin.adhar_back_img || "/img/q.png"}
                       width={40}
                       height={40}
                       className="rounded object-cover w-10 h-10 cursor-pointer"
                       alt="Birth Certificate"
-                      onClick={() => setModalImage(admin.birth_certificate || "/img/q.png")}
+                      onClick={() => setModalImage(admin.adhar_back_img || "/img/q.png")}
                     />
                   </td>
 

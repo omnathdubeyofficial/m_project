@@ -311,6 +311,8 @@ const StudentAdmissionForm = () => {
         contact_no: formData.contact_no ?? "",
         percentage: String(formData.percentage ?? "0"),
         entrance_exam_score: String(formData.entrance_exam_score ?? "0"),
+        adhar_front_img: formData.aadharImageFront,
+        adhar_back_img: formData.aadharImageBack,
       });
 
       console.log("Mutation Response:", response);
