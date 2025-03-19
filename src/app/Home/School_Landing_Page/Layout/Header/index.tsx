@@ -107,7 +107,7 @@ useEffect(() => {
 
   return (
     <header
-    className={`fixed top-0 z-40 w-full transition-all duration-300 ${sticky ? " shadow-lg bg-white py-4" : "shadow-none py-8"
+    className={`fixed top-0 z-40 w-full transition-all duration-300 ${sticky ? " shadow-lg bg-white py-4" : "shadow-none bg-white py-4"
       }`}
   >
     <div className="lg:py-0 py-2">
