@@ -141,7 +141,7 @@ export default function NoticeBoardForm() {
           )}
         </div>
 
-        <button type="submit" className="bg-blue-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 font-semibold text-lg transition">
+        <button type="submit" className="bg-blue-600 text-white py-3 px-6  shadow-md hover:bg-blue-700 font-semibold text-lg transition">
           Submit
         </button>
       </form>
