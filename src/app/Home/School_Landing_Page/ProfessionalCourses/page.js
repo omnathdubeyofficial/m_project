@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect,useState } from "react";
+
 import { Star, Tag, CheckCircle, XCircle, Users, UserCheck, UserMinus } from "lucide-react";
 
 const classes = [
@@ -10,13 +12,58 @@ const classes = [
   { title: "Class 1", description: "Foundation for primary education", tags: ["English", "Math", "Science"], image: "/img/xxx.png", path: "/classes/1", studentRating: 4.7, studentReviews: 140, parentsRating: 4.9, parentsReviews: 120, discount: "15%", isAdmissionOpen: false, totalSeats: 40, filledSeats: 40 },
 ];
 
+const heroContent = [
+  { image: "/img/schooltwo.jpg", title: "Unlock Your Child’s Potential", description: "Give your child the best start in life with our engaging and interactive classes." },
+  { image: "/img/street-2805643.jpg", title: "Innovative Learning Methods", description: "Our curriculum is designed to spark curiosity and encourage creativity in children." },
+  { image: "/img/schoolfour.jpg", title: "Supportive Learning Environment", description: "We provide a safe and nurturing space for children to grow and develop." },
+  { image: "/img/classroom-5405427_1280.png", title: "Join Our Community", description: "Be part of a learning journey that shapes the future of young minds." },
+];
+
 export default function ClassSetup() {
   const router = useRouter();
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % heroContent.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleIndicatorClick = (index) => {
+    setCurrentIndex(index);
+  };
   
   return (
     <section className="py-16 bg-gray-100">
 
-<div className="max-w-7xl mx-auto px-8">
+<div className="relative w-full h-[500px] overflow-hidden">
+        {heroContent.map((item, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
+          >
+            <Image src={item.image} layout="fill" objectFit="cover" alt="Hero Image" />
+            <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+            <div className="absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 text-white max-w-7xl w-full px-10">
+              <h1 className="text-4xl lg:text-6xl font-bold">{item.title}</h1>
+              <p className="mt-4 text-lg lg:text-xl">{item.description}</p>
+            </div>
+          </div>
+        ))}
+        {/* Indicators */}
+        <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex gap-2">
+          {heroContent.map((_, index) => (
+            <span
+              key={index}
+              className={`w-3 h-3 rounded-full cursor-pointer ${index === currentIndex ? 'bg-white' : 'bg-gray-400'}`}
+              onClick={() => handleIndicatorClick(index)}
+            ></span>
+          ))}
+        </div>
+      </div>
+
+<div className="max-w-7xl mx-auto px-8 py-10">
         <h2 className="text-3xl lg:text-5xl font-semibold text-blue-900 mb-6 text-center">Classes</h2>
 
         <p className="text-lg text-gray-700 max-w-2xl mx-auto text-center">

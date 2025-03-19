@@ -18,7 +18,7 @@ const Hero = () => {
                         </p>
                         {/* CTA Buttons */}
                         <div className="flex flex-col md:flex-row items-center md:justify-center lg:justify-start gap-4">
-                            <Link href="/admission" className="text-lg font-medium rounded-full text-white py-4 px-8 bg-primary hover:bg-primary-dark border border-primary transition">
+                            <Link href="/Home/School_Landing_Page/ProfessionalCourses" className="text-lg font-medium rounded-full text-white py-4 px-8 bg-primary hover:bg-primary-dark border border-primary transition">
                                 Apply for Admission
                             </Link>
                             <Link href="#about-section" className="flex items-center gap-2 text-lg font-medium py-4 px-8 border border-primary text-primary rounded-full hover:bg-primary hover:text-white transition">

@@ -33,7 +33,7 @@ export default function Home() {
       <NoticeBoard/>
     
       <Facilities_Infrastructure/>
-      <ProfessionalCourses/>
+      {/* <ProfessionalCourses/> */}
       {/* <HistoryPage/> */}
       {/* <School_Grid/> */}
       <Work_with_us/>
