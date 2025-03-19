@@ -55,7 +55,7 @@ const VaekonSchoolServices = () => {
                     {DigitalServices.map((item, i) => (
                         <div 
                             key={i} 
-                            className="relative p-8 bg-gray-900 rounded-xl shadow-lg flex items-center transition-transform transform hover:-translate-y-2 hover:shadow-2xl border border-gray-700 hover:border-purple-400"
+                            className="relative p-8 bg-gray-900  shadow-lg flex items-center transition-transform transform hover:-translate-y-2 hover:shadow-2xl border border-gray-700 hover:border-purple-400"
                         >
                             <div className="mr-4">{item.icon}</div>
                             <div>

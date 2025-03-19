@@ -11,15 +11,15 @@ const Hero = () => {
                     {/* Left Content */}
                     <div className="text-center lg:text-left">
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold mb-6 text-black">
-                            Custom School Management Solutions 🚀
+                            Admissions Open for 2024-25 🎓
                         </h1>
                         <p className="text-black/60 text-lg md:text-xl leading-relaxed mb-8">
-                            Empower your institution with a fully customized school management system. Automate attendance, streamline fee collection, enhance communication, and manage academics—all in one tailor-made solution. Built to fit your school's unique needs!
+                            Enroll your child in a top-tier learning environment. Our advanced curriculum, expert faculty, and holistic development approach ensure a bright future. Apply now and secure admission for the upcoming session!
                         </p>
                         {/* CTA Buttons */}
                         <div className="flex flex-col md:flex-row items-center md:justify-center lg:justify-start gap-4">
-                            <Link href="/login" className="text-lg font-medium rounded-full text-white py-4 px-8 bg-primary hover:bg-primary-dark border border-primary transition">
-                                Go To Dashboard
+                            <Link href="/admission" className="text-lg font-medium rounded-full text-white py-4 px-8 bg-primary hover:bg-primary-dark border border-primary transition">
+                                Apply for Admission
                             </Link>
                             <Link href="#about-section" className="flex items-center gap-2 text-lg font-medium py-4 px-8 border border-primary text-primary rounded-full hover:bg-primary hover:text-white transition">
                                 <PlayCircle className="w-6 h-6" />
@@ -34,10 +34,10 @@ const Hero = () => {
                         <div className="absolute bottom-5 left-5 md:left-10 bg-white shadow-md p-3 md:p-4 rounded-xl flex items-center gap-4">
                             <Image src="/images/hero/pizza.svg" alt="icon" width={50} height={50} />
                             <p className="text-sm md:text-base font-medium">
-                                More than 500+ <br className="hidden md:block" /> recipes.
+                                More than 500+ <br className="hidden md:block" /> successful admissions.
                             </p>
                         </div>
-                        {/* Hero Image */}
+                        {/* Hero Image (No Change) */}
                         <Image src="/images/hero/banner-image.png" alt="Hero Image" width={600} height={500} className="w-full h-auto max-w-sm md:max-w-md lg:max-w-lg" />
                     </div>
                 </div>

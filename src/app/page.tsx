@@ -28,9 +28,10 @@ export default function Home() {
     <div >
       {/* <Header/> */}
       <Carousel/>
+      <Hero/>
       <Offerings/>
       <NoticeBoard/>
-      <Hero/>
+    
       <Facilities_Infrastructure/>
       <ProfessionalCourses/>
       {/* <HistoryPage/> */}
