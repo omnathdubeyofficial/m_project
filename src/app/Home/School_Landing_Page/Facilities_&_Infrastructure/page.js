@@ -150,14 +150,14 @@ export default function FacilitiesInfrastructure() {
           {visibleCount < facilities.length ? (
             <button
               onClick={() => setVisibleCount((prev) => prev + 3)}
-              className="px-6 py-2 bg-white text-blue-900 font-semibold rounded-full hover:bg-gray-300 transition-all"
+              className="px-6 py-2 bg-white text-blue-900 font-semibold  hover:bg-gray-300 transition-all"
             >
               View More
             </button>
           ) : (
             <button
               onClick={() => setVisibleCount(6)}
-              className="px-6 py-2 bg-white text-blue-900 font-semibold rounded-full hover:bg-gray-300 transition-all"
+              className="px-6 py-2 bg-white text-blue-900 font-semibold  hover:bg-gray-300 transition-all"
             >
               View Less
             </button>
