@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import { executeQuery } from "../../../graphqlClient";
 import { GET_NOTICE_BOARD_LISTS } from "../../../query/NoticeBoardQuery/fetchNoticeBoard";
 import { FaFilePdf } from "react-icons/fa";
+import Link from "next/link";
+import { FaGraduationCap, FaBookOpen } from "react-icons/fa";
 import "./customScrollbar.css";
 
 export default function NoticeBoard() {
@@ -13,6 +14,26 @@ export default function NoticeBoard() {
   const [loading, setLoading] = useState(true); // Loading state added
   const contentRefs = useRef({});
   const scrollContainerRef = useRef(null);
+
+
+  const classes = [
+    { name: "Nursery", path: "/results/nursery" },
+    { name: "LKG", path: "/results/lkg" },
+    { name: "UKG", path: "/results/ukg" },
+    { name: "1st", path: "/results/1st" },
+    { name: "2nd", path: "/results/2nd" },
+    { name: "3rd", path: "/results/3rd" },
+    { name: "4th", path: "/results/4th" },
+    { name: "5th", path: "/results/5th" },
+    { name: "6th", path: "/results/6th" },
+    { name: "7th", path: "/results/7th" },
+    { name: "8th", path: "/results/8th" },
+    { name: "9th", path: "/results/9th" },
+    { name: "10th", path: "/results/10th" },
+    { name: "11th", path: "/results/11th" },
+    { name: "12th", path: "/results/12th" },
+  ];
+  
 
   useEffect(() => {
     const fetchNotices = async () => {
@@ -49,8 +70,8 @@ export default function NoticeBoard() {
   }, []);
 
   return (
-    <div className="w-full h-auto bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 text-white flex flex-col lg:flex-row items-center p-10 gap-10">
-      {/* Left Side - Notice Board */}
+<div className="w-full h-auto bg-gradient-to-b from-gray-900 via-gray-800 to-gray-800 text-white flex flex-col lg:flex-row items-center lg:p-10 p-4 gap-10">
+{/* Left Side - Notice Board */}
       <div className="w-full lg:w-1/2 flex flex-col items-center">
         <h2 className="text-3xl font-semibold mb-0 text-center text-white bg-gray-800 w-full p-4 sticky top-0 z-10">
           Notice Board
@@ -117,14 +138,27 @@ export default function NoticeBoard() {
       </div>
 
       {/* Right Side - Image */}
-      <div className="w-full lg:w-1/2 flex justify-center">
-        <Image 
-          src="/img/cheerful-multiracial-group-people-jumping-together-street.png" 
-          alt="Notice Board Illustration" 
-          width={800} 
-          height={600} 
-        />
+      <div className="w-full lg:w-2/4 flex flex-col bg-gray-800 p-6 shadow-lg items-center ">
+
+      <h2 className="text-2xl font-semibold text-white mb-4 flex items-center">
+  <FaBookOpen className="text-yellow-400 mr-2" /> Result Board
+</h2>      
+
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full border-t-4 pt-6 border-b-4 pb-5 border-white">
+        {classes.map((cls, index) => (
+          <Link key={index} href={cls.path} className="group">
+            <div className="bg-gray-800 backdrop-blur-md bg-opacity-40 text-white p-6  text-center shadow-md border border-gray-700 
+                transition-all duration-300 transform hover:scale-105 hover:shadow-blue-500/30">
+              <FaGraduationCap className="text-yellow-400 text-3xl mx-auto mb-1 transition-all duration-300 group-hover:rotate-6" />
+              <p className="font-medium text-sm">{cls.name}</p>
+              <button className="mt-1 bg-blue-500 hover:bg-blue-600 text-white text-xs py-1 px-3  transition-all duration-300">
+                Check Result
+              </button>
+            </div>
+          </Link>
+        ))}
       </div>
+    </div>
     </div>
   );
 }

@@ -9,9 +9,9 @@ const Hero = () => {
             <div className="container mx-auto px-6 md:px-12 lg:px-16 max-w-screen-xl">
                 <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-10">
                     {/* Left Content */}
-                    <div className="text-center lg:text-left">
+                    <div className="text-left">
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold mb-6 text-black">
-                            Admissions Open for 2024-25 🎓
+                            Admissions Open for 2025-26 🎓
                         </h1>
                         <p className="text-black/60 text-lg md:text-xl leading-relaxed mb-8">
                             Enroll your child in a top-tier learning environment. Our advanced curriculum, expert faculty, and holistic development approach ensure a bright future. Apply now and secure admission for the upcoming session!
