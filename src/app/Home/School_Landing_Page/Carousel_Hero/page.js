@@ -56,7 +56,7 @@ const Carousel = () => {
   };
 
   return (
-    <section id="carousel-section" className="w-full h-screen  relative overflow-hidden flex items-center justify-center">
+    <section id="carousel-section" className="w-full h-screen mt-14 relative overflow-hidden flex items-center justify-center">
       {/* Full-Screen Background Video */}
       <div className="absolute inset-0 transition-opacity duration-1000 ease-in-out">
         <video 
