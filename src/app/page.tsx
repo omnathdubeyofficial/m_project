@@ -44,7 +44,7 @@ export default function Home() {
       <Features/>
       <AboutUs/>
       {/* <Gallery/> */}
-      <Newsletter/>
+      {/* <Newsletter/> */}
       {/* <Footer/> */}
     {/* <Login/> */}
     </div>
