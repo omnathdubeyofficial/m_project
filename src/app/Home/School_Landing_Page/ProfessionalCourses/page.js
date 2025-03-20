@@ -35,9 +35,9 @@ export default function ClassSetup() {
   };
   
   return (
-    <section className="py-16 bg-gray-100">
+    <section className=" bg-gray-100">
 
-<div className="relative w-full h-[500px] overflow-hidden">
+<div className="relative mt-4 w-full h-[500px] overflow-hidden">
         {heroContent.map((item, index) => (
           <div
             key={index}
