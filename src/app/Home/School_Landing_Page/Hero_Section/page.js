@@ -31,14 +31,14 @@ const Hero = () => {
                     {/* Right Content */}
                     <div className="relative flex justify-center">
                         {/* Floating Info Box */}
-                        <div className="absolute bottom-5 left-5 md:left-10 bg-white shadow-md p-3 md:p-4 rounded-xl flex items-center gap-4">
+                        {/* <div className="absolute bottom-5 left-5 md:left-10 bg-white shadow-md p-3 md:p-4 rounded-xl flex items-center gap-4">
                             <Image src="/images/hero/pizza.svg" alt="icon" width={50} height={50} />
                             <p className="text-sm md:text-base font-medium">
                                 More than 500+ <br className="hidden md:block" /> successful admissions.
                             </p>
-                        </div>
+                        </div> */}
                         {/* Hero Image (No Change) */}
-                        <Image src="/images/hero/banner-image.png" alt="Hero Image" width={600} height={500} className="w-full h-auto max-w-sm md:max-w-md lg:max-w-lg" />
+                        <Image src="/img/hero.png" alt="Hero Image" width={600} height={500} className="w-full h-auto max-w-sm md:max-w-md lg:max-w-lg" />
                     </div>
                 </div>
             </div>
