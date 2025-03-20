@@ -45,7 +45,7 @@ export default function Home() {
       <AboutUs/>
       {/* <Gallery/> */}
       <Newsletter/>
-      <Footer/>
+      {/* <Footer/> */}
     {/* <Login/> */}
     </div>
   );
