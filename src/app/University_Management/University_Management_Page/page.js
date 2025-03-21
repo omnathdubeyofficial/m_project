@@ -19,7 +19,7 @@ const University_Management_Page = () => {
     { name: "Digital Access Portal", icon: <FaLaptop />, path: "/university/digital-access" },
     { name: "Budget Management", icon: <FaRupeeSign />, path: "/university/budget-management" },
     { name: "Performance Evaluation", icon: <FaAward />, path: "/university/performance-evaluation" },
-    { name: "Library Management", icon: <FaBook />, path: "/Notic_Board_Dash/Notice_Board_Form" }
+    { name: "Class Data Form", icon: <FaBook />, path: "/University_Management/University_Management_Page/Class_Data_Form" }
   ];
 
   return (
