@@ -30,28 +30,28 @@ model admin_data {
 
 model user_management {
   z_id                   String  @id @db.VarChar(100)
-  userid                 String? @db.VarChar(200)
-  first_name             String? @db.VarChar(200)
-  middle_name            String? @db.VarChar(200)
-  last_name              String? @db.VarChar(200)
+  userid                 String? @db.VarChar(100)
+  first_name             String? @db.VarChar(100)
+  middle_name            String? @db.VarChar(100)
+  last_name              String? @db.VarChar(100)
   gender                 String? @db.VarChar(30)
   email                  String? @db.VarChar(255)
-  password               String? @db.VarChar(300)
-  contact_no             String? @db.VarChar(100)
-  role                   String? @db.VarChar(100)
+  password               String? @db.VarChar(100)
+  contact_no             String? @db.VarChar(10)
+  role                   String? @db.VarChar(20)
   status                 String? @db.VarChar(20)
-  subject_specialization String? @db.VarChar(255)
+  subject_specialization String? @db.VarChar(555)
   class_assigned         String? @db.VarChar(100)
   teacher_id             String? @db.VarChar(100)
   admin_id               String? @db.VarChar(100)
-  joining_date           String? @db.VarChar(100)
+  joining_date           String? @db.VarChar(10)
   qualification          String? @db.VarChar(255)
-  enrollment_no          String? @db.VarChar(100)
-  date_of_birth          String? @db.VarChar(100)
-  standard               String? @db.VarChar(100)
+  enrollment_no          String? @db.VarChar(50)
+  date_of_birth          String? @db.VarChar(10)
+  standard               String? @db.VarChar(10)
   section                String? @db.VarChar(100)
   parent_id              String? @db.VarChar(100)
-  admission_date         String? @db.VarChar(100)
+  admission_date         String? @db.VarChar(10)
   children_id            String? @db.VarChar(100)
   occupation             String? @db.VarChar(100)
   address                String? @db.Text
@@ -599,9 +599,24 @@ model noticeboard {
   utime       String? @db.VarChar(100)
 }
 
-model omnath_data {
-  z_id  String @id @db.VarChar(255)
-  name  String @db.VarChar(255)
-  email String @db.VarChar(255)
-  age   String @db.VarChar(255)
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model classes_data {
+  z_id            String  @id @db.VarChar(100)
+  classes_id      String? @db.VarChar(100)
+  class_title     String? @db.Text
+  description     String? @db.Text
+  tags            String? @db.Text
+  image           String? @db.Text
+  student_rating  String? @db.Text
+  student_reviews String? @db.Text
+  parents_rating  String? @db.Text
+  parents_reviews String? @db.Text
+  discount        String? @db.Text
+  is_admission    String? @db.Text
+  total_seats     String? @db.Text
+  filled_seats    String? @db.Text
+  cdate           String? @db.VarChar(100)
+  ctime           String? @db.VarChar(100)
+  udate           String? @db.VarChar(100)
+  utime           String? @db.VarChar(100)
 }
