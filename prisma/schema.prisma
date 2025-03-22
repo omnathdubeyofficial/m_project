@@ -30,28 +30,28 @@ model admin_data {
 
 model user_management {
   z_id                   String  @id @db.VarChar(100)
-  userid                 String? @db.VarChar(200)
-  first_name             String? @db.VarChar(200)
-  middle_name            String? @db.VarChar(200)
-  last_name              String? @db.VarChar(200)
+  userid                 String? @db.VarChar(100)
+  first_name             String? @db.VarChar(100)
+  middle_name            String? @db.VarChar(100)
+  last_name              String? @db.VarChar(100)
   gender                 String? @db.VarChar(30)
   email                  String? @db.VarChar(255)
-  password               String? @db.VarChar(300)
-  contact_no             String? @db.VarChar(100)
-  role                   String? @db.VarChar(100)
+  password               String? @db.VarChar(100)
+  contact_no             String? @db.VarChar(10)
+  role                   String? @db.VarChar(20)
   status                 String? @db.VarChar(20)
-  subject_specialization String? @db.VarChar(255)
+  subject_specialization String? @db.VarChar(555)
   class_assigned         String? @db.VarChar(100)
   teacher_id             String? @db.VarChar(100)
   admin_id               String? @db.VarChar(100)
-  joining_date           String? @db.VarChar(100)
+  joining_date           String? @db.VarChar(10)
   qualification          String? @db.VarChar(255)
-  enrollment_no          String? @db.VarChar(100)
-  date_of_birth          String? @db.VarChar(100)
-  standard               String? @db.VarChar(100)
+  enrollment_no          String? @db.VarChar(50)
+  date_of_birth          String? @db.VarChar(10)
+  standard               String? @db.VarChar(10)
   section                String? @db.VarChar(100)
   parent_id              String? @db.VarChar(100)
-  admission_date         String? @db.VarChar(100)
+  admission_date         String? @db.VarChar(10)
   children_id            String? @db.VarChar(100)
   occupation             String? @db.VarChar(100)
   address                String? @db.Text
@@ -621,9 +621,50 @@ model classes_data {
   utime           String? @db.VarChar(100)
 }
 
-model omnath_data {
-  z_id  String @id @db.VarChar(255)
-  name  String @db.VarChar(255)
-  email String @db.VarChar(255)
-  age   String @db.VarChar(255)
+model nursery_admission_lists {
+  z_id                          String  @id @db.VarChar(100)
+  student_id                    String? @db.VarChar(100)
+  first_name                    String? @db.VarChar(100)
+  middle_name                   String? @db.VarChar(100)
+  last_name                     String? @db.VarChar(100)
+  adhar_num                     String? @db.VarChar(100)
+  father_name                   String? @db.VarChar(100)
+  mother_name                   String? @db.VarChar(100)
+  father_contact_num            String? @db.VarChar(100)
+  father_email                  String? @db.VarChar(100)
+  father_occupation             String? @db.VarChar(100)
+  dob                           String? @db.VarChar(100)
+  gender                        String? @db.VarChar(100)
+  permanent_address             String? @db.Text
+  current_address               String? @db.Text
+  city                          String? @db.VarChar(100)
+  state                         String? @db.VarChar(100)
+  pincode                       String? @db.VarChar(100)
+  nationality                   String? @db.VarChar(100)
+  religion                      String? @db.VarChar(100)
+  admission_status              String? @db.VarChar(100)
+  admission_fee                 String? @db.VarChar(100)
+  student_adhar_front_img       String? @db.Text
+  student_adhar_back_img        String? @db.Text
+  father_adhar_front_img        String? @db.Text
+  father_adhar_back_img         String? @db.Text
+  mother_adhar_front_img        String? @db.Text
+  mother_adhar_back_img         String? @db.Text
+  father_pancard_img            String? @db.Text
+  student_profile_img           String? @db.Text
+  student_birth_certificate_img String? @db.Text
+  payment_id                    String? @db.VarChar(100)
+  admission_fees                String? @db.VarChar(100)
+  payment_method                String? @db.VarChar(100)
+  payment_status                String? @db.VarChar(100)
+  payment_transaction_id        String? @db.VarChar(100)
+  payment_date                  String? @db.VarChar(100)
+  total_fees                    String? @db.VarChar(100)
+  paid_amount                   String? @db.VarChar(100)
+  due_amount                    String? @db.VarChar(100)
+  cdate                         String? @db.VarChar(100)
+  ctime                         String? @db.VarChar(100)
+  udate                         String? @db.VarChar(100)
+  utime                         String? @db.VarChar(100)
+  caste                         String? @db.VarChar(100)
 }

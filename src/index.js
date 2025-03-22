@@ -54,7 +54,8 @@ import noticeBoardType from './types/noticeboardTypes.js';
 import noticeBoardResolver from './resolvers/noticeBoardResolver.js';
 import classesDataType from './types/classesDataTypes.js';
 import classesDataResolver from './resolvers/classesDataResolver.js';
-
+import nurseryAdmissionListType from './types/nurseryAdmissionListTypes.js';
+import nurseryAdmissionResolver from './resolvers/nurseryAdmissionResolver.js';
 const app = express();
 
 // ✅ CORS Configuration (Allow Credentials for Cookies)
@@ -72,12 +73,22 @@ const schema = makeExecutableSchema({
   typeDefs: [
     userType, userDataType, adminDataType, userManagementType,
     studentRegistrationTypes, attendanceTypes, admissionFormType,
-    authTokantTypes, securityType, transportVehicleRegistrationType, logoutTypes, holidayListType, phoneDirectoryType, academicCalendarType, driversListType, addNewBookType, issuedBookType, housekeepingListType, blogListType, eventCreationType, eventRegistrationFormType, feeStructureDataType, noticeBoardType, classesDataType
+    authTokantTypes, securityType, transportVehicleRegistrationType,
+    logoutTypes, holidayListType, phoneDirectoryType, academicCalendarType,
+    driversListType, addNewBookType, issuedBookType, housekeepingListType,
+    blogListType, eventCreationType, eventRegistrationFormType,
+    feeStructureDataType, noticeBoardType, classesDataType, nurseryAdmissionListType
   ],
   resolvers: [
     userResolver, userDataResolver, adminDataResolver,
     userManagementResolver, studentRegistrationResolver, attendanceResolver,
-    admssionFormResolver, authTokanResolver, securityResolver, transportVehicleResolver, logoutResolver, holidayListResolver, phoneDirectoryResolver, academicCalendarResolver, driversListResolver, addNewBookResolver, issuedBookResolver, housekeepingListResolver, blogListResolver, eventCreationResolver, eventRegistrationResolver, feeStructureListResolver, noticeBoardResolver, classesDataResolver
+    admssionFormResolver, authTokanResolver, securityResolver,
+    transportVehicleResolver, logoutResolver, holidayListResolver,
+    phoneDirectoryResolver, academicCalendarResolver, driversListResolver,
+    addNewBookResolver, issuedBookResolver, housekeepingListResolver,
+    blogListResolver, eventCreationResolver, eventRegistrationResolver,
+    feeStructureListResolver, noticeBoardResolver, classesDataResolver,
+    nurseryAdmissionResolver
   ],
 });
 

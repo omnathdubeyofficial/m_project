@@ -1,0 +1,54 @@
+
+export const UPDATE_NURSERY_ADMISSION_LIST_MUTATION = `
+  mutation updateNurseryAdmissionList($z_id : String, $first_name : String, $middle_name : String, $last_name : String, $adhar_num : String, $father_name : String, $mother_name : String, $father_contact_num : String, $father_email : String, $father_occupation : String, $dob : String, $gender : String, $permanent_address : String, $current_address : String, $city : String, $state : String, $pincode : String, $nationality : String, $religion : String, $caste : String, $admission_status : String, $admission_fee : String, $student_adhar_front_img : String, $student_adhar_back_img : String, $father_adhar_front_img : String, $father_adhar_back_img : String, $mother_adhar_front_img : String, $mother_adhar_back_img : String, $father_pancard_img : String, $student_profile_img : String, $student_birth_certificate_img : String, $payment_id : String, $admission_fees : String, $payment_method : String, $payment_status : String, $payment_transaction_id : String, $payment_date : String, $total_fees : String, $paid_amount : String, $due_amount : String ) {
+    updateNurseryAdmissionList(z_id : $z_id, first_name : $first_name, middle_name : $middle_name, last_name : $last_name, adhar_num : $adhar_num, father_name : $father_name, mother_name : $mother_name, father_contact_num : $father_contact_num, father_email : $father_email, father_occupation : $father_occupation, dob : $dob, gender : $gender, permanent_address : $permanent_address, current_address : $current_address, city : $city, state : $state, pincode : $pincode, nationality : $nationality, religion : $religion, caste : $caste, admission_status : $admission_status, admission_fee : $admission_fee, student_adhar_front_img : $student_adhar_front_img, student_adhar_back_img : $student_adhar_back_img, father_adhar_front_img : $father_adhar_front_img, father_adhar_back_img : $father_adhar_back_img, mother_adhar_front_img : $mother_adhar_front_img, mother_adhar_back_img : $mother_adhar_back_img, father_pancard_img : $father_pancard_img, student_profile_img : $student_profile_img, student_birth_certificate_img : $student_birth_certificate_img, payment_id : $payment_id, admission_fees : $admission_fees, payment_method : $payment_method, payment_status : $payment_status, payment_transaction_id : $payment_transaction_id, payment_date : $payment_date, total_fees : $total_fees, paid_amount : $paid_amount, due_amount : $due_amount) {
+      z_id
+    student_id
+    first_name
+    middle_name
+    last_name
+    adhar_num
+    father_name
+    mother_name
+    father_contact_num
+    father_email
+    father_occupation
+    dob
+    gender
+    permanent_address
+    current_address
+    city
+    state
+    pincode
+    nationality
+    religion
+    caste
+    admission_status
+    admission_fee
+    student_adhar_front_img
+    student_adhar_back_img
+    father_adhar_front_img
+    father_adhar_back_img
+    mother_adhar_front_img
+    mother_adhar_back_img
+    father_pancard_img
+    student_profile_img
+    student_birth_certificate_img
+    payment_id
+    admission_fees
+    payment_method
+    payment_status
+    payment_transaction_id
+    payment_date
+    total_fees
+    paid_amount
+    due_amount
+      cdate
+    ctime
+    udate
+    utime
+      success_msg
+      error_msg
+    }
+  }
+`;
