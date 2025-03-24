@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import { executeMutation } from "../../../graphqlClient";
 import { CREATE_CLASS_DATA_MUTATION } from "../../../mutation/classesDataMutation/createClassDataMutation";
-import { FaArrowLeft, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FaArrowLeft, FaCheckCircle, FaTimesCircle,FaTimes,FaUpload } from "react-icons/fa";
 
 export default function ClassForm() {
   const [formData, setFormData] = useState({
@@ -24,6 +24,50 @@ export default function ClassForm() {
   const [message, setMessage] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
 
+
+  const fileInputRefs = {
+    image: useRef(null),
+  };
+
+  const handleClearFile = (key) => {
+    setFormData({ ...formData, [key]: "" });
+  
+    if (fileInputRefs[key]?.current) {
+      fileInputRefs[key].current.value = ""; 
+      fileInputRefs[key].current.form.reset(); 
+    }
+  };
+
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+  
+    const formDataUpload = new FormData();
+    formDataUpload.append("image", file);
+  
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formDataUpload,
+      });
+  
+      const data = await response.json();
+      console.log("Upload Response:", data);
+  
+      if (data.imageUrl) {
+        setFormData((prev) => ({
+          ...prev,
+          [e.target.name]: data.imageUrl,  // ✅ URL set
+        }));
+      } else {
+        console.error("Upload failed, no imageUrl returned.");
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+  };
+
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
@@ -40,6 +84,11 @@ export default function ClassForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.image) {
+      alert("Please wait, images are still uploading...");
+      return;
+    }
     try {
       const response = await executeMutation(CREATE_CLASS_DATA_MUTATION, formData);
       if (response.createClassesData.success_msg) {
@@ -48,7 +97,7 @@ export default function ClassForm() {
         setFormData({
           class_title: '',
           tags: '',
-          image: '',
+          image: formData.image,
           student_rating: '',
           student_reviews: '',
           parents_rating: '',
@@ -102,6 +151,40 @@ export default function ClassForm() {
           <textarea name="description" value={formData.description} onChange={handleChange}
             className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300" placeholder="Enter description"></textarea>
         </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-t pt-6">
+              {[
+                { key: "image", label: "Profile Image" },
+              ].map(({ key, label }, index) => (
+                <div key={index} className="flex flex-col items-center border p-4 rounded-lg w-full relative">
+                  <span className="font-semibold text-lg">{label}</span>
+                  <label className="border p-2 rounded w-full flex items-center gap-2 cursor-pointer bg-gray-200 hover:bg-gray-300 mt-2">
+                    <FaUpload /> Upload {label}
+                    <input
+                      type="file"
+                      name={key}
+                      ref={fileInputRefs[key]}
+                      className="hidden"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      required
+                    />
+                  </label>
+                  {formData[key] && (
+                    <div className="relative mt-2">
+                      <img src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => handleClearFile(key)}
+                        className="absolute top-0 right-0 bg-red-600 text-white p-1 rounded-full"
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
         <div className="flex justify-center">
           <button type="submit" className="w-48 bg-blue-600 hover:bg-blue-800 text-white py-3 rounded-lg mt-6 font-semibold text-lg">
             Submit
