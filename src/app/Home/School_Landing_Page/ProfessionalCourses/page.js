@@ -122,7 +122,7 @@ export default function ClassSetup() {
 
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 auto-rows-min">
         {classes.map((cls, index) => {
-            const availableSeats = cls.total_seats - cls.filled_seats;
+            const availableSeats = cls.total_seats - cls.filled_seats || '0';
             const classPath = getClassPath(cls.class_title); 
             return (
               <div key={index} className="relative bg-white p-6 shadow-lg text-left transition-all duration-500 ease-in-out transform shadow-md scale-100 min-h-[300px] border-b border-gray-300">
@@ -219,7 +219,7 @@ export default function ClassSetup() {
 
      
     </div>
-    {cls.is_admission && availableSeats > 0 ? (
+    {availableSeats > 0 ? (
         <button
           onClick={() => router.push(classPath)}
           className="mt-6 w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 font-semibold text-lg transition-all duration-500 ease-in-out transform hover:scale-105 hover:from-orange-600 hover:to-orange-700 active:scale-95"

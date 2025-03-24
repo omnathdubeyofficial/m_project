@@ -1,113 +1,105 @@
 'use client';
 
-import { useState, useEffect,useRef } from 'react';
-import { executeMutation } from "../../../graphqlClient";
-import { CREATE_CLASS_DATA_MUTATION } from "../../../mutation/classesDataMutation/createClassDataMutation";
-import { FaArrowLeft, FaCheckCircle, FaTimesCircle,FaTimes,FaUpload } from "react-icons/fa";
+import { useState, useEffect, useRef } from 'react';
+import { executeMutation } from '../../../graphqlClient';
+import { CREATE_CLASS_DATA_MUTATION } from '../../../mutation/classesDataMutation/createClassDataMutation';
+import { FaArrowLeft, FaCheckCircle, FaTimesCircle, FaTimes, FaUpload } from 'react-icons/fa';
+import Select from 'react-select';
+
+
+
 
 export default function ClassForm() {
   const [formData, setFormData] = useState({
     class_title: '',
     tags: '',
-    image: '',
-    student_rating: '',
-    student_reviews: '',
-    parents_rating: '',
-    parents_reviews: '',
     discount: '',
-    is_admission: 'yes',
     total_seats: '',
-    filled_seats: '',
-    description: ''
+    description: '',
+    image: ''
   });
 
   const [message, setMessage] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const fileInputRef = useRef(null);
 
+  const classOptions = [
+    "Nursery", "KG", "1st", "2nd", "3rd", "4th", "5th", "6th",
+    "7th", "8th", "9th", "10th", "11th", "12th"
+  ];
 
-  const fileInputRefs = {
-    image: useRef(null),
-  };
+  useEffect(() => {
+    setIsClient(true);  
+  }, []);
 
-  const handleClearFile = (key) => {
-    setFormData({ ...formData, [key]: "" });
+  const subjectOptions = [
+    { value: 'Math', label: 'Math' },
+    { value: 'Science', label: 'Science' },
+    { value: 'English', label: 'English' },
+    { value: 'History', label: 'History' },
+    { value: 'Geography', label: 'Geography' },
+    { value: 'Computer', label: 'Computer' },
+    { value: 'Hindi', label: 'Hindi' },
+    { value: 'Art', label: 'Art' },
+    { value: 'Biology', label: 'Biology' },
+    { value: 'Chemistry', label: 'Chemistry' },
+    { value: 'Physics', label: 'Physics' },
+  ];
+
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
   
-    if (fileInputRefs[key]?.current) {
-      fileInputRefs[key].current.value = ""; 
-      fileInputRefs[key].current.form.reset(); 
-    }
+  const handleSubjectChange = (selectedOptions) => {
+    setSelectedSubjects(selectedOptions || []);
+    setFormData(prev => ({ ...prev, tags: selectedOptions.map(sub => sub.value).join(', ') }));
   };
 
+  const handleClearImage = () => {
+    setFormData(prev => ({ ...prev, image: '' }));
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-  
+
     const formDataUpload = new FormData();
     formDataUpload.append("image", file);
-  
+
     try {
       const response = await fetch("/api/upload", {
         method: "POST",
         body: formDataUpload,
       });
-  
+      
       const data = await response.json();
-      console.log("Upload Response:", data);
-  
       if (data.imageUrl) {
-        setFormData((prev) => ({
-          ...prev,
-          [e.target.name]: data.imageUrl,  // ✅ URL set
-        }));
-      } else {
-        console.error("Upload failed, no imageUrl returned.");
+        setFormData(prev => ({ ...prev, image: data.imageUrl }));
       }
     } catch (error) {
       console.error("Error uploading file:", error);
     }
   };
 
-  useEffect(() => {
-    if (message) {
-      const timer = setTimeout(() => {
-        setMessage(null);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [message]);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    if (name === 'description' && value.trim().split(/\s+/).length > 20) return;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!formData.image) {
-      alert("Please wait, images are still uploading...");
+      alert("Please upload an image before submitting.");
       return;
     }
+    
     try {
       const response = await executeMutation(CREATE_CLASS_DATA_MUTATION, formData);
       if (response.createClassesData.success_msg) {
         setIsSuccess(true);
         setMessage(response.createClassesData.success_msg);
-        setFormData({
-          class_title: '',
-          tags: '',
-          image: formData.image,
-          student_rating: '',
-          student_reviews: '',
-          parents_rating: '',
-          parents_reviews: '',
-          discount: '',
-          is_admission: 'yes',
-          total_seats: '',
-          filled_seats: '',
-          description: ''
-        });
+        setFormData({ class_title: '', tags: '', discount: '', total_seats: '', description: '', image: '' });
       } else {
         setIsSuccess(false);
         setMessage(response.createClassesData.error_msg);
@@ -118,85 +110,66 @@ export default function ClassForm() {
     }
   };
 
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
   return (
-    <div className="max-w-6xl mx-auto mt-36 py-24 p-8 m-10 bg-white shadow-xl relative">
-      <div className="flex justify-between items-center mb-6 border-b pb-4">
-        <button className="bg-gray-600 hover:bg-blue-600 text-white px-6 py-2 flex items-center gap-2" onClick={() => window.history.back()}>
-          <FaArrowLeft className="w-5 h-5" /> Back
+    <div className="max-w-5xl mx-auto p-6 bg-white shadow-lg mt-44 mb-24">
+         <div className="flex justify-between items-center mb-6">
+        <button className="text-white flex items-center bg-blue-600 p-1 pl-2 pr-3" onClick={() => window.history.back()}>
+          <FaArrowLeft className="mr-2" /> Back
         </button>
-        <h2 className="text-3xl font-semibold text-gray-700">Class Form</h2>
+        <h2 className="text-3xl font-semibold">Add New Class</h2>
       </div>
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-4 gap-6">
-          {Object.keys(formData).map((key) => (
-            key !== 'description' && (
-              <div key={key} className="flex flex-col">
-                <label className="block font-semibold text-gray-600 mb-1">{key.replace('_', ' ').toUpperCase()}</label>
-                {key === 'is_admission' ? (
-                  <select name={key} value={formData[key]} onChange={handleChange} className="w-full p-3 border focus:ring focus:ring-blue-300">
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </select>
-                ) : (
-                  <input name={key} type={key.includes('seats') || key.includes('rating') ? 'number' : 'text'}
-                    value={formData[key]} onChange={handleChange}
-                    className="w-full p-3 border focus:ring focus:ring-blue-300" placeholder={`Enter ${key}`} />
-                )}
-              </div>
-            )
+      <form onSubmit={handleSubmit} className="grid gap-4">
+        <select name="class_title" value={formData.class_title} onChange={handleChange} className="border p-2 rounded" required>
+          <option value="">Select Class</option>
+          {classOptions.map((option, index) => (
+            <option key={index} value={option}>{option}</option>
           ))}
-        </div>
-        <div className="mt-6">
-          <label className="block font-semibold text-gray-600 mb-1">Description</label>
-          <textarea name="description" value={formData.description} onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300" placeholder="Enter description"></textarea>
+        </select>
+        
+        {isClient && (
+        <Select
+          isMulti
+          options={subjectOptions}
+          value={selectedSubjects}
+          onChange={handleSubjectChange}
+          placeholder="Select subjects..."
+        />
+      )}        <input type="text" value={formData.tags} readOnly className="border p-2 bg-gray-200" />
+
+        <input name="discount" type="number" value={formData.discount} onChange={handleChange} className="border p-2 rounded" placeholder="Discount %" />
+        <input name="total_seats" type="number" value={formData.total_seats} onChange={handleChange} className="border p-2 rounded" placeholder="Total Seats" required />
+
+        <textarea name="description" value={formData.description} onChange={handleChange} rows="3" className="border p-2 rounded" placeholder="Description (max 20 words)" required />
+
+        <div className="border p-4 rounded bg-gray-50">
+          <label className="cursor-pointer flex items-center gap-2">
+            <FaUpload /> Upload Image
+            <input type="file" name="image" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
+          </label>
+          {formData.image && (
+            <div className="mt-2">
+              <img src={formData.image} alt="Uploaded" className="w-32 h-32 rounded border" />
+              <button type="button" className="text-white mt-2 bg-red-900 p-1 rounded-xl " onClick={handleClearImage}>
+                <FaTimes />
+              </button>
+            </div>
+          )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-t pt-6">
-              {[
-                { key: "image", label: "Profile Image" },
-              ].map(({ key, label }, index) => (
-                <div key={index} className="flex flex-col items-center border p-4 rounded-lg w-full relative">
-                  <span className="font-semibold text-lg">{label}</span>
-                  <label className="border p-2 rounded w-full flex items-center gap-2 cursor-pointer bg-gray-200 hover:bg-gray-300 mt-2">
-                    <FaUpload /> Upload {label}
-                    <input
-                      type="file"
-                      name={key}
-                      ref={fileInputRefs[key]}
-                      className="hidden"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      required
-                    />
-                  </label>
-                  {formData[key] && (
-                    <div className="relative mt-2">
-                      <img src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" />
-                      <button
-                        type="button"
-                        onClick={() => handleClearFile(key)}
-                        className="absolute top-0 right-0 bg-red-600 text-white p-1 rounded-full"
-                      >
-                        <FaTimes />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
         <div className="flex justify-center">
-          <button type="submit" className="w-48 bg-blue-600 hover:bg-blue-800 text-white py-3 rounded-lg mt-6 font-semibold text-lg">
-            Submit
-          </button>
-        </div>
+  <button type="submit" className="w-48 bg-blue-600 text-white p-2  hover:bg-blue-800">
+    Submit
+  </button>
+</div>
+
       </form>
-      {message && (
-        <div className={`fixed bottom-5 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg text-white text-center flex items-center gap-2 ${isSuccess ? 'bg-green-600' : 'bg-red-600'}`}>
-          {isSuccess ? <FaCheckCircle className="w-6 h-6 text-white" /> : <FaTimesCircle className="w-6 h-6 text-white" />}
-          {message}
-        </div>
-      )}
     </div>
   );
 }
