@@ -8,22 +8,51 @@ const getClassesDataList = async () => {
   return await prisma.classes_data.findMany();
 };
 
-// Create a new user
 const createClassesData = async ({ class_title, description, tags, image, student_rating, student_reviews, parents_rating, parents_reviews, discount, is_admission, total_seats, filled_seats }) => {
   try {
-    const createdData = await prisma.classes_data.create({
-      data: { z_id: uuidv4(), classes_id: unique_id("class"), class_title, description, tags, image, student_rating, student_reviews, parents_rating, parents_reviews, discount, is_admission, total_seats, filled_seats, cdate: setUserDate(), ctime: setUserTime() },
+    const existingClass = await prisma.classes_data.findFirst({
+      where: { class_title }
     });
-    const success_msg = "Class data created successfully."
-    return { ...createdData, success_msg }
-  } catch (e) {
-    const error_msg = `${e}`
-    console.error(error_msg)
-    return { error_msg }
-  } finally {
-    prisma.$disconnect()
-  }
 
+    if (existingClass) {
+      await prisma.classes_data.deleteMany({
+        where: { class_title }
+      });
+    }
+
+    const createdData = await prisma.classes_data.create({
+      data: { 
+        z_id: uuidv4(),
+        classes_id: unique_id("class"),
+        class_title, 
+        description, 
+        tags, 
+        image, 
+        student_rating, 
+        student_reviews, 
+        parents_rating, 
+        parents_reviews, 
+        discount, 
+        is_admission, 
+        total_seats, 
+        filled_seats, 
+        cdate: setUserDate(), 
+        ctime: setUserTime() 
+      },
+    });
+
+    const success_msg = existingClass
+      ? "Existing class data deleted and new data created successfully."
+      : "New class data created successfully.";
+
+    return { ...createdData, success_msg };
+  } catch (e) {
+    const error_msg = `${e}`;
+    console.error(error_msg);
+    return { error_msg };
+  } finally {
+    prisma.$disconnect();
+  }
 };
 
 // Update an existing user by ID
