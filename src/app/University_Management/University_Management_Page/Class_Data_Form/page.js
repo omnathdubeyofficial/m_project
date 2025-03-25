@@ -6,9 +6,6 @@ import { CREATE_CLASS_DATA_MUTATION } from '../../../mutation/classesDataMutatio
 import { FaArrowLeft, FaCheckCircle, FaTimesCircle, FaTimes, FaUpload } from 'react-icons/fa';
 import Select from 'react-select';
 
-
-
-
 export default function ClassForm() {
   const [formData, setFormData] = useState({
     class_title: '',
@@ -168,6 +165,15 @@ export default function ClassForm() {
     Submit
   </button>
 </div>
+
+{message && (
+  <div className={`fixed bottom-5 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg shadow-md text-white flex items-center gap-2
+      ${isSuccess ? "bg-green-600" : "bg-red-600"}`}>
+    {isSuccess ? <FaCheckCircle /> : <FaTimesCircle />}
+    <span>{message}</span>
+  </div>
+)}
+
 
       </form>
     </div>
