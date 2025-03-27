@@ -1,7 +1,7 @@
 
 // import Login from "././login/page";
 import Hero from "../app/Home/School_Landing_Page/Hero_Section/page";
-import Features from "../app/Home/School_Landing_Page/Features/page";
+import Features from "./Home/School_Landing_Page/BlogSection/page";
 import AboutUs from "../app/Home/School_Landing_Page/AboutUs/page";
 import Gallery from "../app/Home/School_Landing_Page/Gallery/page";
 import Newsletter from "../app/Home/School_Landing_Page/Newsletter/page";
@@ -14,7 +14,7 @@ import Stats from "./Home/School_Landing_Page/Stats/page";
 import Pricing from "./Home/School_Landing_Page/Pricing/page";
 import ProfessionalCourses from "./Home/School_Landing_Page/ProfessionalCourses/page";
 import HistoryPage from "./Home/School_Landing_Page/HistoryPage/page";
-import Facilities_Infrastructure from "./Home/School_Landing_Page/Facilities_&_Infrastructure/page";
+import Facilities_Infrastructure from "./Home/School_Landing_Page/Features_Section/page";
 import Carousel from "./Home/School_Landing_Page/Carousel_Hero/page";
 import Offerings from "./Home/School_Landing_Page/Offerings/page";
 import NoticeBoard from "./Home/School_Landing_Page/NoticeBoard/page";
@@ -32,7 +32,7 @@ export default function Home() {
       <Offerings/>
       <NoticeBoard/>
     
-      <Facilities_Infrastructure/>
+      {/* <Facilities_Infrastructure/> */}
       {/* <ProfessionalCourses/> */}
       {/* <HistoryPage/> */}
       {/* <School_Grid/> */}
@@ -42,7 +42,7 @@ export default function Home() {
       {/* <Pricing/> */}
       <Workflow/>
       <Features/>
-      <AboutUs/>
+      {/* <AboutUs/> */}
       {/* <Gallery/> */}
       {/* <Newsletter/> */}
       {/* <Footer/> */}
