@@ -31,39 +31,43 @@ const blogs = [
 
 const BlogSection = () => {
     return (
-        <section className="py-16 bg-gray-900 text-white">
-            <div className="container mx-auto max-w-7xl px-6">
-                <h2 className="text-4xl font-semibold text-purple-400 mb-6">Latest Blogs</h2>
-                <div className="grid md:grid-cols-2 gap-8">
-                    {blogs.map((blog, index) => (
-                        <div key={index} className="p-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700 hover:border-purple-400 transition-all hover:shadow-2xl">
-                            <h3 className="text-2xl font-semibold text-white">{blog.blog_title}</h3>
-                            <p className="text-lg text-gray-400 mt-2">{blog.meta_description}</p>
-                            <div className="text-gray-500 text-sm mt-3">
-                                <span>By <span className="text-purple-400">{blog.author_name}</span></span> &bull;
-                                <span> {blog.published_date_time}</span>
-                            </div>
-                            <div className="mt-3 flex flex-wrap gap-2">
-                                {blog.blog_tags.map((tag, i) => (
-                                    <span key={i} className="text-sm px-3 py-1 bg-purple-600 text-white rounded-full">#{tag}</span>
-                                ))}
-                            </div>
-                            <p className="text-gray-300 mt-4">{blog.blog_content}</p>
-                            <div className="mt-4">
-                                <Link href={`/blog/${blog.blog_slug}`} className="text-purple-400 hover:text-purple-300 font-semibold text-lg">Read More →</Link>
-                            </div>
-                        </div>
-                    ))}
+        <section className="py-16 bg-gradient-to-r from-[#F3E5F5] via-[#E1BEE7] to-[#F3E5F5] text-[#6A1B9A]">
+        <div className="container mx-auto max-w-7xl px-6">
+          <h2 className="text-4xl font-semibold text-[#4A148C] mb-6">Latest Blogs</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            {blogs.map((blog, index) => (
+              <div key={index} className="p-6 bg-[#fff] rounded-lg shadow-lg border border-[#AB47BC] hover:border-[#6A1B9A] transition-all hover:shadow-2xl">
+                <h3 className="text-2xl font-semibold text-[#6A1B9A]">{blog.blog_title}</h3>
+                <p className="text-lg text-gray-700 mt-2">{blog.meta_description}</p>
+                <div className="text-gray-600 text-sm mt-3">
+                  <span>By <span className="text-[#4A148C]">{blog.author_name}</span></span> &bull;
+                  <span> {blog.published_date_time}</span>
                 </div>
-                <div className="text-center mt-12">
-                    <Link href="/blogs">
-                        <button className="px-6 py-3 text-lg font-semibold text-white bg-purple-600 hover:bg-purple-700 transition-all rounded-full shadow-lg hover:scale-105 hover:shadow-2xl">
-                            Read All Blogs
-                        </button>
-                    </Link>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {blog.blog_tags.map((tag, i) => (
+                    <span key={i} className="text-sm px-3 py-1 bg-[#4A148C] text-white font-semibold rounded-full">#{tag}</span>
+                  ))}
                 </div>
-            </div>
-        </section>
+                <p className="text-gray-700 mt-4">{blog.blog_content}</p>
+                <div className="mt-4">
+                  <Link href={`/blog/${blog.blog_slug}`} className="text-[#6A1B9A] hover:text-purple-800 font-semibold text-lg">
+                    Read More →
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-12">
+            <Link href="/blogs">
+              <button className="px-6 py-3 text-lg font-semibold text-white bg-[#4A148C] hover:bg-purple-800 transition-all rounded-full shadow-lg hover:scale-105 hover:shadow-2xl">
+                Read All Blogs
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
+      
+
     );
 }
 

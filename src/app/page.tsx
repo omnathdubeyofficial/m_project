@@ -18,6 +18,9 @@ import Facilities_Infrastructure from "./Home/School_Landing_Page/Features_Secti
 import Carousel from "./Home/School_Landing_Page/Carousel_Hero/page";
 import Offerings from "./Home/School_Landing_Page/Offerings/page";
 import NoticeBoard from "./Home/School_Landing_Page/NoticeBoard/page";
+import Section_Page from "./Home/School_Landing_Page/Section_Page/page";
+import Section_Board from "./Home/School_Landing_Page/Section_Board/page";
+
 
 
 
@@ -31,12 +34,13 @@ export default function Home() {
       <Hero/>
       <Offerings/>
       <NoticeBoard/>
-    
+    <Section_Board/>
       {/* <Facilities_Infrastructure/> */}
       {/* <ProfessionalCourses/> */}
       {/* <HistoryPage/> */}
       {/* <School_Grid/> */}
       <Work_with_us/>
+      <Section_Page/>
       {/* <CTA_Section/> */}
       {/* <Stats/> */}
       {/* <Pricing/> */}

@@ -60,7 +60,7 @@ const Carousel = () => {
       {/* Full-Screen Background Video */}
       <div className="absolute inset-0 transition-opacity duration-1000 ease-in-out">
         <video 
-          key={currentIndex} // Important: This forces reloading the video on index change
+          key={currentIndex} 
           className={`w-full h-full object-cover transition-transform duration-1000 ${isAnimating ? "scale-105 opacity-75" : "scale-100 opacity-100"}`} 
           autoPlay 
           loop 
@@ -71,13 +71,13 @@ const Carousel = () => {
       </div>
       
       {/* Black Overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-65"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
       
       {/* Content Wrapper */}
       <div className={`relative z-10 container mx-auto px-6 md:px-12 lg:px-16 max-w-screen-xl h-full flex flex-col items-start justify-center text-left transition-all duration-1000 ease-in-out transform ${isAnimating ? "opacity-0 translate-y-8" : "opacity-100 translate-y-0"}`}>
-        <h2 className={`text-4xl md:text-5xl lg:text-7xl font-semibold mb-5 leading-tight text-white transition-all duration-1000 ease-in-out ${isAnimating ? "opacity-0 translate-y-5" : "opacity-100 translate-y-0"}`}>{slides[currentIndex].title}</h2>
+        <h2 className={`text-4xl md:text-5xl lg:text-7xl font-bold mb-5 leading-tight text-white transition-all duration-1000 ease-in-out ${isAnimating ? "opacity-0 translate-y-5" : "opacity-100 translate-y-0"}`}>{slides[currentIndex].title}</h2>
         <p className={`text-lg md:text-xl mb-6 leading-relaxed text-white transition-all duration-1000 ease-in-out ${isAnimating ? "opacity-0 translate-y-5" : "opacity-100 translate-y-0"}`}>{slides[currentIndex].description}</p>
-        <Link href={slides[currentIndex].buttonLink} className="px-8 py-4 bg-gray-700 text-white text-lg md:text-xl rounded-full hover:opacity-80 transition-all duration-500 ease-in-out transform hover:scale-105">
+        <Link href={slides[currentIndex].buttonLink} className="px-8 py-4 bg-yellow-500 text-black text-lg md:text-xl rounded-full hover:opacity-80 transition-all duration-500 ease-in-out transform hover:scale-105 shadow-lg">
           {slides[currentIndex].buttonText}
         </Link>
       </div>
@@ -90,7 +90,7 @@ const Carousel = () => {
             onClick={() => goToSlide(index)}
             className={`w-6 h-6 rounded-full cursor-pointer transition-all duration-500 border-2 border-yellow-400 ${
               index === currentIndex 
-                ? "bg-[#0A1F44] scale-150 shadow-lg"
+                ? "bg-yellow-500 scale-150 shadow-lg"
                 : "bg-white opacity-70 hover:opacity-100"
             }`}
           ></div>
