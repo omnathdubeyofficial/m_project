@@ -31,16 +31,18 @@ export default function Home() {
     <div >
       {/* <Header/> */}
       <Carousel/>
-      <Hero/>
+      <Section_Page/>
       <Offerings/>
-      {/* <NoticeBoard/>
-    <Section_Board/> */}
+      <Hero/>
+
+      <NoticeBoard/>
+   {/*  <Section_Board/> */}
       {/* <Facilities_Infrastructure/> */}
       {/* <ProfessionalCourses/> */}
       {/* <HistoryPage/> */}
       {/* <School_Grid/> */}
       <Work_with_us/>
-      <Section_Page/>
+
       {/* <CTA_Section/> */}
       {/* <Stats/> */}
       {/* <Pricing/> */}

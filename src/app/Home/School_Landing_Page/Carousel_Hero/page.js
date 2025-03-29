@@ -1,103 +1,116 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { FaDownload } from "react-icons/fa";
+import { FaFolder, FaUser, FaUsers, FaCalendarAlt, FaClipboardList } from "react-icons/fa";
 
 const slides = [
-  {
-    video: "/videos/21472-318172509_small.mp4",
-    title: "Smart School Management",
-    description: "Efficiently manage your school's academics, attendance, and more.",
-    buttonText: "Learn More",
-    buttonLink: "/about"
-  },
-  {
-    video: "/videos/41603-430090405_medium.mp4",
-    title: "Empower Students with Technology",
-    description: "Bring digital transformation to your classrooms for better learning.",
-    buttonText: "Get Started",
-    buttonLink: "/services"
-  },
-  {
-    video: "/videos/69622-531621070_medium.mp4",
-    title: "Seamless Administration",
-    description: "Streamline administration tasks with our AI-powered solutions.",
-    buttonText: "Explore Now",
-    buttonLink: "/contact"
-  }
+  "/videos/41603-430090405_medium.mp4",
+  "/videos/21472-318172509_small.mp4",
+  "/videos/90933-629483642_medium.mp4"
 ];
 
-const Carousel = () => {
+const announcements = [
+  { date: "2025-03-28", title: "Open House and Important Updates", link: "/announcements/open-house", category: "News", issuedBy: "Admin", audience: "Students", description: "Join us for an open house and get the latest updates about the school! Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!" },
+  { date: "2025-03-25", title: "School Reopening Notification – 7th April 2025", link: "/announcements/school-reopening", category: "News", issuedBy: "Admin", audience: "Students", description: "School will reopen on 7th April 2025. Please ensure attendance!" },
+  { date: "2025-03-25", title: "Open House for Grades Nursery to VIII – 29th March", link: "/announcements/open-house-grades", category: "News", issuedBy: "Admin", audience: "Parents", description: "Parents are invited to the open house session for classes Nursery to VIII." },
+  { date: "2025-03-25", title: "Cervical Cancer Vaccination Drive – 29th March", link: "/announcements/vaccination-drive", category: "Health", issuedBy: "Admin", audience: "Students", description: "A vaccination drive is being held for students on 29th March." },
+  { date: "2025-03-28", title: "Open House and Important Updates", link: "/announcements/open-house", category: "News", issuedBy: "Admin", audience: "Students", description: "Join us for an open house and get the latest updates about the school! Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!" },
+  { date: "2025-03-25", title: "School Reopening Notification – 7th April 2025", link: "/announcements/school-reopening", category: "News", issuedBy: "Admin", audience: "Students", description: "School will reopen on 7th April 2025. Please ensure attendance!" },
+  { date: "2025-03-25", title: "Open House for Grades Nursery to VIII – 29th March", link: "/announcements/open-house-grades", category: "News", issuedBy: "Admin", audience: "Parents", description: "Parents are invited to the open house session for classes Nursery to VIII." },
+  { date: "2025-03-25", title: "Cervical Cancer Vaccination Drive – 29th March", link: "/announcements/vaccination-drive", category: "Health", issuedBy: "Admin", audience: "Students", description: "A vaccination drive is being held for students on 29th March." }
+];
+
+const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [expanded, setExpanded] = useState(Array(announcements.length).fill(false));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      nextSlide();
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
     }, 5000);
     return () => clearInterval(interval);
   }, []);
 
-  const nextSlide = () => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % slides.length);
-      setIsAnimating(false);
-    }, 600);
-  };
-
-  const goToSlide = (index) => {
-    if (index !== currentIndex) {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setCurrentIndex(index);
-        setIsAnimating(false);
-      }, 600);
-    }
+  const toggleReadMore = (index) => {
+    setExpanded((prev) => {
+      const newState = [...prev];
+      newState[index] = !newState[index];
+      return newState;
+    });
   };
 
   return (
-    <section id="carousel-section" className="w-full h-screen mt-14 relative overflow-hidden flex items-center justify-center">
-      {/* Full-Screen Background Video */}
-      <div className="absolute inset-0 transition-opacity duration-1000 ease-in-out">
-        <video 
-          key={currentIndex} 
-          className={`w-full h-full object-cover transition-transform duration-1000 ${isAnimating ? "scale-105 opacity-75" : "scale-100 opacity-100"}`} 
-          autoPlay 
-          loop 
-          muted
-        >
-          <source src={slides[currentIndex].video} type="video/mp4" />
-        </video>
-      </div>
-      
-      {/* Black Overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
-      
-      {/* Content Wrapper */}
-      <div className={`relative z-10 container mx-auto px-6 md:px-12 lg:px-16 max-w-screen-xl h-full flex flex-col items-start justify-center text-left transition-all duration-1000 ease-in-out transform ${isAnimating ? "opacity-0 translate-y-8" : "opacity-100 translate-y-0"}`}>
-        <h2 className={`text-4xl md:text-5xl lg:text-7xl font-bold mb-5 leading-tight text-white transition-all duration-1000 ease-in-out ${isAnimating ? "opacity-0 translate-y-5" : "opacity-100 translate-y-0"}`}>{slides[currentIndex].title}</h2>
-        <p className={`text-lg md:text-xl mb-6 leading-relaxed text-white transition-all duration-1000 ease-in-out ${isAnimating ? "opacity-0 translate-y-5" : "opacity-100 translate-y-0"}`}>{slides[currentIndex].description}</p>
-        <Link href={slides[currentIndex].buttonLink} className="px-8 py-4 bg-yellow-500 text-black text-lg md:text-xl rounded-full hover:opacity-80 transition-all duration-500 ease-in-out transform hover:scale-105 shadow-lg">
-          {slides[currentIndex].buttonText}
-        </Link>
-      </div>
-      
-      {/* Indicators */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-3 z-10">
-        {slides.map((_, index) => (
-          <div 
+    <section className="relative w-screen h-screen flex flex-col md:flex-row items-center justify-between overflow-hidden bg-gray-50">
+      {/* Video Carousel */}
+      <div className="relative w-full md:w-2/3 h-screen">
+        {slides.map((video, index) => (
+          <video
             key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-6 h-6 rounded-full cursor-pointer transition-all duration-500 border-2 border-yellow-400 ${
-              index === currentIndex 
-                ? "bg-yellow-500 scale-150 shadow-lg"
-                : "bg-white opacity-70 hover:opacity-100"
+            className={`absolute w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
+              index === currentIndex ? "opacity-100" : "opacity-0"
             }`}
-          ></div>
+            autoPlay loop muted>
+            <source src={video} type="video/mp4" />
+          </video>
         ))}
+
+        {/* Indicators */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3">
+          {slides.map((_, index) => (
+            <div 
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-3.5 h-3.5 rounded-full cursor-pointer transition-all duration-500 border border-white ${
+                index === currentIndex ? "bg-white scale-125 shadow-lg" : "bg-gray-400"
+              }`}
+            ></div>
+          ))}
+        </div>
+      </div>
+
+      {/* Announcements Section */}
+      <div className="w-full md:w-1/3 h-screen bg-red-100 p-6 md:p-8 overflow-auto z-10 flex flex-col justify-start pt-16 md:pt-28">
+        <h2 className="text-2xl font-bold text-white bg-red-600 p-3  mb-2 border-b-2 pb-2 text-left flex items-center">
+          <span className="mr-2 text-xl "><FaClipboardList className="mx-1"/></span> Latest Circulars
+        </h2>
+        
+        <div className="flex flex-col gap-1">
+          {announcements.map((item, index) => (
+            <motion.div 
+              key={index} 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ delay: index * 0.2 }}
+              className="p-4 border-b border-gray-300 hover:bg-gray-200 transition-all text-left"
+            >
+              <h3 className="text-lg font-semibold text-gray-800 flex items-center">
+                {item.title} {index === 0 && <span className="ml-2 text-red-500 text-sm font-bold animate-pulse">NEW</span>}
+              </h3>
+              <p className="text-sm text-gray-700 mt-2">
+                {expanded[index] ? item.description : `${item.description.substring(0, 50)}...`}
+              </p>
+              <button 
+                onClick={() => toggleReadMore(index)}
+                className="text-red-500 text-sm font-medium hover:underline mt-1 block"
+              >
+                {expanded[index] ? "Read Less" : "Read More →"}
+              </button>
+              <p className="text-xs text-gray-500 font-semibold  flex items-center mt-2 mb-2">
+                 <FaCalendarAlt className="mr-1"/> {new Date(item.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })} | <FaUsers className="mx-1" /> Audience: {item.audience}</p>
+              <p className="text-xs text-gray-500 font-semibold mb-1 flex items-center">
+                <FaFolder className="mr-1" /> Category: {item.category} | <FaUser className="mx-1" /> Issued By: {item.issuedBy} 
+              </p>
+              <Link href={item.link} className="flex items-center text-red-500 text-sm font-medium hover:underline mt-2">
+                <FaDownload className="mr-2" /> Download PDF
+              </Link>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
 };
 
-export default Carousel;
+export default HeroSection;
