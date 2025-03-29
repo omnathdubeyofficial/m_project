@@ -9,3 +9,8 @@ html {
 section {
   @apply py-20;
 }
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
