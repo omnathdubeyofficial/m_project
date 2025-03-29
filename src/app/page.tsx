@@ -35,7 +35,7 @@ export default function Home() {
       <Offerings/>
       <Hero/>
 
-      <NoticeBoard/>
+      {/* <NoticeBoard/> */}
    {/*  <Section_Board/> */}
       {/* <Facilities_Infrastructure/> */}
       {/* <ProfessionalCourses/> */}

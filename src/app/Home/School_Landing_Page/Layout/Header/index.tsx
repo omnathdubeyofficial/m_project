@@ -107,10 +107,11 @@ useEffect(() => {
 
   return (
     <header
-    className={`fixed top-0 z-40 w-full transition-all duration-300 ${sticky ? " shadow-lg bg-white py-4" : "shadow-none bg-white py-4"
+    className={`fixed top-0 z-40 w-full transition-all duration-300 ${sticky ? "  bg-white py-4" : " bg-red-100 py-4"
       }`}
   >
-    <div className="lg:py-0 py-2">
+    {/* <div className="lg:py-0 py-2"> */}
+    <div >
       <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md flex items-center justify-between px-4">
         <Logo />
         <nav className="hidden lg:flex flex-grow items-center gap-8 justify-center">
