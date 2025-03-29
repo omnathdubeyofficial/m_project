@@ -33,8 +33,8 @@ export default function Home() {
       <Carousel/>
       <Hero/>
       <Offerings/>
-      <NoticeBoard/>
-    <Section_Board/>
+      {/* <NoticeBoard/>
+    <Section_Board/> */}
       {/* <Facilities_Infrastructure/> */}
       {/* <ProfessionalCourses/> */}
       {/* <HistoryPage/> */}
@@ -45,7 +45,7 @@ export default function Home() {
       {/* <Stats/> */}
       {/* <Pricing/> */}
       <Workflow/>
-      <Features/>
+      {/* <Features/> */}
       {/* <AboutUs/> */}
       {/* <Gallery/> */}
       {/* <Newsletter/> */}
