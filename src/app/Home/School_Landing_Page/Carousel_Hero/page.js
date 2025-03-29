@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaDownload } from "react-icons/fa";
 import { FaFolder, FaUser, FaUsers, FaCalendarAlt, FaClipboardList } from "react-icons/fa";
-
+import './style.css';
 const slides = [
   "/videos/41603-430090405_medium.mp4",
   "/videos/21472-318172509_small.mp4",
@@ -70,45 +70,48 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Announcements Section */}
-      <div className="w-full md:w-1/3 h-screen bg-red-100 p-6 md:p-8 overflow-auto z-10 flex flex-col justify-start pt-16 md:pt-28">
-        <h2 className="text-2xl font-bold text-white bg-red-600 p-3  mb-2 border-b-2 pb-2 text-left flex items-center">
-          <span className="mr-2 text-xl "><FaClipboardList className="mx-1"/></span> Latest Circulars
-        </h2>
-        
-        <div className="flex flex-col gap-1">
-          {announcements.map((item, index) => (
-            <motion.div 
-              key={index} 
-              initial={{ opacity: 0, y: 20 }} 
-              animate={{ opacity: 1, y: 0 }} 
-              transition={{ delay: index * 0.2 }}
-              className="p-4 border-b border-gray-300 hover:bg-gray-200 transition-all text-left"
-            >
-              <h3 className="text-lg font-semibold text-gray-800 flex items-center">
-                {item.title} {index === 0 && <span className="ml-2 text-red-500 text-sm font-bold animate-pulse">NEW</span>}
-              </h3>
-              <p className="text-sm text-gray-700 mt-2">
-                {expanded[index] ? item.description : `${item.description.substring(0, 50)}...`}
-              </p>
-              <button 
-                onClick={() => toggleReadMore(index)}
-                className="text-red-500 text-sm font-medium hover:underline mt-1 block"
-              >
-                {expanded[index] ? "Read Less" : "Read More →"}
-              </button>
-              <p className="text-xs text-gray-500 font-semibold  flex items-center mt-2 mb-2">
-                 <FaCalendarAlt className="mr-1"/> {new Date(item.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })} | <FaUsers className="mx-1" /> Audience: {item.audience}</p>
-              <p className="text-xs text-gray-500 font-semibold mb-1 flex items-center">
-                <FaFolder className="mr-1" /> Category: {item.category} | <FaUser className="mx-1" /> Issued By: {item.issuedBy} 
-              </p>
-              <Link href={item.link} className="flex items-center text-red-500 text-sm font-medium hover:underline mt-2">
-                <FaDownload className="mr-2" /> Download PDF
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+     {/* Announcements Section */}
+<div className="w-full md:w-1/3 h-screen bg-red-100 p-6 md:p-8 overflow-hidden z-10 flex flex-col justify-start pt-16 md:pt-28">
+  <h2 className="text-2xl font-bold text-white bg-red-600 p-3 mb-2 border-b-2 pb-2 text-left flex items-center">
+    <span className="mr-2 text-xl"><FaClipboardList className="mx-1" /></span> Latest Circulars
+  </h2>
+
+  {/* Scrollable Announcement List */}
+  <div className="flex flex-col gap-1 overflow-y-auto scrollbar-hide" style={{ maxHeight: "calc(100vh - 160px)" }}>
+    {announcements.map((item, index) => (
+      <motion.div
+        key={index}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.2 }}
+        className="p-4 border-b border-gray-300 hover:bg-gray-200 transition-all text-left"
+      >
+        <h3 className="text-lg font-semibold text-gray-800 flex items-center">
+          {item.title} {index === 0 && <span className="ml-2 text-red-500 text-sm font-bold animate-pulse">NEW</span>}
+        </h3>
+        <p className="text-sm text-gray-700 mt-2">
+          {expanded[index] ? item.description : `${item.description.substring(0, 50)}...`}
+        </p>
+        <button
+          onClick={() => toggleReadMore(index)}
+          className="text-red-500 text-sm font-medium hover:underline mt-1 block"
+        >
+          {expanded[index] ? "Read Less" : "Read More →"}
+        </button>
+        <p className="text-xs text-gray-500 font-semibold flex items-center mt-2 mb-2">
+          <FaCalendarAlt className="mr-1" /> {new Date(item.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })} | <FaUsers className="mx-1" /> Audience: {item.audience}
+        </p>
+        <p className="text-xs text-gray-500 font-semibold mb-1 flex items-center">
+          <FaFolder className="mr-1" /> Category: {item.category} | <FaUser className="mx-1" /> Issued By: {item.issuedBy}
+        </p>
+        <Link href={item.link} className="flex items-center text-red-500 text-sm font-medium hover:underline mt-2">
+          <FaDownload className="mr-2" /> Download PDF
+        </Link>
+      </motion.div>
+    ))}
+  </div>
+</div>
+
     </section>
   );
 };
