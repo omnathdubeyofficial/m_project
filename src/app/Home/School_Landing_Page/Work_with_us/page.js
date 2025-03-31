@@ -3,7 +3,7 @@ import Link from 'next/link'
 const links = [
   { name: 'Teaching Positions', href: '/School_Landing_Page/Our_Faculty' },
   { name: 'Internship Program', href: '/internship' },
-  { name: 'Our Mission', href: '/mission' },
+  { name: 'Our Mission', href: '/Home/School_Landing_Page/OurMission' },
   { name: 'Meet Our Faculty', href: '/Home/School_Landing_Page/Our_Faculty' },
 ]
 
