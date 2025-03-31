@@ -2,29 +2,59 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FaDownload } from "react-icons/fa";
-import { FaFolder, FaUser, FaUsers, FaCalendarAlt, FaClipboardList } from "react-icons/fa";
-import './style.css';
+import { FaDownload, FaFolder, FaUser, FaUsers, FaCalendarAlt, FaClipboardList } from "react-icons/fa";
+import { executeQuery } from "../../../graphqlClient";
+import { GET_NOTICE_BOARD_LISTS } from "../../../query/NoticeBoardQuery/fetchNoticeBoard";
+import "./style.css";
+
 const slides = [
   "/videos/41603-430090405_medium.mp4",
   "/videos/21472-318172509_small.mp4",
   "/videos/90933-629483642_medium.mp4"
 ];
 
-const announcements = [
-  { date: "2025-03-28", title: "Open House and Important Updates", link: "/announcements/open-house", category: "News", issuedBy: "Admin", audience: "Students", description: "Join us for an open house and get the latest updates about the school! Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!" },
-  { date: "2025-03-25", title: "School Reopening Notification – 7th April 2025", link: "/announcements/school-reopening", category: "News", issuedBy: "Admin", audience: "Students", description: "School will reopen on 7th April 2025. Please ensure attendance!" },
-  { date: "2025-03-25", title: "Open House for Grades Nursery to VIII – 29th March", link: "/announcements/open-house-grades", category: "News", issuedBy: "Admin", audience: "Parents", description: "Parents are invited to the open house session for classes Nursery to VIII." },
-  { date: "2025-03-25", title: "Cervical Cancer Vaccination Drive – 29th March", link: "/announcements/vaccination-drive", category: "Health", issuedBy: "Admin", audience: "Students", description: "A vaccination drive is being held for students on 29th March." },
-  { date: "2025-03-28", title: "Open House and Important Updates", link: "/announcements/open-house", category: "News", issuedBy: "Admin", audience: "Students", description: "Join us for an open house and get the latest updates about the school! Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!Join us for an open house and get the latest updates about the school!" },
-  { date: "2025-03-25", title: "School Reopening Notification – 7th April 2025", link: "/announcements/school-reopening", category: "News", issuedBy: "Admin", audience: "Students", description: "School will reopen on 7th April 2025. Please ensure attendance!" },
-  { date: "2025-03-25", title: "Open House for Grades Nursery to VIII – 29th March", link: "/announcements/open-house-grades", category: "News", issuedBy: "Admin", audience: "Parents", description: "Parents are invited to the open house session for classes Nursery to VIII." },
-  { date: "2025-03-25", title: "Cervical Cancer Vaccination Drive – 29th March", link: "/announcements/vaccination-drive", category: "Health", issuedBy: "Admin", audience: "Students", description: "A vaccination drive is being held for students on 29th March." }
-];
-
 const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [expanded, setExpanded] = useState(Array(announcements.length).fill(false));
+  const [announcements, setAnnouncements] = useState([]);
+  const [expanded, setExpanded] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+
+
+
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await executeQuery(GET_NOTICE_BOARD_LISTS);
+        const allNotices = response.getNoticeBoardLists;
+        
+        const today = new Date();
+        const threeDaysAgo = new Date();
+        threeDaysAgo.setDate(today.getDate() - 3);
+
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+        const filteredNotices = allNotices
+          .filter((notice) => {
+            const noticeDate = new Date(
+              `${notice.notice_date.substring(0, 4)}-${notice.notice_date.substring(4, 6)}-${notice.notice_date.substring(6, 8)}`
+            );
+            return noticeDate >= oneMonthAgo;
+          })
+          .sort((a, b) => b.notice_date.localeCompare(a.notice_date));
+
+        setAnnouncements(filteredNotices);
+      } catch (error) {
+        console.error("Error fetching notices:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAnnouncements();
+  }, []);
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -40,6 +70,23 @@ const HeroSection = () => {
       return newState;
     });
   };
+
+
+  const formatNoticeDate = (dateString) => {
+    if (!dateString || dateString.length !== 8) return "Invalid Date";
+  
+    const year = dateString.substring(0, 4);
+    const month = dateString.substring(4, 6);
+    const day = dateString.substring(6, 8);
+  
+    const formattedDate = new Date(`${year}-${month}-${day}`);
+  
+    return formattedDate.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  };
+  
+
+  if (loading) return <p className="text-center p-4">Loading announcements...</p>;
+  if (error) return <p className="text-center p-4 text-red-600">Error: {error}</p>;
 
   return (
     <section className="relative w-screen h-screen flex flex-col md:flex-row items-center justify-between overflow-hidden bg-gray-50">
@@ -59,7 +106,7 @@ const HeroSection = () => {
         {/* Indicators */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3">
           {slides.map((_, index) => (
-            <div 
+            <div
               key={index}
               onClick={() => setCurrentIndex(index)}
               className={`w-3.5 h-3.5 rounded-full cursor-pointer transition-all duration-500 border border-white ${
@@ -70,48 +117,61 @@ const HeroSection = () => {
         </div>
       </div>
 
-     {/* Announcements Section */}
-<div className="w-full md:w-1/3 h-screen bg-red-100 p-6 md:p-8 overflow-hidden z-10 flex flex-col justify-start pt-16 md:pt-28">
-  <h2 className="text-2xl font-bold text-white bg-red-600 p-3 mb-2 border-b-2 pb-2 text-left flex items-center">
-    <span className="mr-2 text-xl"><FaClipboardList className="mx-1" /></span> Latest Circulars
-  </h2>
+      {/* Announcements Section */}
+      <div className="w-full md:w-1/3 h-screen bg-red-100 p-4 md:p-8 overflow-hidden z-10 flex flex-col justify-start pt-16 md:pt-24">
+        <h2 className="text-2xl font-bold text-white bg-red-600 p-3 mb-2 border-b-2 text-left flex items-center">
+          <span className="mr-2 text-xl"><FaClipboardList className="mx-1" /></span> Latest Circulars
+        </h2>
 
-  {/* Scrollable Announcement List */}
-  <div className="flex flex-col gap-1 overflow-y-auto scrollbar-hide" style={{ maxHeight: "calc(100vh - 160px)" }}>
-    {announcements.map((item, index) => (
-      <motion.div
-        key={index}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.2 }}
-        className="p-4 border-b border-gray-300 hover:bg-gray-200 transition-all text-left"
-      >
-        <h3 className="text-lg font-semibold text-gray-800 flex items-center">
-          {item.title} {index === 0 && <span className="ml-2 text-red-500 text-sm font-bold animate-pulse">NEW</span>}
-        </h3>
-        <p className="text-sm text-gray-700 mt-2">
-          {expanded[index] ? item.description : `${item.description.substring(0, 50)}...`}
-        </p>
-        <button
-          onClick={() => toggleReadMore(index)}
-          className="text-red-500 text-sm font-medium hover:underline mt-1 block"
-        >
-          {expanded[index] ? "Read Less" : "Read More →"}
-        </button>
-        <p className="text-xs text-gray-500 font-semibold flex items-center mt-2 mb-2">
-          <FaCalendarAlt className="mr-1" /> {new Date(item.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })} | <FaUsers className="mx-1" /> Audience: {item.audience}
-        </p>
-        <p className="text-xs text-gray-500 font-semibold mb-1 flex items-center">
-          <FaFolder className="mr-1" /> Category: {item.category} | <FaUser className="mx-1" /> Issued By: {item.issuedBy}
-        </p>
-        <Link href={item.link} className="flex items-center text-red-500 text-sm font-medium hover:underline mt-2">
-          <FaDownload className="mr-2" /> Download PDF
-        </Link>
-      </motion.div>
-    ))}
-  </div>
-</div>
+        {/* Scrollable Announcement List */}
+        <div className="flex flex-col gap-3 overflow-y-auto scrollbar-hide" >
+          {announcements.length === 0 ? (
+            <p className="text-gray-600 text-center">No announcements available.</p>
+          ) : (
+              announcements.map((item, index) => {
+                const noticeDate = new Date(
+                  `${item.notice_date.substring(0, 4)}-${item.notice_date.substring(4, 6)}-${item.notice_date.substring(6, 8)}`
+                );
+                const isNew = noticeDate >= new Date().setDate(new Date().getDate() - 3);
+  
+                return (
+              <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="p-4 bg-white shadow-md rounded-lg hover:bg-gray-100 transition-all"
+            >
+            <h3 className="text-lg font-semibold text-gray-800 flex items-center">
+                    {item.title} {isNew && <span className="ml-2 text-white pl-2 pr-2 text-sm bg-red-600 font-bold rounded-xl animate-pulse">New</span>}
+                  </h3>
+                <p className="text-sm text-gray-700 mt-2">
+                  {expanded[index] ? item.description : `${item.description.substring(0, 50)}...`}
+                </p>
+                <button
+                  onClick={() => toggleReadMore(index)}
+                  className="text-red-500 text-sm font-medium hover:underline mt-1 block"
+                >
+                  {expanded[index] ? "Read Less" : "Read More →"}
+                </button>
+                <p className="text-xs text-gray-500 font-semibold flex items-center mt-2 mb-2">
+  <FaCalendarAlt className="mr-1" /> {formatNoticeDate(item.notice_date)} | <FaUsers className="mx-1" /> Audience: {item.audience}
+</p>
 
+                <p className="text-xs text-gray-500 font-semibold mb-1 flex items-center">
+                  <FaFolder className="mr-1" /> Category: {item.category} | <FaUser className="mx-1" /> Issued By: {item.issued_by}
+                </p>
+                {item.attachments && (
+                  <Link href={item.attachments} className="flex items-center text-red-500 text-sm font-medium hover:underline mt-2">
+                    <FaDownload className="mr-2" /> Download PDF
+                  </Link>
+                )}
+              </motion.div>
+            );
+          })
+        )}
+        </div>
+      </div>
     </section>
   );
 };

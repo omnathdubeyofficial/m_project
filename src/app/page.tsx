@@ -31,6 +31,7 @@ export default function Home() {
     <div >
       {/* <Header/> */}
       <Carousel/>
+      <Work_with_us/>
       <Section_Page/>
       <Offerings/>
       <Hero/>
@@ -41,7 +42,7 @@ export default function Home() {
       {/* <ProfessionalCourses/> */}
       {/* <HistoryPage/> */}
       {/* <School_Grid/> */}
-      <Work_with_us/>
+
 
       {/* <CTA_Section/> */}
       {/* <Stats/> */}
