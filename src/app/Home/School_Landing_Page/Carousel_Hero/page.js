@@ -89,9 +89,8 @@ const HeroSection = () => {
   if (error) return <p className="text-center p-4 text-red-600">Error: {error}</p>;
 
   return (
-    <section className="relative w-screen h-screen flex flex-col md:flex-row items-center justify-between overflow-hidden bg-gray-50">
-      {/* Video Carousel */}
-      <div className="relative w-full md:w-2/3 h-screen">
+ <section className="relative w-screen h-screen flex flex-col md:flex-row items-center justify-between overflow-hidden bg-red-100">
+  <div className="relative w-full md:w-2/3 h-screen video-container">
         {slides.map((video, index) => (
           <video
             key={index}
@@ -119,7 +118,7 @@ const HeroSection = () => {
 
       {/* Announcements Section */}
       <div className="w-full md:w-1/3 h-screen bg-red-100 p-4 md:p-8 overflow-hidden z-10 flex flex-col justify-start pt-16 md:pt-24">
-        <h2 className="text-2xl font-bold text-white bg-red-600 p-3 mb-2 border-b-2 text-left flex items-center">
+        <h2 className="text-2xl font-semibold text-white bg-red-600 p-3 mb-2 border-b-2 text-left flex items-center">
           <span className="mr-2 text-xl"><FaClipboardList className="mx-1" /></span> Latest Circulars
         </h2>
 
