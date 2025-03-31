@@ -1,9 +1,12 @@
+import Link from 'next/link'
+
 const links = [
-  { name: 'Teaching Positions', href: '#' },
-  { name: 'Internship Program', href: '#' },
-  { name: 'Our Mission', href: '#' },
-  { name: 'Meet Our Faculty', href: '#' },
+  { name: 'Teaching Positions', href: '/School_Landing_Page/Our_Faculty' },
+  { name: 'Internship Program', href: '/internship' },
+  { name: 'Our Mission', href: '/mission' },
+  { name: 'Meet Our Faculty', href: '/Home/School_Landing_Page/Our_Faculty' },
 ]
+
 const stats = [
   { name: 'Campuses', value: '5' },
   { name: 'Total Students', value: '5000+' },
@@ -29,9 +32,9 @@ export default function Work_with_us() {
         <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base/7 font-semibold text-white sm:grid-cols-2 md:flex lg:gap-x-10">
             {links.map((link) => (
-              <a key={link.name} href={link.href}>
+              <Link key={link.name} href={link.href}>
                 {link.name} <span aria-hidden="true">&rarr;</span>
-              </a>
+              </Link>
             ))}
           </div>
           <dl className="mt-16 grid grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 lg:grid-cols-4">
