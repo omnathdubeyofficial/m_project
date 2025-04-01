@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState("overview");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [circles, setCircles] = useState([]); // Store circle data
 
   const fadeInUp = { hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } } };
@@ -16,6 +15,13 @@ export default function Home() {
   // Section Data with Background Colors
   const sections = {
     overview: {
+      title: "The Pulse of Clean Energy",
+      desc1: "Bioenergy harnesses nature’s cycle, capturing carbon in real-time.",
+      desc2: "A renewable force surpassing all, lighting the path ahead.",
+      buttonText: "Dive Into the Future",
+      bgColor: "bg-gradient-to-br from-green-900/80 to-teal-900/80",
+    },
+    software: {
       title: "The Pulse of Clean Energy",
       desc1: "Bioenergy harnesses nature’s cycle, capturing carbon in real-time.",
       desc2: "A renewable force surpassing all, lighting the path ahead.",
@@ -138,57 +144,34 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Responsive Holographic Navigation */}
-      <nav className="sticky top-0 z-20 bg-gray-900/80 backdrop-blur-md">
-        <div className="container mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            {/* Mobile Menu Button */}
-            <button
-              className="sm:hidden text-white focus:outline-none"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
-                />
-              </svg>
-            </button>
-
-            {/* Navigation Links */}
-            <motion.div
-              className={`${
-                isMenuOpen ? "flex" : "hidden"
-              } sm:flex flex-col sm:flex-row justify-center gap-8 sm:gap-12 absolute sm:static top-16 left-0 right-0 bg-gray-900/95 sm:bg-transparent p-4 sm:p-0`}
-              initial="hidden"
-              animate="visible"
-              variants={staggerChildren}
-            >
-              {["Overview", "Tracking", "Programmes"].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => {
-                    setActiveSection(item.toLowerCase());
-                    setIsMenuOpen(false);
-                  }}
-                  className={`relative text-base sm:text-lg font-medium uppercase tracking-wider ${
-                    activeSection === item.toLowerCase() ? "text-green-400" : "text-gray-300"
-                  } hover:text-green-400 transition-all duration-500`}
-                >
-                  <motion.span variants={glowEffect}>{item}</motion.span>
-                  {activeSection === item.toLowerCase() && (
-                    <motion.div
-                      className="absolute -bottom-2 left-0 w-full h-1 bg-green-400 rounded-full"
-                      layoutId="underline"
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    />
-                  )}
-                </button>
-              ))}
-            </motion.div>
-          </div>
+      {/* Scrollable Holographic Navigation */}
+      <nav className="sticky top-0 z-20 bg-gray-900/80 backdrop-blur-md overflow-x-auto whitespace-nowrap py-4">
+        <div className="container mx-auto px-4 sm:px-6">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={staggerChildren}
+            className="flex justify-start sm:justify-center gap-8 sm:gap-12"
+          >
+            {["Overview", "Tracking", "Programmes","software"].map((item) => (
+              <button
+                key={item}
+                onClick={() => setActiveSection(item.toLowerCase())}
+                className={`relative text-base sm:text-lg font-medium uppercase tracking-wider ${
+                  activeSection === item.toLowerCase() ? "text-green-400" : "text-gray-300"
+                } hover:text-green-400 transition-all duration-500`}
+              >
+                <motion.span variants={glowEffect}>{item}</motion.span>
+                {activeSection === item.toLowerCase() && (
+                  <motion.div
+                    className="absolute -bottom-2 left-0 w-full h-1 bg-green-400 rounded-full"
+                    layoutId="underline"
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  />
+                )}
+              </button>
+            ))}
+          </motion.div>
         </div>
       </nav>
 
