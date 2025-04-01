@@ -1,111 +1,279 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import { FaBook, FaChalkboardTeacher, FaLightbulb } from 'react-icons/fa';
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { useState, useEffect } from "react";
 
-export default function OurMission() {
-  // Animation Variants
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+export default function Home() {
+  const [activeSection, setActiveSection] = useState("overview");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [circles, setCircles] = useState([]); // Store circle data
+
+  const fadeInUp = { hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } } };
+  const staggerChildren = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.4 } } };
+  const glowEffect = { hidden: { scale: 0.9, opacity: 0 }, visible: { scale: 1, opacity: 1, transition: { duration: 1.2 } } };
+
+  // Section Data with Background Colors
+  const sections = {
+    overview: {
+      title: "The Pulse of Clean Energy",
+      desc1: "Bioenergy harnesses nature’s cycle, capturing carbon in real-time.",
+      desc2: "A renewable force surpassing all, lighting the path ahead.",
+      buttonText: "Dive Into the Future",
+      bgColor: "bg-gradient-to-br from-green-900/80 to-teal-900/80",
+    },
+    tracking: {
+      title: "Mapping Bioenergy’s Rise",
+      desc1: "Real-time insights into global bioenergy adoption.",
+      desc2: "Visualizing the shift to a sustainable world.",
+      buttonText: "See the Flow",
+      bgColor: "bg-gradient-to-br from-blue-900/80 to-indigo-900/80",
+    },
+    programmes: {
+      title: "Bioenergy Ecosystems",
+      desc1: "Pioneering initiatives for a thriving planet.",
+      desc2: "Uniting innovators for a renewable tomorrow.",
+      buttonText: "Shape the Future",
+      bgColor: "bg-gradient-to-br from-emerald-900/80 to-lime-900/80",
+    },
+  };
+
+  // Cards Data
+  const cards = [
+    {
+      title: "Living Biomass",
+      desc: "Organic energy from earth’s core materials.",
+      img: "/img/biomass-orbit.png",
+      glowColor: "rgba(34, 197, 94, 0.5)",
+    },
+    {
+      title: "Emission Shift",
+      desc: "Redefining energy with zero-waste cycles.",
+      img: "/img/energy-wave.png",
+      glowColor: "rgba(59, 130, 246, 0.5)",
+    },
+    {
+      title: "Next Horizon",
+      desc: "Innovations fueling bioenergy’s frontier.",
+      img: "/img/future-sphere.png",
+      glowColor: "rgba(234, 179, 8, 0.5)",
+    },
+  ];
+
+  // Generate circles only once on client-side mount
+  useEffect(() => {
+    const generatedCircles = Array.from({ length: 30 }).map(() => ({
+      width: Math.random() * 100 + 50,
+      height: Math.random() * 100 + 50,
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+    }));
+    setCircles(generatedCircles);
+  }, []); // Empty dependency array ensures it runs once on mount
+
+  // Animated Circles Component
+  const AnimatedCircles = () => {
+    const circleVariants = {
+      animate: {
+        y: [0, -20, 0],
+        opacity: [0.2, 0.8, 0.2],
+        transition: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+      },
+    };
+
+    return (
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {circles.map((circle, idx) => (
+          <motion.div
+            key={idx}
+            className="absolute rounded-full bg-gradient-to-r from-green-400/30 to-blue-500/30"
+            style={{
+              width: circle.width,
+              height: circle.height,
+              top: circle.top,
+              left: circle.left,
+            }}
+            variants={circleVariants}
+            animate="animate"
+          />
+        ))}
+      </div>
+    );
+  };
+
+  // Content Transition Animation
+  const contentVariants = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeInOut" } },
+    exit: { opacity: 0, x: 50, transition: { duration: 0.6, ease: "easeInOut" } },
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-700 to-gray-800 text-white px-6 py-44 flex flex-col space-y-20">
-      {/* Section 1: Left Content, Right Image */}
-      <div className="flex flex-col md:flex-row items-center max-w-6xl mx-auto space-y-10 md:space-y-0 md:space-x-10">
-        {/* Left Content */}
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-green-950 to-blue-950 font-sans antialiased overflow-hidden">
+      {/* Hero Section */}
+      <section className="relative min-h-[60vh] sm:min-h-[80vh] flex items-center justify-center">
+        <AnimatedCircles />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/50"></div>
         <motion.div
           initial="hidden"
           animate="visible"
-          variants={fadeIn}
-          className="md:w-1/2 text-left"
+          variants={staggerChildren}
+          className="container mx-auto px-4 sm:px-6 z-10 text-center text-white"
         >
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-teal-500">
-            Our School’s Mission
-          </h1>
-          <p className="text-lg md:text-xl text-gray-100 leading-relaxed">
-            To nurture young minds, foster excellence, and prepare students for a world of opportunities with a blend of innovation and tradition.
-          </p>
-        </motion.div>
-
-        {/* Right Image */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeIn}
-          className="md:w-1/2"
-        >
-          <Image
-            src="/img/q.png" // Replace with your image
-            alt="Our School in Action"
-            width={500}
-            height={300}
-            className="rounded-xl shadow-2xl border-2 border-orange-400"
-          />
-        </motion.div>
-      </div>
-
-      {/* Section 2: Left Content, Right Cards */}
-      <div className="flex flex-col md:flex-row items-center max-w-6xl mx-auto space-y-10 md:space-y-0 md:space-x-10">
-        {/* Left Content */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeIn}
-          className="md:w-1/2 text-left"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-teal-300">
-            Our Core Pillars
-          </h2>
-          <p className="text-lg text-gray-200 leading-relaxed">
-            We believe in a holistic approach to education, empowering students through inspiration, growth, and creativity.
-          </p>
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            className="mt-6 px-8 py-3 text-lg bg-gradient-to-r from-teal-500 to-orange-400 text-white font-bold rounded-full shadow-xl hover:shadow-teal-500/50 transition-all"
+          <motion.h1
+            variants={fadeInUp}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold tracking-tight"
           >
-            Discover More
-          </motion.button>
+            Igniting the{" "}
+            <span className="block bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
+              Bioenergy Cosmos
+            </span>
+          </motion.h1>
+          <motion.p
+            variants={fadeInUp}
+            className="mt-4 text-base sm:text-lg md:text-xl lg:text-2xl max-w-xs sm:max-w-md md:max-w-2xl mx-auto"
+          >
+            A renewable universe awaits—sustainable, boundless, alive.
+          </motion.p>
         </motion.div>
+      </section>
 
-        {/* Right Cards */}
-        <div className="md:w-1/2 grid grid-cols-1 gap-6">
-          {[
-            {
-              title: "Inspire Learning",
-              desc: "Encouraging a lifelong love for knowledge.",
-              icon: <FaBook className="text-orange-400 text-4xl" />,
-            },
-            {
-              title: "Empower Growth",
-              desc: "Supporting every student to shine brightly.",
-              icon: <FaChalkboardTeacher className="text-teal-400 text-4xl" />,
-            },
-            {
-              title: "Ignite Ideas",
-              desc: "Cultivating creativity and critical thinking.",
-              icon: <FaLightbulb className="text-yellow-400 text-4xl" />,
-            },
-          ].map((item, index) => (
+      {/* Responsive Holographic Navigation */}
+      <nav className="sticky top-0 z-20 bg-gray-900/80 backdrop-blur-md">
+        <div className="container mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between">
+            {/* Mobile Menu Button */}
+            <button
+              className="sm:hidden text-white focus:outline-none"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+                />
+              </svg>
+            </button>
+
+            {/* Navigation Links */}
             <motion.div
-              key={index}
+              className={`${
+                isMenuOpen ? "flex" : "hidden"
+              } sm:flex flex-col sm:flex-row justify-center gap-8 sm:gap-12 absolute sm:static top-16 left-0 right-0 bg-gray-900/95 sm:bg-transparent p-4 sm:p-0`}
               initial="hidden"
               animate="visible"
-              variants={fadeIn}
-              whileHover={{ scale: 1.05, rotate: 2 }}
-              className="bg-gray-700 p-5 rounded-xl shadow-lg flex items-start space-x-4 border border-gray-600 hover:border-teal-500 transition-all"
+              variants={staggerChildren}
             >
-              <div>{item.icon}</div>
-              <div>
-                <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
-                <p className="text-gray-200 text-sm">{item.desc}</p>
+              {["Overview", "Tracking", "Programmes"].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => {
+                    setActiveSection(item.toLowerCase());
+                    setIsMenuOpen(false);
+                  }}
+                  className={`relative text-base sm:text-lg font-medium uppercase tracking-wider ${
+                    activeSection === item.toLowerCase() ? "text-green-400" : "text-gray-300"
+                  } hover:text-green-400 transition-all duration-500`}
+                >
+                  <motion.span variants={glowEffect}>{item}</motion.span>
+                  {activeSection === item.toLowerCase() && (
+                    <motion.div
+                      className="absolute -bottom-2 left-0 w-full h-1 bg-green-400 rounded-full"
+                      layoutId="underline"
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    />
+                  )}
+                </button>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Dynamic Content Section */}
+      <section id="content" className="container mx-auto px-4 sm:px-6 py-12 sm:py-24 relative">
+        <AnimatedCircles />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeSection}
+            variants={contentVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className={`relative flex flex-col md:flex-row items-center gap-8 md:gap-16 z-10 p-6 sm:p-8 rounded-2xl backdrop-blur-md ${sections[activeSection].bgColor}`}
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="md:w-1/2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white"
+            >
+              {sections[activeSection].title.split(" ").map((word, idx) =>
+                word === "Clean" || word === "Rise" || word === "Ecosystems" ? (
+                  <span
+                    key={idx}
+                    className="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent"
+                  >
+                    {word}{" "}
+                  </span>
+                ) : (
+                  `${word} `
+                )
+              )}
+            </motion.h2>
+            <motion.div variants={fadeInUp} className="md:w-1/2 text-base sm:text-lg text-gray-200">
+              <p>{sections[activeSection].desc1}</p>
+              <p className="mt-4">{sections[activeSection].desc2}</p>
+              <motion.button
+                whileHover={{ scale: 1.1, boxShadow: "0 0 20px rgba(34, 197, 94, 0.7)" }}
+                whileTap={{ scale: 0.95 }}
+                className="mt-6 px-6 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-full shadow-lg hover:from-green-700 hover:to-blue-700 transition-all duration-500 text-sm sm:text-base"
+              >
+                {sections[activeSection].buttonText}
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>
+      </section>
+
+      {/* Cards Section */}
+      <section id="cards" className="container mx-auto px-4 sm:px-6 py-12 sm:py-24 relative">
+        <AnimatedCircles />
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerChildren}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-12"
+        >
+          {cards.map((card, idx) => (
+            <motion.div
+              key={idx}
+              variants={glowEffect}
+              whileHover={{ scale: 1.05, boxShadow: `0 0 30px ${card.glowColor}` }}
+              className="relative bg-gray-800/50 backdrop-blur-md rounded-2xl overflow-hidden border border-gray-700/50"
+            >
+              <Image
+                src={card.img}
+                alt={card.title}
+                width={600}
+                height={400}
+                className="w-full h-48 sm:h-64 object-cover opacity-80"
+              />
+              <div className="p-4 sm:p-6">
+                <h3 className="text-lg sm:text-2xl font-semibold text-white">{card.title}</h3>
+                <p className="mt-2 text-sm sm:text-base text-gray-300">{card.desc}</p>
               </div>
+              <motion.div
+                className="absolute inset-0 pointer-events-none"
+                animate={{ opacity: [0, 0.2, 0], scale: [1, 1.1, 1] }}
+                transition={{ duration: 5, repeat: Infinity }}
+                style={{ background: `radial-gradient(circle, ${card.glowColor}, transparent)` }}
+              />
             </motion.div>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </section>
     </div>
   );
 }
