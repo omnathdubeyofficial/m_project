@@ -1,266 +1,368 @@
 "use client";
 import Link from "next/link";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import {useMemo, useState, useEffect, useRef } from 'react';
-import { headerData } from "../Header/Navigation/menuData";
-import Logo from "./Logo";
-import HeaderLink from "../Header/Navigation/HeaderLink";
-import MobileHeaderLink from "../Header/Navigation/MobileHeaderLink";
+import { useRouter, usePathname } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Image from "next/image";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { GET_TOKAN_MANAGEMENT_DATA } from "../../../../query/authTokanQuery";
-import {LOGOUT_MUTATION} from "../../../../mutation/logoutMutation/logoutMutation"
-import { executeQuery,executeMutation } from "../../../../graphqlClient";
 
+// Navigation data with dropdown support
+const navData = [
+  { name: "Home", href: "/" },
+  {
+    name: "About Us",
+    href: "/about",
+    dropdown: [
+      { name: "Our Vision", href: "/about/vision" },
+      { name: "Our Mission", href: "/about/mission" },
+      { name: "Our Team", href: "/about/team" },
+    ],
+  },
+  {
+    name: "Academics",
+    href: "/academics",
+    dropdown: [
+      { name: "Curriculum", href: "/academics/curriculum" },
+      { name: "Faculty", href: "/academics/faculty" },
+      { name: "Achievements", href: "/academics/achievements" },
+    ],
+  },
+  { name: "Parents Corner", href: "/parents" },
+  { name: "Infrastructure", href: "/infrastructure" },
+  {
+    name: "Admissions",
+    href: "/admissions",
+    dropdown: [
+      { name: "Admission Process", href: "/admissions/process" },
+      { name: "Fee Structure", href: "/admissions/fees" },
+      { name: "Admission Enquiry", href: "/admissions/enquiry" },
+    ],
+  },
+  { name: "Career", href: "/career" },
+  { name: "General Info", href: "/info" },
+];
 
-const Header: React.FC = () => {
+const SchoolHeader: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const [navbarOpen, setNavbarOpen] = useState(false);
-  const [sticky, setSticky] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [logoutMessage, setLogoutMessage] = useState('');
-  const [user, setUser] = useState(null);
-
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
+  // Handle sticky header on scroll
   const handleScroll = () => {
-    setSticky(window.scrollY >= 20);
+    setIsSticky(window.scrollY >= 50);
   };
 
-
-  
+  // Close mobile menu or dropdown when clicking outside
   const handleClickOutside = (event: MouseEvent) => {
     if (
       mobileMenuRef.current &&
       !mobileMenuRef.current.contains(event.target as Node) &&
-      navbarOpen
+      isMenuOpen
     ) {
-      setNavbarOpen(false);
+      setIsMenuOpen(false);
     }
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        if (!user) { // Avoid redundant API calls
-          const response = await executeQuery(GET_TOKAN_MANAGEMENT_DATA);
-          if (response && response.getUserDataFromToken) {
-            setUser(response.getUserDataFromToken);
-          }
-        }
-      } catch (error) {
-        console.error("Error Fetching User Data:", error);
-      }
-    };
-
-    fetchUserData();
-  }, [user]);
-
-useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [navbarOpen]);
+  }, [isMenuOpen]);
 
+  // Prevent body scroll when mobile menu is open
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.target.closest('.profile-menu')) {
-        setIsProfileOpen(false);
-      }
-    };
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
-
-
-    const handleLogout = async () => {
-      try {
-        const response = await executeMutation(LOGOUT_MUTATION);
-        
-        if (response ) {
-          setLogoutMessage('' + response.logout.message);
-          
-          setTimeout(() => {
-            window.location.reload(); 
-          }, 1000);
-        }
-      } catch (error) {
-        console.error('Logout error:', error);
-      }
-    };
-
-
-  useEffect(() => {
-    if ( navbarOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+    return () => {
       document.body.style.overflow = "";
-    }
-  }, [ navbarOpen]);
+    };
+  }, [isMenuOpen]);
+
+  // Toggle dropdown for desktop and mobile
+  const toggleDropdown = (name: string) => {
+    setActiveDropdown(activeDropdown === name ? null : name);
+  };
 
   return (
     <header
-    className={`fixed top-0 z-40 w-full transition-all duration-300 ${sticky ? "  bg-white py-4" : " bg-red-100 py-4"
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        isSticky ? "shadow-lg" : ""
       }`}
-  >
-    {/* <div className="lg:py-0 py-2"> */}
-    <div >
-      <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md flex items-center justify-between px-4">
-        <Logo />
-        <nav className="hidden lg:flex flex-grow items-center gap-8 justify-center">
-          {headerData.map((item, index) => (
-            <HeaderLink key={index} item={item} />
-          ))} 
+    >
+      {/* Top Bar - Hidden on Mobile */}
+      <div
+        className={`bg-[#8B0000] text-white py-2 transition-all duration-300 hidden md:block ${
+          isSticky ? "hidden" : "block"
+        }`}
+      >
+        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-2">
+          <div className="flex flex-wrap items-center gap-3 text-xs">
+            <div className="flex items-center gap-1">
+              <Icon icon="mdi:school" className="text-white" width={16} />
+              <span>SchoolShopper</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Icon icon="mdi:email" className="text-white" width={16} />
+              <span>foe.bh@ariseinternational.in</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Icon icon="mdi:phone" className="text-white" width={16} />
+              <span>+91-99665795376</span>
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
+            <button
+              onClick={() => router.push("/admissions/enquiry")}
+              className="bg-gray-300 text-gray-800 px-3 py-1 rounded-full flex items-center gap-1 hover:bg-gray-400 transition-all duration-300 w-full md:w-auto justify-center text-xs"
+              aria-label="Admission Enquiry"
+            >
+              <Icon icon="mdi:information" width={16} />
+              <span className="font-medium">Admission Enquiry</span>
+            </button>
+            <button
+              onClick={() => router.push("/fees/payment")}
+              className="bg-[#8B0000] text-white px-3 py-1 rounded-full flex items-center gap-1 hover:bg-[#6B0000] transition-all duration-300 border border-white w-full md:w-auto justify-center text-xs"
+              aria-label="Online Fee Payment"
+            >
+              <Icon icon="mdi:credit-card" width={16} />
+              <span className="font-medium">Online Fee Payment</span>
+            </button>
+            <button
+              onClick={() => router.push("/login")}
+              className="bg-blue-600 text-white px-3 py-1 rounded-full flex items-center gap-1 hover:bg-blue-700 transition-all duration-300 w-full md:w-auto justify-center text-xs"
+              aria-label="Edunext ERP Login"
+            >
+              <Icon icon="mdi:login" width={16} />
+              <span className="font-medium">Edunext ERP™ Login</span>
+            </button>
+          </div>
+        </div>
+      </div>
 
+      {/* Main Navbar */}
+      <div
+  className={`bg-white transition-all duration-300 
+    ${isSticky ? "py-2" : "py-2"} 
+    max-sm:py-4`}
+>
 
-        </nav>
-        <div className='flex items-center gap-4'>
-      {!user?.userid ? (
-        <>
-          <Link
-            href='/login'
-            className='bg-primary text-white hover:bg-primary/15 hover:text-primary text-lg py-2 px-6 rounded-full transition-all duration-300'
-          >
-            Login
-          </Link>
-          {/* <Link
-            href='/student_dash/students_forms/admission_form'
-            className='bg-primary text-white hover:bg-primary/15 hover:text-primary  text-lg py-2 px-6 rounded-full transition-all duration-300'
-          >
-            Admission Form
-          </Link> */}
-        </>
-      ) : (
-        <div className='relative'>
-          <div
-            className='w-14 h-14 rounded-full bg-gray-200 cursor-pointer overflow-hidden profile-menu'
-            onClick={() => setIsProfileOpen(!isProfileOpen)}
-          >
+        <div className="container mx-auto px-4 flex items-center justify-between">
+          {/* Logo Section */}
+          <div className="flex items-center gap-2">
             <Image
-              src='/img/q.png'
-              alt='Profile'
-              width={500}
-              height={500}
-              className='w-full h-full object-cover transition-transform duration-200 hover:scale-105'
+              src="/images/logo/image.png" // Replace with your school logo path
+              alt="Arise International School Logo"
+              width={isSticky ? 40 : 50}
+              height={isSticky ? 40 : 50}
+              className="object-contain transition-all duration-300"
             />
+            <div>
+              <h1
+                className={`font-bold text-[#8B0000] transition-all duration-300 ${
+                  isSticky ? "text-lg" : "text-xl"
+                }`}
+              >
+                Arise International School
+              </h1>
+              <p
+                className={`text-[10px] text-gray-600 `}
+              >
+                CBSE Affiliation No. 1131036
+              </p>
+            </div>
           </div>
 
-        
-          {isProfileOpen && (
-  <div className='absolute top-16 right-0 bg-white shadow-2xl rounded-2xl p-4 z-50 w-64 transition-all duration-300 ease-in-out transform scale-95 hover:scale-100 animate-fade-in'>
-    <div className='flex items-center gap-3 mb-4 p-3 bg-gradient-to-r from-green-500 to-green-700 text-white rounded-xl shadow-md'>
-      <Icon icon='tabler:id' className='text-white' />
-      <div className='flex-1 overflow-hidden'>
-        <span className='block font-semibold truncate'>{user.userid}</span>
-        <span className='block text-sm opacity-80'>User ID</span>
-      </div>
-    </div>
-    <Link href='/ProfilePage_Management/Admin_Profile' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
-      <Icon icon='tabler:user' className='text-green-500' />
-      <span className='text-gray-800 font-medium'>Profile</span>
-    </Link>
-    <Link href='/ProfilePage_Management/Settings_Page' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
-      <Icon icon='tabler:settings' className='text-green-500' />
-      <span className='text-gray-800 font-medium'>Settings</span>
-    </Link>
-    <Link href='/ProfilePage_Management/Help_Page' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
-      <Icon icon='tabler:help-circle' className='text-green-500' />
-      <span className='text-gray-800 font-medium'>Help</span>
-    </Link>
-    <Link href='/notifications' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
-      <Icon icon='tabler:bell' className='text-green-500' />
-      <span className='text-gray-800 font-medium'>Notifications</span>
-    </Link>
-    <Link href='/ProfilePage_Management/Support_Page' className='flex items-center gap-3 mb-2 p-3 rounded-xl bg-gray-50 hover:bg-green-50 transition-all'>
-      <Icon icon='tabler:lifebuoy' className='text-green-500' />
-      <span className='text-gray-800 font-medium'>Support</span>
-    </Link>
-    <button
-      onClick={handleLogout}
-      className='flex items-center gap-3 w-full text-left p-3 rounded-xl bg-gray-50 hover:bg-red-50 transition-all'
-    >
-      <Icon icon='tabler:logout' className='text-red-500' />
-      <span className='text-red-600 font-medium'>Logout</span>
-    </button>
-  </div>
-)}
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {navData.map((item, index) => (
+              <div key={index} className="relative group">
+                {item.dropdown ? (
+                  <>
+                    <button
+                      onClick={() => toggleDropdown(item.name)}
+                      className={`text-gray-800 hover:text-[#8B0000] font-medium py-1 px-2 text-sm transition-all duration-300 flex items-center gap-1 border-b-2 ${
+                        pathname === item.href
+                          ? "border-[#8B0000]"
+                          : "border-transparent"
+                      } focus:outline-none focus:border-[#8B0000]`}
+                      aria-expanded={activeDropdown === item.name}
+                      aria-haspopup="true"
+                    >
+                      {item.name}
+                      <Icon
+                        icon="mdi:chevron-down"
+                        width={16}
+                        className={`transition-transform duration-300 ${
+                          activeDropdown === item.name ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+                    <div
+                      className={`absolute top-full left-0 bg-white shadow-lg rounded-b-lg py-1 w-40 transition-all duration-300 transform ${
+                        activeDropdown === item.name
+                          ? "opacity-100 scale-y-100"
+                          : "opacity-0 scale-y-0 pointer-events-none"
+                      } origin-top z-50 border-b-2 border-[#8B0000]`}
+                    >
+                      {item.dropdown.map((subItem, subIndex) => (
+                        <Link
+                          key={subIndex}
+                          href={subItem.href}
+                          className="block px-3 py-1 text-gray-700 hover:bg-[#8B0000] hover:text-white transition-all duration-200 text-sm"
+                        >
+                          {subItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className={`text-gray-800 hover:text-[#8B0000] font-medium py-1 px-2 text-sm transition-all duration-300 border-b-2 ${
+                      pathname === item.href
+                        ? "border-[#8B0000]"
+                        : "border-transparent"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                )}
+              </div>
+            ))}
+          </nav>
 
-        </div>
-      )}
-
-          
+          {/* Mobile Menu Button */}
           <button
-            onClick={() => setNavbarOpen(!navbarOpen)}
-            className="block lg:hidden p-2 rounded-lg"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="lg:hidden p-1 text-gray-800"
             aria-label="Toggle mobile menu"
           >
-            <span className="block w-6 h-0.5 bg-black"></span>
-            <span className="block w-6 h-0.5 bg-black mt-1.5"></span>
-            <span className="block w-6 h-0.5 bg-black mt-1.5"></span>
+            <Icon
+              icon={isMenuOpen ? "mdi:close" : "mdi:menu"}
+              width={24}
+              height={24}
+            />
           </button>
         </div>
-      </div>
-      {navbarOpen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-40" />
-      )}
-      <div
-        ref={mobileMenuRef}
-        className={`lg:hidden fixed top-0 right-0 h-full w-full bg-white shadow-lg transform transition-transform duration-300 max-w-xs ${navbarOpen ? "translate-x-0" : "translate-x-full"
-          } z-50`}
-      >
-        <div className="flex items-center justify-between p-4">
-          <h2 className="text-lg font-bold text-black">
-            <Logo />
-          </h2>
 
+        {/* Desktop Navigation Bar (Red Border) */}
+        <div className="hidden lg:block border-t-[1.5px] border-[#8B0000] mt-1"></div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+  <>
+    {/* Overlay */}
+    <div className="fixed inset-0 bg-black bg-opacity-60 z-40 lg:hidden transition-opacity duration-300" />
+    
+    {/* Mobile Menu */}
+    <div
+      ref={mobileMenuRef}
+      className="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl transform transition-transform duration-500 lg:hidden z-50 ease-in-out translate-x-0 rounded-l-2xl"
+    >
+      {/* Header */}
+      <div className="p-4 border-b flex items-center justify-between bg-white text-white rounded-tl-2xl">
+        <img src="/images/logo/image.png" alt="School Logo" className="h-16" />
+        <button
+          onClick={() => setIsMenuOpen(false)}
+          className="text-black hover:text-gray-300 transition"
+          aria-label="Close mobile menu"
+        >
+          <Icon icon="mdi:close" width={24} height={24} />
+        </button>
+      </div>
+      
+      {/* Navigation */}
+      <nav className="flex flex-col p-4 gap-2 text-sm">
+        {navData.map((item, index) => (
+          <div key={index}>
+            {item.dropdown ? (
+              <>
+                <button
+                  onClick={() => toggleDropdown(item.name)}
+                  className="w-full text-left text-gray-900 hover:text-white font-medium py-3 px-4 flex items-center justify-between border-b border-gray-300 transition-colors duration-300 hover:bg-red-600 rounded-md"
+                >
+                  {item.name}
+                  <Icon
+                    icon="mdi:chevron-down"
+                    width={18}
+                    className={`transition-transform duration-300 ${activeDropdown === item.name ? "rotate-180" : ""}`}
+                  />
+                </button>
+                <div
+                  className={`flex flex-col pl-4 transition-all duration-500 overflow-hidden ${activeDropdown === item.name ? "max-h-80 opacity-100" : "max-h-0 opacity-0"}`}
+                >
+                  {item.dropdown.map((subItem, subIndex) => (
+                    <Link
+                      key={subIndex}
+                      href={subItem.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="py-2 px-4 text-gray-700 hover:bg-red-600 hover:text-white transition-all duration-300 rounded-md border-b border-gray-300"
+                    >
+                      {subItem.name}
+                    </Link>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <Link
+                href={item.href}
+                onClick={() => setIsMenuOpen(false)}
+                className="block text-gray-900 hover:text-white font-medium py-3 px-4 border-b border-gray-300 transition-colors duration-300 hover:bg-red-600 rounded-md"
+              >
+                {item.name}
+              </Link>
+            )}
+          </div>
+        ))}
+        
+        {/* Mobile Action Buttons */}
+        <div className="mt-4 flex flex-col gap-3">
           <button
-  onClick={() => setNavbarOpen(false)}
-  className="w-5 h-5 absolute top-0 right-0 mr-8 mt-8"
-  aria-label="Close menu Modal"
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-full h-full text-black"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="18" y1="6" x2="6" y2="18" />
-    <line x1="6" y1="6" x2="18" y2="18" />
-  </svg>
-</button>
-
+            onClick={() => {
+              router.push("/admissions/enquiry");
+              setIsMenuOpen(false);
+            }}
+            className="bg-gray-200 text-gray-900 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-300 transition-all duration-300 justify-center shadow-sm"
+            aria-label="Admission Enquiry"
+          >
+            <Icon icon="mdi:information" width={18} />
+            <span className="font-medium">Admission Enquiry</span>
+          </button>
+          <button
+            onClick={() => {
+              router.push("/fees/payment");
+              setIsMenuOpen(false);
+            }}
+            className="bg-gradient-to-r from-red-700 to-red-900 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:from-red-800 hover:to-red-950 transition-all duration-300 justify-center shadow-md"
+            aria-label="Online Fee Payment"
+          >
+            <Icon icon="mdi:credit-card" width={18} />
+            <span className="font-medium">Online Fee Payment</span>
+          </button>
+          <button
+            onClick={() => {
+              router.push("/login");
+              setIsMenuOpen(false);
+            }}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-all duration-300 justify-center shadow-md"
+            aria-label="Edunext ERP Login"
+          >
+            <Icon icon="mdi:login" width={18} />
+            <span className="font-medium">Edunext ERP™ Login</span>
+          </button>
         </div>
-        <nav className="flex flex-col items-start p-4">
-          {headerData.map((item, index) => (
-            <MobileHeaderLink key={index} item={item} />
-          ))}
-          
-        </nav>
-      </div>
+      </nav>
     </div>
-
-
-{logoutMessage && (
-            <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg flex items-center space-x-2 animate-fade-in">
-
-              <FontAwesomeIcon icon={faSignOutAlt} className="w-6 h-6 text-white"  />
-              <span className="font-semibold text-lg">{logoutMessage}</span>
-            </div>
-          )}
-  </header>
-
+  </>
+)
+}
+    </header>
   );
 };
 
-export default Header;
+export default SchoolHeader;
