@@ -89,7 +89,7 @@ const HeroSection = () => {
   if (error) return <p className="text-center p-4 text-red-600">Error: {error}</p>;
 
   return (
- <section className="relative w-screen h-screen flex pb-6 flex-col md:flex-row items-center justify-between overflow-hidden bg-red-100">
+ <section className="relative w-screen h-screen flex pb-4 flex-col md:flex-row items-center justify-between overflow-hidden bg-red-100">
   <div className="relative w-full md:w-2/3 h-screen video-container">
         {slides.map((video, index) => (
           <video
