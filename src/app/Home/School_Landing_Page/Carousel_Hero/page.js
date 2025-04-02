@@ -117,7 +117,7 @@ const HeroSection = () => {
       </div>
 
       {/* Announcements Section */}
-      <div className="w-full md:w-1/3 h-screen bg-red-100 p-3 md:p-8 overflow-hidden z-10 flex flex-col justify-start pt-4 md:pt-24">
+      <div className="w-full md:w-1/3 h-screen bg-red-100 p-3 md:pr-7 overflow-hidden z-10 flex flex-col justify-start pt-4 md:pt-24">
         <h2 className="text-2xl font-semibold text-white bg-red-600 p-3 mb-2 border-b-2 text-left flex items-center">
           <span className="mr-2 text-xl"><FaClipboardList className="mx-1" /></span> Latest Circulars
         </h2>
@@ -139,7 +139,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="p-4 bg-white shadow-md rounded-lg hover:bg-gray-100 transition-all"
+              className="p-4 bg-white shadow-md  hover:bg-gray-100 transition-all"
             >
             <h3 className="text-lg font-semibold text-gray-800 flex items-center">
                     {item.title} {isNew && <span className="ml-2 text-white pl-2 pr-2 text-sm bg-red-600 font-bold rounded-xl animate-pulse">New</span>}
