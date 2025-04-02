@@ -4,10 +4,13 @@ import Masonry from 'react-masonry-css';
 import Link from 'next/link';
 
 const galleryImages = [
-    { src: '/images/Gallery/foodone.jpg', name: 'Caesar Salad(187 Kcal)', price: 35 },
-    { src: '/images/Gallery/foodtwo.jpg', name: 'Christmas salad(118 Kcal)', price: 17 },
-    { src: '/images/Gallery/foodthree.jpg', name: 'Sauteed mushrooms with pumpkin and sweet pepper(238 kcal)', price: 45 },
-    { src: '/images/Gallery/foodfour.jpg', name: 'BBQ Chicken Feast Pizza(272 kcal)', price: 27 },
+    { src: '/gallery/ai-generated-8659303_1280.jpg', name: 'Modern Classroom', description: 'Fully equipped digital classroom with smart boards.', path: '/gallery/classroom' },
+    { src: '/gallery/ai-generated-8817237_1280.png', name: 'School Library', description: 'A vast collection of books and a quiet reading space.', path: '/gallery/library' },
+    { src: '/gallery/living-room-8800183_1280.jpg', name: 'School Playground', description: 'A spacious playground with various sports facilities.', path: '/gallery/playground' },
+    { src: '/gallery/ai-generated-9487507_1280.png', name: 'School Playground', description: 'A spacious playground with various sports facilities.', path: '/gallery/playground' },
+    // { src: '/gallery/women-1178187_1280.jpg', name: 'Science Laboratory', description: 'Well-equipped science lab for practical learning.', path: '/gallery/laboratory' },
+    // { src: '/gallery/silhouette-2512805_1280.jpg', name: 'Science Laboratory', description: 'Well-equipped science lab for practical learning.', path: '/gallery/laboratory' },
+    // { src: '/gallery/sicily-4793099_1280.jpg', name: 'Science Laboratory', description: 'Well-equipped science lab for practical learning.', path: '/gallery/laboratory' },
 ];
 
 const Gallery = () => {
@@ -15,9 +18,9 @@ const Gallery = () => {
         <section>
             <div className='container mx-auto lg:max-w-screen-xl md:max-w-screen-md' id='gallery-section'>
                 <div className="text-center">
-                    <p className='text-primary text-lg font-normal mb-3 tracking-widest uppercase'>Our Gallery</p>
+                    <p className='text-primary text-lg font-normal mb-3 tracking-widest uppercase'>Our School Gallery</p>
                     <h2 className="text-3xl lg:text-5xl font-semibold text-black">
-                        Gallery of our cooked food.
+                    Explore Our School Campus
                     </h2>
                 </div>
                 <div className="my-16 px-6">
@@ -36,15 +39,13 @@ const Gallery = () => {
                                     height={500}
                                     className="object-cover w-full h-full"
                                 />
-                                <div className="w-full h-full absolute bg-black/40 top-full group-hover:top-0 duration-500 p-12 flex flex-col items-start gap-8 justify-end">
+                                <div className="w-full h-full absolute bg-black/40 top-full group-hover:top-0 duration-500 p-12 flex flex-col items-start gap-4 justify-end">
                                     <p className='text-white text-2xl'>
-                                        <span className='font-semibold'>Name:</span> {item.name}
+                                     {item.name}
                                     </p>
+                                    <p className='text-white text-lg'>{item.description}</p>
                                     <div className="flex items-center justify-between w-full">
-                                        <p className='text-white text-2xl'>
-                                            <span className='font-semibold'>Price:</span> ${item.price}
-                                        </p>
-                                        <Link href="#" className='text-white rounded-full bg-primary border border-primary py-2 px-6 hover:bg-primary/40 hover:backdrop-blur-sm'>
+                                        <Link href={item.path} className='text-white rounded-full bg-primary border border-primary py-2 px-6 hover:bg-primary/40 hover:backdrop-blur-sm'>
                                             Learn More
                                         </Link>
                                     </div>

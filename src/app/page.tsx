@@ -50,7 +50,7 @@ export default function Home() {
       <Workflow/>
       {/* <Features/> */}
       {/* <AboutUs/> */}
-      {/* <Gallery/> */}
+      <Gallery/>
       {/* <Newsletter/> */}
       {/* <Footer/> */}
     {/* <Login/> */}
