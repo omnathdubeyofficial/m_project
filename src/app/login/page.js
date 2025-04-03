@@ -7,6 +7,7 @@ import { VERIFY_OTP_MUTATION } from "../mutation/Otp_V/otpMutation";
 import { GET_LOGIN_DATA } from "../query/loginQuery";
 import Image from "next/image";
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube, FaCheckCircle, FaHome, FaArrowLeft } from "react-icons/fa";
+import Link from "next/link";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -32,7 +33,7 @@ const Login = () => {
     setPasswordError("");
 
     if (!username) {
-      setUsernameError("Student ID is required");
+      setUsernameError("User ID is required");
       return;
     }
     if (!password) {
@@ -71,7 +72,7 @@ const Login = () => {
         if (otpResult.verifyOtp.token) {
           localStorage.setItem("token", otpResult.verifyOtp.token);
         }
-        router.push("/dashboard"); // Redirect to a school dashboard
+        router.push("/dashboard");
       } else {
         setOtpError(otpResult?.verifyOtp?.error_msg || "OTP verification failed");
       }
@@ -84,74 +85,81 @@ const Login = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="text-lg font-medium text-blue-600">Loading...</div>
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-purple-100">
+        <div className="text-xl font-semibold text-blue-600 animate-pulse">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-green-100 p-4">
-      {/* Main Container */}
-      <div className="relative w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 md:bg-none relative overflow-hidden">
+      {/* Enhanced Animated Background (Visible only on desktop) */}
+      <div className="absolute inset-0 z-0 hidden md:block">
+        <div className="absolute w-80 h-80 bg-blue-400 rounded-full opacity-30 animate-[float_6s_ease-in-out_infinite] top-10 left-10"></div>
+        <div className="absolute w-96 h-96 bg-purple-400 rounded-full opacity-30 animate-[float_8s_ease-in-out_infinite] bottom-20 right-20"></div>
+        <div className="absolute w-64 h-64 bg-pink-400 rounded-full opacity-30 animate-[float_10s_ease-in-out_infinite] top-1/2 left-1/3"></div>
+      </div>
+
+      {/* Main Container with Glassmorphism */}
+      <div className="relative w-full max-w-7xl bg-white/10 md:bg-white/10 backdrop-blur-lg mt-16 shadow-xl border border-white/20 overflow-hidden flex flex-col md:flex-row z-10 transform transition-transform duration-300">
         
-        {/* Left Side - School Branding */}
-        <div className="md:w-1/2 bg-blue-600 text-white p-8 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center space-x-3">
-              <Image src="/img/school-logo.png" alt="School Logo" width={60} height={60} />
-              <h1 className="text-2xl font-bold">Springfield School</h1>
-            </div>
-            <p className="mt-4 text-sm">Welcome back! Log in to access your school portal securely.</p>
-          </div>
-          <div className="flex space-x-4 mt-6">
-            <a href="https://facebook.com" target="_blank" className="text-white hover:text-blue-200">
-              <FaFacebook size={24} />
-            </a>
-            <a href="https://instagram.com" target="_blank" className="text-white hover:text-blue-200">
-              <FaInstagram size={24} />
-            </a>
-            <a href="https://linkedin.com" target="_blank" className="text-white hover:text-blue-200">
-              <FaLinkedin size={24} />
-            </a>
-            <a href="https://youtube.com" target="_blank" className="text-white hover:text-blue-200">
-              <FaYoutube size={24} />
-            </a>
-          </div>
-        </div>
+      <div className="md:w-1/2 relative text-white p-10  flex flex-col justify-between min-h-[50vh] md:min-h-full">
+  <video
+    autoPlay
+    loop
+    muted
+    playsInline
+    className="absolute inset-0 w-full h-full object-cover z-[-1]"
+  >
+    <source src="/videos/8500482-hd_1920_1080_30fps.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+  <div className="relative z-10">
+    <div className="flex items-center space-x-4">
+      <Image src="/images/logo/image.png" alt="School Logo" width={70} height={70} className="rounded-full shadow-md" />
+    </div>
+  </div>
+  
+</div>
+
+
+
+
 
         {/* Right Side - Login Form */}
-        <div className="md:w-1/2 p-8">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-3xl font-bold text-gray-800">Student Login</h2>
-            <div className="flex space-x-2">
-              <button
-                onClick={() => router.push("/")}
-                className="text-blue-600 hover:text-blue-800 flex items-center"
-              >
-                <FaHome className="mr-1" /> Home
-              </button>
-              <button
+        <div className="md:w-1/2 p-10 bg-white/90 backdrop-blur-sm">
+        <div className="flex space-x-4 mb-5">
+        <button
                 onClick={() => router.back()}
-                className="text-blue-600 hover:text-blue-800 flex items-center"
+                className="text-indigo-600 hover:text-indigo-800 flex items-center text-sm font-medium"
               >
                 <FaArrowLeft className="mr-1" /> Back
               </button>
+              <button
+                onClick={() => router.push("/")}
+                className="text-indigo-600 hover:text-indigo-800 flex items-center text-sm font-medium"
+              >
+                <FaHome className="mr-1" /> Home
+              </button>
+          
             </div>
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-4xl font-semibold text-gray-900 tracking-tight">User Login</h2>
+           
           </div>
 
           <form className="space-y-6">
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">Student ID</label>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700">User ID</label>
               <input
                 id="username"
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter your Student ID"
+                className="mt-2 w-full rounded-xl border border-gray-200 p-4 focus:ring-2 focus:ring-indigo-500 bg-white/50 shadow-inner"
+                placeholder="Enter your User ID"
               />
-              {usernameError && <p className="text-red-500 text-sm mt-1">{usernameError}</p>}
+              {usernameError && <p className="text-red-500 text-sm mt-2">{usernameError}</p>}
             </div>
 
             <div>
@@ -161,39 +169,59 @@ const Login = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-blue-500"
+                className="mt-2 w-full rounded-xl border border-gray-200 p-4 focus:ring-2 focus:ring-indigo-500 bg-white/50 shadow-inner"
                 placeholder="Enter your password"
               />
-              {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
+              {passwordError && <p className="text-red-500 text-sm mt-2">{passwordError}</p>}
             </div>
 
             <button
               type="button"
               onClick={handleLogin}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200"
+              className="w-full bg-indigo-600 text-white py-3 rounded-xl shadow-lg hover:bg-indigo-700 transition duration-200 transform hover:-translate-y-1"
             >
               Sign In
             </button>
 
-            {errorMsg && <div className="text-red-500 text-sm text-center">{errorMsg}</div>}
+            <div className="text-center">
+              <Link href="/forgot-password" className="text-indigo-600 hover:text-indigo-800 text-sm font-medium hover:underline">
+                Forgot Password?
+              </Link>
+            </div>
+            <div className="relative z-10 flex justify-center space-x-3 mt-8">
+
+<a href="https://facebook.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#3b5998] text-white hover:bg-[#2d4373] transition transform hover:rotate-12">
+  <FaFacebook size={24} />
+</a>
+<a href="https://instagram.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#e1306c] text-white hover:bg-[#b92b5b] transition transform hover:rotate-12">
+  <FaInstagram size={24} />
+</a>
+<a href="https://linkedin.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#0077b5] text-white hover:bg-[#005f8f] transition transform hover:rotate-12">
+  <FaLinkedin size={24} />
+</a>
+<a href="https://youtube.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#ff0000] text-white hover:bg-[#cc0000] transition transform hover:rotate-12">
+  <FaYoutube size={24} />
+</a>
+</div>
+            {errorMsg && <div className="text-red-500 text-sm text-center mt-4">{errorMsg}</div>}
           </form>
         </div>
       </div>
 
       {/* Success Message */}
       {successMsg && (
-        <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2">
-          <FaCheckCircle size={20} />
-          <span>{successMsg}</span>
+        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-3 animate-bounce">
+          <FaCheckCircle size={22} />
+          <span className="font-medium">{successMsg}</span>
         </div>
       )}
 
       {/* OTP Modal */}
       {showOtpModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">Verify OTP</h3>
-            <div className="space-y-4">
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+          <div className="bg-white/95 backdrop-blur-md p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100">
+            <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">Verify OTP</h3>
+            <div className="space-y-6">
               <div>
                 <label htmlFor="otp" className="block text-sm font-medium text-gray-700">Enter OTP</label>
                 <input
@@ -201,21 +229,21 @@ const Login = () => {
                   type="text"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-blue-500"
+                  className="mt-2 w-full rounded-xl border border-gray-200 p-4 focus:ring-2 focus:ring-indigo-500 bg-white/50 shadow-inner"
                   placeholder="Enter OTP"
                 />
-                {otpError && <p className="text-red-500 text-sm mt-1">{otpError}</p>}
+                {otpError && <p className="text-red-500 text-sm mt-2">{otpError}</p>}
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between gap-4">
                 <button
                   onClick={() => setShowOtpModal(false)}
-                  className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300"
+                  className="w-full bg-gray-200 text-gray-800 py-3 px-6 rounded-xl hover:bg-gray-300 transition"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleOtpSubmit}
-                  className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
+                  className="w-full bg-indigo-600 text-white py-3 px-6 rounded-xl hover:bg-indigo-700 transition"
                 >
                   Verify
                 </button>
