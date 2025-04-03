@@ -1,23 +1,26 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState,useEffect } from "react";
-import { executeQuery } from "../graphqlClient";
+import { useState, useEffect } from "react";
+import { executeQuery, executeMutation } from "../graphqlClient";
+import { VERIFY_OTP_MUTATION } from "../mutation/Otp_V/otpMutation";
 import { GET_LOGIN_DATA } from "../query/loginQuery";
 import Image from "next/image";
-import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube,FaCheckCircle } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube, FaCheckCircle, FaHome, FaArrowLeft } from "react-icons/fa";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [otp, setOtp] = useState("");
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otpError, setOtpError] = useState("");
 
   const router = useRouter();
-
 
   useEffect(() => {
     setLoading(false);
@@ -29,7 +32,7 @@ const Login = () => {
     setPasswordError("");
 
     if (!username) {
-      setUsernameError("Username is required");
+      setUsernameError("Student ID is required");
       return;
     }
     if (!password) {
@@ -38,80 +41,117 @@ const Login = () => {
     }
 
     setLoading(true);
-
     try {
       const result = await executeQuery(GET_LOGIN_DATA, { userid: username, password });
-
       if (result?.login?.success_msg) {
-        setSuccessMsg(result.login.success_msg);
-        router.refresh();
+        setShowOtpModal(true);
       } else {
         setErrorMsg(result?.login?.error_msg || "Login failed");
       }
     } catch (error) {
-      setErrorMsg("An error occurred during login");
+      setErrorMsg(`Login failed: ${error.message}`);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
+  const handleOtpSubmit = async () => {
+    setOtpError("");
+    if (!otp) {
+      setOtpError("OTP is required");
+      return;
+    }
 
-
+    setLoading(true);
+    try {
+      const otpResult = await executeMutation(VERIFY_OTP_MUTATION, { userid: username, otp });
+      if (otpResult?.verifyOtp?.success_msg) {
+        setSuccessMsg(otpResult.verifyOtp.success_msg);
+        setShowOtpModal(false);
+        if (otpResult.verifyOtp.token) {
+          localStorage.setItem("token", otpResult.verifyOtp.token);
+        }
+        router.push("/dashboard"); // Redirect to a school dashboard
+      } else {
+        setOtpError(otpResult?.verifyOtp?.error_msg || "OTP verification failed");
+      }
+    } catch (error) {
+      setOtpError(`OTP verification failed: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg font-medium">Loading...</div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-lg font-medium text-blue-600">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col lg:flex-row pt-28">
-      {/* Left Side (Image) */}
-      <div className="hidden lg:block lg:w-1/1 w-full h-screen bg-gradient-to-br from-indigo-500 to-purple-600 text-white relative">
-        <div className="absolute inset-0 bg-black opacity-40"></div>
-        <video
-          autoPlay
-          loop
-          muted
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="/video/uiux.mp4" type="video/mp4" />
-        </video>
-      </div>
-      
-      {successMsg && (
-  <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg flex items-center space-x-2 animate-fade-in">
-    <FaCheckCircle className="w-6 h-6 text-white" />
-    <span className="font-semibold text-lg">{successMsg}</span>
-  </div>
-)}
-
-
-
-
-      {/* Right Side (Form) */}
-      <div className="flex-grow w-full flex flex-col justify-center items-center bg-gradient-to-r from-blue-200 via-blue-600 to-blue-900 p-8">
-      <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-8 border border-gray-300">
-          <div className="flex justify-center mb-6">
-            <Image src="/img/logo.png" alt="Logo" width={120} height={120} />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-green-100 p-4">
+      {/* Main Container */}
+      <div className="relative w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
+        
+        {/* Left Side - School Branding */}
+        <div className="md:w-1/2 bg-blue-600 text-white p-8 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center space-x-3">
+              <Image src="/img/school-logo.png" alt="School Logo" width={60} height={60} />
+              <h1 className="text-2xl font-bold">Springfield School</h1>
+            </div>
+            <p className="mt-4 text-sm">Welcome back! Log in to access your school portal securely.</p>
           </div>
-          <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
-            Sign In
-          </h2>
+          <div className="flex space-x-4 mt-6">
+            <a href="https://facebook.com" target="_blank" className="text-white hover:text-blue-200">
+              <FaFacebook size={24} />
+            </a>
+            <a href="https://instagram.com" target="_blank" className="text-white hover:text-blue-200">
+              <FaInstagram size={24} />
+            </a>
+            <a href="https://linkedin.com" target="_blank" className="text-white hover:text-blue-200">
+              <FaLinkedin size={24} />
+            </a>
+            <a href="https://youtube.com" target="_blank" className="text-white hover:text-blue-200">
+              <FaYoutube size={24} />
+            </a>
+          </div>
+        </div>
+
+        {/* Right Side - Login Form */}
+        <div className="md:w-1/2 p-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-3xl font-bold text-gray-800">Student Login</h2>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => router.push("/")}
+                className="text-blue-600 hover:text-blue-800 flex items-center"
+              >
+                <FaHome className="mr-1" /> Home
+              </button>
+              <button
+                onClick={() => router.back()}
+                className="text-blue-600 hover:text-blue-800 flex items-center"
+              >
+                <FaArrowLeft className="mr-1" /> Back
+              </button>
+            </div>
+          </div>
+
           <form className="space-y-6">
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700">Student ID</label>
               <input
                 id="username"
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="mt-2 w-full rounded-md border-2 border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-500 px-4 py-3"
-                placeholder="Enter your username"
+                className="mt-1 w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your Student ID"
               />
-              {usernameError && <p className="text-red-500 text-sm">{usernameError}</p>}
+              {usernameError && <p className="text-red-500 text-sm mt-1">{usernameError}</p>}
             </div>
 
             <div>
@@ -121,103 +161,71 @@ const Login = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-2 w-full rounded-md border-2 border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-500 px-4 py-3"
+                className="mt-1 w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter your password"
               />
-              {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
+              {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
             </div>
-
 
             <button
               type="button"
               onClick={handleLogin}
-              className="w-full bg-indigo-600 text-white py-3 px-4 rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200"
             >
-              Login
+              Sign In
             </button>
 
-            {errorMsg && <div className="text-red-500 text-sm mt-2 text-center">{errorMsg}</div>}
-
-
-            <div className="text-center mt-4">
-              <a href="/forgot-password" className="text-indigo-600 hover:underline">
-                Forgot Password?
-              </a>
-            </div>
+            {errorMsg && <div className="text-red-500 text-sm text-center">{errorMsg}</div>}
           </form>
-
-          <div className="text-center mt-6">
-            <p className="text-sm text-gray-600">
-              Don't have an account?{" "}
-              <a href="/register" className="text-indigo-600 hover:underline">
-                Sign Up
-              </a>
-            </p>
-          </div>
-
-          <div className="mt-6 flex justify-center space-x-6">
-            <a
-              href="https://www.facebook.com"
-              target="_blank"
-              rel="noreferrer"
-              className="bg-white rounded-full p-3 shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              <FaFacebook className="text-blue-600 w-6 h-6" />
-            </a>
-            <a
-              href="https://www.instagram.com"
-              target="_blank"
-              rel="noreferrer"
-              className="bg-white rounded-full p-3 shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              <FaInstagram className="text-red-400 w-6 h-6" />
-            </a>
-            <a
-              href="https://www.linkedin.com"
-              target="_blank"
-              rel="noreferrer"
-              className="bg-white rounded-full p-3 shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              <FaLinkedin className="text-blue-700 w-6 h-6" />
-            </a>
-            <a
-              href="https://www.youtube.com"
-              target="_blank"
-              rel="noreferrer"
-              className="bg-white rounded-full p-3 shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              <FaYoutube className="text-red-600 w-6 h-6" />
-            </a>
-          </div>
         </div>
       </div>
+
+      {/* Success Message */}
+      {successMsg && (
+        <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2">
+          <FaCheckCircle size={20} />
+          <span>{successMsg}</span>
+        </div>
+      )}
+
+      {/* OTP Modal */}
+      {showOtpModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">Verify OTP</h3>
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="otp" className="block text-sm font-medium text-gray-700">Enter OTP</label>
+                <input
+                  id="otp"
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="mt-1 w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter OTP"
+                />
+                {otpError && <p className="text-red-500 text-sm mt-1">{otpError}</p>}
+              </div>
+              <div className="flex justify-between">
+                <button
+                  onClick={() => setShowOtpModal(false)}
+                  className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleOtpSubmit}
+                  className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
+                >
+                  Verify
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Login;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

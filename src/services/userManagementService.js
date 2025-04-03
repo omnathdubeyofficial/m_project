@@ -5,9 +5,10 @@ import bcrypt from 'bcrypt';
 import { setUserDate, setUserTime, setDateFormat } from './dateTimeService.js';
 // const jwt = require('jsonwebtoken');
 import jwt from 'jsonwebtoken';
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
 
-
-
+dotenv.config();
 // Get all users
 const getUserManagementData = async () => {
   try {
@@ -33,6 +34,7 @@ const login = async (_, { userid, password }, { res }) => {
   try {
     console.log("🔹 Login attempt for userid:", userid);
 
+    // Fetch user from database using userid, then use z_id for updates
     const user = await prisma.user_management.findFirst({ where: { userid } });
     console.log("🔹 User fetched from DB:", user ? "User found" : "User not found");
 
@@ -41,6 +43,7 @@ const login = async (_, { userid, password }, { res }) => {
       return { error_msg: "Invalid Username", token: null };
     }
 
+    // Verify password (assuming verifyPassword is available)
     const isMatch = await verifyPassword(password, user.password);
     console.log("🔹 Password match status:", isMatch);
 
@@ -49,18 +52,77 @@ const login = async (_, { userid, password }, { res }) => {
       return { error_msg: "Invalid password", token: null };
     }
 
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+    const otpExpiry = Date.now() + 10 * 60 * 1000; // OTP expires in 10 minutes
+
+    // Store OTP in database using z_id as unique identifier
+    await prisma.user_management.update({
+      where: { z_id: user.z_id }, // z_id use karo
+      data: {
+        otp,
+        otpExpiry
+      }
+    });
+
+    // Send OTP to user's email
+    await sendOtpEmail(user.email, otp);
+    console.log("🔹 OTP sent to email:", user.email);
+
+    // Return response indicating OTP has been sent
+    return {
+      success_msg: "OTP sent to your email. Please verify to complete login.",
+      token: null,
+      requiresOtp: true
+    };
+
+  } catch (err) {
+    console.error("❌ Error during login:", err.message || err);
+    return { error_msg: `❌ Error during login: ${err.message || err}`, token: null };
+  }
+};
+
+// New endpoint to verify OTP and generate token
+const verifyOtp = async (_, { userid, otp }, { res }) => {
+  try {
+    console.log("🔹 OTP verification attempt for userid:", userid);
+
+    // Fetch user using userid, then use z_id for updates
+    const user = await prisma.user_management.findFirst({ where: { userid } });
+    if (!user) {
+      return { error_msg: "Invalid user", token: null };
+    }
+
+    // Check OTP validity
+    if (!user.otp || !user.otpExpiry || Date.now() > user.otpExpiry) {
+      return { error_msg: "OTP expired or invalid", token: null };
+    }
+
+    if (user.otp !== otp) {
+      console.log("❌ Invalid OTP");
+      return { error_msg: "Invalid OTP", token: null };
+    }
+
+    // OTP is valid, clear it from database using z_id
+    await prisma.user_management.update({
+      where: { z_id: user.z_id }, // z_id use karo
+      data: {
+        otp: null,
+        otpExpiry: null
+      }
+    });
+
+    // JWT Configuration
     const SECRET_KEY = process.env.JWT_SECRET;
     const JWT_ISSUER = process.env.JWT_ISSUER;
     const JWT_AUDIENCE = process.env.JWT_AUDIENCE;
     const JWT_ALGORITHM = process.env.JWT_ALGORITHM || "HS256";
 
-    console.log("🔹 JWT Config Loaded");
-
     if (!SECRET_KEY || !JWT_ISSUER || !JWT_AUDIENCE) {
-      throw new Error("Missing JWT_SECRET, ISSUER, or AUDIENCE in environment variables!");
+      throw new Error("Missing JWT configuration in environment variables!");
     }
 
-    // ✅ Token Generation
+    // Generate JWT token
     const token = jwt.sign(
       {
         userid: user.userid,
@@ -75,9 +137,7 @@ const login = async (_, { userid, password }, { res }) => {
       }
     );
 
-    console.log("✅ JWT Token Generated");
-
-    // ✅ Ensure Cookie is Set Immediately
+    // Set cookie
     res.cookie("authToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -86,20 +146,39 @@ const login = async (_, { userid, password }, { res }) => {
       maxAge: 6 * 60 * 60 * 1000,
     });
 
-    console.log("✅ Cookie Set Successfully");
-
-    // ✅ Force Cookie to be Sent Before Returning Response
     await new Promise((resolve) => setTimeout(resolve, 10));
-    console.log("✅ Delay Added to Ensure Cookie Transmission");
+    console.log("✅ Login Successful with OTP verification");
 
-    console.log("✅ Login Successful");
     return { success_msg: "Login successful", token };
 
   } catch (err) {
-    console.error("❌ Error during login:", err.message || err);
-    return { error_msg: `❌ Error during login: ${err.message || err}`, token: null };
+    console.error("❌ Error during OTP verification:", err.message || err);
+    return { error_msg: `❌ Error during OTP verification: ${err.message || err}`, token: null };
   }
 };
+
+// Email sending function
+const sendOtpEmail = async (email, otp) => {
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    secure: false, 
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Your Login OTP',
+    text: `Your OTP for login is: ${otp}. It will expire in 10 minutes.`
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
 
 
 
@@ -218,4 +297,4 @@ const deleteUserManagementData = async ({ z_id }) => {
   }
 };
 
-export { getUserManagementData, createUserManagementData, updateUserManagementData, deleteUserManagementData, login };
+export { getUserManagementData,verifyOtp, createUserManagementData, updateUserManagementData, deleteUserManagementData, login };
