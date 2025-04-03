@@ -6,22 +6,29 @@ import { FaCheckCircle, FaArrowLeft, FaHome } from "react-icons/fa";
 import Link from "next/link";
 
 const ForgotPassword = () => {
+  const [userId, setUserId] = useState("");
   const [email, setEmail] = useState("");
+  const [userIdError, setUserIdError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [otp, setOtp] = useState("");
   const [otpError, setOtpError] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [step, setStep] = useState(1); // 1: Email, 2: OTP, 3: New Password, 4: Success
+  const [step, setStep] = useState(1); // 1: User ID & Email, 2: OTP, 3: New Password, 4: Success
   const [successMsg, setSuccessMsg] = useState("");
 
   const router = useRouter();
 
   const handleEmailSubmit = (e) => {
     e.preventDefault();
+    setUserIdError("");
     setEmailError("");
 
+    if (!userId) {
+      setUserIdError("User ID is required");
+      return;
+    }
     if (!email) {
       setEmailError("Email ID is required");
       return;
@@ -90,9 +97,23 @@ const ForgotPassword = () => {
           </h2>
         </div>
 
-        {/* Step 1: Enter Email */}
+        {/* Step 1: Enter User ID & Email */}
         {step === 1 && (
           <form onSubmit={handleEmailSubmit} className="space-y-6">
+            <div>
+              <label htmlFor="userId" className="block text-sm font-medium text-gray-700">
+                User ID
+              </label>
+              <input
+                id="userId"
+                type="text"
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
+                className="mt-2 w-full rounded-xl border border-gray-200 p-3 sm:p-4 focus:ring-2 focus:ring-indigo-500 bg-white/50 shadow-inner"
+                placeholder="Enter your User ID"
+              />
+              {userIdError && <p className="text-red-500 text-sm mt-2">{userIdError}</p>}
+            </div>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Registered Email ID
@@ -121,7 +142,8 @@ const ForgotPassword = () => {
           <form onSubmit={handleOtpSubmit} className="space-y-6">
             <div>
               <p className="text-gray-700 text-sm sm:text-base mb-4">
-                An OTP has been sent to <span className="font-semibold">{email}</span>. Please check your inbox.
+                An OTP has been sent to <span className="font-semibold">{email}</span> for User ID{" "}
+                <span className="font-semibold">{userId}</span>. Please check your inbox.
               </p>
               <label htmlFor="otp" className="block text-sm font-medium text-gray-700">
                 Enter OTP
@@ -192,7 +214,8 @@ const ForgotPassword = () => {
               <span className="text-lg sm:text-xl font-semibold">{successMsg}</span>
             </div>
             <p className="text-gray-700 text-sm sm:text-base">
-              Your password has been updated successfully. You can now log in with your new password.
+              Your password has been updated successfully for User ID{" "}
+              <span className="font-semibold">{userId}</span>. You can now log in with your new password.
             </p>
             <Link
               href="/login"
