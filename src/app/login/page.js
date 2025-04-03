@@ -72,8 +72,8 @@ const Login = () => {
         if (otpResult.verifyOtp.token) {
           localStorage.setItem("token", otpResult.verifyOtp.token);
         }
-        router.push("/dashboard");
-      } else {
+        window.location.reload();
+            } else {
         setOtpError(otpResult?.verifyOtp?.error_msg || "OTP verification failed");
       }
     } catch (error) {
@@ -85,9 +85,13 @@ const Login = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-purple-100">
-        <div className="text-xl font-semibold text-blue-600 animate-pulse">Loading...</div>
-      </div>
+      <div className="flex items-center justify-center min-h-screen bg-white">
+      <img 
+        src="/gif_loading/loader_block.gif" 
+        alt="Loading..." 
+      />
+    </div>
+    
     );
   }
 
@@ -101,7 +105,7 @@ const Login = () => {
       </div>
 
       {/* Main Container with Glassmorphism */}
-      <div className="relative w-full max-w-7xl bg-white/10 md:bg-white/10 backdrop-blur-lg mt-16 shadow-xl border border-white/20 overflow-hidden flex flex-col md:flex-row z-10 transform transition-transform duration-300">
+      <div className="relative w-full max-w-5xl bg-white/10 md:bg-white/10 backdrop-blur-lg mt-20 shadow-xl border border-white/20 overflow-hidden flex flex-col md:flex-row z-10 transform transition-transform duration-300">
         
       <div className="md:w-1/2 relative text-white p-10  flex flex-col justify-between min-h-[50vh] md:min-h-full">
   <video
@@ -119,7 +123,21 @@ const Login = () => {
       <Image src="/images/logo/image.png" alt="School Logo" width={70} height={70} className="rounded-full shadow-md" />
     </div>
   </div>
-  
+  <div className="relative z-10 flex justify-center space-x-3 mt-8">
+
+<a href="https://facebook.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#3b5998] text-white hover:bg-[#2d4373] transition transform hover:rotate-12">
+  <FaFacebook size={24} />
+</a>
+<a href="https://instagram.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#e1306c] text-white hover:bg-[#b92b5b] transition transform hover:rotate-12">
+  <FaInstagram size={24} />
+</a>
+<a href="https://linkedin.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#0077b5] text-white hover:bg-[#005f8f] transition transform hover:rotate-12">
+  <FaLinkedin size={24} />
+</a>
+<a href="https://youtube.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#ff0000] text-white hover:bg-[#cc0000] transition transform hover:rotate-12">
+  <FaYoutube size={24} />
+</a>
+</div>
 </div>
 
 
@@ -128,7 +146,7 @@ const Login = () => {
 
         {/* Right Side - Login Form */}
         <div className="md:w-1/2 p-10 bg-white/90 backdrop-blur-sm">
-        <div className="flex space-x-4 mb-5">
+        <div className="flex space-x-4 mb-3">
         <button
                 onClick={() => router.back()}
                 className="text-indigo-600 hover:text-indigo-800 flex items-center text-sm font-medium"
@@ -143,7 +161,7 @@ const Login = () => {
               </button>
           
             </div>
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex justify-between items-center mb-4">
             <h2 className="text-4xl font-semibold text-gray-900 tracking-tight">User Login</h2>
            
           </div>
@@ -188,21 +206,7 @@ const Login = () => {
                 Forgot Password?
               </Link>
             </div>
-            <div className="relative z-10 flex justify-center space-x-3 mt-8">
-
-<a href="https://facebook.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#3b5998] text-white hover:bg-[#2d4373] transition transform hover:rotate-12">
-  <FaFacebook size={24} />
-</a>
-<a href="https://instagram.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#e1306c] text-white hover:bg-[#b92b5b] transition transform hover:rotate-12">
-  <FaInstagram size={24} />
-</a>
-<a href="https://linkedin.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#0077b5] text-white hover:bg-[#005f8f] transition transform hover:rotate-12">
-  <FaLinkedin size={24} />
-</a>
-<a href="https://youtube.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#ff0000] text-white hover:bg-[#cc0000] transition transform hover:rotate-12">
-  <FaYoutube size={24} />
-</a>
-</div>
+           
             {errorMsg && <div className="text-red-500 text-sm text-center mt-4">{errorMsg}</div>}
           </form>
         </div>
