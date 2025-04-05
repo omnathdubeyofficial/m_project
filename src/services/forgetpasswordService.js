@@ -1,7 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -9,56 +7,114 @@ dotenv.config();
 const prisma = new PrismaClient();
 
 const sendOtpForPasswordReset = async (args = {}) => {
-    console.log("🔔 [sendOtpForPasswordReset] Input Args:", args);
-  
-    const { userid, email } = args;
-  
-    if (!userid || !email) {
-      console.log("❌ [sendOtpForPasswordReset] Missing userid or email.");
+  // console.log("🔔 [sendOtpForPasswordReset] Input Args:", args);
+
+  const { userid, email } = args;
+
+  // Step 1: Input validation
+  if (!userid || !email) {
+    // console.log("❌ [Validation Error] Missing userid or email.");
+    return {
+      success_msg: null,
+      error_msg: "Both UserID and Email are required fields.",
+    };
+  }
+
+  try {
+    // Step 2: Ensure Prisma is connected
+    if (!prisma || !prisma.user_management) {
+      // console.log("❌ [Database Error] Prisma not initialized.");
       return {
         success_msg: null,
-        error_msg: "UserID और Email दोनों ज़रूरी हैं।",
+        error_msg: "Database connection error. Please try again later.",
       };
     }
-  
+
+    // Step 3: Fetch user
+    const user = await prisma.user_management.findFirst({
+      where: { userid, email },
+    });
+
+    if (!user) {
+      // console.log("❌ [User Not Found] No matching user found.");
+      return {
+        success_msg: null,
+        error_msg: "No user found with the provided UserID and Email.",
+      };
+    }
+
+    // Step 4: Generate OTP and expiry
+    const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+    const otpExpiry = BigInt(Date.now() + 10 * 60 * 1000); // 10 minutes from now
+
+    // Step 5: Save OTP in database
     try {
-      const user = await prisma.user_management.findFirst({
-        where: { userid, email },
-      });
-  
-      if (!user) {
-        console.log("❌ [sendOtpForPasswordReset] User not found.");
-        return {
-          success_msg: null,
-          error_msg: "User not found with this UserID and Email.",
-        };
-      }
-  
-      const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      const otpExpiry = BigInt(Date.now() + 10 * 60 * 1000); // convert to BigInt for DB
-      
       await prisma.user_management.update({
         where: { z_id: user.z_id },
-        data: { otp, otpExpiry }
+        data: { otp, otpExpiry },
       });
-      
-  
-      console.log(`✅ [sendOtpForPasswordReset] OTP generated: ${otp}`);
-      await sendOtpEmail(email, otp);
-      console.log(`📧 [sendOtpForPasswordReset] OTP sent to: ${email}`);
-  
-      return {
-        success_msg: "OTP sent to your email.",
-        error_msg: null,
-      };
-    } catch (err) {
-      console.error("❌ Error sending OTP:", err.message || err);
+    } catch (updateError) {
+      // console.error("❌ [Database Update Error] Failed to store OTP:", updateError.message || updateError);
       return {
         success_msg: null,
-        error_msg: "Failed to send OTP. Please try again later.",
+        error_msg: "Failed to store OTP in the database. Please try again.",
       };
     }
-  };
+
+    // Step 6: Send OTP via email
+    try {
+      await sendOtpEmail(email, otp);
+    } catch (emailError) {
+      // console.error("❌ [Email Send Error]:", emailError.message || emailError);
+
+      // Detect possible internet issue
+      if (
+        emailError.code === 'ENOTFOUND' ||
+        emailError.code === 'ECONNREFUSED' ||
+        emailError.message?.toLowerCase().includes("network") ||
+        emailError.message?.toLowerCase().includes("timeout")
+      ) {
+        return {
+          success_msg: null,
+          error_msg: "Network error while sending email. Please check your internet connection.",
+        };
+      }
+
+      return {
+        success_msg: null,
+        error_msg: "Failed to send OTP email. Please try again later.",
+      };
+    }
+
+    // Step 7: Success response
+    // console.log(`✅ [Success] OTP sent to: ${email}`);
+    return {
+      success_msg: "An OTP has been sent to your registered email address.",
+      error_msg: null,
+    };
+
+  } catch (err) {
+    console.error("❌ [Unhandled Error]:", err.message || err);
+
+    if (
+      err.code === 'ENOTFOUND' ||
+      err.code === 'ECONNREFUSED' ||
+      err.message?.toLowerCase().includes("network") ||
+      err.message?.toLowerCase().includes("internet")
+    ) {
+      return {
+        success_msg: null,
+        error_msg: "Internet connection error. Please check your network and try again.",
+      };
+    }
+
+    return {
+      success_msg: null,
+      error_msg: `Unexpected server error: ${err.message || "Please try again later."}`,
+    };
+  }
+};
+
   
 
 
