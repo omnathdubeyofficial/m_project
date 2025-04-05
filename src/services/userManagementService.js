@@ -30,46 +30,53 @@ async function verifyPassword(plainPassword, hashedPassword) {
 }
 
 const login = async (_, { userid, password }, { res }) => {
-  let error_msg = "";
   try {
     console.log("🔹 Login attempt for userid:", userid);
 
-    // Fetch user from database using userid, then use z_id for updates
+    // Check DB connection before query
+    if (!prisma || !prisma.user_management) {
+      console.log("❌ Database connection error");
+      return { error_msg: "Unable to connect to the database. Please try again later.", token: null };
+    }
+
     const user = await prisma.user_management.findFirst({ where: { userid } });
     console.log("🔹 User fetched from DB:", user ? "User found" : "User not found");
 
     if (!user) {
-      console.log("❌ Invalid Username");
-      return { error_msg: "Invalid Username", token: null };
+      return { error_msg: "Invalid Username. Please check your userid.", token: null };
     }
 
-    // Verify password (assuming verifyPassword is available)
     const isMatch = await verifyPassword(password, user.password);
-    console.log("🔹 Password match status:", isMatch);
-
     if (!isMatch) {
-      console.log("❌ Invalid password");
-      return { error_msg: "Invalid password", token: null };
+      return { error_msg: "Invalid Password. Please try again.", token: null };
     }
 
     // Generate OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
-    const otpExpiry = Date.now() + 10 * 60 * 1000; // OTP expires in 10 minutes
+    const otpExpiry = Date.now() + 10 * 60 * 1000;
 
-    // Store OTP in database using z_id as unique identifier
-    await prisma.user_management.update({
-      where: { z_id: user.z_id }, // z_id use karo
-      data: {
-        otp,
-        otpExpiry
-      }
-    });
+    // Save OTP to DB
+    try {
+      await prisma.user_management.update({
+        where: { z_id: user.z_id },
+        data: {
+          otp,
+          otpExpiry
+        }
+      });
+    } catch (dbUpdateErr) {
+      console.error("❌ OTP Save Error:", dbUpdateErr.message || dbUpdateErr);
+      return { error_msg: "Error saving OTP. Please try again.", token: null };
+    }
 
     // Send OTP to user's email
-    await sendOtpEmail(user.email, otp);
-    console.log("🔹 OTP sent to email:", user.email);
+    try {
+      await sendOtpEmail(user.email, otp);
+    } catch (emailErr) {
+      console.error("❌ OTP Email Error:", emailErr.message || emailErr);
+      return { error_msg: "Unable to send OTP email. Check your internet connection or try again later.", token: null };
+    }
 
-    // Return response indicating OTP has been sent
     return {
       success_msg: "OTP sent to your email. Please verify to complete login.",
       token: null,
@@ -77,10 +84,19 @@ const login = async (_, { userid, password }, { res }) => {
     };
 
   } catch (err) {
-    console.error("❌ Error during login:", err.message || err);
-    return { error_msg: `❌ Error during login: ${err.message || err}`, token: null };
+    console.error("❌ Unknown Error:", err.message || err);
+
+    if (err.code === 'ENOTFOUND' || err.message?.includes("fetch failed")) {
+      return { error_msg: "Network error. Please check your internet connection.", token: null };
+    }
+
+    return {
+      error_msg: `Server error: ${err.message || "Unknown error occurred. Please try again."}`,
+      token: null
+    };
   }
 };
+
 
 // New endpoint to verify OTP and generate token
 const verifyOtp = async (_, { userid, otp }, { res }) => {
