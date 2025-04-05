@@ -56,6 +56,9 @@ import classesDataType from './types/classesDataTypes.js';
 import classesDataResolver from './resolvers/classesDataResolver.js';
 import nurseryAdmissionListType from './types/nurseryAdmissionListTypes.js';
 import nurseryAdmissionResolver from './resolvers/nurseryAdmissionResolver.js';
+import forgetpasswordTypes from './types/forgetpasswordTypes.js';
+import forgetpasswordResolver from './resolvers/forgetpasswordResolver.js';
+
 const app = express();
 
 // ✅ CORS Configuration (Allow Credentials for Cookies)
@@ -77,7 +80,7 @@ const schema = makeExecutableSchema({
     logoutTypes, holidayListType, phoneDirectoryType, academicCalendarType,
     driversListType, addNewBookType, issuedBookType, housekeepingListType,
     blogListType, eventCreationType, eventRegistrationFormType,
-    feeStructureDataType, noticeBoardType, classesDataType, nurseryAdmissionListType
+    feeStructureDataType, noticeBoardType, classesDataType, nurseryAdmissionListType,forgetpasswordTypes
   ],
   resolvers: [
     userResolver, userDataResolver, adminDataResolver,
@@ -88,7 +91,7 @@ const schema = makeExecutableSchema({
     addNewBookResolver, issuedBookResolver, housekeepingListResolver,
     blogListResolver, eventCreationResolver, eventRegistrationResolver,
     feeStructureListResolver, noticeBoardResolver, classesDataResolver,
-    nurseryAdmissionResolver
+    nurseryAdmissionResolver,forgetpasswordResolver
   ],
 });
 
