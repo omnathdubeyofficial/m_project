@@ -5,7 +5,19 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Get all users
 const getClassesDataList = async () => {
-  return await prisma.classes_data.findMany();
+  const orderedTitles = [
+   "Nursery", "LKG", "UKG","1st", "2nd", "3rd", "4th", "5th", "6th",
+    "7th", "8th", "9th", "10th", "11th", "12th"
+  ];
+
+  const classes = await prisma.classes_data.findMany();
+
+  // Custom sorting using the orderedTitles index
+  const sortedClasses = classes.sort((a, b) => {
+    return orderedTitles.indexOf(a.class_title) - orderedTitles.indexOf(b.class_title);
+  });
+
+  return sortedClasses;
 };
 
 const createClassesData = async ({ class_title, description, tags, image, student_rating, student_reviews, parents_rating, parents_reviews, discount, is_admission, total_seats, filled_seats }) => {
