@@ -1,58 +1,68 @@
 "use client";
-
-import { 
-  FaUniversity, FaUserGraduate, FaChalkboardTeacher, FaClipboardList, FaCalendarCheck, FaComments, FaLaptop, FaAward, FaRupeeSign, FaBook
-} from "react-icons/fa";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import {
+  FaUniversity, FaUserGraduate, FaUserTie, FaChartBar, FaUsers, FaFileAlt,
+  FaBus, FaCogs, FaBook, FaFlask, FaDesktop, FaBroom, FaShieldAlt, FaClipboardCheck,
+  FaCalendarAlt, FaFutbol, FaTrophy, FaBell, FaUserPlus, FaMoneyBillWave,FaSignOutAlt,FaArrowLeft
+} from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import Loading from '../../Loader/page';
+import Panel_Header from '../../dashboard/panel_header';
 
 const University_Management_Page = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
-  const universityServices = [
-    { name: "University Information Management", icon: <FaUniversity />, path: "/University_Management/University_Management_Page/Academic_Calendar_List" },
-    { name: "Student Management", icon: <FaUserGraduate />, path: "/University_Management/University_Management_Page/Academic_Calendar_Form" },
-    { name: "Faculty Management", icon: <FaChalkboardTeacher />, path: "/university/faculty-management" },
-    { name: "Attendance Management", icon: <FaClipboardList />, path: "/university/attendance" },
-    { name: "Class Scheduling", icon: <FaCalendarCheck />, path: "/university/class-scheduling" },
-    { name: "Feedback & Communication", icon: <FaComments />, path: "/university/feedback-communication" },
-    { name: "Digital Access Portal", icon: <FaLaptop />, path: "/university/digital-access" },
-    { name: "Budget Management", icon: <FaRupeeSign />, path: "/university/budget-management" },
-    { name: "Performance Evaluation", icon: <FaAward />, path: "/university/performance-evaluation" },
-    { name: "Class Data Form", icon: <FaBook />, path: "/University_Management/University_Management_Page/Class_Data_Form" }
+  useEffect(() => {
+    const handleLoad = () => setIsLoading(false);
+    if (document.readyState === 'complete') {
+      handleLoad();
+    } else {
+      window.addEventListener('load', handleLoad);
+    }
+    return () => window.removeEventListener('load', handleLoad);
+  }, []);
+
+  const menuItems = [
+    { name: 'University Information Management', icon: FaChartBar, link: '/University_Management/University_Management_Page/Academic_Calendar_List' },
+    { name: 'Student Management', icon: FaUniversity, link: "/University_Management/University_Management_Page/Academic_Calendar_Form" },
+    { name: 'Class Data Form', icon: FaFlask, link: '/University_Management/University_Management_Page/Class_Data_Form' },
   ];
 
-  return (
-    <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 min-h-screen pt-32">
-      <main className="py-12 px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 p-4 bg-white border-2 border-gray-300 shadow-md">
-            <button 
-              onClick={() => router.push("/dashboard")}
-              className="bg-yellow-600 text-white px-6 py-2 flex items-center gap-2 shadow-md hover:bg-yellow-700 transition-all"
-            >
-              Go Back
-            </button>
-            <h2 className="text-3xl text-center flex items-center gap-3 text-gray-800 font-semibold">
-              <FaUniversity className="text-yellow-500 text-3xl animate-pulse" />
-              University Management
-            </h2>
-          </div>
+  if (isLoading) return <Loading />;
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {universityServices.map((service, index) => (
-              <Link href={service.path} key={index}>
-                <div
-                  className="p-8 shadow-lg flex flex-col items-center cursor-pointer border border-gray-300 bg-white transition-transform hover:scale-105 hover:shadow-2xl rounded-lg text-gray-900 hover:bg-yellow-50 hover:border-yellow-400"
-                >
-                  <div className="text-5xl mb-4 text-yellow-700">{service.icon}</div>
-                  <h3 className="text-lg font-semibold text-center">{service.name}</h3>
-                </div>
-              </Link>
-            ))}
-          </div>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[#f0f7ff] via-[#e6f0fa] to-[#e0f2e9] pt-24 font-sans">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+       
+     <Panel_Header/>
+        {/* Grid Layout */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+          {menuItems.map((item, index) => (
+            <div
+              key={index}
+              onClick={() => router.push(item.link)}
+              className="group relative bg-white  shadow-md hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer p-6 flex flex-col items-center text-center overflow-hidden border border-gray-100 hover:border-indigo-300"
+            >
+              {/* Gradient Overlay on Hover */}
+              <div className="absolute inset-0 bg-gradient-to-t from-indigo-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+
+              {/* Icon */}
+              <div className="relative z-10 bg-indigo-100 p-4 rounded-full mb-4 group-hover:bg-indigo-200 transition-colors duration-300">
+                <item.icon className="text-3xl text-indigo-600 group-hover:text-indigo-800 transition-transform duration-300 group-hover:scale-110" />
+              </div>
+
+              {/* Menu Name */}
+              <span className="relative z-10 text-base font-medium text-gray-800 group-hover:text-indigo-700 transition-colors duration-300">
+                {item.name}
+              </span>
+
+              {/* Subtle Hover Effect */}
+              <div className="absolute bottom-0 left-0 w-full h-1 bg-indigo-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+            </div>
+          ))}
         </div>
-      </main>
+      </div>
     </div>
   );
 };
