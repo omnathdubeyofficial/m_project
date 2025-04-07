@@ -58,6 +58,8 @@ import nurseryAdmissionListType from './types/nurseryAdmissionListTypes.js';
 import nurseryAdmissionResolver from './resolvers/nurseryAdmissionResolver.js';
 import forgetpasswordTypes from './types/forgetpasswordTypes.js';
 import forgetpasswordResolver from './resolvers/forgetpasswordResolver.js';
+import classSubjectsTypes from './types/classSubjectsTypes.js';
+import classSubjectsResolver from './resolvers/classSubjectsResolver.js';
 
 const app = express();
 
@@ -80,7 +82,7 @@ const schema = makeExecutableSchema({
     logoutTypes, holidayListType, phoneDirectoryType, academicCalendarType,
     driversListType, addNewBookType, issuedBookType, housekeepingListType,
     blogListType, eventCreationType, eventRegistrationFormType,
-    feeStructureDataType, noticeBoardType, classesDataType, nurseryAdmissionListType,forgetpasswordTypes
+    feeStructureDataType, noticeBoardType, classesDataType, nurseryAdmissionListType,forgetpasswordTypes,classSubjectsTypes
   ],
   resolvers: [
     userResolver, userDataResolver, adminDataResolver,
@@ -91,7 +93,7 @@ const schema = makeExecutableSchema({
     addNewBookResolver, issuedBookResolver, housekeepingListResolver,
     blogListResolver, eventCreationResolver, eventRegistrationResolver,
     feeStructureListResolver, noticeBoardResolver, classesDataResolver,
-    nurseryAdmissionResolver,forgetpasswordResolver
+    nurseryAdmissionResolver,forgetpasswordResolver,classSubjectsResolver
   ],
 });
 

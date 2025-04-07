@@ -677,3 +677,13 @@ model omnath_data {
   email String @db.VarChar(255)
   age   String @db.VarChar(255)
 }
+
+model class_subjects {
+  z_id         String  @id @db.VarChar(100)
+  class_name   String? @db.VarChar(100)
+  subject_name String? @db.Text
+  cdate        String? @db.VarChar(100)
+  ctime        String? @db.VarChar(100)
+  udate        String? @db.VarChar(100)
+  utime        String? @db.VarChar(100)
+}
