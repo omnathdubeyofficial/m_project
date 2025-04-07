@@ -1,35 +1,24 @@
 "use client";
-import { 
-  FaUniversity, FaUserGraduate, FaUserTie, FaChartBar, FaUsers, FaFileAlt, 
-  FaBus, FaCogs, FaBook, FaFlask, FaDesktop, FaBroom, FaShieldAlt, FaClipboardCheck, 
-  FaCalendarAlt, FaFutbol, FaTrophy, FaBell, FaUserPlus, FaMoneyBillWave 
+import {
+  FaUniversity, FaUserGraduate, FaUserTie, FaChartBar, FaUsers, FaFileAlt,
+  FaBus, FaCogs, FaBook, FaFlask, FaDesktop, FaBroom, FaShieldAlt, FaClipboardCheck,
+  FaCalendarAlt, FaFutbol, FaTrophy, FaBell, FaUserPlus, FaMoneyBillWave
 } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import Loading from '../Loader/page'; 
+import Loading from '../Loader/page';
 
 const Dashboard = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setIsLoading(false);
-  //   }, 500);
-  // }, []);
-
-
   useEffect(() => {
-    const handleLoad = () => {
-      setIsLoading(false);
-    };
-
+    const handleLoad = () => setIsLoading(false);
     if (document.readyState === 'complete') {
       handleLoad();
     } else {
       window.addEventListener('load', handleLoad);
     }
-
     return () => window.removeEventListener('load', handleLoad);
   }, []);
 
@@ -42,7 +31,6 @@ const Dashboard = () => {
     { name: 'Library Management', icon: FaBook, link: '/Library_Management/Library_Management_Page' },
     { name: 'Lab Management', icon: FaFlask, link: '/Lab_Management/Lab_Management_Page' },
     { name: 'Staff Management', icon: FaUsers, link: '/Staff_Management/Staff_Management_Data' },
-    // { name: 'Transport Drivers', icon: FaBus, link: '/Drivers_Transport/Drivers_Transport_Data' },
     { name: 'Computer Management', icon: FaDesktop, link: '/Computer_Section/Computer_Management_Page' },
     { name: 'Housekeeping Staff', icon: FaBroom, link: '/Housekeeping_Staff/Housekeeping_Staff_Page' },
     { name: 'Security Staff', icon: FaShieldAlt, link: '/Security_Staff/Security_Staff_Page' },
@@ -59,21 +47,35 @@ const Dashboard = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <div>
-      <div className="flex flex-col flex-1 p-6 pt-24 bg-white min-h-screen">
-        <div className="w-full mx-auto p-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {menuItems.map((item, index) => (
-              <div 
-                key={index} 
-                onClick={() => router.push(item.link)} 
-                className="p-6 bg-green-50 text-gray-800 shadow-md hover:shadow-lg transition-all transform hover:scale-105 cursor-pointer border border-gray-200 flex flex-col items-center justify-center"
-              >
-                <item.icon className="text-5xl mb-4 text-gray-600" />
-                <h2 className="text-lg font-medium">{item.name}</h2>
+    <div className="min-h-screen bg-gradient-to-br from-[#f0f7ff] via-[#e6f0fa] to-[#e0f2e9] pt-24 font-sans">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+       
+
+        {/* Grid Layout */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+          {menuItems.map((item, index) => (
+            <div
+              key={index}
+              onClick={() => router.push(item.link)}
+              className="group relative bg-white  shadow-md hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer p-6 flex flex-col items-center text-center overflow-hidden border border-gray-100 hover:border-indigo-300"
+            >
+              {/* Gradient Overlay on Hover */}
+              <div className="absolute inset-0 bg-gradient-to-t from-indigo-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+
+              {/* Icon */}
+              <div className="relative z-10 bg-indigo-100 p-4 rounded-full mb-4 group-hover:bg-indigo-200 transition-colors duration-300">
+                <item.icon className="text-3xl text-indigo-600 group-hover:text-indigo-800 transition-transform duration-300 group-hover:scale-110" />
               </div>
-            ))}
-          </div>
+
+              {/* Menu Name */}
+              <span className="relative z-10 text-base font-medium text-gray-800 group-hover:text-indigo-700 transition-colors duration-300">
+                {item.name}
+              </span>
+
+              {/* Subtle Hover Effect */}
+              <div className="absolute bottom-0 left-0 w-full h-1 bg-indigo-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
