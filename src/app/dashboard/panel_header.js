@@ -47,7 +47,7 @@ const Dashboard = () => {
         setTimeout(() => {
           setShowPopup(false);
           router.push('/login');
-        }, 3000);
+        }, 5000);
       }
     } catch (error) {
       // Error popup
@@ -57,7 +57,7 @@ const Dashboard = () => {
 
       setTimeout(() => {
         setShowPopup(false);
-      }, 3000);
+      }, 5000);
 
       console.error('Logout failed:', error);
     }
@@ -67,15 +67,27 @@ const Dashboard = () => {
     <div className="relative">
       {/* Logout Popup */}
       {showPopup && (
-        <div className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-          ${isError ? 'bg-red-600' : 'bg-green-600'} 
-          text-white px-8 py-6 rounded-xl shadow-2xl z-50 flex items-center gap-4 max-w-md w-full`}>
-          <div className="text-4xl">
-            {isError ? <FaTimesCircle className="text-white" /> : <FaCheckCircle className="text-white" />}
-          </div>
-          <div className="text-lg font-medium">{logoutMessage}</div>
+  <div className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+    ${isError ? 'bg-red-500' : 'bg-emerald-500'} 
+    text-white px-6 py-5 rounded-2xl shadow-xl z-50 w-auto max-w-lg animate-fade-in`}>
+    
+    <div className="flex items-start gap-4">
+      <div className="text-3xl">
+        {isError ? (
+          <FaTimesCircle className="text-white drop-shadow-sm" />
+        ) : (
+          <FaCheckCircle className="text-white drop-shadow-sm" />
+        )}
+      </div>
+      <div className="flex-1">
+        <div className="text-base sm:text-lg font-semibold tracking-wide">
+          {logoutMessage}
         </div>
-      )}
+      </div>
+    </div>
+  </div>
+)}
+
 
       {/* Header */}
       <header className="w-full flex items-center justify-between px-6 py-4 mb-2 bg-white shadow-md">
