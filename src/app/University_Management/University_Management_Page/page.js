@@ -27,6 +27,8 @@ const University_Management_Page = () => {
     { name: 'University Information Management', icon: FaChartBar, link: '/University_Management/University_Management_Page/Academic_Calendar_List' },
     { name: 'Student Management', icon: FaUniversity, link: "/University_Management/University_Management_Page/Academic_Calendar_Form" },
     { name: 'Class Data Form', icon: FaFlask, link: '/University_Management/University_Management_Page/Class_Data_Form' },
+    { name: 'Class Subject Form', icon: FaBook, link: '/University_Management/University_Management_Page/Class_Subject_Form' },
+
   ];
 
   if (isLoading) return <Loading />;

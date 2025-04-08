@@ -67,12 +67,13 @@ const Dashboard = () => {
     <div className="relative">
       {/* Logout Popup */}
       {showPopup && (
-  <div className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+  <div
+    className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 
     ${isError ? 'bg-red-500' : 'bg-emerald-500'} 
-    text-white px-6 py-5 rounded-2xl shadow-xl z-50 w-auto max-w-lg animate-fade-in`}>
-    
-    <div className="flex items-start gap-4">
-      <div className="text-3xl">
+    text-white px-4 py-3 rounded-xl shadow-lg z-50 w-auto max-w-md animate-fade-in`}
+  >
+    <div className="flex items-start gap-3">
+      <div className="text-2xl">
         {isError ? (
           <FaTimesCircle className="text-white drop-shadow-sm" />
         ) : (
@@ -80,13 +81,14 @@ const Dashboard = () => {
         )}
       </div>
       <div className="flex-1">
-        <div className="text-base sm:text-lg font-semibold tracking-wide">
+        <div className="text-sm sm:text-base font-medium tracking-wide">
           {logoutMessage}
         </div>
       </div>
     </div>
   </div>
 )}
+
 
 
       {/* Header */}

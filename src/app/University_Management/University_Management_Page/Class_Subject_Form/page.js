@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import {
-  FaArrowLeft,
   FaCheckCircle,
   FaTimesCircle,
   FaEdit,
@@ -17,6 +16,8 @@ import { DELETE_CLASS_SUBJECTS_MUTATION } from '../../../mutation/classSubjectMu
 import { GET_CLASS_SUBJECTS_DATA } from '../../../query/GetClassSubjectsQuery/getClassSubjectsQuery';
 import { executeQuery, executeMutation } from '../../../graphqlClient';
 import Panel_Header from '../../../dashboard/panel_header';
+import Loading from '../../../Loader/page';
+
 
 const Class_Subject_Form = () => {
   const router = useRouter();
