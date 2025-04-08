@@ -27,9 +27,7 @@ const createClassesData = async ({ class_title, description, tags, image, studen
     });
 
     if (existingClass) {
-      await prisma.classes_data.deleteMany({
-        where: { class_title }
-      });
+      return { error_msg: "This class already exists in the database." };
     }
 
     const createdData = await prisma.classes_data.create({
@@ -53,11 +51,7 @@ const createClassesData = async ({ class_title, description, tags, image, studen
       },
     });
 
-    const success_msg = existingClass
-      ? "Existing class data deleted and new data created successfully."
-      : "New class data created successfully.";
-
-    return { ...createdData, success_msg };
+    return { ...createdData, success_msg: "New class data created successfully." };
   } catch (e) {
     const error_msg = `${e}`;
     console.error(error_msg);
@@ -66,6 +60,7 @@ const createClassesData = async ({ class_title, description, tags, image, studen
     prisma.$disconnect();
   }
 };
+
 
 // Update an existing user by ID
 const updateClassesData = async ({ z_id, class_title, description, tags, image, student_rating, student_reviews, parents_rating, parents_reviews, discount, is_admission, total_seats, filled_seats }) => {
