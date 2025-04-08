@@ -121,7 +121,7 @@ const Class_Subject_Form = () => {
       setLogoutMessage(error.message || 'Operation failed.');
       setIsError(true);
       setShowPopup(true);
-      setTimeout(() => setShowPopup(false), 3000);
+      setTimeout(() => setShowPopup(false), 6000);
     }
   };
 
@@ -141,7 +141,7 @@ const Class_Subject_Form = () => {
       setLogoutMessage(error.message || 'Failed to delete class subject.');
       setIsError(true);
       setShowPopup(true);
-      setTimeout(() => setShowPopup(false), 3000);
+      setTimeout(() => setShowPopup(false), 6000);
     }
   };
 
@@ -165,7 +165,7 @@ const Class_Subject_Form = () => {
       {/* Notification Popup */}
       {showPopup && (
         <div
-          className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-2 rounded-full shadow-lg text-white flex items-center gap-2 ${
+          className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-2  shadow-lg text-white flex items-center gap-2 ${
             isError ? 'bg-red-600' : 'bg-green-600'
           }`}
         >
