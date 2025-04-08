@@ -20,6 +20,21 @@ const getClassSubjects = async () => {
 // 🔹 Create new class subject record
 const createClassSubject = async ({ class_name, subject_name }) => {
   try {
+    // Check if the class name already exists
+    const existing = await prisma.class_subjects.findFirst({
+      where: {
+        class_name,
+      },
+    });
+
+    if (existing) {
+      return {
+        error_msg:
+          "This class name already exists. If you want to make changes, please edit the existing entry or delete it and create a new one. Thank you.",
+      };
+    }
+
+    // If not existing, create new entry
     const created = await prisma.class_subjects.create({
       data: {
         z_id: uuidv4(),
@@ -29,6 +44,7 @@ const createClassSubject = async ({ class_name, subject_name }) => {
         ctime: setUserTime(),
       },
     });
+
     return { ...created, success_msg: "Class subject created successfully." };
   } catch (error) {
     console.error("Error creating class subject:", error);
@@ -37,6 +53,7 @@ const createClassSubject = async ({ class_name, subject_name }) => {
     await prisma.$disconnect();
   }
 };
+
 
 // 🔹 Update existing class subject
 const updateClassSubject = async ({ z_id, class_name, subject_name }) => {
