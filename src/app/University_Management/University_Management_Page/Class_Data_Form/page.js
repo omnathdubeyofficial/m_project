@@ -2,10 +2,11 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { CREATE_CLASS_DATA_MUTATION } from '../../../mutation/classesDataMutation/createClassDataMutation';
-import { FaArrowLeft, FaCheckCircle, FaTimesCircle, FaTimes, FaUpload } from 'react-icons/fa';
+import { FaArrowLeft, FaCheckCircle,FaPlus, FaTimesCircle, FaTimes, FaUpload } from 'react-icons/fa';
 import { GET_CLASS_SUBJECTS_DATA } from '../../../query/GetClassSubjectsQuery/getClassSubjectsQuery';
 import { executeQuery, executeMutation } from '../../../graphqlClient';
 import Select from 'react-select';
+import Panel_Header from '../../../dashboard/panel_header';
 
 export default function ClassForm() {
   const initialFormState = {
@@ -136,17 +137,17 @@ export default function ClassForm() {
     : [];
 
   return (
-<div className="min-h-screen bg-gray-100 flex items-center justify-center py-16 mt-16 sm:mt-0 px-4 sm:px-6 lg:px-8 lg:pt-36">
+<div className="min-h-screen max-w-6xl mx-auto  items-center justify-center py-16 mt-16 sm:mt-0 px-4 sm:px-6 lg:px-8 lg:pt-36">
+  <Panel_Header/>
 <div className="max-w-6xl w-full bg-white  shadow-xl p-8">
-        <div className="flex justify-between items-center mb-6">
-          <button
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium transition-colors"
-            onClick={() => window.history.back()}
-          >
-            <FaArrowLeft /> Back
-          </button>
-          <h2 className="text-2xl font-semibold text-gray-800">Add New Class</h2>
-        </div>
+<div className="mb-6">
+  <div className="flex items-center gap-2">
+    <FaPlus className="text-blue-600" />
+    <div className="relative">
+      <h2 className="text-2xl font-semibold text-gray-800">Add New Class</h2>
+    </div>
+  </div>
+</div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Class Title */}
