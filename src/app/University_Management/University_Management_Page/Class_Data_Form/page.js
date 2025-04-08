@@ -136,8 +136,8 @@ export default function ClassForm() {
     : [];
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 lg:pt-36">
-      <div className="max-w-6xl w-full bg-white rounded-lg shadow-xl p-8">
+<div className="min-h-screen bg-gray-100 flex items-center justify-center py-16 mt-16 sm:mt-0 px-4 sm:px-6 lg:px-8 lg:pt-36">
+<div className="max-w-6xl w-full bg-white  shadow-xl p-8">
         <div className="flex justify-between items-center mb-6">
           <button
             className="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium transition-colors"
@@ -156,7 +156,7 @@ export default function ClassForm() {
               name="class_title"
               value={formData.class_title}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="w-full border border-gray-300  px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
               required
             >
               <option value="">Select Class</option>
@@ -192,7 +192,7 @@ export default function ClassForm() {
               type="text"
               value={formData.tags}
               readOnly
-              className="w-full border border-gray-200 rounded-md px-4 py-2 bg-gray-100 text-gray-500"
+              className="w-full border border-gray-200 px-4 py-2 bg-gray-100 text-gray-500"
             />
           </div>
 
@@ -205,7 +205,7 @@ export default function ClassForm() {
                 type="number"
                 value={formData.discount}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                className="w-full border border-gray-300  px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                 placeholder="Enter discount"
               />
             </div>
@@ -216,7 +216,7 @@ export default function ClassForm() {
                 type="number"
                 value={formData.total_seats}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                className="w-full border border-gray-300  px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                 placeholder="Enter total seats"
                 required
               />
@@ -231,13 +231,13 @@ export default function ClassForm() {
               value={formData.description}
               onChange={handleChange}
               rows="4"
-              className="w-full border border-gray-300 rounded-md px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="w-full border border-gray-300  px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
               placeholder="Enter description (max 20 words)"
               required
             />
           </div>
 
-          <div className="border p-4 rounded bg-gray-50">
+          <div className="border p-4  bg-gray-50">
           <label className="cursor-pointer flex items-center gap-2">
             <FaUpload /> Upload Image
             <input
@@ -271,7 +271,7 @@ export default function ClassForm() {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="w-full sm:w-48 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="w-full sm:w-48 bg-blue-600 text-white py-2 px-4  hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             >
               Submit
             </button>
@@ -280,7 +280,7 @@ export default function ClassForm() {
           {/* Message Popup */}
           {message && (
             <div
-              className={`fixed bottom-5 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg shadow-md text-white flex items-center gap-2 ${
+              className={`fixed bottom-5 left-1/2 transform -translate-x-1/2 px-4 py-2  shadow-md text-white flex items-center gap-2 ${
                 isSuccess ? 'bg-green-600' : 'bg-red-600'
               }`}
             >
