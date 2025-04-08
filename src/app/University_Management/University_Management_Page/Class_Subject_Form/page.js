@@ -18,13 +18,13 @@ import { executeQuery, executeMutation } from '../../../graphqlClient';
 import Panel_Header from '../../../dashboard/panel_header';
 import Loading from '../../../Loader/page';
 
-
 const Class_Subject_Form = () => {
   const router = useRouter();
   const [firstName] = useState('');
   const [logoutMessage, setLogoutMessage] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Added loading state
 
   const [className, setClassName] = useState('');
   const [subjectsInput, setSubjectsInput] = useState('');
@@ -44,8 +44,15 @@ const Class_Subject_Form = () => {
   }, []);
 
   const fetchClassSubjects = async () => {
-    const response = await executeQuery(GET_CLASS_SUBJECTS_DATA);
-    setSubjectList(response?.getClassSubjects || []);
+    try {
+      setIsLoading(true); // Set loading to true before fetching
+      const response = await executeQuery(GET_CLASS_SUBJECTS_DATA);
+      setSubjectList(response?.getClassSubjects || []);
+    } catch (error) {
+      console.error('Error fetching class subjects:', error);
+    } finally {
+      setIsLoading(false); // Set loading to false after fetch completes (success or failure)
+    }
   };
 
   const formatDate = (dateStr) => {
@@ -148,9 +155,14 @@ const Class_Subject_Form = () => {
     }
   };
 
+  // Show loading component while data is being fetched
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
-<div className="min-h-screen bg-[#f9fafb] pt-10 px-4 sm:px-6 lg:px-8 lg:pt-16">
-{/* Notification Popup */}
+    <div className="min-h-screen bg-[#f9fafb] pt-10 px-4 sm:px-6 lg:px-8 lg:pt-16">
+      {/* Notification Popup */}
       {showPopup && (
         <div
           className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-2 rounded-full shadow-lg text-white flex items-center gap-2 ${
@@ -164,7 +176,7 @@ const Class_Subject_Form = () => {
 
       {/* Form */}
       <section ref={formRef} className="max-w-6xl mx-auto mb-0 pb-0">
-      <Panel_Header/>
+        <Panel_Header />
         <div className="bg-white p-6 shadow-md border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
             {editId ? <FaEdit className="text-indigo-600" /> : <FaPlus className="text-indigo-600" />}
@@ -280,7 +292,7 @@ const Class_Subject_Form = () => {
           </div>
         </div>
       </section>
-      </div>
+    </div>
   );
 };
 
