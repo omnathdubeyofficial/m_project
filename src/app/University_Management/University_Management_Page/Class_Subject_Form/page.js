@@ -1,21 +1,26 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
-  FaSignOutAlt,
   FaArrowLeft,
   FaCheckCircle,
   FaTimesCircle,
+  FaEdit,
+  FaTrash,
+  FaPlus,
+  FaSave,
 } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
-import { CREATE_CLASS_SUBJECTS_MUTATION } from '../mutation/classSubjectMutation/createclassSubjectMutation';
-import { CREATE_CLASS_SUBJECTS_MUTATION } from '../mutation/classSubjectMutation/createclassSubjectMutation';
-import { GET_CLASS_SUBJECTS_DATA } from '../query/GetClassSubjectsQuery/getClassSubjectsQuery';
-import { executeQuery, executeMutation } from '../graphqlClient';
+import { CREATE_CLASS_SUBJECTS_MUTATION } from '../../../mutation/classSubjectMutation/createclassSubjectMutation';
+import { UPDATE_CLASS_SUBJECTS_MUTATION } from '../../../mutation/classSubjectMutation/updateclassSubjectMutation';
+import { DELETE_CLASS_SUBJECTS_MUTATION } from '../../../mutation/classSubjectMutation/deleteclassSubjectMutation';
+import { GET_CLASS_SUBJECTS_DATA } from '../../../query/GetClassSubjectsQuery/getClassSubjectsQuery';
+import { executeQuery, executeMutation } from '../../../graphqlClient';
+import Panel_Header from '../../../dashboard/panel_header';
 
 const Class_Subject_Form = () => {
   const router = useRouter();
-  const [firstName, setFirstName] = useState('');
+  const [firstName] = useState('');
   const [logoutMessage, setLogoutMessage] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -23,6 +28,15 @@ const Class_Subject_Form = () => {
   const [className, setClassName] = useState('');
   const [subjectsInput, setSubjectsInput] = useState('');
   const [subjectList, setSubjectList] = useState([]);
+  const [editId, setEditId] = useState(null);
+
+  // Ref to the form section
+  const formRef = useRef(null);
+
+  const classOptions = [
+    'Nursery', 'LKG', 'UKG', '1st', '2nd', '3rd', '4th', '5th',
+    '6th', '7th', '8th', '9th', '10th', '11th', '12th',
+  ];
 
   useEffect(() => {
     fetchClassSubjects();
@@ -33,128 +47,239 @@ const Class_Subject_Form = () => {
     setSubjectList(response?.getClassSubjects || []);
   };
 
+  const formatDate = (dateStr) => {
+    const year = dateStr.slice(0, 4);
+    const month = dateStr.slice(4, 6);
+    const day = dateStr.slice(6, 8);
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+    return `${day} ${months[parseInt(month) - 1]} ${year}`;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const subjects = subjectsInput
       .split(',')
-      .map(s => s.trim())
+      .map((s) => s.trim())
       .filter(Boolean)
       .join(',');
 
     try {
-      await executeMutation(CREATE_CLASS_SUBJECTS_MUTATION, {
-        class_name: className,
-        subject_name: subjects,
-      });
+      if (editId) {
+        const response = await executeMutation(UPDATE_CLASS_SUBJECTS_MUTATION, {
+          z_id: editId,
+          class_name: className,
+          subject_name: subjects,
+        });
+        if (response?.updateClassSubject?.success_msg) {
+          setLogoutMessage(response.updateClassSubject.success_msg);
+          setIsError(false);
+          setSubjectList((prevList) =>
+            prevList.map((item) =>
+              item.z_id === editId ? { ...item, class_name: className, subject_name: subjects } : item
+            )
+          );
+        } else {
+          throw new Error(response?.updateClassSubject?.error_msg || 'Update failed');
+        }
+      } else {
+        const response = await executeMutation(CREATE_CLASS_SUBJECTS_MUTATION, {
+          class_name: className,
+          subject_name: subjects,
+        });
+        if (response?.createClassSubject?.success_msg) {
+          setLogoutMessage(response.createClassSubject.success_msg || 'Class subjects saved successfully!');
+          setIsError(false);
+          const newItem = {
+            z_id: response.createClassSubject.z_id || Date.now().toString(),
+            class_name: className,
+            subject_name: subjects,
+            cdate: response.createClassSubject.cdate || new Date().toISOString().slice(0, 10).replace(/-/g, ''),
+          };
+          setSubjectList((prevList) => [newItem, ...prevList]);
+        } else {
+          throw new Error(response?.createClassSubject?.error_msg || 'Save failed');
+        }
+      }
 
       setClassName('');
       setSubjectsInput('');
-      fetchClassSubjects();
-      setLogoutMessage('Class subjects saved successfully!');
-      setIsError(false);
+      setEditId(null);
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 3000);
     } catch (error) {
-      setLogoutMessage('Failed to save class subjects.');
+      setLogoutMessage(error.message || 'Operation failed.');
       setIsError(true);
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 3000);
     }
   };
 
+  const handleDelete = async (z_id) => {
+    try {
+      const response = await executeMutation(DELETE_CLASS_SUBJECTS_MUTATION, { z_id });
+      if (response?.deleteClassSubject?.success_msg) {
+        setLogoutMessage(response.deleteClassSubject.success_msg || 'Class subject deleted successfully!');
+        setIsError(false);
+        setSubjectList((prevList) => prevList.filter((item) => item.z_id !== z_id));
+      } else {
+        throw new Error(response?.deleteClassSubject?.error_msg || 'Deletion failed');
+      }
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 3000);
+    } catch (error) {
+      setLogoutMessage(error.message || 'Failed to delete class subject.');
+      setIsError(true);
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 3000);
+    }
+  };
+
+  const handleUpdate = (item) => {
+    setClassName(item.class_name);
+    setSubjectsInput(item.subject_name);
+    setEditId(item.z_id);
+    // Scroll to the form section
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="relative p-4 sm:p-6 lg:p-10 bg-gray-50 min-h-screen">
-      {/* Notification Popup */}
+<div className="min-h-screen bg-[#f9fafb] pt-10 px-4 sm:px-6 lg:px-8 lg:pt-16">
+{/* Notification Popup */}
       {showPopup && (
         <div
-          className={`fixed top-6 right-6 z-50 px-6 py-4 rounded-xl shadow-lg text-white flex items-center gap-3 animate-fade-in-up transition-transform duration-300 ${
+          className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-2 rounded-full shadow-lg text-white flex items-center gap-2 ${
             isError ? 'bg-red-600' : 'bg-green-600'
           }`}
         >
-          {isError ? <FaTimesCircle className="text-xl" /> : <FaCheckCircle className="text-xl" />}
-          <span className="text-sm font-medium">{logoutMessage}</span>
+          {isError ? <FaTimesCircle /> : <FaCheckCircle />}
+          <span className="text-sm">{logoutMessage}</span>
         </div>
       )}
 
-      {/* Header */}
-      <header className="flex justify-between items-center mb-8">
-        <button
-          onClick={() => router.back()}
-          className="text-gray-600 hover:text-indigo-600 flex items-center text-sm font-medium"
-        >
-          <FaArrowLeft className="mr-2" /> Back
-        </button>
-        <h1 className="text-2xl font-bold text-gray-800">
-          Welcome,{' '}
-          <span className="bg-indigo-600 text-white px-3 py-1 rounded-xl">
-            {firstName || 'User'}
-          </span>
-        </h1>
-      </header>
-
-      {/* Class + Subjects Form */}
-      <section className="bg-white p-6 rounded-2xl shadow-md max-w-3xl mx-auto mb-10">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Add Class Subjects</h2>
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium mb-1">Class Name</label>
-            <input
-              type="text"
-              value={className}
-              onChange={(e) => setClassName(e.target.value)}
-              required
-              className="w-full border border-gray-300 px-4 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Subjects (comma separated)</label>
-            <input
-              type="text"
-              value={subjectsInput}
-              onChange={(e) => setSubjectsInput(e.target.value)}
-              required
-              placeholder="e.g. Math, English, Science"
-              className="w-full border border-gray-300 px-4 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm px-6 py-2 rounded-md shadow-md transition"
-          >
-            Save Subjects
-          </button>
-        </form>
-      </section>
-
-      {/* Subjects Table */}
-      <section className="bg-white p-6 rounded-2xl shadow-md max-w-5xl mx-auto">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">All Class Subjects</h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm text-left">
-            <thead className="bg-gray-100 text-gray-700">
-              <tr>
-                <th className="px-4 py-2 whitespace-nowrap">Class</th>
-                <th className="px-4 py-2 whitespace-nowrap">Subjects</th>
-                <th className="px-4 py-2 whitespace-nowrap">Date</th>
-                <th className="px-4 py-2 whitespace-nowrap">Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {subjectList.map((item, index) => (
-                <tr key={index} className="border-t hover:bg-gray-50">
-                  <td className="px-4 py-2">{item.class_name}</td>
-                  <td className="px-4 py-2">{item.subject_name}</td>
-                  <td className="px-4 py-2">{item.cdate}</td>
-                  <td className="px-4 py-2">{item.ctime}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {/* Form */}
+      <section ref={formRef} className="max-w-6xl mx-auto mb-0 pb-0">
+      <Panel_Header/>
+        <div className="bg-white p-6 shadow-md border border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            {editId ? <FaEdit className="text-indigo-600" /> : <FaPlus className="text-indigo-600" />}
+            {editId ? 'Update Record' : 'Add New Record'}
+          </h2>
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Class Name</label>
+              <select
+                value={className}
+                onChange={(e) => setClassName(e.target.value)}
+                required
+                className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="">Select Class</option>
+                {classOptions.map((cls) => (
+                  <option key={cls} value={cls}>
+                    {cls}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Subjects</label>
+              <input
+                type="text"
+                value={subjectsInput}
+                onChange={(e) => setSubjectsInput(e.target.value)}
+                required
+                placeholder="e.g. Math, English, Science"
+                className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+            <div className="md:col-start-3 flex items-end">
+              <button
+                type="submit"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 flex items-center justify-center gap-2"
+              >
+                {editId ? <FaSave /> : <FaPlus />}
+                {editId ? 'Update' : 'Add'}
+              </button>
+            </div>
+          </form>
         </div>
       </section>
-    </div>
+
+      {/* Enhanced Class Subjects List Design with Light Colors */}
+      <section className="max-w-6xl mx-auto mt-5 pt-0">
+        <div className="bg-white shadow-lg border border-gray-200 overflow-hidden">
+          <div className="bg-gradient-to-r from-blue-200 to-blue-300 p-4 flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+              <span className="text-blue-600"></span> Class Subjects List
+            </h2>
+            <span className="text-sm text-gray-600 bg-blue-100 px-2 py-1">
+              {subjectList.length} Records
+            </span>
+          </div>
+          <div className="p-4">
+            {subjectList.length === 0 ? (
+              <p className="text-gray-400 text-center py-6 flex items-center justify-center gap-2">
+                <span>📭</span> No records found
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {subjectList.map((item) => (
+                  <div
+                    key={item.z_id}
+                    className="bg-gray-50 border border-gray-100 p-4 hover:bg-white hover:border-blue-200 transition-all duration-300 shadow-sm"
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                      <div className="md:col-span-2">
+                        <p className="text-xs text-blue-500 font-semibold uppercase">Class</p>
+                        <p className="text-lg font-semibold text-gray-800">{item.class_name}</p>
+                      </div>
+                      <div className="md:col-span-6">
+                        <p className="text-xs text-blue-500 font-semibold uppercase">Subjects</p>
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          {item.subject_name.split(',').map((subject, idx) => (
+                            <span
+                              key={idx}
+                              className="bg-blue-50 text-blue-600 text-xs font-medium px-2 py-1 border border-blue-100"
+                            >
+                              {subject.trim()}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="md:col-span-2">
+                        <p className="text-xs text-blue-500 font-semibold uppercase">Date</p>
+                        <p className="text-sm text-gray-600">{formatDate(item.cdate)}</p>
+                      </div>
+                      <div className="md:col-span-2 flex justify-end gap-3">
+                        <button
+                          onClick={() => handleUpdate(item)}
+                          className="text-blue-500 hover:text-blue-700 p-2 bg-blue-50 hover:bg-blue-100 transition-colors border border-blue-100"
+                          title="Edit"
+                        >
+                          <FaEdit />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item.z_id)}
+                          className="text-red-500 hover:text-red-700 p-2 bg-red-50 hover:bg-red-100 transition-colors border border-red-100"
+                          title="Delete"
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+      </div>
   );
 };
 

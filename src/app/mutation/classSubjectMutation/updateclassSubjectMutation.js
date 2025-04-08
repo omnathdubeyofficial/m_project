@@ -1,7 +1,7 @@
 
 export const UPDATE_CLASS_SUBJECTS_MUTATION = `
-  mutation updateClassSubject($class_name : String, $subject_name : String ) {
-    updateClassSubject(class_name : $class_name,  subject_name : $subject_name) {
+  mutation updateClassSubject( $z_id: String,, $class_name : String, $subject_name : String ) {
+    updateClassSubject( z_id: $z_id, class_name : $class_name,  subject_name : $subject_name) {
     z_id
     class_name
     subject_name
