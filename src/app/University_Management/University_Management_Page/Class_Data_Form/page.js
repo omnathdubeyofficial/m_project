@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { CREATE_CLASS_DATA_MUTATION } from '../../../mutation/classesDataMutation/createClassDataMutation';
-import { FaArrowLeft, FaCheckCircle,FaPlus, FaTimesCircle, FaTimes, FaUpload } from 'react-icons/fa';
+import { FaArrowLeft, FaCheckCircle, FaPlus, FaTimesCircle, FaTimes, FaUpload } from 'react-icons/fa';
 import { GET_CLASS_SUBJECTS_DATA } from '../../../query/GetClassSubjectsQuery/getClassSubjectsQuery';
 import { executeQuery, executeMutation } from '../../../graphqlClient';
 import Select from 'react-select';
 import Panel_Header from '../../../dashboard/panel_header';
+import Loading from '../../../Loader/page';
 
 export default function ClassForm() {
   const initialFormState = {
@@ -21,6 +22,7 @@ export default function ClassForm() {
   const [formData, setFormData] = useState(initialFormState);
   const [message, setMessage] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Initialized as true
   const [isClient, setIsClient] = useState(false);
   const [classOptions, setClassOptions] = useState([]);
   const [subjectOptionsByClass, setSubjectOptionsByClass] = useState({});
@@ -33,6 +35,7 @@ export default function ClassForm() {
 
   const fetchClassSubjects = async () => {
     try {
+      setIsLoading(true); // Set loading to true before fetching
       const response = await executeQuery(GET_CLASS_SUBJECTS_DATA);
       const classSubjects = response?.getClassSubjects || [];
       const uniqueClasses = [...new Set(classSubjects.map(item => item.class_name))];
@@ -49,6 +52,8 @@ export default function ClassForm() {
       setSubjectOptionsByClass(subjectOptions);
     } catch (error) {
       console.error('Error fetching class subjects:', error);
+    } finally {
+      setIsLoading(false); // Set loading to false after fetch completes (success or failure)
     }
   };
 
@@ -135,6 +140,11 @@ export default function ClassForm() {
   const currentSubjectOptions = formData.class_title
     ? subjectOptionsByClass[formData.class_title] || []
     : [];
+
+  // Show Loading component while isLoading is true
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
 <div className="min-h-screen max-w-6xl mx-auto  items-center justify-center py-16 mt-16 sm:mt-0 px-4 sm:px-6 lg:px-8 lg:pt-36">
