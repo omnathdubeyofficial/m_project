@@ -6,9 +6,20 @@ const prisma = new PrismaClient();
 
 // 🔹 Get all class subjects
 const getClassSubjects = async () => {
+  const orderedTitles = [
+    "Nursery", "LKG", "UKG", "1st", "2nd", "3rd", "4th", "5th",
+    "6th", "7th", "8th", "9th", "10th", "11th", "12th"
+  ];
+
   try {
     const data = await prisma.class_subjects.findMany();
-    return data;
+
+    // class_name ke order ke according sort karna
+    const sortedData = data.sort((a, b) => {
+      return orderedTitles.indexOf(a.class_name) - orderedTitles.indexOf(b.class_name);
+    });
+
+    return sortedData;
   } catch (error) {
     console.error("Error fetching class subjects:", error);
     return { error_msg: error.toString() };
@@ -16,6 +27,7 @@ const getClassSubjects = async () => {
     await prisma.$disconnect();
   }
 };
+
 
 // 🔹 Create new class subject record
 const createClassSubject = async ({ class_name, subject_name }) => {
