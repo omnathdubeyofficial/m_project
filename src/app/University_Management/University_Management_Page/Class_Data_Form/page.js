@@ -269,7 +269,7 @@ export default function ClassForm() {
   }
 
   return (
-    <div className="min-h-screen max-w-6xl mx-auto items-center justify-center py-16 mt-16 sm:mt-0 px-4 sm:px-6 lg:px-8 lg:pt-36">
+    <div className="min-h-screen max-w-6xl mx-auto items-center justify-center pt-16 mt-16 sm:mt-0 px-4 sm:px-6 lg:px-8 lg:pt-36">
       <Panel_Header />
       <div ref={formRef} className="max-w-6xl w-full bg-white shadow-xl p-8">
         <div className="mb-6">
