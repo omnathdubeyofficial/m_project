@@ -1,128 +1,112 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image"; // Import Next.js Image component
-import Loading from '../../../Loader/page'; // Import your Loader component
-import { motion, AnimatePresence } from "framer-motion"; // Import framer-motion with AnimatePresence
+import Image from "next/image";
+import Loading from '../../../Loader/page';
+import { motion, AnimatePresence } from "framer-motion";
+import { GET_STUDENT_RATING_DATA } from "../../../query/StudentRatingQuery/fetchStudentQuery";
+import { executeQuery } from "../../../graphqlClient";
+import { ArrowLeft } from "lucide-react";
 
 export default function Home() {
-  // Dummy data with class added
-  const totalReviews = 10000;
-  const reviewGrowth = 21;
-  const averageRating = 4.0;
-  const ratingDistribution = [
-    { stars: 5, count: 2000, color: "indigo-600" },
-    { stars: 4, count: 500, color: "yellow-500" },
-    { stars: 3, count: 200, color: "orange-400" },
-    { stars: 2, count: 200, color: "blue-500" },
-    { stars: 1, count: 100, color: "red-500" },
-  ];
-  const reviews = [
-    {
-      id: 1,
-      name: "Towhidur Rahman",
-      rating: 5,
-      date: "24-10-2022",
-      review: "My first and only mala ordered on Etsy, and I'm beyond delighted! I requested a custom mala based on two stones I was called to invite together in this kind of creation. The fun and genuine joy...",
-      class: "5th",
-    },
-    {
-      id: 2,
-      name: "Priya Singh",
-      rating: 4,
-      date: "15-09-2022",
-      review: "Good quality product, delivery was a bit slow but overall satisfied.",
-      class: "6th",
-    },
-    {
-      id: 3,
-      name: "Aman Verma",
-      rating: 5,
-      date: "01-11-2022",
-      review: "Excellent service, highly recommend to everyone!",
-      class: "7th",
-    },
-    {
-      id: 14,
-      name: "Towhidur Rahman",
-      rating: 5,
-      date: "24-10-2022",
-      review: "My first and only mala ordered on Etsy, and I'm beyond delighted! I requested a custom mala based on two stones I was called to invite together in this kind of creation. The fun and genuine joy...",
-      class: "5th",
-    },
-    {
-      id: 24,
-      name: "Priya Singh",
-      rating: 4,
-      date: "15-09-2022",
-      review: "Good quality product, delivery was a bit slow but overall satisfied.",
-      class: "6th",
-    },
-    {
-      id: 34,
-      name: "Aman Verma",
-      rating: 5,
-      date: "01-11-2022",
-      review: "Excellent service, highly recommend to everyone!",
-      class: "7th",
-    },
-  ];
+  const [visibleReviews, setVisibleReviews] = useState(3);
+  const [isLoading, setIsLoading] = useState(true);
+  const [studentRatings, setStudentRatings] = useState([]);
+  const [selectedClass, setSelectedClass] = useState("all"); // State for class filter
+  const reviewsPerLoad = 3;
 
-  // State for showing reviews and loading
-  const [visibleReviews, setVisibleReviews] = useState(3); // Initial number of reviews to show
-  const [isLoading, setIsLoading] = useState(true); // Loading state
-  const reviewsPerLoad = 3; // Number of reviews to load each time "Show More" is clicked
-
-  // Animated number effect and full page load handling
   const [displayedTotalReviews, setDisplayedTotalReviews] = useState(0);
+
   useEffect(() => {
-    // Animate the total reviews count
-    let start = 0;
-    const end = totalReviews;
-    const duration = 1500;
-    const stepTime = Math.floor(duration / (end / 100));
+    let pageLoaded = false;
+    let dataFetched = false;
 
-    const timer = setInterval(() => {
-      start += 100;
-      if (start >= end) {
-        clearInterval(timer);
-        setDisplayedTotalReviews(end);
-      } else {
-        setDisplayedTotalReviews(start);
-      }
-    }, stepTime);
+    const animateReviewsCount = (total) => {
+      let start = 0;
+      const end = total;
+      const duration = 1500;
+      const stepTime = Math.floor(duration / (end / 100));
 
-    // Handle full page load (including images)
-    const handleLoad = () => {
-      setIsLoading(false); // Set loading to false when everything is loaded
+      const timer = setInterval(() => {
+        start += 100;
+        if (start >= end) {
+          clearInterval(timer);
+          setDisplayedTotalReviews(end);
+        } else {
+          setDisplayedTotalReviews(start);
+        }
+      }, stepTime);
+      return () => clearInterval(timer);
     };
 
-    // Check if the document and all resources are loaded
+    const fetchStudentRatings = async () => {
+      try {
+        const response = await executeQuery(GET_STUDENT_RATING_DATA);
+        const ratings = response?.getStudentRatings || [];
+        setStudentRatings(ratings);
+        animateReviewsCount(ratings.length);
+        dataFetched = true;
+        checkLoadingComplete();
+      } catch (error) {
+        console.error("Error fetching student ratings:", error);
+        setStudentRatings([]);
+        dataFetched = true;
+        checkLoadingComplete();
+      }
+    };
+
+    const checkLoadingComplete = () => {
+      if (pageLoaded && dataFetched) {
+        setIsLoading(false);
+      }
+    };
+
+    const handlePageLoad = () => {
+      pageLoaded = true;
+      checkLoadingComplete();
+    };
+
     if (document.readyState === "complete") {
-      handleLoad();
+      handlePageLoad();
     } else {
-      window.addEventListener("load", handleLoad);
+      window.addEventListener("load", handlePageLoad);
     }
 
+    fetchStudentRatings();
+
     return () => {
-      clearInterval(timer);
-      window.removeEventListener("load", handleLoad);
+      window.removeEventListener("load", handlePageLoad);
     };
   }, []);
 
-  // Render stars
+  // Format date from "20250409" to "09 April 2025"
+  const formatDate = (dateStr) => {
+    if (!dateStr || dateStr.length !== 8) return "N/A";
+    const year = dateStr.slice(0, 4);
+    const month = dateStr.slice(4, 6);
+    const day = dateStr.slice(6, 8);
+    
+    const date = new Date(`${year}-${month}-${day}`);
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric"
+    });
+  };
+
+  // Render stars based on string rating converted to number
   const renderStars = (rating) => {
+    const ratingNum = parseInt(rating, 10) || 0; // Convert string to number
     return Array.from({ length: 5 }, (_, i) => (
       <span
         key={i}
-        className={`text-lg ${i < rating ? "text-yellow-500" : "text-gray-300"}`}
+        className={`text-lg ${i < ratingNum ? "text-yellow-500" : "text-gray-300"}`}
       >
         ★
       </span>
     ));
   };
 
-  // Handlers for Show More/Show Less
   const handleShowMore = () => {
     setVisibleReviews((prev) => prev + reviewsPerLoad);
   };
@@ -131,7 +115,6 @@ export default function Home() {
     setVisibleReviews((prev) => Math.max(prev - reviewsPerLoad, reviewsPerLoad));
   };
 
-  // Animation variants for buttons
   const buttonVariants = {
     hidden: { opacity: 0, scale: 0.9 },
     visible: { opacity: 1, scale: 1, transition: { duration: 0.3, ease: "easeInOut" } },
@@ -139,7 +122,6 @@ export default function Home() {
     tap: { scale: 0.95 },
   };
 
-  // Animation variants for review cards
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: (i) => ({
@@ -150,66 +132,108 @@ export default function Home() {
     exit: { opacity: 0, y: -20, transition: { duration: 0.3, ease: "easeIn" } },
   };
 
-  // If loading, show the loader
   if (isLoading) {
-    return <Loading />; // Your custom loader component
+    return <Loading />;
   }
+
+  // Get unique classes for filter dropdown
+  const uniqueClasses = ["all", ...new Set(studentRatings.map(review => review.class_assigned).filter(Boolean))];
+
+  // Filter reviews based on selected class
+  const filteredReviews = selectedClass === "all" 
+    ? studentRatings 
+    : studentRatings.filter(review => review.class_assigned === selectedClass);
+
+  const totalReviewsFetched = filteredReviews.length;
+  const ratingSum = filteredReviews.reduce((sum, review) => sum + (parseInt(review.rating) || 0), 0);
+  const averageRatingFetched = totalReviewsFetched > 0 ? (ratingSum / totalReviewsFetched).toFixed(1) : 0;
+
+  const ratingColors = {
+    5: "green-600",
+    4: "purple-500",
+    3: "indigo-600",
+    2: "blue-500",
+    1: "red-500",
+  };
+
+  const ratingDistributionFetched = [5, 4, 3, 2, 1].map((star) => ({
+    stars: star,
+    count: filteredReviews.filter((review) => parseInt(review.rating) === star).length,
+    color: ratingColors[star] || "gray-500",
+  }));
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col pt-28">
-      {/* Main Content */}
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow">
-        {/* Stats Section */}
+        {/* Class Filter Dropdown */}
+        <div className="flex justify-between items-center mb-6">
+  {/* Back Button with Icon */}
+  <button
+  onClick={() => window.history.back()}
+  className="inline-flex items-center gap-2 bg-green-100 text-green-800 hover:bg-green-200 hover:text-green-900 px-4 py-2  shadow-sm transition-all duration-200 ease-in-out"
+>
+  <ArrowLeft className="w-5 h-5" strokeWidth={2.5} />
+  <span className="font-semibold">Back</span>
+</button>
+
+  {/* Filter Dropdown */}
+  <div>
+    <select
+      value={selectedClass}
+      onChange={(e) => setSelectedClass(e.target.value)}
+      className="px-4 py-2 border border-gray-300  bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+    >
+      {uniqueClasses.map((className) => (
+        <option  key={className} value={className}>
+          {className === "all" ? "Filter By Class" : className}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
+
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-          {/* Total Reviews with Image and Description */}
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 flex flex-col sm:flex-row items-center justify-between">
+          <div className="bg-white  p-6 shadow-sm border border-gray-200 flex flex-col sm:flex-row items-center justify-between">
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-gray-700">Total Reviews</h3>
               <div className="flex items-baseline space-x-2 mt-2">
                 <span className="text-5xl font-bold text-gray-900">
                   {displayedTotalReviews.toLocaleString()}
                 </span>
-                <span className="text-sm text-green-600">+{reviewGrowth}%</span>
               </div>
-              <p className="text-gray-600 text-sm mt-1">Growth in reviews this year</p>
+              <p className="text-gray-600 text-sm mt-1">Total reviews this year</p>
               <p className="text-gray-500 text-sm mt-2">
                 This reflects the total feedback received from students across all classes, showcasing our commitment to quality education.
               </p>
             </div>
             <div className="mt-4 sm:mt-0 sm:ml-6 flex-shrink-0">
               <Image
-                src="/img/super-kid.webp" // Replace with your image path
+                src="/img/super-kid.webp"
                 alt="Reviews Icon"
                 width={280}
                 height={120}
                 className="object-contain"
-                onLoadingComplete={() => {
-                  // Optional: Ensure image load contributes to loading state
-                  if (document.readyState === "complete") {
-                    setIsLoading(false);
-                  }
-                }}
               />
             </div>
           </div>
 
-          {/* Average Rating */}
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          <div className="bg-white  p-6 shadow-sm border border-gray-200">
             <h3 className="text-lg font-semibold text-gray-700">Average Rating</h3>
             <div className="flex items-center space-x-2 mt-2">
-              <div className="flex">{renderStars(averageRating)}</div>
-              <span className="text-2xl font-bold text-gray-900">{averageRating}</span>
+              <div className="flex">{renderStars(averageRatingFetched)}</div>
+              <span className="text-2xl font-bold text-gray-900">{averageRatingFetched}</span>
             </div>
             <p className="text-gray-600 text-sm mt-1">Average rating this year</p>
             <div className="mt-4 space-y-2">
-              {ratingDistribution.map((item) => (
+              {ratingDistributionFetched.map((item) => (
                 <div key={item.stars} className="flex items-center space-x-2 text-sm">
                   <span className="w-8 text-gray-600">{item.stars} ★</span>
                   <div className="flex-1 bg-gray-200 rounded-full h-2">
                     <div
                       className={`h-2 rounded-full bg-${item.color}`}
                       style={{
-                        width: `${(item.count / Math.max(...ratingDistribution.map((r) => r.count))) * 100}%`,
+                        width: `${(item.count / Math.max(...ratingDistributionFetched.map((r) => r.count))) * 100}%`,
                       }}
                     />
                   </div>
@@ -222,13 +246,12 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Reviews List with Motion and AnimatePresence */}
         <AnimatePresence>
           <section className="grid grid-cols-1 lg:grid-cols-3 gap-4 py-0 pt-0">
-            {reviews.slice(0, visibleReviews).map((review, index) => (
+            {filteredReviews.slice(0, visibleReviews).map((review, index) => (
               <motion.div
-                key={review.id}
-                className="bg-white rounded-xl p-6 border border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-200"
+                key={review.z_id}
+                className="bg-white  p-6 border border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-200"
                 variants={cardVariants}
                 initial="hidden"
                 animate="visible"
@@ -236,8 +259,24 @@ export default function Home() {
                 custom={index}
               >
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-xl font-semibold text-gray-800 tracking-tight">{review.name}</h3>
-                  <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-md">{review.date}</span>
+                <h3 className="text-xl font-semibold text-gray-800 tracking-tight">
+  {[
+    review.first_name,
+    review.middle_name,
+    review.last_name,
+  ]
+    .filter(Boolean) // Remove undefined/null parts
+    .map(
+      (name) =>
+        name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+    )
+    .join(" ")}
+</h3>
+
+
+                  <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 ">
+                    {formatDate(review.cdate)}
+                  </span>
                 </div>
                 <div className="flex items-center space-x-2 mb-4">
                   <div className="flex">{renderStars(review.rating)}</div>
@@ -245,10 +284,13 @@ export default function Home() {
                     {review.rating}/5
                   </span>
                 </div>
-                <p className="text-gray-700 text-base leading-relaxed mb-4 font-light italic">"{review.review}"</p>
+                <p className="text-gray-600 text-base leading-relaxed mb-4 border-l-4 border-green-500 pl-4 italic bg-green-50 rounded-sm">
+  “{review.review}”
+</p>
+
                 <div className="flex justify-between items-center">
                   <p className="text-gray-600 text-sm">
-                    <span className="font-medium text-gray-800">Class:</span> {review.class}
+                    <span className="font-medium text-gray-800">Class:</span> {review.class_assigned || "N/A"}
                   </p>
                 </div>
               </motion.div>
@@ -256,12 +298,11 @@ export default function Home() {
           </section>
         </AnimatePresence>
 
-        {/* Show More/Show Less Buttons with Motion */}
         <div className="flex justify-center items-center gap-4 mt-10">
-          {visibleReviews < reviews.length && (
+          {visibleReviews < filteredReviews.length && (
             <motion.button
               onClick={handleShowMore}
-              className="px-6 py-2 bg-green-600 text-white rounded-lg text-sm shadow-md"
+              className="px-6 py-2 bg-green-600 text-white  text-sm shadow-md"
               variants={buttonVariants}
               initial="hidden"
               animate="visible"
@@ -274,7 +315,7 @@ export default function Home() {
           {visibleReviews > reviewsPerLoad && (
             <motion.button
               onClick={handleShowLess}
-              className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm shadow-md"
+              className="px-6 py-2 bg-gray-200 text-gray-700  text-sm shadow-md"
               variants={buttonVariants}
               initial="hidden"
               animate="visible"
