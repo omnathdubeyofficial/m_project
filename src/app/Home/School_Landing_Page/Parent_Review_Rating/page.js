@@ -12,11 +12,11 @@ export default function Home() {
   const [visibleReviews, setVisibleReviews] = useState(3);
   const [isLoading, setIsLoading] = useState(true);
   const [studentRatings, setStudentRatings] = useState([]);
-  const [selectedClass, setSelectedClass] = useState("all"); // State for class filter
+  const [selectedClass, setSelectedClass] = useState("all");
   const reviewsPerLoad = 3;
-
   const [displayedTotalReviews, setDisplayedTotalReviews] = useState(0);
 
+  // Initial data fetch
   useEffect(() => {
     let pageLoaded = false;
     let dataFetched = false;
@@ -24,11 +24,11 @@ export default function Home() {
     const animateReviewsCount = (total) => {
       let start = 0;
       const end = total;
-      const duration = 500;
-      const stepTime = Math.floor(duration / (end / 10));
+      const duration = 100;
+      const stepTime = Math.floor(duration / (end / 10 || 1));
 
       const timer = setInterval(() => {
-        start += 100;
+        start += Math.max(1, Math.floor(end / 10));
         if (start >= end) {
           clearInterval(timer);
           setDisplayedTotalReviews(end);
@@ -44,7 +44,7 @@ export default function Home() {
         const response = await executeQuery(GET_PARENT_RATING_DATA);
         const ratings = response?.getParentRatings || [];
         setStudentRatings(ratings);
-        animateReviewsCount(ratings.length);
+        animateReviewsCount(ratings.length); // Keep animation for initial load
         dataFetched = true;
         checkLoadingComplete();
       } catch (error) {
@@ -79,13 +79,20 @@ export default function Home() {
     };
   }, []);
 
-  // Format date from "20250409" to "09 April 2025"
+  // Update displayedTotalReviews immediately when selectedClass changes
+  useEffect(() => {
+    const filteredReviews = selectedClass === "all" 
+      ? studentRatings 
+      : studentRatings.filter(review => review.class_assigned === selectedClass);
+    
+    setDisplayedTotalReviews(filteredReviews.length); // Set immediately without animation
+  }, [selectedClass, studentRatings]);
+
   const formatDate = (dateStr) => {
     if (!dateStr || dateStr.length !== 8) return "N/A";
     const year = dateStr.slice(0, 4);
     const month = dateStr.slice(4, 6);
     const day = dateStr.slice(6, 8);
-    
     const date = new Date(`${year}-${month}-${day}`);
     return date.toLocaleDateString("en-GB", {
       day: "2-digit",
@@ -94,9 +101,8 @@ export default function Home() {
     });
   };
 
-  // Render stars based on string rating converted to number
   const renderStars = (rating) => {
-    const ratingNum = parseInt(rating, 10) || 0; // Convert string to number
+    const ratingNum = parseInt(rating, 10) || 0;
     return Array.from({ length: 5 }, (_, i) => (
       <span
         key={i}
@@ -136,10 +142,7 @@ export default function Home() {
     return <Loading />;
   }
 
-  // Get unique classes for filter dropdown
   const uniqueClasses = ["all", ...new Set(studentRatings.map(review => review.class_assigned).filter(Boolean))];
-
-  // Filter reviews based on selected class
   const filteredReviews = selectedClass === "all" 
     ? studentRatings 
     : studentRatings.filter(review => review.class_assigned === selectedClass);
@@ -165,36 +168,31 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col pt-28">
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow">
-        {/* Class Filter Dropdown */}
         <div className="flex justify-between items-center mb-6">
-  {/* Back Button with Icon */}
-  <button
-  onClick={() => window.history.back()}
-  className="inline-flex items-center gap-2 bg-green-100 text-green-800 hover:bg-green-200 hover:text-green-900 px-4 py-2  shadow-sm transition-all duration-200 ease-in-out"
->
-  <ArrowLeft className="w-5 h-5" strokeWidth={2.5} />
-  <span className="font-semibold">Back</span>
-</button>
-
-  {/* Filter Dropdown */}
-  <div>
-    <select
-      value={selectedClass}
-      onChange={(e) => setSelectedClass(e.target.value)}
-      className="px-4 py-2 border border-gray-300  bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-    >
-      {uniqueClasses.map((className) => (
-        <option  key={className} value={className}>
-          {className === "all" ? "Filter By Class" : className}
-        </option>
-      ))}
-    </select>
-  </div>
-</div>
-
+          <button
+            onClick={() => window.history.back()}
+            className="inline-flex items-center gap-2 bg-green-100 text-green-800 hover:bg-green-200 hover:text-green-900 px-4 py-2 shadow-sm transition-all duration-200 ease-in-out"
+          >
+            <ArrowLeft className="w-5 h-5" strokeWidth={2.5} />
+            <span className="font-semibold">Back</span>
+          </button>
+          <div>
+            <select
+              value={selectedClass}
+              onChange={(e) => setSelectedClass(e.target.value)}
+              className="px-4 py-2 border border-gray-300 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+              {uniqueClasses.map((className) => (
+                <option key={className} value={className}>
+                  {className === "all" ? "Filter By Class" : className}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-          <div className="bg-white  p-6 shadow-sm border border-gray-200 flex flex-col sm:flex-row items-center justify-between">
+          <div className="bg-white p-6 shadow-sm border border-gray-200 flex flex-col sm:flex-row items-center justify-between">
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-gray-700">Total Reviews</h3>
               <div className="flex items-baseline space-x-2 mt-2">
@@ -218,7 +216,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="bg-white  p-6 shadow-sm border border-gray-200">
+          <div className="bg-white p-6 shadow-sm border border-gray-200">
             <h3 className="text-lg font-semibold text-gray-700">Average Rating</h3>
             <div className="flex items-center space-x-2 mt-2">
               <div className="flex">{renderStars(averageRatingFetched)}</div>
@@ -251,7 +249,7 @@ export default function Home() {
             {filteredReviews.slice(0, visibleReviews).map((review, index) => (
               <motion.div
                 key={review.z_id}
-                className="bg-white  p-6 border border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-200"
+                className="bg-white p-6 border border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-200"
                 variants={cardVariants}
                 initial="hidden"
                 animate="visible"
@@ -259,22 +257,13 @@ export default function Home() {
                 custom={index}
               >
                 <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-semibold text-gray-800 tracking-tight">
-  {[
-    review.first_name,
-    review.middle_name,
-    review.last_name,
-  ]
-    .filter(Boolean) // Remove undefined/null parts
-    .map(
-      (name) =>
-        name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
-    )
-    .join(" ")}
-</h3>
-
-
-                  <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 ">
+                  <h3 className="text-xl font-semibold text-gray-800 tracking-tight">
+                    {[review.first_name, review.middle_name, review.last_name]
+                      .filter(Boolean)
+                      .map((name) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase())
+                      .join(" ")}
+                  </h3>
+                  <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1">
                     {formatDate(review.cdate)}
                   </span>
                 </div>
@@ -285,9 +274,8 @@ export default function Home() {
                   </span>
                 </div>
                 <p className="text-gray-600 text-base leading-relaxed mb-4 border-l-4 border-green-500 pl-4 italic bg-green-50 rounded-sm">
-  “{review.review}”
-</p>
-
+                  “{review.review}”
+                </p>
                 <div className="flex justify-between items-center">
                   <p className="text-gray-600 text-sm">
                     <span className="font-medium text-gray-800">Class:</span> {review.class_assigned || "N/A"}
@@ -302,7 +290,7 @@ export default function Home() {
           {visibleReviews < filteredReviews.length && (
             <motion.button
               onClick={handleShowMore}
-              className="px-6 py-2 bg-green-600 text-white  text-sm shadow-md"
+              className="px-6 py-2 bg-green-600 text-white text-sm shadow-md"
               variants={buttonVariants}
               initial="hidden"
               animate="visible"
@@ -315,7 +303,7 @@ export default function Home() {
           {visibleReviews > reviewsPerLoad && (
             <motion.button
               onClick={handleShowLess}
-              className="px-6 py-2 bg-gray-200 text-gray-700  text-sm shadow-md"
+              className="px-6 py-2 bg-gray-200 text-gray-700 text-sm shadow-md"
               variants={buttonVariants}
               initial="hidden"
               animate="visible"
