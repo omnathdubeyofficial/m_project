@@ -154,21 +154,21 @@ export default function ClassSetup() {
       {/* Student Rating */}
       <p
         className="flex justify-between items-center text-sm border-b border-gray-300 rounded-xl p-3 text-gray-700 cursor-pointer hover:bg-gray-200"
-        onClick={() => router.push(cls.path)}
+        onClick={() => router.push('/student/ratings')}
       >
         <span className="flex items-center gap-1">
           <Star className="w-4 h-4 text-yellow-500" />
           <span className="font-semibold">Student Rating:</span>
         </span>
         <span className="text-green-500 font-semibold">
-          {cls.student_rating}/5 ({cls.student_reviews})
+          {cls.student_reviews}/5 ({cls.student_rating})
         </span>
       </p>
 
       {/* Parents Rating */}
       <p
         className="flex justify-between items-center text-sm border-b border-gray-300 rounded-xl p-3 text-gray-700 cursor-pointer hover:bg-gray-200 mt-2"
-        onClick={() => router.push(cls.path)}
+        onClick={() => router.push('/parents/ratings')}
       >
         <span className="flex items-center gap-1">
           <Star className="w-4 h-4 text-yellow-500" />
