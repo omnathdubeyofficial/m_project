@@ -8,6 +8,7 @@ query {
           userid
           review
           rating
+          class_assigned
     cdate
     ctime
     udate

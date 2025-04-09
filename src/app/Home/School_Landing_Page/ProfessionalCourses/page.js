@@ -154,7 +154,7 @@ export default function ClassSetup() {
       {/* Student Rating */}
       <p
         className="flex justify-between items-center text-sm border-b border-gray-300 rounded-xl p-3 text-gray-700 cursor-pointer hover:bg-gray-200"
-        onClick={() => router.push('/student/ratings')}
+        onClick={() => router.push('/Home/School_Landing_Page/Students_Review_Rating')}
       >
         <span className="flex items-center gap-1">
           <Star className="w-4 h-4 text-yellow-500" />
@@ -168,7 +168,7 @@ export default function ClassSetup() {
       {/* Parents Rating */}
       <p
         className="flex justify-between items-center text-sm border-b border-gray-300 rounded-xl p-3 text-gray-700 cursor-pointer hover:bg-gray-200 mt-2"
-        onClick={() => router.push('/parents/ratings')}
+        onClick={() => router.push('/Home/School_Landing_Page/Parent_Review_Rating')}
       >
         <span className="flex items-center gap-1">
           <Star className="w-4 h-4 text-yellow-500" />

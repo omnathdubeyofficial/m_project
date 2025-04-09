@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Loading from '../../../Loader/page';
 import { motion, AnimatePresence } from "framer-motion";
-import { GET_STUDENT_RATING_DATA } from "../../../query/StudentRatingQuery/fetchStudentQuery";
+import { GET_PARENT_RATING_DATA } from "../../../query/ParentRatingQuery/fetchParentQuery";
 import { executeQuery } from "../../../graphqlClient";
 import { ArrowLeft } from "lucide-react";
 
@@ -41,8 +41,8 @@ export default function Home() {
 
     const fetchStudentRatings = async () => {
       try {
-        const response = await executeQuery(GET_STUDENT_RATING_DATA);
-        const ratings = response?.getStudentRatings || [];
+        const response = await executeQuery(GET_PARENT_RATING_DATA);
+        const ratings = response?.getParentRatings || [];
         setStudentRatings(ratings);
         animateReviewsCount(ratings.length);
         dataFetched = true;
