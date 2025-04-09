@@ -161,7 +161,7 @@ export default function ClassSetup() {
           <span className="font-semibold">Student Rating:</span>
         </span>
         <span className="text-green-500 font-semibold">
-          {cls.student_reviews}/5 ({cls.student_rating})
+          {cls.student_reviews || "NA"}/5 ({cls.student_rating || "NA"})
         </span>
       </p>
 
@@ -175,7 +175,7 @@ export default function ClassSetup() {
           <span className="font-semibold">Parents Rating:</span>
         </span>
         <span className="text-green-500 font-semibold">
-          {cls.parents_rating}/5 ({cls.parents_rating})
+          {cls.parents_reviews}/5 ({cls.parents_rating})
         </span>
       </p>
 
