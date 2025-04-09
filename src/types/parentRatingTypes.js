@@ -8,6 +8,7 @@ const ParentRatingType = gql`
     middle_name: String
     last_name: String
     userid: String
+    class_assigned: String
     review: String
     rating: String
     cdate: String
@@ -29,6 +30,7 @@ const ParentRatingType = gql`
       first_name: String
       middle_name: String
       last_name: String
+      class_assigned: String
       userid: String
       review: String
       rating: String
@@ -39,6 +41,7 @@ const ParentRatingType = gql`
       first_name: String
       middle_name: String
       last_name: String
+      class_assigned: String
       userid: String
       review: String
       rating: String

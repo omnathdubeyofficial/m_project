@@ -77,6 +77,7 @@ export default function RatingReviewPopup() {
         middle_name: userData.middle_name || '',
         last_name: userData.last_name,
         userid: userData.userid,
+        class_assigned: userData.class_assigned,
         review,
         rating: rating.toString(),
       });
