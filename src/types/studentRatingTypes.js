@@ -9,6 +9,7 @@ const studentRatingType = gql`
     last_name: String
     userid: String
     review: String
+    class_assigned: String
     rating: String
     cdate: String
     ctime: String
@@ -28,6 +29,7 @@ const studentRatingType = gql`
     createStudentRating(
       first_name: String
       middle_name: String
+      class_assigned: String
       last_name: String
       userid: String
       review: String
@@ -38,6 +40,7 @@ const studentRatingType = gql`
       z_id: String
       first_name: String
       middle_name: String
+      class_assigned: String
       last_name: String
       userid: String
       review: String

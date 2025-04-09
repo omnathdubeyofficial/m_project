@@ -25,6 +25,7 @@ const createStudentRating = async ({
     userid,
     review,
     rating,
+    class_assigned,
   }) => {
     try {
       // Check if the user has already submitted a review
@@ -47,6 +48,7 @@ const createStudentRating = async ({
           userid,
           review,
           rating,
+          class_assigned,
           cdate: setUserDate(),
           ctime: setUserTime(),
         },
@@ -72,6 +74,7 @@ const updateStudentRating = async ({
   userid,
   review,
   rating,
+  class_assigned,
 }) => {
   try {
     const updated = await prisma.student_rating.update({
@@ -83,6 +86,7 @@ const updateStudentRating = async ({
         userid,
         review,
         rating,
+        class_assigned,
         udate: setUserDate(),
         utime: setUserTime(),
       },
