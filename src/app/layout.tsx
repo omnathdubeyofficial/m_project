@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./Home/School_Landing_Page/Layout/Header";
 import Footer from "./Home/School_Landing_Page/Layout/Footer";
-
+import Student_Rating_Review from "./Rating_Review_All/Student_Rating_Review/page"
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,6 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Student_Rating_Review/>
         <Header/>
         {children}
         <Footer/>

@@ -3,10 +3,10 @@ const prisma = new PrismaClient();
 import { setUserDate, setUserTime } from './dateTimeService.js';
 import { v4 as uuidv4 } from 'uuid';
 
-// Get all student ratings
-const getStudentRatings = async () => {
+// Get all Parent ratings
+const getParentRatings = async () => {
   try {
-    const ratings = await prisma.student_rating.findMany();
+    const ratings = await prisma.parent_rating.findMany();
     return ratings;
   } catch (err) {
     const error_msg = `${err}`;
@@ -17,8 +17,8 @@ const getStudentRatings = async () => {
   }
 };
 
-// Create a new student rating
-const createStudentRating = async ({
+// Create a new Parent rating
+const createParentRating = async ({
     first_name,
     middle_name,
     last_name,
@@ -28,7 +28,7 @@ const createStudentRating = async ({
   }) => {
     try {
       // Check if the user has already submitted a review
-      const existingReview = await prisma.student_rating.findFirst({
+      const existingReview = await prisma.parent_rating.findFirst({
         where: { userid }
       });
   
@@ -38,7 +38,7 @@ const createStudentRating = async ({
         };
       }
   
-      const newRating = await prisma.student_rating.create({
+      const newRating = await prisma.parent_rating.create({
         data: {
           z_id: uuidv4(),
           first_name,
@@ -63,8 +63,8 @@ const createStudentRating = async ({
   };
   
 
-// Update student rating by z_id
-const updateStudentRating = async ({
+// Update Parent rating by z_id
+const updateParentRating = async ({
   z_id,
   first_name,
   middle_name,
@@ -74,7 +74,7 @@ const updateStudentRating = async ({
   rating,
 }) => {
   try {
-    const updated = await prisma.student_rating.update({
+    const updated = await prisma.parent_rating.update({
       where: { z_id },
       data: {
         first_name,
@@ -88,7 +88,7 @@ const updateStudentRating = async ({
       },
     });
 
-    return { ...updated, success_msg: "Student rating updated successfully." };
+    return { ...updated, success_msg: "Parent rating updated successfully." };
   } catch (err) {
     const error_msg = `${err}`;
     console.error(error_msg);
@@ -98,14 +98,14 @@ const updateStudentRating = async ({
   }
 };
 
-// Delete student rating by z_id
-const deleteStudentRating = async ({ z_id }) => {
+// Delete Parent rating by z_id
+const deleteParentRating = async ({ z_id }) => {
   try {
-    const deleted = await prisma.student_rating.delete({
+    const deleted = await prisma.parent_rating.delete({
       where: { z_id },
     });
 
-    return { ...deleted, success_msg: "Student rating deleted successfully." };
+    return { ...deleted, success_msg: "Parent rating deleted successfully." };
   } catch (err) {
     const error_msg = `${err}`;
     console.error(error_msg);
@@ -116,8 +116,8 @@ const deleteStudentRating = async ({ z_id }) => {
 };
 
 export {
-  getStudentRatings,
-  createStudentRating,
-  updateStudentRating,
-  deleteStudentRating,
+  getParentRatings,
+  createParentRating,
+  updateParentRating,
+  deleteParentRating,
 };

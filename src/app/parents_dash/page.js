@@ -20,9 +20,9 @@ const sampleData = [
 export default function ParentsDashboard() {
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 pt-24">
+    <div className="min-h-screen bg-gray-100 p-4 pt-44">
 
-        <Navber/>
+  
       {/* Main Dashboard */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
         {/* Attendance Overview */}
