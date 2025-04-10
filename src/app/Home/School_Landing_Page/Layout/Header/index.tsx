@@ -12,9 +12,15 @@ const navData = [
     name: "About Us",
     href: "/about",
     dropdown: [
-      { name: "Our Vision", href: "/about/vision" },
-      { name: "Our Mission", href: "/about/mission" },
-      { name: "Our Team", href: "/about/team" },
+      { name: "Why Arise", href: "/about/vision" },
+      { name: "President", href: "/about/mission" },
+      { name: "Secretory", href: "/about/team" },
+      { name: "Voice President", href: "/about/vision" },
+      { name: "Managing Director", href: "/about/mission" },
+      { name: "Director Principal", href: "/about/team" },
+      { name: "Our Institution", href: "/about/vision" },
+      { name: "Media Coverage", href: "/about/mission" },
+      { name: "Arise Team", href: "/about/team" },
     ],
   },
   {
@@ -24,9 +30,13 @@ const navData = [
       { name: "Curriculum", href: "/academics/curriculum" },
       { name: "Faculty", href: "/academics/faculty" },
       { name: "Achievements", href: "/academics/achievements" },
+      { name: "Learning Resources", href: "/academics/achievements" },
+      { name: "Infrastructure", href: "/academics/achievements" },
     ],
+    
   },
   { name: "Parents Corner", href: "/parents" },
+  { name: "Students Corner", href: "/parents" },
   { name: "Infrastructure", href: "/infrastructure" },
   {
     name: "Admissions",
@@ -35,10 +45,13 @@ const navData = [
       { name: "Admission Process", href: "/admissions/process" },
       { name: "Fee Structure", href: "/admissions/fees" },
       { name: "Admission Enquiry", href: "/admissions/enquiry" },
+      { name: "Apply For Admission", href: "/admissions/enquiry" },
+      { name: "Schedule for School Visit", href: "/admissions/enquiry" },
+      { name: "School Brochure", href: "/admissions/enquiry" },
     ],
+    
   },
   { name: "Career", href: "/career" },
-  { name: "General Info", href: "/info" },
 ];
 
 const SchoolHeader: React.FC = () => {
@@ -202,22 +215,23 @@ const SchoolHeader: React.FC = () => {
                       />
                     </button>
                     <div
-                      className={`absolute top-full left-0 bg-white shadow-lg rounded-b-lg py-1 w-40 transition-all duration-300 transform ${
-                        activeDropdown === item.name
-                          ? "opacity-100 scale-y-100"
-                          : "opacity-0 scale-y-0 pointer-events-none"
-                      } origin-top z-50 border-b-2 border-[#8B0000]`}
-                    >
-                      {item.dropdown.map((subItem, subIndex) => (
-                        <Link
-                          key={subIndex}
-                          href={subItem.href}
-                          className="block px-3 py-1 text-gray-700 hover:bg-[#8B0000] hover:text-white transition-all duration-200 text-sm"
-                        >
-                          {subItem.name}
-                        </Link>
-                      ))}
-                    </div>
+  className={`absolute top-full left-0 bg-white shadow-lg border-b-2 py-1 w-40 transition-all duration-300 transform ${
+    activeDropdown === item.name
+      ? "opacity-100 scale-y-100"
+      : "opacity-0 scale-y-0 pointer-events-none"
+  } origin-top z-50 border-b-2 border-[#8B0000]`}
+>
+  {item.dropdown.map((subItem, subIndex) => (
+    <Link
+      key={subIndex}
+      href={subItem.href}
+      className="block px-3 py-2 text-gray-700 hover:bg-[#8B0000] hover:text-white transition-all duration-200 text-sm border-b border-gray-200 last:border-b-0"
+    >
+      {subItem.name}
+    </Link>
+  ))}
+</div>
+
                   </>
                 ) : (
                   <Link
