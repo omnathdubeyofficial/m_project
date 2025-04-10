@@ -190,7 +190,7 @@ export default function ClassSetup() {
                       <span className="font-semibold">Parents Rating:</span>
                     </span>
                     <span className="text-green-500 font-semibold">
-                      {cls.parents_reviews}/5 ({cls.parents_rating})
+                      {cls.parents_reviews || "NA"}/5 ({cls.parents_rating || "NA"} )
                     </span>
                   </p>
                   <p className="flex justify-between items-center text-sm border-b border-gray-300 rounded-xl p-3 text-gray-700 mt-2">
