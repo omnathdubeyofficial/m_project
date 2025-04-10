@@ -1,9 +1,13 @@
 "use client";
-import {
-  FaUniversity, FaUserGraduate, FaUserTie, FaChartBar, FaUsers, FaFileAlt,
-  FaBus, FaCogs, FaBook, FaFlask, FaDesktop, FaBroom, FaShieldAlt, FaClipboardCheck,
-  FaCalendarAlt, FaFutbol, FaTrophy, FaBell, FaUserPlus, FaMoneyBillWave,FaSignOutAlt,FaArrowLeft
-} from 'react-icons/fa';
+import { 
+  FaChartBar,
+  FaUserGraduate,
+  FaClipboardList,
+  FaBookOpen,
+  FaBullhorn,
+  FaBriefcase,
+  FaChalkboardTeacher 
+} from "react-icons/fa";
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Loading from '../../Loader/page';
@@ -24,15 +28,42 @@ const University_Management_Page = () => {
   }, []);
 
   const menuItems = [
-    { name: 'University Information Management', icon: FaChartBar, link: '/University_Management/University_Management_Page/Academic_Calendar_List' },
-    { name: 'Student Management', icon: FaUniversity, link: "/University_Management/University_Management_Page/Academic_Calendar_Form" },
-    { name: 'Class Data Form', icon: FaFlask, link: '/University_Management/University_Management_Page/Class_Data_Form' },
-    { name: 'Class Subject Form', icon: FaBook, link: '/University_Management/University_Management_Page/Class_Subject_Form' },
-    { name: 'Notice Board Data', icon: FaBook, link: '/Notic_Board_Dash/Notice_Board_Form' },
-    { name: 'Career', icon: FaBook, link: '/Career/CareerApplicationForm' },
-    { name: 'Faculty', icon: FaBook, link: '/Faculty/FacultyApplicationForm' },
+    {
+      name: 'University Information Management',
+      icon: FaChartBar, 
+      link: '/University_Management/University_Management_Page/Academic_Calendar_List'
+    },
+    {
+      name: 'Student Management',
+      icon: FaUserGraduate, 
+      link: "/University_Management/University_Management_Page/Academic_Calendar_Form"
+    },
+    {
+      name: 'Class Data Form',
+      icon: FaClipboardList, 
+      link: '/University_Management/University_Management_Page/Class_Data_Form'
+    },
+    {
+      name: 'Class Subject Form',
+      icon: FaBookOpen, 
+      link: '/University_Management/University_Management_Page/Class_Subject_Form'
+    },
+    {
+      name: 'Notice Board Data',
+      icon: FaBullhorn, 
+      link: '/Notic_Board_Dash/Notice_Board_Form'
+    },
+    {
+      name: 'Career',
+      icon: FaBriefcase, 
+      link: '/Career/CareerApplicationForm'
+    },
+    {
+      name: 'Faculty',
+      icon: FaChalkboardTeacher, 
+      link: '/Faculty/FacultyApplicationForm'
+    }
   ];
-
   if (isLoading) return <Loading />;
 
   return (
