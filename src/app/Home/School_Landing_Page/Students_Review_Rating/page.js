@@ -24,11 +24,11 @@ export default function Home() {
     const animateReviewsCount = (total) => {
       let start = 0;
       const end = total;
-      const duration = 500;
-      const stepTime = Math.floor(duration / (end / 10));
+      const duration = 100;
+      const stepTime = Math.floor(duration / (end / 10 || 1));
 
       const timer = setInterval(() => {
-        start += 100;
+        start += Math.max(1, Math.floor(end / 10));
         if (start >= end) {
           clearInterval(timer);
           setDisplayedTotalReviews(end);
@@ -78,6 +78,15 @@ export default function Home() {
       window.removeEventListener("load", handlePageLoad);
     };
   }, []);
+
+
+  useEffect(() => {
+    const filteredReviews = selectedClass === "all" 
+      ? studentRatings 
+      : studentRatings.filter(review => review.class_assigned === selectedClass);
+    
+    setDisplayedTotalReviews(filteredReviews.length); // Set immediately without animation
+  }, [selectedClass, studentRatings]);
 
   // Format date from "20250409" to "09 April 2025"
   const formatDate = (dateStr) => {
