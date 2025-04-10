@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from "react";
 import {
   FaCheckCircle,
   FaTimesCircle,
@@ -8,35 +8,48 @@ import {
   FaTrash,
   FaPlus,
   FaSave,
-} from 'react-icons/fa';
-import { useRouter } from 'next/navigation';
-import { CREATE_CLASS_SUBJECTS_MUTATION } from '../../../mutation/classSubjectMutation/createclassSubjectMutation';
-import { UPDATE_CLASS_SUBJECTS_MUTATION } from '../../../mutation/classSubjectMutation/updateclassSubjectMutation';
-import { DELETE_CLASS_SUBJECTS_MUTATION } from '../../../mutation/classSubjectMutation/deleteclassSubjectMutation';
-import { GET_CLASS_SUBJECTS_DATA } from '../../../query/GetClassSubjectsQuery/getClassSubjectsQuery';
-import { executeQuery, executeMutation } from '../../../graphqlClient';
-import Panel_Header from '../../../dashboard/panel_header';
-import Loading from '../../../Loader/page';
+} from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { CREATE_CLASS_SUBJECTS_MUTATION } from "../../../mutation/classSubjectMutation/createclassSubjectMutation";
+import { UPDATE_CLASS_SUBJECTS_MUTATION } from "../../../mutation/classSubjectMutation/updateclassSubjectMutation";
+import { DELETE_CLASS_SUBJECTS_MUTATION } from "../../../mutation/classSubjectMutation/deleteclassSubjectMutation";
+import { GET_CLASS_SUBJECTS_DATA } from "../../../query/GetClassSubjectsQuery/getClassSubjectsQuery";
+import { executeQuery, executeMutation } from "../../../graphqlClient";
+import Panel_Header from "../../../dashboard/panel_header";
+import Loading from "../../../Loader/page";
 
 const Class_Subject_Form = () => {
   const router = useRouter();
-  const [firstName] = useState('');
-  const [logoutMessage, setLogoutMessage] = useState('');
+  const [firstName] = useState("");
+  const [logoutMessage, setLogoutMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Added loading state
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [className, setClassName] = useState('');
-  const [subjectsInput, setSubjectsInput] = useState('');
+  const [className, setClassName] = useState("");
+  const [subjectsInput, setSubjectsInput] = useState("");
   const [subjectList, setSubjectList] = useState([]);
   const [editId, setEditId] = useState(null);
+  const [showConfirm, setShowConfirm] = useState({ type: null, id: null }); // Confirmation state
 
-  // Ref to the form section
   const formRef = useRef(null);
 
   const classOptions = [
-    'Nursery', 'LKG', 'UKG', '1st', '2nd', '3rd', '4th', '5th',
-    '6th', '7th', '8th', '9th', '10th', '11th', '12th',
+    "Nursery",
+    "LKG",
+    "UKG",
+    "1st",
+    "2nd",
+    "3rd",
+    "4th",
+    "5th",
+    "6th",
+    "7th",
+    "8th",
+    "9th",
+    "10th",
+    "11th",
+    "12th",
   ];
 
   useEffect(() => {
@@ -45,13 +58,13 @@ const Class_Subject_Form = () => {
 
   const fetchClassSubjects = async () => {
     try {
-      setIsLoading(true); // Set loading to true before fetching
+      setIsLoading(true);
       const response = await executeQuery(GET_CLASS_SUBJECTS_DATA);
       setSubjectList(response?.getClassSubjects || []);
     } catch (error) {
-      console.error('Error fetching class subjects:', error);
+      console.error("Error fetching class subjects:", error);
     } finally {
-      setIsLoading(false); // Set loading to false after fetch completes (success or failure)
+      setIsLoading(false);
     }
   };
 
@@ -60,8 +73,18 @@ const Class_Subject_Form = () => {
     const month = dateStr.slice(4, 6);
     const day = dateStr.slice(6, 8);
     const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December',
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
     return `${day} ${months[parseInt(month) - 1]} ${year}`;
   };
@@ -69,10 +92,10 @@ const Class_Subject_Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const subjects = subjectsInput
-      .split(',')
+      .split(",")
       .map((s) => s.trim())
       .filter(Boolean)
-      .join(',');
+      .join(",");
 
     try {
       if (editId) {
@@ -90,7 +113,7 @@ const Class_Subject_Form = () => {
             )
           );
         } else {
-          throw new Error(response?.updateClassSubject?.error_msg || 'Update failed');
+          throw new Error(response?.updateClassSubject?.error_msg || "Update failed");
         }
       } else {
         const response = await executeMutation(CREATE_CLASS_SUBJECTS_MUTATION, {
@@ -98,64 +121,76 @@ const Class_Subject_Form = () => {
           subject_name: subjects,
         });
         if (response?.createClassSubject?.success_msg) {
-          setLogoutMessage(response.createClassSubject.success_msg || 'Class subjects saved successfully!');
+          setLogoutMessage(response.createClassSubject.success_msg || "Class subjects saved successfully!");
           setIsError(false);
           const newItem = {
             z_id: response.createClassSubject.z_id || Date.now().toString(),
             class_name: className,
             subject_name: subjects,
-            cdate: response.createClassSubject.cdate || new Date().toISOString().slice(0, 10).replace(/-/g, ''),
+            cdate: response.createClassSubject.cdate || new Date().toISOString().slice(0, 10).replace(/-/g, ""),
           };
           setSubjectList((prevList) => [newItem, ...prevList]);
         } else {
-          throw new Error(response?.createClassSubject?.error_msg || 'Save failed');
+          throw new Error(response?.createClassSubject?.error_msg || "Save failed");
         }
       }
 
-      setClassName('');
-      setSubjectsInput('');
+      setClassName("");
+      setSubjectsInput("");
       setEditId(null);
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 3000);
     } catch (error) {
-      setLogoutMessage(error.message || 'Operation failed.');
+      setLogoutMessage(error.message || "Operation failed.");
       setIsError(true);
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 6000);
     }
   };
 
-  const handleDelete = async (z_id) => {
+  const handleDelete = (z_id) => {
+    setShowConfirm({ type: "delete", id: z_id }); // Show confirmation for delete
+  };
+
+  const handleUpdate = (item) => {
+    setShowConfirm({ type: "edit", id: item.z_id }); // Show confirmation for edit
+  };
+
+  const confirmAction = (type, id) => {
+    if (type === "edit") {
+      const item = subjectList.find((i) => i.z_id === id);
+      setClassName(item.class_name);
+      setSubjectsInput(item.subject_name);
+      setEditId(item.z_id);
+      if (formRef.current) {
+        formRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+    } else if (type === "delete") {
+      executeDelete(id);
+    }
+    setShowConfirm({ type: null, id: null }); // Reset confirmation state
+  };
+
+  const executeDelete = async (z_id) => {
     try {
       const response = await executeMutation(DELETE_CLASS_SUBJECTS_MUTATION, { z_id });
       if (response?.deleteClassSubject?.success_msg) {
-        setLogoutMessage(response.deleteClassSubject.success_msg || 'Class subject deleted successfully!');
+        setLogoutMessage(response.deleteClassSubject.success_msg || "Class subject deleted successfully!");
         setIsError(false);
         setSubjectList((prevList) => prevList.filter((item) => item.z_id !== z_id));
       } else {
-        throw new Error(response?.deleteClassSubject?.error_msg || 'Deletion failed');
+        throw new Error(response?.deleteClassSubject?.error_msg || "Deletion failed");
       }
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 3000);
     } catch (error) {
-      setLogoutMessage(error.message || 'Failed to delete class subject.');
+      setLogoutMessage(error.message || "Failed to delete class subject.");
       setIsError(true);
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 6000);
     }
   };
 
-  const handleUpdate = (item) => {
-    setClassName(item.class_name);
-    setSubjectsInput(item.subject_name);
-    setEditId(item.z_id);
-    // Scroll to the form section
-    if (formRef.current) {
-      formRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  // Show loading component while data is being fetched
   if (isLoading) {
     return <Loading />;
   }
@@ -165,12 +200,39 @@ const Class_Subject_Form = () => {
       {/* Notification Popup */}
       {showPopup && (
         <div
-          className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-2  shadow-lg text-white flex items-center gap-2 ${
-            isError ? 'bg-red-600' : 'bg-green-600'
+          className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-2 shadow-lg text-white flex items-center gap-2 ${
+            isError ? "bg-red-600" : "bg-green-600"
           }`}
         >
           {isError ? <FaTimesCircle /> : <FaCheckCircle />}
           <span className="text-sm">{logoutMessage}</span>
+        </div>
+      )}
+
+      {/* Confirmation Dialog */}
+      {showConfirm.type && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 shadow-lg w-80">
+            <p className="text-lg font-semibold mb-4">
+              Are you sure you want to {showConfirm.type === "edit" ? "edit" : "delete"} this class subject?
+            </p>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={() => setShowConfirm({ type: null, id: null })}
+                className="px-4 py-2 bg-gray-300 hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => confirmAction(showConfirm.type, showConfirm.id)}
+                className={`px-4 py-2 text-white ${
+                  showConfirm.type === "edit" ? "bg-blue-500 hover:bg-blue-600" : "bg-red-500 hover:bg-red-600"
+                }`}
+              >
+                {showConfirm.type === "edit" ? "Edit" : "Delete"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -180,7 +242,7 @@ const Class_Subject_Form = () => {
         <div className="bg-white p-6 shadow-md border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
             {editId ? <FaEdit className="text-indigo-600" /> : <FaPlus className="text-indigo-600" />}
-            {editId ? 'Update Record' : 'Add New Record'}
+            {editId ? "Update Record" : "Add New Record"}
           </h2>
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -216,7 +278,7 @@ const Class_Subject_Form = () => {
                 className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 flex items-center justify-center gap-2"
               >
                 {editId ? <FaSave /> : <FaPlus />}
-                {editId ? 'Update' : 'Add'}
+                {editId ? "Update" : "Add"}
               </button>
             </div>
           </form>
@@ -254,7 +316,7 @@ const Class_Subject_Form = () => {
                       <div className="md:col-span-6">
                         <p className="text-xs text-blue-500 font-semibold uppercase">Subjects</p>
                         <div className="flex flex-wrap gap-2 mt-1">
-                          {item.subject_name.split(',').map((subject, idx) => (
+                          {item.subject_name.split(",").map((subject, idx) => (
                             <span
                               key={idx}
                               className="bg-blue-50 text-blue-600 text-xs font-medium px-2 py-1 border border-blue-100"
