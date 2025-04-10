@@ -28,6 +28,7 @@ const University_Management_Page = () => {
     { name: 'Student Management', icon: FaUniversity, link: "/University_Management/University_Management_Page/Academic_Calendar_Form" },
     { name: 'Class Data Form', icon: FaFlask, link: '/University_Management/University_Management_Page/Class_Data_Form' },
     { name: 'Class Subject Form', icon: FaBook, link: '/University_Management/University_Management_Page/Class_Subject_Form' },
+    { name: 'Notice Board Data', icon: FaBook, link: '/Notic_Board_Dash/Notice_Board_Form' },
 
   ];
 

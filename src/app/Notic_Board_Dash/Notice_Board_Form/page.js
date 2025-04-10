@@ -36,10 +36,10 @@ export default function NoticeBoardForm() {
     formDataUpload.append("file", file);
 
     try {
-      const response = await fetch("/api/upload", {
+      const response = await fetch("/api/pdf_upload", {
         method: "POST",
         body: formDataUpload,
-      });
+      });       
 
       const data = await response.json();
       console.log("Upload Response:", data);
