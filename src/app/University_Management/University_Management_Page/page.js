@@ -29,7 +29,8 @@ const University_Management_Page = () => {
     { name: 'Class Data Form', icon: FaFlask, link: '/University_Management/University_Management_Page/Class_Data_Form' },
     { name: 'Class Subject Form', icon: FaBook, link: '/University_Management/University_Management_Page/Class_Subject_Form' },
     { name: 'Notice Board Data', icon: FaBook, link: '/Notic_Board_Dash/Notice_Board_Form' },
-
+    { name: 'Career', icon: FaBook, link: '/Career/CareerApplicationForm' },
+    { name: 'Faculty', icon: FaBook, link: '/Faculty/FacultyApplicationForm' },
   ];
 
   if (isLoading) return <Loading />;
