@@ -8,7 +8,7 @@ import { GET_NOTICE_BOARD_LISTS } from "../../query/NoticeBoardQuery/fetchNotice
 import { executeMutation, executeQuery } from "../../graphqlClient";
 import { CheckCircle, XCircle } from "lucide-react";
 import { FaUpload, FaTimes, FaEdit, FaTrash, FaFilePdf, FaCalendarAlt, FaTag, FaUser } from "react-icons/fa";
-import Loading from '../../Loader/page'; 
+import Loading from '../../Loader/page';
 import Panel_Header from '../../dashboard/panel_header';
 
 export default function NoticeBoardForm() {
@@ -40,6 +40,11 @@ export default function NoticeBoardForm() {
   const [expandedItems, setExpandedItems] = useState({});
   const itemsPerPage = 5;
   const fileInputRef = useRef(null);
+  const formRef = useRef(null); // Ref for scrolling to form
+
+  // Predefined options for dropdowns
+  const categoryOptions = ["General", "Academic", "Sports", "Events", "Holidays"];
+  const issuedByOptions = ["Admin", "Principal", "Teacher", "Coordinator"];
 
   // Fetch Notice Board List
   useEffect(() => {
@@ -162,9 +167,27 @@ export default function NoticeBoardForm() {
     }, 3000);
   };
 
+  // Convert date format from YYYYMMDD to YYYY-MM-DD
+  const formatDateForInput = (dateString) => {
+    if (!dateString || dateString.length !== 8) return "";
+    const year = dateString.slice(0, 4);
+    const month = dateString.slice(4, 6);
+    const day = dateString.slice(6, 8);
+    return `${year}-${month}-${day}`;
+  };
+
   const handleUpdate = (notice) => {
-    setFormData(notice);
+    const updatedNotice = {
+      ...notice,
+      notice_date: formatDateForInput(notice.notice_date),
+      expiry_date: formatDateForInput(notice.expiry_date),
+    };
+    setFormData(updatedNotice);
     setShowConfirm({ type: null, id: null });
+    // Scroll to form after setting data
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
   };
 
   const handleDelete = async (z_id) => {
@@ -216,40 +239,39 @@ export default function NoticeBoardForm() {
 
   return (
     <div className="mt-20 py-24 max-w-6xl mx-auto">
-      <Panel_Header/>
-    {/* Popup Message with Animation */}
-{popupMessage && (
-  <div
-    className={`fixed bottom-5 left-1/2 transform -translate-x-1/2 max-w-md w-full p-4 rounded-lg shadow-lg text-white flex items-center gap-3 animate-fade-in-up z-50 ${
-      popupType === "success" ? "bg-green-600" : "bg-red-600"
-    }`}
-  >
-    {popupType === "success" ? <CheckCircle size={24} /> : <XCircle size={24} />}
-    <span className="flex-1">{popupMessage}</span>
-    <button
-      onClick={() => {
-        setPopupMessage(null);
-        setPopupType(null);
-      }}
-      className="text-white hover:text-gray-200 transition-colors"
-    >
-      <FaTimes size={18} />
-    </button>
-  </div>
-)}
-
+      <Panel_Header />
+      {/* Popup Message with Animation */}
+      {popupMessage && (
+        <div
+          className={`fixed bottom-5 left-1/2 transform -translate-x-1/2 max-w-md w-full p-4 rounded-lg shadow-lg text-white flex items-center gap-3 animate-fade-in-up z-50 ${
+            popupType === "success" ? "bg-green-600" : "bg-red-600"
+          }`}
+        >
+          {popupType === "success" ? <CheckCircle size={24} /> : <XCircle size={24} />}
+          <span className="flex-1">{popupMessage}</span>
+          <button
+            onClick={() => {
+              setPopupMessage(null);
+              setPopupType(null);
+            }}
+            className="text-white hover:text-gray-200 transition-colors"
+          >
+            <FaTimes size={18} />
+          </button>
+        </div>
+      )}
 
       {/* Confirmation Dialog */}
       {showConfirm.type && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6  shadow-lg w-80">
+          <div className="bg-white p-6 shadow-lg w-80">
             <p className="text-lg font-semibold mb-4">
               Are you sure you want to {showConfirm.type === "edit" ? "edit" : "delete"} this notice?
             </p>
             <div className="flex justify-end gap-4">
               <button
                 onClick={() => setShowConfirm({ type: null, id: null })}
-                className="px-4 py-2 bg-gray-300  hover:bg-gray-400"
+                className="px-4 py-2 bg-gray-300 hover:bg-gray-400"
               >
                 Cancel
               </button>
@@ -259,7 +281,7 @@ export default function NoticeBoardForm() {
                     ? handleUpdate(noticeList.find((item) => item.z_id === showConfirm.id))
                     : handleDelete(showConfirm.id)
                 }
-                className={`px-4 py-2  text-white ${
+                className={`px-4 py-2 text-white ${
                   showConfirm.type === "edit" ? "bg-blue-500 hover:bg-blue-600" : "bg-red-500 hover:bg-red-600"
                 }`}
               >
@@ -271,7 +293,7 @@ export default function NoticeBoardForm() {
       )}
 
       {/* Notice Board Form */}
-      <div className="bg-white p-8  shadow-lg border border-gray-200 mb-5">
+      <div ref={formRef} className="bg-white p-8 shadow-lg border border-gray-200 mb-5">
         <h2 className="text-3xl font-semibold text-center text-blue-800 mb-6">School Notice Board</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -282,30 +304,39 @@ export default function NoticeBoardForm() {
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300  shadow-sm focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-              <input
-                type="text"
+              <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300  shadow-sm focus:ring-2 focus:ring-blue-500"
-              />
+                className="w-full p-3 border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500"
+                required
+              >
+                <option value="">Select Category</option>
+                {categoryOptions.map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Issued By</label>
-              <input
-                type="text"
+              <select
                 name="issued_by"
                 value={formData.issued_by}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300  shadow-sm focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500"
                 required
-              />
+              >
+                <option value="">Select Issuer</option>
+                {issuedByOptions.map((issuer) => (
+                  <option key={issuer} value={issuer}>{issuer}</option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -315,7 +346,8 @@ export default function NoticeBoardForm() {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300  shadow-sm h-24 focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 border border-gray-300 shadow-sm h-24 focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 
@@ -327,7 +359,7 @@ export default function NoticeBoardForm() {
                 name="notice_date"
                 value={formData.notice_date}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300  shadow-sm focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
@@ -338,7 +370,7 @@ export default function NoticeBoardForm() {
                 name="expiry_date"
                 value={formData.expiry_date}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300  shadow-sm focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
@@ -346,7 +378,7 @@ export default function NoticeBoardForm() {
 
           <div className="flex flex-col">
             <label className="block text-sm font-medium text-gray-700 mb-1">Attachments (PDF only)</label>
-            <label className="border p-3  w-full flex items-center gap-2 cursor-pointer bg-gray-100 hover:bg-gray-200 transition">
+            <label className="border p-3 w-full flex items-center gap-2 cursor-pointer bg-gray-100 hover:bg-gray-200 transition">
               <FaUpload className="text-blue-500" /> Upload PDF
               <input
                 type="file"
@@ -372,7 +404,7 @@ export default function NoticeBoardForm() {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="w-auto bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-6  shadow-md hover:from-blue-600 hover:to-blue-700 font-semibold transition-all"
+              className="w-auto bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-6 shadow-md hover:from-blue-600 hover:to-blue-700 font-semibold transition-all"
             >
               {formData.z_id ? "Update Notice" : "Submit Notice"}
             </button>
@@ -382,7 +414,7 @@ export default function NoticeBoardForm() {
 
       {/* Notice List */}
       <section className="max-w-6xl mx-auto pt-0">
-        <div className="bg-white shadow-lg border border-gray-200  overflow-hidden">
+        <div className="bg-white shadow-lg border border-gray-200 overflow-hidden">
           <div className="bg-gradient-to-r from-blue-900 to-blue-300 p-4 flex items-center justify-between">
             <h2 className="text-xl font-semibold text-white">Notice List</h2>
             <span className="text-sm text-gray-600 bg-blue-100 px-2 py-1 rounded">
@@ -399,7 +431,7 @@ export default function NoticeBoardForm() {
                 placeholder="Search by title or description..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="p-2 border border-gray-300  w-full focus:ring-2 focus:ring-blue-500"
+                className="p-2 border border-gray-300 w-full focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="w-full md:w-1/6">
@@ -408,7 +440,7 @@ export default function NoticeBoardForm() {
                 type="date"
                 value={fromDate}
                 onChange={(e) => setFromDate(e.target.value)}
-                className="p-2 border border-gray-300  w-full focus:ring-2 focus:ring-blue-500"
+                className="p-2 border border-gray-300 w-full focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="w-full md:w-1/6">
@@ -417,7 +449,7 @@ export default function NoticeBoardForm() {
                 type="date"
                 value={toDate}
                 onChange={(e) => setToDate(e.target.value)}
-                className="p-2 border border-gray-300  w-full focus:ring-2 focus:ring-blue-500"
+                className="p-2 border border-gray-300 w-full focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="w-full md:w-1/4">
@@ -425,7 +457,7 @@ export default function NoticeBoardForm() {
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="p-2 border border-gray-300  w-full focus:ring-2 focus:ring-blue-500"
+                className="p-2 border border-gray-300 w-full focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">All Categories</option>
                 {[...new Set(noticeList.map((item) => item.category))].map((cat) => (
@@ -445,10 +477,12 @@ export default function NoticeBoardForm() {
               currentItems.map((item) => (
                 <div
                   key={item.z_id}
-                  className="bg-white border border-gray-100  shadow-sm hover:shadow-md hover:border-teal-300 transition-all duration-300 flex flex-col overflow-hidden"
+                  className="bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-teal-300 transition-all duration-300 flex flex-col overflow-hidden"
                 >
                   <div className="p-4 border-b border-gray-400 bg-gradient-to-br from-teal-50 to-gray-50">
-                    <h3 className="text-md  text-gray-800"><span className="text-green-600 font-semibold">Notice  Title :</span> {expandedItems[`${item.z_id}-title`] ? item.title : truncateText(item.title, 8)}
+                    <h3 className="text-md text-gray-800">
+                      <span className="text-green-600 font-semibold">Notice Title:</span>{" "}
+                      {expandedItems[`${item.z_id}-title`] ? item.title : truncateText(item.title, 8)}
                       {item.title.split(" ").length > 8 && (
                         <button
                           onClick={() => toggleExpand(item.z_id, "title")}
@@ -460,7 +494,9 @@ export default function NoticeBoardForm() {
                     </h3>
                   </div>
                   <div className="p-4 flex-1 space-y-4">
-                    <p className="text-gray-600 text-sm"> <span className="text-green-600 font-semibold">Description :</span> {expandedItems[`${item.z_id}-description`] ? item.description : truncateText(item.description, 10)}
+                    <p className="text-gray-600 text-sm">
+                      <span className="text-green-600 font-semibold">Description:</span>{" "}
+                      {expandedItems[`${item.z_id}-description`] ? item.description : truncateText(item.description, 10)}
                       {item.description.split(" ").length > 10 && (
                         <button
                           onClick={() => toggleExpand(item.z_id, "description")}
@@ -470,7 +506,7 @@ export default function NoticeBoardForm() {
                         </button>
                       )}
                     </p>
-                    <div className="bg-gray-50 p-4  border border-gray-200 space-y-3 text-sm text-gray-700">
+                    <div className="bg-gray-50 p-4 border border-gray-200 space-y-3 text-sm text-gray-700">
                       <div className="flex items-center gap-3">
                         <FaCalendarAlt className="text-teal-500" />
                         <span className="text-green-600 font-semibold">Notice Date:</span>
@@ -538,7 +574,7 @@ export default function NoticeBoardForm() {
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="px-4 py-2 bg-blue-500 text-white  disabled:bg-gray-300 hover:bg-blue-600 transition-all"
+                className="px-4 py-2 bg-blue-500 text-white disabled:bg-gray-300 hover:bg-blue-600 transition-all"
               >
                 Previous
               </button>
@@ -548,7 +584,7 @@ export default function NoticeBoardForm() {
               <button
                 onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="px-4 py-2 bg-blue-500 text-white  disabled:bg-gray-300 hover:bg-blue-600 transition-all"
+                className="px-4 py-2 bg-blue-500 text-white disabled:bg-gray-300 hover:bg-blue-600 transition-all"
               >
                 Next
               </button>
@@ -559,4 +595,3 @@ export default function NoticeBoardForm() {
     </div>
   );
 }
-
