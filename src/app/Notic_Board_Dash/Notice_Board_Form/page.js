@@ -40,21 +40,26 @@ export default function NoticeBoardForm() {
   const [expandedItems, setExpandedItems] = useState({});
   const itemsPerPage = 5;
   const fileInputRef = useRef(null);
-  const formRef = useRef(null); // Ref for scrolling to form
+  const formRef = useRef(null);
 
-  // Predefined options for dropdowns
   const categoryOptions = ["General", "Academic", "Sports", "Events", "Holidays"];
   const issuedByOptions = ["Admin", "Principal", "Teacher", "Coordinator"];
 
-  // Fetch Notice Board List
+  // Fetch Notice Board List and Sort by Latest Date
   useEffect(() => {
     const fetchNotices = async () => {
       setIsLoading(true);
       try {
         const response = await executeQuery(GET_NOTICE_BOARD_LISTS);
         if (response?.getNoticeBoardLists) {
-          setNoticeList(response.getNoticeBoardLists);
-          setFilteredList(response.getNoticeBoardLists);
+          // Create a copy and sort by notice_date in descending order (latest first)
+          const sortedList = [...response.getNoticeBoardLists].sort((a, b) => {
+            const dateA = new Date(a.notice_date.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3"));
+            const dateB = new Date(b.notice_date.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3"));
+            return dateB - dateA; // Latest date first
+          });
+          setNoticeList(sortedList);
+          setFilteredList(sortedList);
         }
       } catch (error) {
         console.error("Error fetching notices:", error);
@@ -65,9 +70,9 @@ export default function NoticeBoardForm() {
     fetchNotices();
   }, []);
 
-  // Search and Filter Logic
+  // Search and Filter Logic with Sorting
   useEffect(() => {
-    let result = noticeList;
+    let result = [...noticeList]; // Create a copy of noticeList
 
     if (searchTerm) {
       result = result.filter((item) =>
@@ -88,6 +93,13 @@ export default function NoticeBoardForm() {
     if (categoryFilter) {
       result = result.filter((item) => item.category === categoryFilter);
     }
+
+    // Sort filtered list by notice_date in descending order
+    result = result.sort((a, b) => {
+      const dateA = new Date(a.notice_date.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3"));
+      const dateB = new Date(b.notice_date.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3"));
+      return dateB - dateA; // Latest date first
+    });
 
     setFilteredList(result);
     setCurrentPage(1);
@@ -167,7 +179,6 @@ export default function NoticeBoardForm() {
     }, 3000);
   };
 
-  // Convert date format from YYYYMMDD to YYYY-MM-DD
   const formatDateForInput = (dateString) => {
     if (!dateString || dateString.length !== 8) return "";
     const year = dateString.slice(0, 4);
@@ -184,7 +195,6 @@ export default function NoticeBoardForm() {
     };
     setFormData(updatedNotice);
     setShowConfirm({ type: null, id: null });
-    // Scroll to form after setting data
     setTimeout(() => {
       formRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 100);
@@ -400,7 +410,6 @@ export default function NoticeBoardForm() {
             )}
           </div>
 
-          {/* Centered Button with Auto Width */}
           <div className="flex justify-center">
             <button
               type="submit"
