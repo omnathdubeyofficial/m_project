@@ -129,7 +129,7 @@ export default function ClassSetup() {
                 <div className="mt-4 flex flex-wrap gap-2">
                 {cls.tags && typeof cls.tags === "string" 
   ? cls.tags.split(",").map((tag, idx) => (
-      <span key={idx} className="px-3 py-1 text-sm bg-gray-200 rounded-full flex items-center gap-1">
+      <span key={idx} className="px-3 py-1 text-sm bg-blue-100 rounded-full flex items-center gap-1">
         <Tag className="w-3 h-3 text-gray-500" /> {tag.trim()}
       </span>
     ))
@@ -220,7 +220,7 @@ export default function ClassSetup() {
           onClick={() => router.push(classPath)}
           className="mt-6 w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 font-semibold text-lg transition-all duration-500 ease-in-out transform hover:scale-105 hover:from-orange-600 hover:to-orange-700 active:scale-95"
         >
-          Admission Form
+         Apply Now
         </button>
       ) : (
         <button className="mt-6 w-full bg-red-600 text-white py-3 font-semibold text-lg" disabled>
