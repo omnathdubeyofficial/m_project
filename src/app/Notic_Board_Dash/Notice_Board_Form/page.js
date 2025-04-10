@@ -7,7 +7,7 @@ import { DELETE_NOTICE_BOARD_MUTATION } from "../../mutation/noticeBoardMutation
 import { GET_NOTICE_BOARD_LISTS } from "../../query/NoticeBoardQuery/fetchNoticeBoard";
 import { executeMutation, executeQuery } from "../../graphqlClient";
 import { CheckCircle, XCircle } from "lucide-react";
-import { FaUpload, FaTimes, FaEdit, FaTrash, FaFilePdf, FaCalendarAlt, FaTag, FaUser } from "react-icons/fa";
+import { FaUpload, FaTimes, FaEdit,FaUsers, FaTrash, FaFilePdf, FaCalendarAlt, FaTag, FaUser } from "react-icons/fa";
 import Loading from '../../Loader/page';
 import Panel_Header from '../../dashboard/panel_header';
 
@@ -20,7 +20,7 @@ export default function NoticeBoardForm() {
     expiry_date: "",
     category: "",
     issued_by: "",
-    audience: "Students",
+    audience: "",
     status: "Active",
     attachments: null,
   };
@@ -42,8 +42,9 @@ export default function NoticeBoardForm() {
   const fileInputRef = useRef(null);
   const formRef = useRef(null);
 
-  const categoryOptions = ["General", "Academic", "Sports", "Events", "Holidays"];
+  const categoryOptions = ["General", "Academic", "Sports", "Events", "Holidays","News"];
   const issuedByOptions = ["Admin", "Principal", "Teacher", "Coordinator"];
+  const viewAudience = ["Students", "Parents", "Public", "Teacher"];
 
   // Fetch Notice Board List and Sort by Latest Date
   useEffect(() => {
@@ -306,8 +307,7 @@ export default function NoticeBoardForm() {
       <div ref={formRef} className="bg-white p-8 shadow-lg border border-gray-200 mb-5">
         <h2 className="text-3xl font-semibold text-center text-blue-800 mb-6">School Notice Board</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
+        <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Notice Title</label>
               <input
                 type="text"
@@ -318,6 +318,25 @@ export default function NoticeBoardForm() {
                 required
               />
             </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    
+           
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Audience</label>
+              <select
+                name="audience"
+                value={formData.audience}
+                onChange={handleChange}
+                className="w-full p-3 border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500"
+                required
+              >
+                <option value="">Select Audience</option>
+                { viewAudience.map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
               <select
@@ -535,6 +554,11 @@ export default function NoticeBoardForm() {
                         <FaTag className="text-blue-500" />
                         <span className="text-green-600 font-semibold">Category:</span>
                         <span>{item.category || "Uncategorized"}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <FaUsers className="text-blue-500" />
+                        <span className="text-green-600 font-semibold">Audience:</span>
+                        <span>{item.audience || "Uncategorized"}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <FaFilePdf className="text-teal-500" />
