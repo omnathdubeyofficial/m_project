@@ -253,7 +253,7 @@ export default function NoticeBoardForm() {
       {/* Popup Message with Animation */}
       {popupMessage && (
         <div
-          className={`fixed bottom-5 left-1/2 transform -translate-x-1/2 max-w-md w-full p-4 rounded-lg shadow-lg text-white flex items-center gap-3 animate-fade-in-up z-50 ${
+          className={`fixed bottom-5 left-1/2 transform -translate-x-1/2 max-w-md w-auto p-4 rounded-lg shadow-lg text-white flex items-center gap-3 animate-fade-in-up z-50 ${
             popupType === "success" ? "bg-green-600" : "bg-red-600"
           }`}
         >
