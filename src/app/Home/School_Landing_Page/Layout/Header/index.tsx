@@ -191,7 +191,7 @@ const SchoolHeader: React.FC = () => {
             />
             <div>
               <h1
-                className={`font-bold text-[#8B0000] transition-all duration-300 ${
+                className={`font-semibold text-[#8B0000] transition-all duration-300 ${
                   isSticky ? "text-lg" : "text-xl"
                 }`}
               >
