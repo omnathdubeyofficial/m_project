@@ -96,49 +96,70 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 md:bg-none relative overflow-hidden">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 sm:p-6 md:p-0">
       {/* Enhanced Animated Background (Visible only on desktop) */}
-      <div className="absolute inset-0 z-0 hidden md:block">
-        <div className="absolute w-80 h-80 bg-blue-400 rounded-full opacity-30 animate-[float_6s_ease-in-out_infinite] top-10 left-10"></div>
-        <div className="absolute w-96 h-96 bg-purple-400 rounded-full opacity-30 animate-[float_8s_ease-in-out_infinite] bottom-20 right-20"></div>
-        <div className="absolute w-64 h-64 bg-pink-400 rounded-full opacity-30 animate-[float_10s_ease-in-out_infinite] top-1/2 left-1/3"></div>
+      <div className="absolute inset-0 z-0 hidden lg:block">
+        <div className="absolute w-96 h-96 bg-[#8E24AA]/20 rounded-full animate-[float_7s_ease-in-out_infinite] top-20 left-20"></div>
+        <div className="absolute w-80 h-80 bg-[#8B0000]/20 rounded-full animate-[float_9s_ease-in-out_infinite] bottom-10 right-10"></div>
+        <div className="absolute w-64 h-64 bg-[#F3E5F5]/30 rounded-full animate-[float_11s_ease-in-out_infinite] top-1/3 left-1/2"></div>
       </div>
 
       {/* Main Container with Glassmorphism */}
       <div className="relative w-full max-w-5xl bg-white/10 md:bg-white/10 backdrop-blur-lg mt-20 shadow-xl border border-white/20 overflow-hidden flex flex-col md:flex-row z-10 transform transition-transform duration-300">
         
-      <div className="md:w-1/2 relative text-white p-10  flex flex-col justify-between min-h-[50vh] md:min-h-full">
-  <video
-    autoPlay
-    loop
-    muted
-    playsInline
-    className="absolute inset-0 w-full h-full object-cover z-[-1]"
-  >
-    <source src="/videos/8500482-hd_1920_1080_30fps.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
-  <div className="relative z-10">
-    <div className="flex items-center space-x-4">
-      <Image src="/images/logo/image.png" alt="School Logo" width={70} height={70} className="rounded-full shadow-md" />
-    </div>
-  </div>
-  <div className="relative z-10 flex justify-center space-x-3 mt-8">
-
-<a href="https://facebook.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#3b5998] text-white hover:bg-[#2d4373] transition transform hover:rotate-12">
-  <FaFacebook size={24} />
-</a>
-<a href="https://instagram.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#e1306c] text-white hover:bg-[#b92b5b] transition transform hover:rotate-12">
-  <FaInstagram size={24} />
-</a>
-<a href="https://linkedin.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#0077b5] text-white hover:bg-[#005f8f] transition transform hover:rotate-12">
-  <FaLinkedin size={24} />
-</a>
-<a href="https://youtube.com" target="_blank" className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-[#ff0000] text-white hover:bg-[#cc0000] transition transform hover:rotate-12">
-  <FaYoutube size={24} />
-</a>
-</div>
-</div>
+      <div className="lg:w-1/2 relative text-[#3B3B3B] p-12 flex flex-col justify-between bg-gradient-to-br from-[#E3F2FD] to-[#FCE4EC] min-h-[400px]">
+          <div className="flex flex-col items-center justify-center flex-grow">
+            <Image
+              src="/images/logo/image.png"
+              alt="Arise International School Logo"
+              width={100}
+              height={100}
+              className="rounded-full shadow-lg mb-4"
+            />
+            <div className="text-center">
+              <h1 className="text-3xl font-serif">Arise International School</h1>
+              <p className="text-sm opacity-80 mt-2">CBSE Affiliation No. 1131036</p>
+            </div>
+          </div>
+          <div className="flex justify-center space-x-4">
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 flex items-center justify-center rounded-full bg-[#8E24AA]/20 hover:bg-[#8E24AA]/30 transition-all duration-300 transform hover:scale-110"
+              aria-label="Facebook"
+            >
+              <FaFacebook size={24} className="text-[#3B3B3B]" />
+            </a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 flex items-center justify-center rounded-full bg-[#8E24AA]/20 hover:bg-[#8E24AA]/30 transition-all duration-300 transform hover:scale-110"
+              aria-label="Instagram"
+            >
+              <FaInstagram size={24} className="text-[#3B3B3B]" />
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 flex items-center justify-center rounded-full bg-[#8E24AA]/20 hover:bg-[#8E24AA]/30 transition-all duration-300 transform hover:scale-110"
+              aria-label="LinkedIn"
+            >
+              <FaLinkedin size={24} className="text-[#3B3B3B]" />
+            </a>
+            <a
+              href="https://youtube.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 flex items-center justify-center rounded-full bg-[#8E24AA]/20 hover:bg-[#8E24AA]/30 transition-all duration-300 transform hover:scale-110"
+              aria-label="YouTube"
+            >
+              <FaYoutube size={24} className="text-[#3B3B3B]" />
+            </a>
+          </div>
+        </div>
 
 
 

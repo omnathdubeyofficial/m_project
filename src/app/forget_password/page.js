@@ -172,6 +172,11 @@ const validatePassword = (password) => {
 
   return (
     <div>
+            <div className="absolute inset-0 z-0 hidden lg:block">
+        <div className="absolute w-96 h-96 bg-[#8E24AA]/20 rounded-full animate-[float_7s_ease-in-out_infinite] top-20 left-20"></div>
+        <div className="absolute w-80 h-80 bg-[#8B0000]/20 rounded-full animate-[float_9s_ease-in-out_infinite] bottom-10 right-10"></div>
+        <div className="absolute w-64 h-64 bg-[#F3E5F5]/30 rounded-full animate-[float_11s_ease-in-out_infinite] top-1/3 left-1/2"></div>
+      </div>
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 sm:p-6 md:p-0">
         <div className="relative w-full mt-44 mb-24 max-w-md sm:max-w-lg md:max-w-xl bg-white/90 backdrop-blur-lg shadow-xl border border-white/20 p-6 sm:p-8 md:p-10 z-10">
           <div className="flex flex-col sm:flex-row sm:space-x-4 mb-6 justify-between items-center">
