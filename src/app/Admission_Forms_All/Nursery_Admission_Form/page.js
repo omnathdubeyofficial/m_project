@@ -7,7 +7,7 @@ import { ArrowLeft, FileText, File, Trash2, Edit, ChevronLeft, ChevronRight } fr
 import Select from 'react-select';
 import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
 
-const Two_Admission_Form = () => {
+const Nursery_Admission_Form = () => {
   const [formData, setFormData] = useState({
     first_name: "",
     middle_name: "",
@@ -382,7 +382,7 @@ const Two_Admission_Form = () => {
 
   {/* Heading */}
   <h1 className="text-2xl">
- 1th Admission Form
+  Nursery Admission Form
   </h1>
 </div>
 
@@ -391,10 +391,10 @@ const Two_Admission_Form = () => {
 
         {/* Personal Information Section */}
         <div className="mb-8 mt-10">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-6">Personal Information</h2>
+        <h2 className="text-2xl font-semibold text-gray-700 mb-6">Child's Personal Information</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-600">First Name *</label>
+          <label className="block text-sm font-medium text-gray-600">First Name<span className="text-red-600">*</span></label>
           <input
             type="text"
             name="first_name"
@@ -415,7 +415,7 @@ const Two_Admission_Form = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-600">Last Name *</label>
+          <label className="block text-sm font-medium text-gray-600">Last Name<span className="text-red-600">*</span></label>
           <input
             type="text"
             name="last_name"
@@ -426,7 +426,7 @@ const Two_Admission_Form = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-600">Gender *</label>
+          <label className="block text-sm font-medium text-gray-600">Gender<span className="text-red-600">*</span></label>
           <select
             name="gender"
             required
@@ -441,7 +441,7 @@ const Two_Admission_Form = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-600">Date of Birth *</label>
+          <label className="block text-sm font-medium text-gray-600">Date of Birth<span className="text-red-600">*</span></label>
           <input
             type="date"
             name="date_of_birth"
@@ -452,10 +452,10 @@ const Two_Admission_Form = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-600">Blood Group *</label>
+          <label className="block text-sm font-medium text-gray-600">Blood Group</label>
           <select
             name="blood_group"
-            required
+            // required
             onChange={handleChange}
             className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
           >
@@ -472,7 +472,7 @@ const Two_Admission_Form = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-600">Aadhar Number *</label>
+          <label className="block text-sm font-medium text-gray-600">Aadhar Number<span className="text-red-600">*</span></label>
           <input
             type="text"
             name="adhar_no"
@@ -483,7 +483,7 @@ const Two_Admission_Form = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-600">Category *</label>
+          <label className="block text-sm font-medium text-gray-600">Category<span className="text-red-600">*</span></label>
           <select
             name="category"
             required
@@ -501,7 +501,7 @@ const Two_Admission_Form = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-600">Mother Tongue *</label>
+          <label className="block text-sm font-medium text-gray-600">Mother Tongue<span className="text-red-600">*</span></label>
           <select
             name="mother_tongue"
             required
@@ -526,129 +526,6 @@ const Two_Admission_Form = () => {
 
 
 
-
-
-<div className="mb-8">
-      <h2 className="text-2xl font-semibold text-gray-700 mb-4">Educational Information</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {/* Previous School (Required) */}
-        <div>
-          <label className="block text-sm font-medium text-gray-600">Previous School *</label>
-          <input
-            type="text"
-            name="previous_school"
-            required
-            onChange={handleChange}
-            className="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-          />
-        </div>
-
-        {/* Desired Class for Admission (Required) */}
-        <div>
-          <label className="block text-sm font-medium text-gray-600">Desired Class for Admission *</label>
-          <select
-            name="desired_class"
-            required
-            onChange={handleClassChange}
-            className="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-          >
-            <option value="">Select Class</option>
-            <option value="LKG">LKG</option>
-            <option value="UKG">UKG</option>
-            {Array.from({ length: 12 }, (_, i) => (
-              <option key={i + 1} value={`Class ${i + 1}`}>{`Class ${i + 1}`}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Highest Qualification (Required for applicable classes) */}
-        {selectedClass !== 'LKG' && selectedClass !== 'UKG' && (
-           <div>
-           <label className="block text-sm font-medium text-gray-600">Previous Year of Passing *</label>
-           <input
-             type="number"
-             name="previous_year_of_passing"
-             required
-             placeholder="e.g., 2022"
-             onChange={handleChange}
-             className="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-           />
-         </div>
- 
-        )}
-
- 
-        {/* Select Subjects for Class 9 to 12 */}
-        {['Class 9', 'Class 10', 'Class 11', 'Class 12'].includes(selectedClass) && (
-          <div>
-            <label className="block text-sm font-medium text-gray-600">Select Subjects * (Comma separated)</label>
-            <Select
-              isMulti
-              name="subjects"
-              options={subjectsOptions[selectedClass]}
-              className="basic-multi-select mt-2"
-              classNamePrefix="select"
-              onChange={(selectedOptions) => {
-                const subjects = selectedOptions.map(option => option.value);
-                setSelectedSubjects(subjects);
-                handleChange({ target: { name: 'subjects', value: subjects.join(', ') } });
-              }}
-            />
-          </div>
-        )}
-
-        {/* Percentage (Required for applicable classes) */}
-        {selectedClass !== 'LKG' && selectedClass !== 'UKG' && (
-           <div>
-           <label className="block text-sm font-medium text-gray-600">Previous Passing Year Percentage *</label>
-           <input
-             type="number"
-             name="percentage"
-             required
-             placeholder="e.g., 85.5"
-             step="0.01"
-             onChange={handleChange}
-             className="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-           />
-         </div>
- 
-        )}
-
-      
-
-        {/* Board/University (Required for higher classes) */}
-        {selectedClass !== 'LKG' && selectedClass !== 'UKG' && (
-         <div>
-         <label className="block text-sm font-medium text-gray-600">Board *</label>
-         <select
-           name="board"
-           required
-           onChange={handleChange}
-           className="w-full p-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-         >
-           <option value="">Select Board</option>
-           <option value="CBSE">CBSE</option>
-           <option value="ICSE">ICSE</option>
-           <option value="State Board">State Board</option>
-           <option value="NIOS">NIOS</option>
-           <option value="Other">Other</option>
-         </select>
-       </div>
-        )}
-      </div>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
  {/* Parent/Guardian Information */}
  <div className="mb-8">
    <h2 className="text-2xl font-semibold text-gray-700 mb-4">Parent/Guardian Information</h2>
@@ -656,7 +533,7 @@ const Two_Admission_Form = () => {
 
      {/* Father Name */}
      <div>
-       <label className="block text-sm font-medium text-gray-600">Father Full Name *</label>
+       <label className="block text-sm font-medium text-gray-600">Father Full Name<span className="text-red-600">*</span></label>
        <input
          type="text"
          name="father_name"
@@ -668,7 +545,7 @@ const Two_Admission_Form = () => {
 
      {/* Mother Name */}
      <div>
-       <label className="block text-sm font-medium text-gray-600">Mother Full Name *</label>
+       <label className="block text-sm font-medium text-gray-600">Mother Full Name<span className="text-red-600">*</span></label>
        <input
          type="text"
          name="mother_name"
@@ -680,7 +557,7 @@ const Two_Admission_Form = () => {
 
      {/* Father Work */}
      <div>
-       <label className="block text-sm font-medium text-gray-600">Father's Work *</label>
+       <label className="block text-sm font-medium text-gray-600">Father's Work<span className="text-red-600">*</span></label>
        <select
          name="father_occupation"
          required
@@ -696,7 +573,7 @@ const Two_Admission_Form = () => {
 
      {/* Mother Work */}
      <div>
-       <label className="block text-sm font-medium text-gray-600">Mother's Work *</label>
+       <label className="block text-sm font-medium text-gray-600">Mother's Work<span className="text-red-600">*</span></label>
        <select
          name="mother_occupation"
          required
@@ -713,7 +590,7 @@ const Two_Admission_Form = () => {
 
      {/* Parent WhatsApp Number */}
      <div>
-       <label className="block text-sm font-medium text-gray-600">Parent WhatsApp Number *</label>
+       <label className="block text-sm font-medium text-gray-600">Guardian WhatsApp Number<span className="text-red-600">*</span></label>
        <input
          type="tel"
          name="father_whatsapp_no"
@@ -725,7 +602,7 @@ const Two_Admission_Form = () => {
 
      {/* Parent Mobile Number */}
      <div>
-       <label className="block text-sm font-medium text-gray-600">Parent Mobile Number *</label>
+       <label className="block text-sm font-medium text-gray-600">Guardian Mobile Number<span className="text-red-600">*</span></label>
        <input
          type="tel"
          name="father_contact_no"
@@ -737,7 +614,7 @@ const Two_Admission_Form = () => {
 
      {/* Parent Email ID */}
      <div>
-       <label className="block text-sm font-medium text-gray-600">Parent Email ID *</label>
+       <label className="block text-sm font-medium text-gray-600">Guardian Email ID<span className="text-red-600">*</span></label>
        <input
          type="email"
          name="father_email"
@@ -748,7 +625,7 @@ const Two_Admission_Form = () => {
      </div>
        {/* Religion */}
        <div>
-       <label className="block text-sm font-medium text-gray-600">Religion *</label>
+       <label className="block text-sm font-medium text-gray-600">Religion<span className="text-red-600">*</span></label>
        <select
          name="religion"
          required
@@ -766,7 +643,7 @@ const Two_Admission_Form = () => {
 
      {/* Annual Income */}
      <div>
-       <label className="block text-sm font-medium text-gray-600">Annual Income *</label>
+       <label className="block text-sm font-medium text-gray-600">Annual Income<span className="text-red-600">*</span></label>
        <select
          name="annual_income"
          required
@@ -793,7 +670,7 @@ const Two_Admission_Form = () => {
    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
      {/* Permanent Address */}
      <div>
-       <label className="block text-sm font-medium text-gray-600">Permanent Address *</label>
+       <label className="block text-sm font-medium text-gray-600">Permanent Address<span className="text-red-600">*</span></label>
        <textarea
          name="permanent_address"
          required
@@ -804,7 +681,7 @@ const Two_Admission_Form = () => {
 
      {/* Current Address */}
      <div>
-       <label className="block text-sm font-medium text-gray-600">Current Address *</label>
+       <label className="block text-sm font-medium text-gray-600">Current Address<span className="text-red-600">*</span></label>
        <textarea
          name="current_address"
          required
@@ -817,7 +694,7 @@ const Two_Admission_Form = () => {
      
       {/* Nearest Police Station */}
       <div>
-       <label className="block text-sm font-medium text-gray-600">Permanent Address Nearest Police Station *</label>
+       <label className="block text-sm font-medium text-gray-600">Permanent Address Nearest Police Station<span className="text-red-600">*</span></label>
        <input
          type="text"
          name="nearest_police_station"
@@ -827,7 +704,7 @@ const Two_Admission_Form = () => {
        />
      </div>
       <div>
-       <label className="block text-sm font-medium text-gray-600">Current Address Nearest Police Station *</label>
+       <label className="block text-sm font-medium text-gray-600">Current Address Nearest Police Station<span className="text-red-600">*</span></label>
        <input
          type="text"
          name="nearest_police_station"
@@ -839,7 +716,7 @@ const Two_Admission_Form = () => {
 
      {/* Nearest Landmark */}
      <div>
-       <label className="block text-sm font-medium text-gray-600">Permanent Address Nearest Landmark *</label>
+       <label className="block text-sm font-medium text-gray-600">Permanent Address Nearest Landmark<span className="text-red-600">*</span></label>
        <input
          type="text"
          name="nearest_landmark"
@@ -849,7 +726,7 @@ const Two_Admission_Form = () => {
        />
      </div>
      <div>
-       <label className="block text-sm font-medium text-gray-600">Current Address Nearest Landmark *</label>
+       <label className="block text-sm font-medium text-gray-600">Current Address Nearest Landmark<span className="text-red-600">*</span></label>
        <input
          type="text"
          name="nearest_landmark"
@@ -863,7 +740,7 @@ const Two_Admission_Form = () => {
 
       {/* Permanent Address State */}
       <div>
-        <label className="block text-sm font-medium text-gray-600">Permanent Address State *</label>
+        <label className="block text-sm font-medium text-gray-600">Permanent Address State<span className="text-red-600">*</span></label>
         <select
           name="permanent_state"
           required
@@ -881,7 +758,7 @@ const Two_Admission_Form = () => {
 
       {/* Current Address State */}
       <div>
-        <label className="block text-sm font-medium text-gray-600">Current Address State *</label>
+        <label className="block text-sm font-medium text-gray-600">Current Address State<span className="text-red-600">*</span></label>
         <select
           name="current_state"
           required
@@ -899,7 +776,7 @@ const Two_Admission_Form = () => {
 
       {/* Permanent Address District */}
       <div>
-        <label className="block text-sm font-medium text-gray-600">Permanent Address District *</label>
+        <label className="block text-sm font-medium text-gray-600">Permanent Address District<span className="text-red-600">*</span></label>
         <select
           name="permanent_district"
           required
@@ -918,7 +795,7 @@ const Two_Admission_Form = () => {
 
       {/* Current Address District */}
       <div>
-        <label className="block text-sm font-medium text-gray-600">Current Address District *</label>
+        <label className="block text-sm font-medium text-gray-600">Current Address District<span className="text-red-600">*</span></label>
         <select
           name="current_district"
           required
@@ -937,7 +814,7 @@ const Two_Admission_Form = () => {
 
       {/* Permanent Address Tehsil */}
       <div>
-        <label className="block text-sm font-medium text-gray-600">Permanent Address Tehsil *</label>
+        <label className="block text-sm font-medium text-gray-600">Permanent Address Tehsil<span className="text-red-600">*</span></label>
         <select
           name="permanent_tehsil"
           required
@@ -955,7 +832,7 @@ const Two_Admission_Form = () => {
 
       {/* Current Address Tehsil */}
       <div>
-        <label className="block text-sm font-medium text-gray-600">Current Address Tehsil *</label>
+        <label className="block text-sm font-medium text-gray-600">Current Address Tehsil<span className="text-red-600">*</span></label>
         <select
           name="current_tehsil"
           required
@@ -972,7 +849,7 @@ const Two_Admission_Form = () => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600">Permanent Address Post Office *</label>
+        <label className="block text-sm font-medium text-gray-600">Permanent Address Post Office<span className="text-red-600">*</span></label>
         <select
           name="permanent_post_office"
           required
@@ -991,7 +868,7 @@ const Two_Admission_Form = () => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600">Current Address Post Office *</label>
+        <label className="block text-sm font-medium text-gray-600">Current Address Post Office<span className="text-red-600">*</span></label>
         <select
           name="current_post_office"
           required
@@ -1010,7 +887,7 @@ const Two_Admission_Form = () => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600">Permanent Address Pincode *</label>
+        <label className="block text-sm font-medium text-gray-600">Permanent Address Pincode<span className="text-red-600">*</span></label>
         <input
           type="text"
           name="permanent_pincode"
@@ -1024,7 +901,7 @@ const Two_Admission_Form = () => {
     
 
       <div>
-        <label className="block text-sm font-medium text-gray-600">Current Address Pincode *</label>
+        <label className="block text-sm font-medium text-gray-600">Current Address Pincode<span className="text-red-600">*</span></label>
         <input
           type="text"
           name="current_pincode"
@@ -1036,7 +913,7 @@ const Two_Admission_Form = () => {
 
  {/* Permanent Address Type */}
 <div>
-  <label className="block text-sm font-medium text-gray-600">Permanent Address Type *</label>
+  <label className="block text-sm font-medium text-gray-600">Permanent Address Type<span className="text-red-600">*</span></label>
   <select
     name="permanent_address_type"
     required
@@ -1051,7 +928,7 @@ const Two_Admission_Form = () => {
 
 {/* Current Address Type */}
 <div>
-  <label className="block text-sm font-medium text-gray-600">Current Address Type *</label>
+  <label className="block text-sm font-medium text-gray-600">Current Address Type<span className="text-red-600">*</span></label>
   <select
     name="current_address_type"
     required
@@ -1067,7 +944,7 @@ const Two_Admission_Form = () => {
 
    {/* Nationality */}
 <div>
-  <label className="block text-sm font-medium text-gray-600">Nationality *</label>
+  <label className="block text-sm font-medium text-gray-600">Nationality<span className="text-red-600">*</span></label>
   <select
     name="nationality"
     required
@@ -1085,7 +962,7 @@ const Two_Admission_Form = () => {
 
 {/* Country */}
 <div>
-  <label className="block text-sm font-medium text-gray-600">Country *</label>
+  <label className="block text-sm font-medium text-gray-600">Country<span className="text-red-600">*</span></label>
   <select
     name="country"
     required
@@ -1199,4 +1076,4 @@ const Two_Admission_Form = () => {
   );
 };
 
-export default Two_Admission_Form;
+export default Nursery_Admission_Form;
