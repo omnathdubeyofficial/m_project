@@ -2,10 +2,35 @@
 
 import { useState, useRef } from "react";
 import { executeMutation } from "../../graphqlClient";
-import { CREATE_STUDENT_REGISTRATION_MUTATION } from "../../mutation/studentRegistrationMutations/createStudentRegistration";
+import { CREATE_NURSERY_ADMISSION_LIST_MUTATION } from "../../mutation/NurseryAdmissionMutation/createNurseryAdmissionListMutation";
 import { ArrowLeft, FileText, File, Trash2, Edit, ChevronLeft, ChevronRight } from 'lucide-react';
-import Select from 'react-select';
 import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
+
+
+
+// Hardcoded Nursery Fee Structure
+const NURSERY_FEES = {
+  tuition: 10000,
+  admission: 5000,
+  uniform: 2000,
+  books: 1500,
+  gstPercentage: 18,
+};
+
+// Calculate total and GST
+const calculateFees = () => {
+  const subtotal = NURSERY_FEES.tuition + NURSERY_FEES.admission + NURSERY_FEES.uniform + NURSERY_FEES.books;
+  const gst = (subtotal * NURSERY_FEES.gstPercentage) / 100;
+  const grandTotal = subtotal + gst;
+  return {
+    tuition: NURSERY_FEES.tuition,
+    admission: NURSERY_FEES.admission,
+    uniform: NURSERY_FEES.uniform,
+    books: NURSERY_FEES.books,
+    gst,
+    grandTotal,
+  };
+};
 
 const Nursery_Admission_Form = () => {
   const [formData, setFormData] = useState({
@@ -80,20 +105,6 @@ const Nursery_Admission_Form = () => {
 
   const [paymentId, setPaymentId] = useState(null);
 
-  const handleSubmitpay = () => {
-    if (!paymentId) {
-      alert('Please complete the payment before submitting the application.');
-      return;
-    }
-    alert('Application Submitted Successfully!');
-  };
-
-  const handlePayNow = () => {
-    // Hardcoded payment ID for now
-    const generatedPaymentId = 'PAY123456';
-    setPaymentId(generatedPaymentId);
-    alert(`Payment ID generated: ${generatedPaymentId}`);
-  };
 
   const GST_PERCENTAGE = 18;
 
@@ -187,52 +198,23 @@ const Nursery_Admission_Form = () => {
     setCurrentPincode(stateDistrictData[currentState][currentDistrict].postOffices[postOffice] || '');
   };
 
-  const [fees, setFees] = useState(0);
 
 
-  const classFees = {
-    LKG: { total: 15000, tuition: 9000, admission: 3000, uniform: 1500, books: 1500 },
-    UKG: { total: 18000, tuition: 10800, admission: 3600, uniform: 1800, books: 1800 },
-    'Class 1': { total: 20000, tuition: 12000, admission: 4000, uniform: 2000, books: 2000 },
-    'Class 2': { total: 22000, tuition: 13200, admission: 4400, uniform: 2200, books: 2200 },
-    'Class 3': { total: 25000, tuition: 15000, admission: 5000, uniform: 2500, books: 2500 },
-    'Class 4': { total: 27000, tuition: 16200, admission: 5400, uniform: 2700, books: 2700 },
-    'Class 5': { total: 30000, tuition: 18000, admission: 6000, uniform: 3000, books: 3000 },
-    'Class 6': { total: 35000, tuition: 21000, admission: 7000, uniform: 3500, books: 3500 },
-    'Class 7': { total: 40000, tuition: 24000, admission: 8000, uniform: 4000, books: 4000 },
-    'Class 8': { total: 45000, tuition: 27000, admission: 9000, uniform: 4500, books: 4500 },
-    'Class 9': { total: 50000, tuition: 30000, admission: 10000, uniform: 5000, books: 5000 },
-    'Class 10': { total: 55000, tuition: 33000, admission: 11000, uniform: 5500, books: 5500 },
-    'Class 11': { total: 60000, tuition: 36000, admission: 12000, uniform: 6000, books: 6000 },
-    'Class 12': { total: 65000, tuition: 39000, admission: 13000, uniform: 6500, books: 6500 },
-  };
-
-
-  const handleClassChange = (e) => {
-    const selected = e.target.value;
-    setSelectedClass(selected);
-    const feeDetails = classFees[selected] || { total: 0, tuition: 0, admission: 0, uniform: 0, books: 0 };
-    const gst = Math.round((feeDetails.total * GST_PERCENTAGE) / 100);
-    setFees({ ...feeDetails, gst, grandTotal: feeDetails.total + gst });
-  };
 
 
 
   const [errors, setErrors] = useState({});
 
   const fileInputRefs = {
-    profileImage: useRef(null),
-    aadharImageFront: useRef(null),
-    aadharImageBack: useRef(null),
-    documentFile: useRef(null),
-  };
-
-  const handleClearFile = (key) => {
-    setFormData({ ...formData, [key]: null });
-    setErrors({ ...errors, [key]: null });
-    if (fileInputRefs[key].current) {
-      fileInputRefs[key].current.value = '';
-    }
+    student_profile_img: useRef(null),
+    student_adhar_front_img: useRef(null),
+    student_adhar_back_img: useRef(null),
+    father_adhar_front_img: useRef(null),
+    father_adhar_back_img: useRef(null),
+    mother_adhar_front_img: useRef(null),
+    mother_adhar_back_img: useRef(null),
+    father_pancard_img: useRef(null),
+    student_birth_certificate_img: useRef(null),
   };
 
   const handleFileChange = async (e) => {
@@ -241,131 +223,205 @@ const Nursery_Admission_Form = () => {
     if (!file) return;
 
     // File validation
-    const validTypes = ['image/jpeg', 'image/png'];
+    const validTypes = ["image/jpeg", "image/png"];
     if (!validTypes.includes(file.type)) {
-      setErrors((prev) => ({ ...prev, [name]: 'Only JPG and PNG files are allowed.' }));
+      setErrors((prev) => ({ ...prev, [name]: "Only JPG and PNG files are allowed." }));
       return;
     }
 
-    if (file.size > 1 * 1024 * 1024) { // 1 MB size limit
-      setErrors((prev) => ({ ...prev, [name]: 'File size must be under 1 MB.' }));
+    if (file.size > 1 * 1024 * 1024) {
+      // 1 MB size limit
+      setErrors((prev) => ({ ...prev, [name]: "File size must be under 1 MB." }));
       return;
     }
 
-    setErrors((prev) => ({ ...prev, [name]: null })); // Clear previous error
+    setErrors((prev) => ({ ...prev, [name]: null }));
 
     const formDataUpload = new FormData();
-    formDataUpload.append('image', file);
+    formDataUpload.append("image", file);
 
     try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
+      const response = await fetch("/api/upload", {
+        method: "POST",
         body: formDataUpload,
       });
 
       const data = await response.json();
-      console.log('Upload Response:', data);
-
       if (data.imageUrl) {
         setFormData((prev) => ({
           ...prev,
           [name]: data.imageUrl,
         }));
       } else {
-        console.error('Upload failed, no imageUrl returned.');
+        setErrors((prev) => ({ ...prev, [name]: "Upload failed." }));
       }
     } catch (error) {
-      console.error('Error uploading file:', error);
+      setErrors((prev) => ({ ...prev, [name]: "Error uploading file." }));
     }
   };
+
+  const handleClearFile = (key) => {
+    setFormData({ ...formData, [key]: "" });
+    setErrors({ ...errors, [key]: null });
+    if (fileInputRefs[key].current) {
+      fileInputRefs[key].current.value = "";
+    }
+  };
+
 
 
 
   
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const newErrors = {};
+  const handlePayNow = () => {
+    if (!formData.student_profile_img || !formData.student_adhar_front_img || !formData.student_adhar_back_img) {
+      alert("Please upload all required documents before proceeding with payment.");
+      return;
+    }
+    const generatedPaymentId = `PAY${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+    setPaymentId(generatedPaymentId);
+    setFormData({
+      ...formData,
+      payment_id: generatedPaymentId,
+      payment_status: "Completed",
+      payment_transaction_id: `TXN${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+      payment_date: new Date().toISOString().split("T")[0],
+      paid_amount: formData.total_fees,
+      due_amount: "0",
+    });
+    alert(`Payment successful! Payment ID: ${generatedPaymentId}`);
+  };
 
-    ['profileImage', 'aadharImageFront', 'aadharImageBack'].forEach((key) => {
-        if (!formData[key]) {
-            newErrors[key] = `${key.replace(/([A-Z])/g, ' $1')} is required.`;
-        }
+  const validateForm = () => {
+    const newErrors = {};
+    const requiredFields = [
+      "first_name",
+      "last_name",
+      "adhar_num",
+      "father_name",
+      "mother_name",
+      "father_contact_num",
+      "father_email",
+      "father_occupation",
+      "dob",
+      "gender",
+      "permanent_address",
+      "current_address",
+      "city",
+      "state",
+      "pincode",
+      "nationality",
+      "religion",
+      "caste",
+      "student_profile_img",
+      "student_adhar_front_img",
+      "student_adhar_back_img",
+      "payment_id",
+      "payment_method",
+    ];
+
+    requiredFields.forEach((field) => {
+      if (!formData[field]) {
+        newErrors[field] = `${field.replace(/_/g, " ")} is required.`;
+      }
     });
 
-    if (formData.parent_email && !/\S+@\S+\.\S+/.test(formData.parent_email)) {
-      newErrors.parent_email = 'Please enter a valid email address.';
-  }
+    if (formData.father_email && !/\S+@\S+\.\S+/.test(formData.father_email)) {
+      newErrors.father_email = "Please enter a valid email address.";
+    }
+
+    if (formData.adhar_num && !/^\d{12}$/.test(formData.adhar_num)) {
+      newErrors.adhar_num = "Aadhar number must be 12 digits.";
+    }
+
+    if (formData.father_contact_num && !/^\d{10}$/.test(formData.father_contact_num)) {
+      newErrors.father_contact_num = "Contact number must be 10 digits.";
+    }
+
+    return newErrors;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = validateForm();
 
     if (Object.keys(newErrors).length > 0) {
-        setErrors(newErrors);
-        return;
+      setErrors(newErrors);
+      return;
     }
-    console.log("Submitting Form Data:", formData);
+
+    if (!paymentId) {
+      alert("Please complete the payment before submitting the application.");
+      return;
+    }
 
     try {
-      const response = await executeMutation(CREATE_STUDENT_REGISTRATION_MUTATION, {
+      const response = await executeMutation(CREATE_NURSERY_ADMISSION_LIST_MUTATION, {
         ...formData,
-        gender: formData.gender?.toLowerCase() ?? "other", // Default gender if not provided
-        email: formData.email ?? "",
-        date_of_birth: formData.date_of_birth ?? "",
-        contact_no: formData.contact_no ?? "",
-        percentage: String(formData.percentage ?? "0"),
-        entrance_exam_score: String(formData.entrance_exam_score ?? "0"),
-        adhar_front_img: formData.aadharImageFront,
-        adhar_back_img: formData.aadharImageBack,
+        gender: formData.gender.toLowerCase() ?? "other",
       });
 
-      console.log("Mutation Response:", response);
-
-      if (response?.errors) {
-        console.error("GraphQL Errors:", response.errors);
-        alert("GraphQL Error: " + response.errors[0]?.message);
+      if (response?.errors || response?.error_msg) {
+        setPopupMessage(response?.error_msg || response?.errors[0]?.message || "An error occurred.");
+        setIsSuccess(false);
+        setShowPopup(true);
         return;
       }
 
-      alert("Admission form submitted successfully!");
+      setPopupMessage(response?.success_msg || "Admission form submitted successfully!");
+      setIsSuccess(true);
+      setShowPopup(true);
+      setFormData({
+        first_name: "",
+        middle_name: "",
+        last_name: "",
+        adhar_num: "",
+        father_name: "",
+        mother_name: "",
+        father_contact_num: "",
+        father_email: "",
+        father_occupation: "",
+        dob: "",
+        gender: "",
+        permanent_address: "",
+        current_address: "",
+        city: "",
+        state: "",
+        pincode: "",
+        nationality: "",
+        religion: "",
+        caste: "",
+        admission_status: "Pending",
+        admission_fee: String(NURSERY_FEES.admission),
+        student_adhar_front_img: "",
+        student_adhar_back_img: "",
+        father_adhar_front_img: "",
+        father_adhar_back_img: "",
+        mother_adhar_front_img: "",
+        mother_adhar_back_img: "",
+        father_pancard_img: "",
+        student_profile_img: "",
+        student_birth_certificate_img: "",
+        payment_id: "",
+        admission_fees: String(NURSERY_FEES.admission),
+        payment_method: "",
+        payment_status: "Pending",
+        payment_transaction_id: "",
+        payment_date: "",
+        total_fees: String(calculateFees().grandTotal),
+        paid_amount: "0",
+        due_amount: String(calculateFees().grandTotal),
+      });
+      setPaymentId(null);
     } catch (error) {
-      console.error("Mutation Error:", error.networkError?.result || error.message);
-      alert("Error submitting form: " + (error.networkError?.result?.errors[0]?.message || error.message));
+      setPopupMessage(error.message || "Error submitting form.");
+      setIsSuccess(false);
+      setShowPopup(true);
     }
   };
 
-
-  const [selectedClass, setSelectedClass] = useState('');
-  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const fees = calculateFees();
 
 
-
-  const subjectsOptions = {
-    'Class 9': [
-      { label: 'Mathematics', value: 'Mathematics' },
-      { label: 'Science', value: 'Science' },
-      { label: 'Social Studies', value: 'Social Studies' },
-      { label: 'English', value: 'English' },
-      { label: 'Hindi', value: 'Hindi' }
-    ],
-    'Class 10': [
-      { label: 'Mathematics', value: 'Mathematics' },
-      { label: 'Science', value: 'Science' },
-      { label: 'Social Studies', value: 'Social Studies' },
-      { label: 'English', value: 'English' },
-      { label: 'Hindi', value: 'Hindi' }
-    ],
-    'Class 11': [
-      { label: 'Physics', value: 'Physics' },
-      { label: 'Chemistry', value: 'Chemistry' },
-      { label: 'Mathematics', value: 'Mathematics' },
-      { label: 'Biology', value: 'Biology' },
-      { label: 'Accountancy', value: 'Accountancy' }
-    ],
-    'Class 12': [
-      { label: 'Physics', value: 'Physics' },
-      { label: 'Chemistry', value: 'Chemistry' },
-      { label: 'Mathematics', value: 'Mathematics' },
-      { label: 'Biology', value: 'Biology' },
-      { label: 'Accountancy', value: 'Accountancy' }
-    ]
-  };
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4 flex justify-center mt-32">
@@ -986,48 +1042,54 @@ const Nursery_Admission_Form = () => {
 
 
 
- <h2 className="text-2xl font-semibold text-gray-700 mb-4">Upload Documents</h2>
-
-
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-t pt-6">
-      <p className="col-span-full text-red-600 font-bold">
-      Note: Only JPG and PNG images under 1 MB are allowed. Please ensure the document is clear and easily readable.
-      </p>
-      {[
-        { key: 'profileImage', label: 'Student Image' },
-        { key: 'aadharImageFront', label: 'Student Aadhar Image Front' },
-        { key: 'aadharImageBack', label: 'Student Aadhar Image Back' },
-      ].map(({ key, label }, index) => (
-        <div key={index} className="flex flex-col items-center border p-4  w-full relative">
-          <span className="font-semibold text-lg">{label}</span>
-          <label className="border p-2  w-full flex items-center gap-2 cursor-pointer bg-gray-200 hover:bg-gray-300 mt-2">
-            <FaUpload /> Upload {label}
-            <input
-    type="file"
-    name={key}
-    ref={fileInputRefs[key]}
-    className="hidden"
-    accept="image/jpeg,image/png"
-    onChange={handleFileChange}
-/>
-
-          </label>
-          {errors[key] && <p className="text-red-600 mt-1">{errors[key]}</p>}
-          {formData[key] && (
-            <div className="relative mt-2">
-              <img src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" />
-              <button
-                type="button"
-                onClick={() => handleClearFile(key)}
-                className="absolute top-0 right-0 bg-red-600 text-white p-1 rounded-full"
-              >
-                <FaTimes />
-              </button>
-            </div>
-          )}
+ {/* Upload Documents */}
+ <div className="mb-8">
+          <h2 className="text-2xl font-semibold text-gray-700 mb-6">Upload Documents</h2>
+          <p className="text-red-600 font-bold mb-4">
+            Note: Only JPG and PNG images under 1 MB are allowed. Please ensure the document is clear and readable.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { key: "student_profile_img", label: "Student Profile Image" },
+              { key: "student_adhar_front_img", label: "Student Aadhar Front" },
+              { key: "student_adhar_back_img", label: "Student Aadhar Back" },
+              { key: "father_adhar_front_img", label: "Father Aadhar Front" },
+              { key: "father_adhar_back_img", label: "Father Aadhar Back" },
+              { key: "mother_adhar_front_img", label: "Mother Aadhar Front" },
+              { key: "mother_adhar_back_img", label: "Mother Aadhar Back" },
+              { key: "father_pancard_img", label: "Father Pancard" },
+              { key: "student_birth_certificate_img", label: "Student Birth Certificate" },
+            ].map(({ key, label }) => (
+              <div key={key} className="flex flex-col items-center border p-4 w-full relative">
+                <span className="font-semibold text-lg">{label}</span>
+                <label className="border p-2 w-full flex items-center gap-2 cursor-pointer bg-gray-200 hover:bg-gray-300 mt-2">
+                  <FaUpload /> Upload {label}
+                  <input
+                    type="file"
+                    name={key}
+                    ref={fileInputRefs[key]}
+                    className="hidden"
+                    accept="image/jpeg,image/png"
+                    onChange={handleFileChange}
+                  />
+                </label>
+                {errors[key] && <p className="text-red-600 mt-1">{errors[key]}</p>}
+                {formData[key] && (
+                  <div className="relative mt-2">
+                    <img src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => handleClearFile(key)}
+                      className="absolute top-0 right-0 bg-red-600 text-white p-1 rounded-full"
+                    >
+                      <FaTimes />
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
-    </div>
 
 
 
@@ -1054,12 +1116,13 @@ const Nursery_Admission_Form = () => {
       </div>
 
       <div className="flex flex-col items-center">
-        <button
+      <button
           className="mt-6 w-full md:w-1/3 bg-green-500 text-white py-2 rounded-md shadow-lg text-base hover:bg-green-600 transition duration-200"
           onClick={handlePayNow}
         >
           Pay Now
         </button>
+
       </div>
 
       <div className="flex mt-4 flex-col items-center">
