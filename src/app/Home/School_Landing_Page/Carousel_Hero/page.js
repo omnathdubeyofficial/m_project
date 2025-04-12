@@ -117,7 +117,7 @@ const HeroSection = () => {
       </div>
 
       {/* Announcements Section */}
-      <div className="w-full md:w-1/3 h-screen bg-red-100 p-3 md:pr-7 overflow-hidden z-10 flex flex-col justify-start pt-4 md:pt-24">
+      <div className="w-full md:w-1/3 h-screen bg-red-100 p-3 md:pr-7 overflow-hidden z-10 flex flex-col justify-start mb-4 md:pt-24">
         <h2 className="text-2xl font-semibold text-white bg-red-600 p-3 mb-2 border-b-2 text-left flex items-center">
           <span className="mr-2 text-xl"><FaClipboardList className="mx-1" /></span> Latest Circulars
         </h2>
