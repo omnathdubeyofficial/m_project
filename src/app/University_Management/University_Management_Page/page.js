@@ -65,9 +65,10 @@ const University_Management_Page = () => {
     },
     {
       name: 'Job Application',
-      icon: FaChalkboardTeacher, 
+      icon: FaBriefcase,
       link: '/University_Management/University_Management_Page/Job_Application_Data_Form'
-    },
+    }
+    
   ];
   if (isLoading) return <Loading />;
 
