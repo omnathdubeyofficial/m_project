@@ -740,3 +740,18 @@ model school_careers {
   utime                  String? @db.VarChar(300)
   is_active              String? @db.VarChar(300)
 }
+
+model job_applications {
+  z_id                 String  @id @db.VarChar(100)
+  full_name            String? @db.VarChar(100)
+  email                String? @db.VarChar(100)
+  phone_number         String? @db.VarChar(20)
+  whatsapp_number      String? @db.VarChar(20)
+  position_applied_for String? @db.Text
+  cover_letter         String? @db.Text
+  resume_pdf           String? @db.VarChar(500)
+  cdate                String? @db.VarChar(500)
+  ctime                String? @db.VarChar(500)
+  udate                String? @db.VarChar(500)
+  utime                String? @db.VarChar(500)
+}
