@@ -234,7 +234,7 @@ export default function CareerForm() {
       {/* Popup Message with Animation */}
       {popupMessage && (
         <div
-          className={`fixed bottom-5 left-1/2 transform -translate-x-1/2 max-w-md w-full p-4 rounded-lg shadow-lg text-white flex items-center gap-3 animate-fade-in-up z-50 ${
+          className={`fixed bottom-5 left-1/2 transform -translate-x-1/2 max-w-md w-auto p-4 rounded-lg shadow-lg text-white flex items-center gap-3 animate-fade-in-up z-50 ${
             popupType === "success" ? "bg-green-600" : "bg-red-600"
           }`}
         >
@@ -286,7 +286,7 @@ export default function CareerForm() {
       )}
 
       {/* Career Form */}
-      <div ref={formRef} className="bg-white p-8 rounded-lg shadow-lg border border-gray-200 mb-8">
+      <div ref={formRef} className="bg-white p-8  shadow-lg border border-gray-200 mb-8">
         <h2 className="text-3xl font-semibold text-center text-blue-800 mb-6">
           {formData.z_id ? "Update Career" : "Create Career"}
         </h2>
@@ -472,7 +472,7 @@ export default function CareerForm() {
             <button
               type="submit"
               disabled={loading}
-              className={`w-auto bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-6 rounded-md shadow-md hover:from-blue-600 hover:to-blue-700 font-semibold transition-all ${
+              className={`w-auto bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-6  shadow-md hover:from-blue-600 hover:to-blue-700 font-semibold transition-all ${
                 loading ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
