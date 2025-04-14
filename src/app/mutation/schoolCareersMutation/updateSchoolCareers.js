@@ -1,5 +1,6 @@
-export const CREATE_SCHOOL_CAREER_MUTATION = `
-  mutation createSchoolCareer(
+export const UPDATE_SCHOOL_CAREER_MUTATION = `
+  mutation updateSchoolCareer(
+    $z_id: String!,
     $position_title: String,
     $av_salary: String,
     $department: String,
@@ -12,9 +13,11 @@ export const CREATE_SCHOOL_CAREER_MUTATION = `
     $location: String,
     $job_description: String,
     $application_start: String,
-    $application_deadline: String
+    $application_deadline: String,
+    $is_active: String
   ) {
-    createSchoolCareer(
+    updateSchoolCareer(
+      z_id: $z_id,
       position_title: $position_title,
       av_salary: $av_salary,
       department: $department,
@@ -27,7 +30,8 @@ export const CREATE_SCHOOL_CAREER_MUTATION = `
       location: $location,
       job_description: $job_description,
       application_start: $application_start,
-      application_deadline: $application_deadline
+      application_deadline: $application_deadline,
+      is_active: $is_active
     ) {
       z_id
       job_id
