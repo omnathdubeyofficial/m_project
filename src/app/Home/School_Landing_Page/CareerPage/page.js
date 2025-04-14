@@ -314,7 +314,7 @@ const CareerPage = () => {
               </div>
 
               <motion.button
-                onClick={() => router.push("/career")} // Update this to a dynamic route if needed
+                onClick={() => router.push("/Career/ApplicationFormApply")} // Update this to a dynamic route if needed
                 className="w-full py-3 mt-5 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-full shadow-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-500"
               >
                 I am Interested
