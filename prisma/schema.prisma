@@ -717,3 +717,26 @@ model parent_rating {
   utime          String? @db.VarChar(100)
   class_assigned String? @db.VarChar(100)
 }
+
+model school_careers {
+  z_id                   String  @id @db.VarChar(255)
+  job_id                 String? @db.VarChar(255)
+  position_title         String? @db.VarChar(255)
+  av_salary              String? @db.VarChar(300)
+  department             String? @db.VarChar(300)
+  required_qualification String? @db.Text
+  required_language      String? @db.Text
+  required_experience    String? @db.VarChar(300)
+  employment_type        String? @db.VarChar(300)
+  number_of_vacancies    String? @db.VarChar(300)
+  required_work_time     String? @db.VarChar(300)
+  location               String? @db.Text
+  job_description        String? @db.Text
+  application_start      String? @db.VarChar(300)
+  application_deadline   String? @db.VarChar(300)
+  cdate                  String? @db.VarChar(300)
+  ctime                  String? @db.VarChar(300)
+  udate                  String? @db.VarChar(300)
+  utime                  String? @db.VarChar(300)
+  is_active              String? @db.VarChar(300)
+}
