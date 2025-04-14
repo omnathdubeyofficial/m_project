@@ -62,7 +62,7 @@ const University_Management_Page = () => {
       name: 'Faculty',
       icon: FaChalkboardTeacher, 
       link: '/Faculty/FacultyApplicationForm'
-    }
+    },
   ];
   if (isLoading) return <Loading />;
 

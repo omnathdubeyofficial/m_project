@@ -2,53 +2,42 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FaSchool, FaMapMarkerAlt, FaClock, FaGraduationCap, FaLanguage, FaUsers } from 'react-icons/fa';
+import {
+  FaSchool,
+  FaMapMarkerAlt,
+  FaClock,
+  FaGraduationCap,
+  FaLanguage,
+  FaUsers,
+  FaHome,
+  FaTachometerAlt,
+  FaArrowLeft,
+} from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import Image from 'next/image';
-import { FaHome, FaTachometerAlt, FaArrowLeft } from 'react-icons/fa';
-const jobs = [
-  {
-    id: 1,
-    title: "Math Teacher",
-    school: "Springfield High School",
-    location: "Delhi, India",
-    workTime: "8:00 AM - 3:00 PM",
-    qualification: "B.Ed, M.Sc Mathematics",
-    language: "English, Hindi",
-    experience: "5+ years",
-    description: "Looking for an experienced Math teacher to handle high school classes with strong conceptual knowledge.",
-  },
-  {
-    id: 2,
-    title: "Security Guard",
-    school: "Greenwood Public School",
-    location: "Mumbai, India",
-    workTime: "24-hour shift rotation",
-    qualification: "High School Diploma",
-    language: "Hindi, Marathi",
-    experience: "3+ years",
-    description: "Hiring a responsible Security Guard to ensure student safety and campus security.",
-  },
-  {
-    id: 3,
-    title: "Science Teacher",
-    school: "Bluebell Academy",
-    location: "Bangalore, India",
-    workTime: "9:00 AM - 4:00 PM",
-    qualification: "B.Ed, M.Sc Physics",
-    language: "English, Kannada",
-    experience: "4+ years",
-    description: "Seeking a dedicated Science teacher with expertise in Physics and Chemistry.",
-  },
-];
+import Image from "next/image";
+import { executeQuery } from "../../../graphqlClient";
+import { GET_SCHOOL_CAREER_DATA } from "../../../query/schoolCareersQuery/schoolCareersquery";
+
+// Animation Variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+};
+const staggerChildren = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.4 } },
+};
+const glowEffect = {
+  hidden: { scale: 0.9, opacity: 0 },
+  visible: { scale: 1, opacity: 1, transition: { duration: 1.2 } },
+};
 
 const CareerPage = () => {
   const [circles, setCircles] = useState([]);
-  const router = useRouter();  
-  // Animation Variants
-  const fadeInUp = { hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } } };
-  const staggerChildren = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.4 } } };
-  const glowEffect = { hidden: { scale: 0.9, opacity: 0 }, visible: { scale: 1, opacity: 1, transition: { duration: 1.2 } } };
+  const [jobs, setJobs] = useState([]); // State to store fetched jobs
+  const [loading, setLoading] = useState(true); // State for loading
+  const [error, setError] = useState(null); // State for errors
+  const router = useRouter();
 
   // Generate circles for background animation
   useEffect(() => {
@@ -59,6 +48,28 @@ const CareerPage = () => {
       left: `${Math.random() * 100}%`,
     }));
     setCircles(generatedCircles);
+  }, []);
+
+  // Fetch job data using the GraphQL query
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        setLoading(true);
+        const response = await executeQuery(GET_SCHOOL_CAREER_DATA);
+        if (response?.getSchoolCareers) {
+          setJobs(response.getSchoolCareers);
+        } else {
+          setError("No job data found.");
+        }
+      } catch (err) {
+        setError("Failed to fetch job data.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
   }, []);
 
   // Animated Circles Component
@@ -85,7 +96,6 @@ const CareerPage = () => {
       </div>
     );
   };
-
   return (
     <div className="min-h-screen  antialiased overflow-hidden">
       {/* Header Section */}
@@ -251,55 +261,65 @@ const CareerPage = () => {
       {/* Jobs Section */}
       <section className="container mx-auto px-4 sm:px-6 py-12 sm:py-24 relative">
         <AnimatedCircles />
+        {loading && <p className="text-center text-gray-600">Loading jobs...</p>}
+        {error && <p className="text-center text-red-600">{error}</p>}
+        {!loading && !error && jobs.length === 0 && (
+          <p className="text-center text-gray-600">No job openings available at the moment.</p>
+        )}
         <motion.div
-  initial="hidden"
-  whileInView="visible"
-  viewport={{ once: true }}
-  variants={staggerChildren}
-  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6" // Adjust gap values
->
-
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerChildren}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6"
+        >
           {jobs.map((job) => (
- <motion.div
- key={job.id}
- variants={{
-   hidden: { opacity: 0, y: 20 },
-   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
- }}
- initial="hidden"
- animate="visible"
-//  whileHover={{ scale: 1.05 }}
- className="relative bg-gradient-to-br from-white to-gray-100 border-2 border-dashed border-blue-400 rounded-3xl shadow-xl p-6 transition-all duration-300"
->
- <h2 className="text-2xl font-semibold text-gray-900 text-center mb-4 border-b-2 border-blue-400 pb-2  tracking-wide">{job.title}</h2>
- 
- <div className="bg-white border border-gray-300 rounded-xl p-4 space-y-3 shadow-md">
-   {[
-     { icon: FaSchool, label: "School", value: job.school },
-     { icon: FaMapMarkerAlt, label: "Location", value: job.location },
-     { icon: FaClock, label: "Work Time", value: job.workTime },
-     { icon: FaGraduationCap, label: "Qualification", value: job.qualification },
-     { icon: FaLanguage, label: "Language", value: job.language },
-     { icon: FaUsers, label: "Experience", value: job.experience },
-   ].map((item, index) => (
-     <div key={index} className="flex items-center space-x-3 border-b border-gray-200 pb-2 last:border-none">
-       <item.icon className="text-blue-500 text-xl" />
-       <p className="text-md font-semibold text-gray-800">
-         <span className="font-medium">{item.label}:</span> <span className="text-green-800">{item.value}</span> 
-       </p>
-     </div>
-   ))}
-   <p className="mt-4 text-gray-700 text-md leading-relaxed italic border-t border-gray-300 pt-3">{job.description}</p>
- </div>
- 
- <motion.button
-   onClick={() => router.push("/career")}
+            <motion.div
+              key={job.job_id}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+              }}
+              initial="hidden"
+              animate="visible"
+              className="relative bg-gradient-to-br from-white to-gray-100 border-2 border-dashed border-blue-400 rounded-3xl shadow-xl p-6 transition-all duration-300"
+            >
+              <h2 className="text-2xl font-semibold text-gray-900 text-center mb-4 border-b-2 border-blue-400 pb-2 tracking-wide">
+                {job.position_title}
+              </h2>
 
-   className="w-full py-3 mt-5 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-full shadow-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-500"
- >
-    I am Interested
- </motion.button>
-</motion.div>
+              <div className="bg-white border border-gray-300 rounded-xl p-4 space-y-3 shadow-md">
+                {[
+                  { icon: FaSchool, label: "Department", value: job.department },
+                  { icon: FaMapMarkerAlt, label: "Location", value: job.location },
+                  { icon: FaClock, label: "Work Time", value: job.required_work_time },
+                  { icon: FaGraduationCap, label: "Qualification", value: job.required_qualification },
+                  { icon: FaLanguage, label: "Language", value: job.required_language },
+                  { icon: FaUsers, label: "Experience", value: job.required_experience },
+                ].map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center space-x-3 border-b border-gray-200 pb-2 last:border-none"
+                  >
+                    <item.icon className="text-blue-500 text-xl" />
+                    <p className="text-md font-semibold text-gray-800">
+                      <span className="font-medium">{item.label}:</span>{" "}
+                      <span className="text-green-800">{item.value}</span>
+                    </p>
+                  </div>
+                ))}
+                <p className="mt-4 text-gray-700 text-md leading-relaxed italic border-t border-gray-300 pt-3">
+                  {job.job_description}
+                </p>
+              </div>
+
+              <motion.button
+                onClick={() => router.push("/career")} // Update this to a dynamic route if needed
+                className="w-full py-3 mt-5 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-full shadow-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-500"
+              >
+                I am Interested
+              </motion.button>
+            </motion.div>
           ))}
         </motion.div>
       </section>
