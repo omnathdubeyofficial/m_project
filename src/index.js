@@ -66,6 +66,8 @@ import parentRatingTypes from './types/parentRatingTypes.js';
 import parentRatingResolver from './resolvers/parentRatingResolver.js';
 import schoolCareersType from './types/schoolCareersType.js';
 import schoolCareersResolver from './resolvers/schoolCareersResolver.js';
+import jobApplicationType from './types/jobApplicationType.js';
+import jobApplicationResolver from './resolvers/jobApplicationResolver.js';
 
 const app = express();
 
@@ -88,7 +90,7 @@ const schema = makeExecutableSchema({
     logoutTypes, holidayListType, phoneDirectoryType, academicCalendarType,
     driversListType, addNewBookType, issuedBookType, housekeepingListType,
     blogListType, eventCreationType, eventRegistrationFormType,
-    feeStructureDataType, noticeBoardType, classesDataType, nurseryAdmissionListType,forgetpasswordTypes,classSubjectsTypes,studentRatingTypes,parentRatingTypes,schoolCareersType
+    feeStructureDataType, noticeBoardType, classesDataType, nurseryAdmissionListType,forgetpasswordTypes,classSubjectsTypes,studentRatingTypes,parentRatingTypes,schoolCareersType,jobApplicationType
   ],
   resolvers: [
     userResolver, userDataResolver, adminDataResolver,
@@ -99,7 +101,7 @@ const schema = makeExecutableSchema({
     addNewBookResolver, issuedBookResolver, housekeepingListResolver,
     blogListResolver, eventCreationResolver, eventRegistrationResolver,
     feeStructureListResolver, noticeBoardResolver, classesDataResolver,
-    nurseryAdmissionResolver,forgetpasswordResolver,classSubjectsResolver,studentRatingResolver,parentRatingResolver,schoolCareersResolver
+    nurseryAdmissionResolver,forgetpasswordResolver,classSubjectsResolver,studentRatingResolver,parentRatingResolver,schoolCareersResolver,jobApplicationResolver
   ],
 });
 
