@@ -755,3 +755,22 @@ model job_applications {
   udate                String? @db.VarChar(500)
   utime                String? @db.VarChar(500)
 }
+
+model faculty_members {
+  z_id           String  @id @db.VarChar(100)
+  full_name      String? @db.VarChar(300)
+  profession     String? @db.VarChar(500)
+  qualification  String? @db.Text
+  experience     String? @db.VarChar(500)
+  department     String? @db.Text
+  facebook_link  String? @db.Text
+  instagram_link String? @db.Text
+  youtube_link   String? @db.Text
+  linkedin_link  String? @db.Text
+  x_link         String? @db.Text
+  cdate          String? @db.VarChar(100)
+  ctime          String? @db.VarChar(100)
+  udate          String? @db.VarChar(100)
+  utime          String? @db.VarChar(100)
+  profile_image  String? @db.VarChar(255)
+}
