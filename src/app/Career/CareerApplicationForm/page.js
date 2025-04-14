@@ -40,7 +40,9 @@ export default function CareerForm() {
   const jobOptions = ["Teacher", "Administrator", "Librarian", "Counselor", "Support Staff"];
   const departmentOptions = ["Mathematics", "Science", "Administration", "Library", "Counseling"];
   const locationOptions = ["New York", "Los Angeles", "Chicago", "Houston"];
-  const workTimeOptions = ["Full-Time", "Part-Time", "Contract", "Temporary"];
+  const employmenttypeOptions = ["Full-Time", "Part-Time", "Contract", "Temporary"];
+  const workTimeOptions = [ "09:00 AM To 06:00 PM"," 05:00 AM To 12:00 PM"];
+
 
   // Fetch careers on component mount
   useEffect(() => {
@@ -400,15 +402,22 @@ export default function CareerForm() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Employment Type</label>
-              <input
-                type="text"
-                name="employment_type"
-                value={formData.employment_type}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">Employment Type</label>
+  <select
+    name="employment_type" // Fixed the name attribute
+    value={formData.employment_type}
+    onChange={handleChange}
+    className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
+    required
+  >
+    <option value="">Select Employment Type</option>
+    {employmenttypeOptions.map((type) => (
+      <option key={type} value={type}>
+        {type}
+      </option>
+    ))}
+  </select>
+</div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
