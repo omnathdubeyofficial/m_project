@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { GET_ALL_FACULTY_QUERY } from "../../../query/facultyMembersQuery/facultyMembersQuery";
 import { executeQuery } from "../../../graphqlClient";
+import Loading from "../../../Loader/page";
 
 // Animation Variants
 const sectionVariants = {
@@ -117,7 +118,7 @@ const FacultyPage = () => {
       {/* Faculty Sections */}
       <div className="max-w-6xl mx-auto space-y-16">
         {loading ? (
-          <p className="text-center text-gray-600 text-lg">Loading faculty...</p>
+          <Loading />
         ) : error ? (
           <p className="text-center text-red-600 text-lg">{error}</p>
         ) : Object.keys(facultyData).length === 0 ? (
