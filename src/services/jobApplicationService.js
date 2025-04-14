@@ -15,6 +15,24 @@ const applyForJob = async ({
   resume_pdf,
 }) => {
   try {
+    // Check if an application with the same email or phone number already exists
+    const existingApplication = await prisma.job_applications.findFirst({
+      where: {
+        OR: [
+          { email },
+          { phone_number },
+        ],
+      },
+    });
+
+    // If an existing application is found, return an error message
+    if (existingApplication) {
+      const error_msg = 'You have already applied for a job. Please try again after 3 months.';
+      console.log(error_msg);
+      return { error_msg };
+    }
+
+    // If no existing application found, create a new application
     const newApplication = await prisma.job_applications.create({
       data: {
         z_id: uuidv4(),

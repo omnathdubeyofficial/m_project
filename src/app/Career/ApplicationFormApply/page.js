@@ -3,21 +3,24 @@
 import { useState, useRef } from "react";
 import { FaUpload, FaTimes, FaFilePdf } from "react-icons/fa";
 import { CheckCircle, XCircle } from "lucide-react";
+import { CREATE_JOB_APPLICATION_MUTATION } from "../../mutation/JobApplicationMutation/createSchoolCareers";
+import { executeMutation } from "../../graphqlClient";
 
 export default function JobApplicationForm() {
   const initialFormData = {
     full_name: "",
     email: "",
-    phone: "",
+    phone_number: "",
     whatsapp_number: "",
-    position_title: "",
+    position_applied_for: "",
     cover_letter: "",
-    resume: null,
+    resume_pdf: null,
   };
 
   const [formData, setFormData] = useState(initialFormData);
   const [popupMessage, setPopupMessage] = useState(null);
   const [popupType, setPopupType] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef(null);
   const formRef = useRef(null);
 
@@ -52,7 +55,7 @@ export default function JobApplicationForm() {
       });
       const data = await response.json();
       if (data.fileUrl) {
-        setFormData((prev) => ({ ...prev, resume: data.fileUrl }));
+        setFormData((prev) => ({ ...prev, resume_pdf: data.fileUrl }));
         setPopupMessage("Resume uploaded successfully.");
         setPopupType("success");
       } else {
@@ -71,23 +74,25 @@ export default function JobApplicationForm() {
   };
 
   const handleClearFile = () => {
-    setFormData({ ...formData, resume: null });
+    setFormData({ ...formData, resume_pdf: null });
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     // Basic validation
     if (
       !formData.full_name ||
       !formData.email ||
-      !formData.phone ||
+      !formData.phone_number ||
       !formData.whatsapp_number ||
-      !formData.position_title
+      !formData.position_applied_for
     ) {
       setPopupMessage("Please fill all required fields.");
       setPopupType("error");
+      setIsSubmitting(false);
       setTimeout(() => {
         setPopupMessage(null);
         setPopupType(null);
@@ -95,9 +100,10 @@ export default function JobApplicationForm() {
       return;
     }
 
-    if (!formData.resume) {
+    if (!formData.resume_pdf) {
       setPopupMessage("Please upload a resume.");
       setPopupType("error");
+      setIsSubmitting(false);
       setTimeout(() => {
         setPopupMessage(null);
         setPopupType(null);
@@ -105,11 +111,25 @@ export default function JobApplicationForm() {
       return;
     }
 
-    // Validate phone and WhatsApp number format (basic regex for digits, allowing +, -, and spaces)
+    // Validate phone and WhatsApp number format
     const phoneRegex = /^\+?[\d\s-]{10,}$/;
-    if (!phoneRegex.test(formData.phone) || !phoneRegex.test(formData.whatsapp_number)) {
+    if (!phoneRegex.test(formData.phone_number) || !phoneRegex.test(formData.whatsapp_number)) {
       setPopupMessage("Please enter valid phone and WhatsApp numbers.");
       setPopupType("error");
+      setIsSubmitting(false);
+      setTimeout(() => {
+        setPopupMessage(null);
+        setPopupType(null);
+      }, 3000);
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setPopupMessage("Please enter a valid email address.");
+      setPopupType("error");
+      setIsSubmitting(false);
       setTimeout(() => {
         setPopupMessage(null);
         setPopupType(null);
@@ -118,30 +138,36 @@ export default function JobApplicationForm() {
     }
 
     try {
-      // Placeholder for API call to submit the application
-      const response = await fetch("/api/submit_job_application", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      // Prepare mutation variables
+      const variables = {
+        full_name: formData.full_name,
+        email: formData.email,
+        phone_number: formData.phone_number,
+        whatsapp_number: formData.whatsapp_number,
+        position_applied_for: formData.position_applied_for,
+        cover_letter: formData.cover_letter || "", // Optional field
+        resume_pdf: formData.resume_pdf,
+      };
 
-      const data = await response.json();
-      if (data.success) {
-        setPopupMessage("Application submitted successfully!");
+      // Execute mutation
+      const response = await executeMutation(CREATE_JOB_APPLICATION_MUTATION, variables);
+
+      if (response?.applyForJob?.success_msg) {
+        setPopupMessage(response.applyForJob.success_msg);
         setPopupType("success");
         setFormData(initialFormData);
         if (fileInputRef.current) fileInputRef.current.value = "";
       } else {
-        setPopupMessage(data.error || "Failed to submit application.");
+        setPopupMessage(response?.applyForJob?.error_msg || "Failed to submit application.");
         setPopupType("error");
       }
     } catch (error) {
+      console.error("Error submitting application:", error);
       setPopupMessage("Error submitting application.");
       setPopupType("error");
     }
 
+    setIsSubmitting(false);
     setTimeout(() => {
       setPopupMessage(null);
       setPopupType(null);
@@ -213,8 +239,8 @@ export default function JobApplicationForm() {
               </label>
               <input
                 type="tel"
-                name="phone"
-                value={formData.phone}
+                name="phone_number"
+                value={formData.phone_number}
                 onChange={handleChange}
                 className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
                 required
@@ -242,8 +268,8 @@ export default function JobApplicationForm() {
               Position Applying For <span className="text-red-500">*</span>
             </label>
             <select
-              name="position_title"
-              value={formData.position_title}
+              name="position_applied_for"
+              value={formData.position_applied_for}
               onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
               required
@@ -284,10 +310,10 @@ export default function JobApplicationForm() {
                 onChange={handleFileChange}
               />
             </label>
-            {formData.resume && (
+            {formData.resume_pdf && (
               <div className="mt-2 flex items-center gap-2">
                 <a
-                  href={formData.resume}
+                  href={formData.resume_pdf}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 underline flex items-center gap-1"
@@ -308,9 +334,12 @@ export default function JobApplicationForm() {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="w-auto bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-6 rounded-md shadow-md hover:from-blue-600 hover:to-blue-700 font-semibold transition-all"
+              disabled={isSubmitting}
+              className={`w-auto bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-6 rounded-md shadow-md hover:from-blue-600 hover:to-blue-700 font-semibold transition-all ${
+                isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
-              Submit Application
+              {isSubmitting ? "Submitting..." : "Submit Application"}
             </button>
           </div>
         </form>
