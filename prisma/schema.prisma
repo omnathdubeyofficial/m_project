@@ -774,3 +774,65 @@ model faculty_members {
   utime          String? @db.VarChar(100)
   profile_image  String? @db.VarChar(255)
 }
+
+model nursery_admissions {
+  z_id                                    String  @id @db.VarChar(100)
+  student_id                              String? @db.VarChar(200)
+  first_name                              String? @db.VarChar(200)
+  middle_name                             String? @db.VarChar(200)
+  last_name                               String? @db.VarChar(200)
+  gender                                  String? @db.VarChar(200)
+  date_of_birth                           String? @db.VarChar(200)
+  blood_group                             String? @db.VarChar(200)
+  adhar_no                                String? @db.VarChar(200)
+  category                                String? @db.VarChar(200)
+  mother_tangue                           String? @db.VarChar(200)
+  father_full_name                        String? @db.Text
+  mother_full_name                        String? @db.Text
+  father_work                             String? @db.VarChar(200)
+  mother_work                             String? @db.VarChar(200)
+  guardian_whatsapp_number                String? @db.VarChar(200)
+  guardian_mobile_number                  String? @db.VarChar(200)
+  guardian_email_id                       String? @db.VarChar(200)
+  guardian_religion                       String? @db.VarChar(200)
+  guardian_annual_income                  String? @db.VarChar(200)
+  permanent_address                       String? @db.Text
+  permanent_address_nearest_policestation String? @db.Text
+  permanent_address_nearest_landmark      String? @db.Text
+  permanent_address_state                 String? @db.Text
+  permanent_address_district              String? @db.Text
+  permanent_address_tehsil                String? @db.Text
+  permanent_address_post_office           String? @db.Text
+  permanent_address_pincode               String? @db.Text
+  permanent_address_type                  String? @db.Text
+  nationality                             String? @db.VarChar(200)
+  current_address                         String? @db.Text
+  current_address_nearest_policestation   String? @db.Text
+  current_address_nearest_landmark        String? @db.Text
+  current_address_state                   String? @db.Text
+  current_address_district                String? @db.Text
+  current_address_tehsil                  String? @db.Text
+  current_address_post_office             String? @db.Text
+  current_address_pincode                 String? @db.Text
+  current_address_type                    String? @db.Text
+  country                                 String? @db.VarChar(200)
+  student_profile_image                   String? @db.Text
+  student_aadhar_front                    String? @db.Text
+  student_aadhar_back                     String? @db.Text
+  father_aadhar_front                     String? @db.Text
+  father_aadhar_back                      String? @db.Text
+  mother_aadhar_front                     String? @db.Text
+  mother_aadhar_back                      String? @db.Text
+  student_birth_certificate               String? @db.Text
+  payment_id                              String? @db.VarChar(500)
+  payment_status                          String? @db.VarChar(500)
+  payment_transaction_id                  String? @db.VarChar(500)
+  payment_date                            String? @db.VarChar(500)
+  total_fees                              String? @db.VarChar(500)
+  paid_amount                             String? @db.VarChar(500)
+  payment_method                          String? @db.VarChar(500)
+  cdate                                   String? @db.VarChar(500)
+  ctime                                   String? @db.VarChar(500)
+  udate                                   String? @db.VarChar(500)
+  utime                                   String? @db.VarChar(500)
+}
