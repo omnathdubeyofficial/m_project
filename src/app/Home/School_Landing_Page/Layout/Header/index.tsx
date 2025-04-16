@@ -49,7 +49,7 @@ const navData = [
       { name: "School Brochure", href: "/admissions/enquiry" },
     ],
   },
-  { name: "Career", href: "/career" },
+  { name: "Career", href: "/Home/School_Landing_Page/CareerPage" },
 ];
 
 const SchoolHeader: React.FC = () => {
