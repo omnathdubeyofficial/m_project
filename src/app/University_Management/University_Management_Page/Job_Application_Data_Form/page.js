@@ -8,7 +8,7 @@ import { CREATE_JOB_APPLICATION_MUTATION } from "../../../mutation/JobApplicatio
 import { UPDATE_JOB_APPLICATION_MUTATION } from "../../../mutation/JobApplicationMutation/updateJobApplication";
 import { DELETE_JOB_APPLICATION_MUTATION } from "../../../mutation/JobApplicationMutation/deleteJobApplication";
 import { GET_JOB_APPLICATIONS_DATA } from "../../../query/JobApplicationsQuery/getJobApplicationQuery";
-
+import Panel_Header from '../../../dashboard/panel_header';
 export default function JobApplicationForm() {
   const initialFormData = {
     z_id: null,
@@ -312,6 +312,7 @@ export default function JobApplicationForm() {
 
   return (
     <div className="mt-20 py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Panel_Header/>
       {/* Popup Message */}
       {popupMessage && (
         <div

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 const links = [
-  { name: 'Teaching Positions', href: '/School_Landing_Page/Our_Faculty' },
+  // { name: 'Teaching Positions', href: '/School_Landing_Page/Our_Faculty' },
   { name: 'Career', href: '/Home/School_Landing_Page/CareerPage' },
   { name: 'Our Mission', href: '/Home/School_Landing_Page/OurMission' },
   { name: 'Meet Our Faculty', href: '/Home/School_Landing_Page/Our_Faculty' },

@@ -8,6 +8,7 @@ import { CREATE_SCHOOL_CAREER_MUTATION } from "../../mutation/schoolCareersMutat
 import { UPDATE_SCHOOL_CAREER_MUTATION } from "../../mutation/schoolCareersMutation/updateSchoolCareers";
 import { DELETE_SCHOOL_CAREER_MUTATION } from "../../mutation/schoolCareersMutation/deleteSchoolCareers";
 import { GET_SCHOOL_CAREER_DATA } from "../../query/schoolCareersQuery/schoolCareersquery";
+import Panel_Header from '../../dashboard/panel_header';
 
 export default function CareerForm() {
   const initialFormData = {
@@ -233,6 +234,7 @@ export default function CareerForm() {
 
   return (
     <div className="mt-20 py-24 max-w-7xl mx-auto px-4">
+      <Panel_Header/>
       {/* Popup Message with Animation */}
       {popupMessage && (
         <div

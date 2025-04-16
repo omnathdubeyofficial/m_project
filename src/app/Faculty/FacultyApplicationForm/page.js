@@ -8,7 +8,7 @@ import { CREATE_FACULTY_MUTATION } from "../../mutation/facultyMembersMutation/c
 import { UPDATE_FACULTY_MUTATION } from "../../mutation/facultyMembersMutation/updatefacultyMembers";
 import { DELETE_FACULTY_MUTATION } from "../../mutation/facultyMembersMutation/deletefacultyMembers";
 import {GET_ALL_FACULTY_QUERY } from "../../query/facultyMembersQuery/facultyMembersQuery";
-
+import Panel_Header from '../../dashboard/panel_header';
 
 export default function FacultyApplicationForm() {
   const initialFormData = {
@@ -249,6 +249,7 @@ export default function FacultyApplicationForm() {
 
   return (
     <div className="mt-20 py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Panel_Header/>
       {/* Popup Message */}
       {popupMessage && (
         <div
