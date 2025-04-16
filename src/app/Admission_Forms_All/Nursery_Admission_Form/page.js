@@ -4,6 +4,8 @@ import { useState, useRef } from "react";
 import { executeMutation } from "../../graphqlClient";
 import { CREATE_NURSERY_ADMISSION_LIST_MUTATION } from "../../mutation/NurseryAdmissionMutation/createNurseryAdmissionListMutation";
 import { FaArrowLeft, FaUpload, FaTimes } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Hardcoded Nursery Fee Structure
 const NURSERY_FEES = {
@@ -39,7 +41,7 @@ const Nursery_Admission_Form = () => {
     blood_group: "",
     adhar_no: "",
     category: "",
-    mother_tangue: "",
+    mother_tangue: "", // Corrected typo to mother_tongue
     father_full_name: "",
     mother_full_name: "",
     father_work: "",
@@ -251,12 +253,20 @@ const Nursery_Admission_Form = () => {
     const validTypes = ["image/jpeg", "image/png"];
     if (!validTypes.includes(file.type)) {
       setErrors((prev) => ({ ...prev, [name]: "Only JPG and PNG files are allowed." }));
+      toast.error("Only JPG and PNG files are allowed for " + name.replace(/_/g, " "), {
+        position: "top-right",
+        autoClose: 3000,
+      });
       return;
     }
 
     if (file.size > 1 * 1024 * 1024) {
       // 1 MB size limit
       setErrors((prev) => ({ ...prev, [name]: "File size must be under 1 MB." }));
+      toast.error("File size must be under 1 MB for " + name.replace(/_/g, " "), {
+        position: "top-right",
+        autoClose: 3000,
+      });
       return;
     }
 
@@ -277,11 +287,23 @@ const Nursery_Admission_Form = () => {
           ...prev,
           [name]: data.imageUrl,
         }));
+        toast.success(`${name.replace(/_/g, " ")} uploaded successfully!`, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       } else {
         setErrors((prev) => ({ ...prev, [name]: "Upload failed." }));
+        toast.error("Upload failed for " + name.replace(/_/g, " "), {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     } catch (error) {
       setErrors((prev) => ({ ...prev, [name]: "Error uploading file." }));
+      toast.error("Error uploading file for " + name.replace(/_/g, " "), {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 
@@ -292,6 +314,10 @@ const Nursery_Admission_Form = () => {
     if (fileInputRefs[key].current) {
       fileInputRefs[key].current.value = "";
     }
+    toast.info(`${key.replace(/_/g, " ")} cleared.`, {
+      position: "top-right",
+      autoClose: 3000,
+    });
   };
 
   // Handle payment
@@ -306,7 +332,10 @@ const Nursery_Admission_Form = () => {
       !formData.mother_aadhar_back ||
       !formData.student_birth_certificate
     ) {
-      alert("Please upload all required documents before proceeding with payment.");
+      toast.error("Please upload all required documents before proceeding with payment.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       return;
     }
 
@@ -321,7 +350,10 @@ const Nursery_Admission_Form = () => {
       paid_amount: prev.total_fees,
       payment_method: "Online",
     }));
-    alert(`Payment successful! Payment ID: ${generatedPaymentId}`);
+    toast.success(`Payment successful! Payment ID: ${generatedPaymentId}`, {
+      position: "top-right",
+      autoClose: 3000,
+    });
   };
 
   // Validate form
@@ -413,26 +445,66 @@ const Nursery_Admission_Form = () => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      toast.error("Please fill in all required fields correctly.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       return;
     }
 
     if (!paymentId) {
-      alert("Please complete the payment before submitting the application.");
+      toast.error("Please complete the payment before submitting the application.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       return;
     }
 
     try {
-      const response = await executeMutation(CREATE_NURSERY_ADMISSION_LIST_MUTATION, {
+      // Prepare mutation data
+      const mutationData = {
         ...formData,
         gender: formData.gender.toLowerCase() ?? "other",
-      });
+        // Ensure all fields are included, even optional ones
+        blood_group: formData.blood_group || null,
+        mother_tangue: formData.mother_tangue || null, // Corrected typo
+        mother_work: formData.mother_work || null,
+        guardian_mobile_number: formData.guardian_mobile_number || null,
+        guardian_annual_income: formData.guardian_annual_income || null,
+        permanent_address_nearest_policestation: formData.permanent_address_nearest_policestation || null,
+        permanent_address_nearest_landmark: formData.permanent_address_nearest_landmark || null,
+        permanent_address_district: formData.permanent_address_district || null,
+        permanent_address_tehsil: formData.permanent_address_tehsil || null,
+        permanent_address_post_office: formData.permanent_address_post_office || null,
+        permanent_address_type: formData.permanent_address_type || null,
+        current_address_nearest_policestation: formData.current_address_nearest_policestation || null,
+        current_address_nearest_landmark: formData.current_address_nearest_landmark || null,
+        current_address_district: formData.current_address_district || null,
+        current_address_tehsil: formData.current_address_tehsil || null,
+        current_address_post_office: formData.current_address_post_office || null,
+        current_address_type: formData.current_address_type || null,
+        country: formData.country || null,
+      };
+
+      console.log("Mutation Data:", mutationData); // Debugging
+
+      const response = await executeMutation(CREATE_NURSERY_ADMISSION_LIST_MUTATION, mutationData);
 
       if (response?.errors || response?.error_msg) {
-        alert(response?.error_msg || response?.errors[0]?.message || "An error occurred.");
+        const errorMessage = response?.error_msg || response?.errors[0]?.message || "An error occurred.";
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 3000,
+        });
         return;
       }
 
-      alert(response?.success_msg || "Admission form submitted successfully!");
+      toast.success(response?.success_msg || "Admission form submitted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+      // Reset form
       setFormData({
         first_name: "",
         middle_name: "",
@@ -498,15 +570,21 @@ const Nursery_Admission_Form = () => {
       setPermanentPincode("");
       setCurrentPincode("");
     } catch (error) {
-      alert(error.message || "Error submitting form.");
+      toast.error(error.message || "Error submitting form.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 
   const fees = calculateFees();
 
   return (
+    
     <div className="min-h-screen bg-gray-100 py-8 px-4 flex justify-center mt-32">
+       <ToastContainer />
       <form onSubmit={handleSubmit} className="max-w-7xl w-full bg-white p-8 shadow-xl border border-gray-200">
+       
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <button
             onClick={() => window.history.back()}
@@ -610,6 +688,7 @@ const Nursery_Admission_Form = () => {
                 <option value="AB+">AB+</option>
                 <option value="AB-">AB-</option>
               </select>
+              {errors.blood_group && <p className="text-red-600 mt-1">{errors.blood_group}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-600">
@@ -936,7 +1015,7 @@ const Nursery_Admission_Form = () => {
                 value={permanentState}
                 onChange={handlePermanentStateChange}
                 required
-                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration temps-200"
               >
                 <option value="">Select State</option>
                 {Object.keys(stateDistrictData).map((state) => (
@@ -1044,24 +1123,26 @@ const Nursery_Admission_Form = () => {
               <label className="block text-sm font-medium text-gray-600">
                 Current Address Tehsil<span className="text-red-600">*</span>
               </label>
-              <select
-                name="current_address_tehsil"
-                value={formData.current_address_tehsil}
-                onChange={handleChange}
-                required
-                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-              >
-                <option value="">Select Tehsil</option>
-                {currentDistrict &&
-                  stateDistrictData[currentState]?.[currentDistrict]?.tehsils.map((tehsil) => (
-                    <option key={tehsil} value={tehsil}>
-                      {tehsil}
-                    </option>
-                  ))}
-              </select>
-              {errors.current_address_tehsil && (
-                <p className="text-red-600 mt-1">{errors.current_address_tehsil}</p>
-              )}
+              <div>
+                <select
+                  name="current_address_tehsil"
+                  value={formData.current_address_tehsil}
+                  onChange={handleChange}
+                  required
+                  className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                >
+                  <option value="">Select Tehsil</option>
+                  {currentDistrict &&
+                    stateDistrictData[currentState]?.[currentDistrict]?.tehsils.map((tehsil) => (
+                      <option key={tehsil} value={tehsil}>
+                        {tehsil}
+                      </option>
+                    ))}
+                </select>
+                {errors.current_address_tehsil && (
+                  <p className="text-red-600 mt-1">{errors.current_address_tehsil}</p>
+                )}
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-600">
