@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { executeMutation } from "../../graphqlClient";
 import { CREATE_NURSERY_ADMISSION_LIST_MUTATION } from "../../mutation/NurseryAdmissionMutation/createNurseryAdmissionListMutation";
-import { FaArrowLeft, FaUpload, FaTimes } from "react-icons/fa";
+import { FaArrowLeft, FaUpload, FaTimes, FaCopy } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
@@ -67,6 +67,8 @@ const Nursery_Admission_Form = () => {
   const [currentPostOffice, setCurrentPostOffice] = useState("");
   const [permanentPincode, setPermanentPincode] = useState("");
   const [currentPincode, setCurrentPincode] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [studentId, setStudentId] = useState("");
 
   const stateDistrictData = {
     "Uttar Pradesh": {
@@ -403,6 +405,10 @@ const Nursery_Admission_Form = () => {
         return;
       }
 
+      const studentIdFromResponse = response?.createNurseryAdmissionList?.student_id || "N/A";
+      setStudentId(studentIdFromResponse);
+      setShowPopup(true);
+
       toast.success(response?.success_msg || "Admission form submitted successfully!", {
         position: "top-right",
         autoClose: 3000,
@@ -470,6 +476,19 @@ const Nursery_Admission_Form = () => {
         autoClose: 3000,
       });
     }
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
+    setStudentId("");
+  };
+
+  const copyStudentId = () => {
+    navigator.clipboard.writeText(studentId);
+    toast.success("Student ID copied successfully!", {
+      position: "top-right",
+      autoClose: 2000,
+    });
   };
 
   return (
@@ -1256,6 +1275,45 @@ const Nursery_Admission_Form = () => {
           </p>
         </div>
       </form>
+
+      {showPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 transition-opacity duration-300">
+          <div className="bg-white p-8 rounded-xl shadow-2xl max-w-lg w-full text-center transform scale-95 animate-pop-in">
+            <div className="flex justify-center mb-4">
+              <svg className="w-16 h-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">Congratulations!</h2>
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <p className="text-lg font-semibold text-gray-700">Student ID: {studentId}</p>
+              <button
+                onClick={copyStudentId}
+                className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors duration-200"
+                title="Copy Student ID"
+              >
+                <FaCopy className="text-gray-600" />
+              </button>
+            </div>
+            <p className="text-gray-600 mb-8">
+              Your online admission registration has been successfully completed. For the next step, please proceed to make the admission payment.
+            </p>
+            <div className="flex justify-center gap-4">
+              <Link href="/Admission_Forms_All/Admission_payment">
+                <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2 px-6 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
+                  Proceed to Admission Payment
+                </button>
+              </Link>
+              <button
+                onClick={closePopup}
+                className="bg-gray-200 text-gray-700 py-2 px-6 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-300"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
