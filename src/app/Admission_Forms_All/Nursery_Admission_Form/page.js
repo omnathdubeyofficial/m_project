@@ -6,30 +6,7 @@ import { CREATE_NURSERY_ADMISSION_LIST_MUTATION } from "../../mutation/NurseryAd
 import { FaArrowLeft, FaUpload, FaTimes } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// Hardcoded Nursery Fee Structure
-const NURSERY_FEES = {
-  tuition: 10000,
-  admission: 5000,
-  uniform: 2000,
-  books: 1500,
-  gstPercentage: 18,
-};
-
-// Calculate total and GST
-const calculateFees = () => {
-  const subtotal = NURSERY_FEES.tuition + NURSERY_FEES.admission + NURSERY_FEES.uniform + NURSERY_FEES.books;
-  const gst = (subtotal * NURSERY_FEES.gstPercentage) / 100;
-  const grandTotal = subtotal + gst;
-  return {
-    tuition: NURSERY_FEES.tuition,
-    admission: NURSERY_FEES.admission,
-    uniform: NURSERY_FEES.uniform,
-    books: NURSERY_FEES.books,
-    gst,
-    grandTotal,
-  };
-};
+import Link from "next/link";
 
 const Nursery_Admission_Form = () => {
   const [formData, setFormData] = useState({
@@ -41,7 +18,7 @@ const Nursery_Admission_Form = () => {
     blood_group: "",
     adhar_no: "",
     category: "",
-    mother_tangue: "", // Corrected typo to mother_tongue
+    mother_tangue: "",
     father_full_name: "",
     mother_full_name: "",
     father_work: "",
@@ -79,16 +56,8 @@ const Nursery_Admission_Form = () => {
     mother_aadhar_front: "",
     mother_aadhar_back: "",
     student_birth_certificate: "",
-    payment_id: "",
-    payment_status: "",
-    payment_transaction_id: "",
-    payment_date: "",
-    total_fees: String(calculateFees().grandTotal),
-    paid_amount: "",
-    payment_method: "",
   });
 
-  const [paymentId, setPaymentId] = useState(null);
   const [errors, setErrors] = useState({});
   const [permanentState, setPermanentState] = useState("");
   const [currentState, setCurrentState] = useState("");
@@ -99,7 +68,6 @@ const Nursery_Admission_Form = () => {
   const [permanentPincode, setPermanentPincode] = useState("");
   const [currentPincode, setCurrentPincode] = useState("");
 
-  // Sample data with Pincode mapping
   const stateDistrictData = {
     "Uttar Pradesh": {
       Lucknow: {
@@ -139,7 +107,6 @@ const Nursery_Admission_Form = () => {
     },
   };
 
-  // File input refs
   const fileInputRefs = {
     student_profile_image: useRef(null),
     student_aadhar_front: useRef(null),
@@ -151,7 +118,6 @@ const Nursery_Admission_Form = () => {
     student_birth_certificate: useRef(null),
   };
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -160,7 +126,6 @@ const Nursery_Admission_Form = () => {
     }));
   };
 
-  // Handle state changes
   const handlePermanentStateChange = (e) => {
     const state = e.target.value;
     setPermanentState(state);
@@ -191,7 +156,6 @@ const Nursery_Admission_Form = () => {
     }));
   };
 
-  // Handle district changes
   const handlePermanentDistrictChange = (e) => {
     const district = e.target.value;
     setPermanentDistrict(district);
@@ -218,7 +182,6 @@ const Nursery_Admission_Form = () => {
     }));
   };
 
-  // Handle post office changes
   const handlePermanentPostOfficeChange = (e) => {
     const postOffice = e.target.value;
     setPermanentPostOffice(postOffice);
@@ -243,13 +206,11 @@ const Nursery_Admission_Form = () => {
     }));
   };
 
-  // Handle file uploads
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     const { name } = e.target;
     if (!file) return;
 
-    // File validation
     const validTypes = ["image/jpeg", "image/png"];
     if (!validTypes.includes(file.type)) {
       setErrors((prev) => ({ ...prev, [name]: "Only JPG and PNG files are allowed." }));
@@ -261,7 +222,6 @@ const Nursery_Admission_Form = () => {
     }
 
     if (file.size > 1 * 1024 * 1024) {
-      // 1 MB size limit
       setErrors((prev) => ({ ...prev, [name]: "File size must be under 1 MB." }));
       toast.error("File size must be under 1 MB for " + name.replace(/_/g, " "), {
         position: "top-right",
@@ -307,7 +267,6 @@ const Nursery_Admission_Form = () => {
     }
   };
 
-  // Clear uploaded file
   const handleClearFile = (key) => {
     setFormData((prev) => ({ ...prev, [key]: "" }));
     setErrors((prev) => ({ ...prev, [key]: null }));
@@ -320,43 +279,6 @@ const Nursery_Admission_Form = () => {
     });
   };
 
-  // Handle payment
-  const handlePayNow = () => {
-    if (
-      !formData.student_profile_image ||
-      !formData.student_aadhar_front ||
-      !formData.student_aadhar_back ||
-      !formData.father_aadhar_front ||
-      !formData.father_aadhar_back ||
-      !formData.mother_aadhar_front ||
-      !formData.mother_aadhar_back ||
-      !formData.student_birth_certificate
-    ) {
-      toast.error("Please upload all required documents before proceeding with payment.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      return;
-    }
-
-    const generatedPaymentId = `PAY${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
-    setPaymentId(generatedPaymentId);
-    setFormData((prev) => ({
-      ...prev,
-      payment_id: generatedPaymentId,
-      payment_status: "Completed",
-      payment_transaction_id: `TXN${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
-      payment_date: new Date().toISOString().split("T")[0],
-      paid_amount: prev.total_fees,
-      payment_method: "Online",
-    }));
-    toast.success(`Payment successful! Payment ID: ${generatedPaymentId}`, {
-      position: "top-right",
-      autoClose: 3000,
-    });
-  };
-
-  // Validate form
   const validateForm = () => {
     const newErrors = {};
     const requiredFields = [
@@ -404,13 +326,6 @@ const Nursery_Admission_Form = () => {
       "mother_aadhar_front",
       "mother_aadhar_back",
       "student_birth_certificate",
-      "payment_id",
-      "payment_status",
-      "payment_transaction_id",
-      "payment_date",
-      "total_fees",
-      "paid_amount",
-      "payment_method",
     ];
 
     requiredFields.forEach((field) => {
@@ -438,7 +353,6 @@ const Nursery_Admission_Form = () => {
     return newErrors;
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateForm();
@@ -452,22 +366,12 @@ const Nursery_Admission_Form = () => {
       return;
     }
 
-    if (!paymentId) {
-      toast.error("Please complete the payment before submitting the application.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      return;
-    }
-
     try {
-      // Prepare mutation data
       const mutationData = {
         ...formData,
         gender: formData.gender.toLowerCase() ?? "other",
-        // Ensure all fields are included, even optional ones
         blood_group: formData.blood_group || null,
-        mother_tangue: formData.mother_tangue || null, // Corrected typo
+        mother_tangue: formData.mother_tangue || null,
         mother_work: formData.mother_work || null,
         guardian_mobile_number: formData.guardian_mobile_number || null,
         guardian_annual_income: formData.guardian_annual_income || null,
@@ -486,7 +390,7 @@ const Nursery_Admission_Form = () => {
         country: formData.country || null,
       };
 
-      console.log("Mutation Data:", mutationData); // Debugging
+      console.log("Mutation Data:", mutationData);
 
       const response = await executeMutation(CREATE_NURSERY_ADMISSION_LIST_MUTATION, mutationData);
 
@@ -504,7 +408,6 @@ const Nursery_Admission_Form = () => {
         autoClose: 3000,
       });
 
-      // Reset form
       setFormData({
         first_name: "",
         middle_name: "",
@@ -552,15 +455,7 @@ const Nursery_Admission_Form = () => {
         mother_aadhar_front: "",
         mother_aadhar_back: "",
         student_birth_certificate: "",
-        payment_id: "",
-        payment_status: "",
-        payment_transaction_id: "",
-        payment_date: "",
-        total_fees: String(calculateFees().grandTotal),
-        paid_amount: "",
-        payment_method: "",
       });
-      setPaymentId(null);
       setPermanentState("");
       setCurrentState("");
       setPermanentDistrict("");
@@ -577,14 +472,10 @@ const Nursery_Admission_Form = () => {
     }
   };
 
-  const fees = calculateFees();
-
   return (
-    
     <div className="min-h-screen bg-gray-100 py-8 px-4 flex justify-center mt-32">
-       <ToastContainer />
+      <ToastContainer />
       <form onSubmit={handleSubmit} className="max-w-7xl w-full bg-white p-8 shadow-xl border border-gray-200">
-       
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <button
             onClick={() => window.history.back()}
@@ -596,7 +487,6 @@ const Nursery_Admission_Form = () => {
           <h1 className="text-2xl">Nursery Admission Form</h1>
         </div>
 
-        {/* Personal Information Section */}
         <div className="mb-8 mt-10">
           <h2 className="text-2xl font-semibold text-gray-700 mb-6">Child's Personal Information</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -752,7 +642,6 @@ const Nursery_Admission_Form = () => {
           </div>
         </div>
 
-        {/* Parent/Guardian Information Section */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">Parent/Guardian Information</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -912,7 +801,6 @@ const Nursery_Admission_Form = () => {
           </div>
         </div>
 
-        {/* Address Information Section */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">Address Information</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -1015,7 +903,7 @@ const Nursery_Admission_Form = () => {
                 value={permanentState}
                 onChange={handlePermanentStateChange}
                 required
-                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration temps-200"
+                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
               >
                 <option value="">Select State</option>
                 {Object.keys(stateDistrictData).map((state) => (
@@ -1123,26 +1011,24 @@ const Nursery_Admission_Form = () => {
               <label className="block text-sm font-medium text-gray-600">
                 Current Address Tehsil<span className="text-red-600">*</span>
               </label>
-              <div>
-                <select
-                  name="current_address_tehsil"
-                  value={formData.current_address_tehsil}
-                  onChange={handleChange}
-                  required
-                  className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                >
-                  <option value="">Select Tehsil</option>
-                  {currentDistrict &&
-                    stateDistrictData[currentState]?.[currentDistrict]?.tehsils.map((tehsil) => (
-                      <option key={tehsil} value={tehsil}>
-                        {tehsil}
-                      </option>
-                    ))}
-                </select>
-                {errors.current_address_tehsil && (
-                  <p className="text-red-600 mt-1">{errors.current_address_tehsil}</p>
-                )}
-              </div>
+              <select
+                name="current_address_tehsil"
+                value={formData.current_address_tehsil}
+                onChange={handleChange}
+                required
+                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+              >
+                <option value="">Select Tehsil</option>
+                {currentDistrict &&
+                  stateDistrictData[currentState]?.[currentDistrict]?.tehsils.map((tehsil) => (
+                    <option key={tehsil} value={tehsil}>
+                      {tehsil}
+                    </option>
+                  ))}
+              </select>
+              {errors.current_address_tehsil && (
+                <p className="text-red-600 mt-1">{errors.current_address_tehsil}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-600">
@@ -1307,7 +1193,6 @@ const Nursery_Admission_Form = () => {
           </div>
         </div>
 
-        {/* Upload Documents Section */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-gray-700 mb-6">Upload Documents</h2>
           <p className="text-red-600 font-semibold mb-4">
@@ -1355,41 +1240,20 @@ const Nursery_Admission_Form = () => {
           </div>
         </div>
 
-        {/* Admission Fee Payment Section */}
-        <div className="col-span-full mt-6 border p-6">
-          <h2 className="text-2xl md:text-3xl mb-5 text-left text-gray-700">Admission Fee Payment</h2>
-          <div className="border p-6 bg-gray-50">
-            {["Tuition", "Admission", "Uniform", "Books"].map((item, index) => (
-              <div key={index} className="flex justify-between mb-2 text-lg">
-                <span>{item} Fee</span>
-                <span>₹{fees[item.toLowerCase()]}</span>
-              </div>
-            ))}
-            <div className="flex justify-between mb-2 text-lg">
-              <span>GST ({NURSERY_FEES.gstPercentage}%)</span>
-              <span>₹{fees.gst}</span>
-            </div>
-            <div className="border-t border-dashed border-gray-400 my-4"></div>
-            <div className="flex justify-between text-2xl font-bold text-green-600">
-              <span>Grand Total</span>
-              <span>₹{fees.grandTotal}</span>
-            </div>
-          </div>
-          <div className="flex flex-col items-center">
-            <button
-              type="button"
-              className="mt-6 w-full md:w-1/3 bg-green-500 text-white py-2 rounded-md shadow-lg text-base hover:bg-green-600 transition duration-200"
-              onClick={handlePayNow}
-            >
-              Pay Now
-            </button>
-            <button
-              type="submit"
-              className="mt-4 w-full md:w-1/3 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-            >
-              Submit
-            </button>
-          </div>
+        <div className="flex flex-col items-center">
+          <button
+            type="submit"
+            className="mt-4 w-full md:w-1/3 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+          >
+            Submit
+          </button>
+          <p className="mt-4 text-gray-600">
+            If registration is complete, click{" "}
+            <Link href="/admission_payment" className="text-blue-600 hover:underline">
+              here
+            </Link>{" "}
+            for admission payment.
+          </p>
         </div>
       </form>
     </div>
