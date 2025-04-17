@@ -1249,7 +1249,7 @@ const Nursery_Admission_Form = () => {
           </button>
           <p className="mt-4 text-gray-600">
             If registration is complete, click{" "}
-            <Link href="/admission_payment" className="text-blue-600 hover:underline">
+            <Link href="/Admission_Forms_All/Admission_payment" className="text-blue-600 hover:underline">
               here
             </Link>{" "}
             for admission payment.
