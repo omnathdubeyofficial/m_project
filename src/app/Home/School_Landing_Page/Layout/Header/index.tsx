@@ -7,50 +7,96 @@ import Image from "next/image";
 
 // Navigation data with dropdown support
 const navData = [
-  { name: "Home", href: "/" },
-  {
-    name: "About Us",
-    href: "/about",
-    dropdown: [
-      { name: "Why Arise", href: "/Home/School_Landing_Page/Why_Arise" },
-      { name: "President", href: "/Home/School_Landing_Page/President" },
-      { name: "Secretory", href: "/Home/School_Landing_Page/Secretory" },
-      { name: "Voice President", href: "/Home/School_Landing_Page/Voice_President" },
-      { name: "Managing Director", href: "/Home/School_Landing_Page/Managing_Director" },
-      { name: "Director Principal", href: "/Home/School_Landing_Page/Director_Principal" },
-      { name: "Our Institution", href: "/Home/School_Landing_Page/Our_Institution" },
-      { name: "Media Coverage", href: "/Home/School_Landing_Page/Media_Coverage" },
-      { name: "Arise Team", href: "/Home/School_Landing_Page/Arise_Team" },
-    ],
-  },
-  {
-    name: "Academics",
-    href: "/academics",
-    dropdown: [
-      { name: "Curriculum", href: "/academics/curriculum" },
-      { name: "Faculty", href: "/academics/faculty" },
-      { name: "Achievements", href: "/academics/achievements" },
-      { name: "Learning Resources", href: "/academics/achievements" },
-      { name: "Infrastructure", href: "/academics/achievements" },
-    ],
-  },
-  { name: "Parents Corner", href: "/parents" },
-  { name: "Students Corner", href: "/parents" },
-  { name: "Infrastructure", href: "/infrastructure" },
-  {
-    name: "Admissions",
-    href: "/admissions",
-    dropdown: [
-      { name: "Admission Process", href: "/admissions/process" },
-      { name: "Fee Structure", href: "/admissions/fees" },
-      { name: "Admission Enquiry", href: "/admissions/enquiry" },
-      { name: "Apply For Admission", href: "/admissions/enquiry" },
-      { name: "Schedule for School Visit", href: "/admissions/enquiry" },
-      { name: "School Brochure", href: "/admissions/enquiry" },
-    ],
-  },
-  { name: "Career", href: "/Home/School_Landing_Page/CareerPage" },
-];
+
+    { name: "Home", href: "/" },
+  
+    {
+      name: "About Us",
+      href: "/about",
+      dropdown: [
+        { name: "Why Arise", href: "/Home/School_Landing_Page/Why_Arise" },
+        { name: "President", href: "/Home/School_Landing_Page/President" },
+        { name: "Secretary", href: "/Home/School_Landing_Page/Secretory" },
+        { name: "Vice President", href: "/Home/School_Landing_Page/Voice_President" },
+        { name: "Managing Director", href: "/Home/School_Landing_Page/Managing_Director" },
+        { name: "Director Principal", href: "/Home/School_Landing_Page/Director_Principal" },
+        { name: "Our Institution", href: "/Home/School_Landing_Page/Our_Institution" },
+        { name: "Arise Team", href: "/Home/School_Landing_Page/Arise_Team" },
+        { name: "Media Coverage", href: "/Home/School_Landing_Page/Media_Coverage" },
+      ],
+    },
+  
+    {
+      name: "Academics",
+      href: "/academics",
+      dropdown: [
+        { name: "Curriculum", href: "/Home/School_Landing_Page/Curriculum" },
+        { name: "Faculty", href: "/Home/School_Landing_Page/Our_Faculty" },
+        { name: "Achievements", href: "/Home/School_Landing_Page/Achievements" },
+        { name: "Learning Resources", href: "/Home/School_Landing_Page/Learning_Resources" },
+        { name: "Infrastructure", href: "/Home/School_Landing_Page/Infrastructure" },
+      ],
+    },
+  
+    {
+      name: "Sports & Co-Curricular",
+      href: "/Sports_And_CoCurricular",
+      dropdown: [
+        { name: "Sports Curriculum", href: "/Home/School_Landing_Page/Sports_Curriculum" },
+        { name: "Yoga & Wellness", href: "/Home/School_Landing_Page/Yoga_Wellness" },
+        { name: "Art & Craft", href: "/Home/School_Landing_Page/Art_And_Craft" },
+        { name: "Dance & Music", href: "/Home/School_Landing_Page/Dance_Music" },
+        { name: "Science Labs", href: "/Home/School_Landing_Page/Science_Labs" },
+        { name: "Robotics & STEM", href: "/Home/School_Landing_Page/Robotics_And_STEM" },
+        { name: "Innovation Hub", href: "/Home/School_Landing_Page/Innovation_Hub" },
+      ],
+    },
+  
+    {
+      name: "Media Gallery",
+      href: "/Media_Gallery",
+      dropdown: [
+        { name: "Photo Gallery", href: "/Home/School_Landing_Page/Photo_Gallery" },
+        { name: "Video Gallery", href: "/Home/School_Landing_Page/Video_Gallery" },
+        { name: "Annual Day Highlights", href: "/Home/School_Landing_Page/Annual_Day_Highlights" },
+        { name: "Sports Day Moments", href: "/Home/School_Landing_Page/Sports_Day_Moments" },
+        { name: "Science Exhibition", href: "/Home/School_Landing_Page/Science_Exhibition" },
+        { name: "Student Achievements", href: "/Home/School_Landing_Page/Student_Achievements" },
+        { name: "Cultural Events", href: "/Home/School_Landing_Page/Cultural_Events" },
+      ],
+    },
+  
+    {
+      name: "Admissions",
+      href: "/admissions",
+      dropdown: [
+        { name: "Admission Process", href: "/Home/School_Landing_Page/Admission_Process" },
+        { name: "Fee Structure", href: "/Home/School_Landing_Page/Fee_Structure" },
+        { name: "Admission Enquiry", href: "/Home/School_Landing_Page/Admission_Enquiry" },
+        { name: "Apply For Admission", href: "/Home/School_Landing_Page/Apply_For_Admission" },
+        { name: "Schedule for School Visit", href: "/Home/School_Landing_Page/Schedule_for_School_Visit" },
+        { name: "School Brochure", href: "/Home/School_Landing_Page/School_Brochure" },
+        { name: "Eligibility Criteria", href: "/Home/School_Landing_Page/Eligibility_Criteria" },
+        { name: "Scholarships & Discounts", href: "/Home/School_Landing_Page/Scholarships_And_Discounts" },
+        { name: "Admission FAQs", href: "/Home/School_Landing_Page/Admission_FAQ" },
+      ],
+    },
+  
+    {
+      name: "Student Life",
+      href: "/student_life",
+      dropdown: [
+        { name: "Daily Routine", href: "/Home/School_Landing_Page/Daily_Routine" },
+        { name: "Meal Plan", href: "/Home/School_Landing_Page/Meal_Plan" },
+        { name: "Clubs & Activities", href: "/Home/School_Landing_Page/Clubs_Activities" },
+        { name: "Student Council", href: "/Home/School_Landing_Page/Student_Council" },
+      ],
+    },
+  
+
+  
+
+]
 
 const SchoolHeader: React.FC = () => {
   const router = useRouter();
@@ -215,7 +261,7 @@ const SchoolHeader: React.FC = () => {
                   <>
                     <button
                       onClick={() => toggleDropdown(item.name)}
-                      className={`text-gray-800 hover:text-[#8B0000] font-medium py-1 px-2 text-sm transition-all duration-300 flex items-center gap-1 border-b-2 ${
+                      className={`text-gray-800 hover:text-[#8B0000]  font-medium py-1 px-2 text-sm transition-all duration-300 flex items-center gap-1 border-b-2 ${
                         pathname === item.href
                           ? "border-[#8B0000]"
                           : "border-transparent"

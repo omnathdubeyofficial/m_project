@@ -1310,7 +1310,7 @@ const Nursery_Admission_Form = () => {
         {/* Upload Documents Section */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-gray-700 mb-6">Upload Documents</h2>
-          <p className="text-red-600 font-bold mb-4">
+          <p className="text-red-600 font-semibold mb-4">
             Note: Only JPG and PNG images under 1 MB are allowed. Please ensure the document is clear and readable.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
