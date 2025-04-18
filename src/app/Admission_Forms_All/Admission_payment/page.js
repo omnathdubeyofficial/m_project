@@ -339,7 +339,7 @@ const AdmissionPayment = () => {
           transition={{ delay: 0.2, duration: 0.5 }}
           className="mb-12"
         >
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Fetch Student Details</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Fetch Student Details & Pay Admission Fee</h2>
           <form onSubmit={handleFetchStudent} className="flex flex-col sm:flex-row gap-4 items-start sm:items-end">
             <div className="w-full sm:w-1/2">
               <label htmlFor="studentId" className="block text-sm font-medium text-gray-700 mb-2">
