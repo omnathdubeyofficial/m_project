@@ -70,6 +70,8 @@ const Nursery_Admission_Form = () => {
   const [currentPincode, setCurrentPincode] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [studentId, setStudentId] = useState("");
+  const [popupMessage, setPopupMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(true);
 
   const stateDistrictData = {
     "Uttar Pradesh": {
@@ -300,7 +302,6 @@ const Nursery_Admission_Form = () => {
       "guardian_mobile_number",
       "guardian_email_id",
       "guardian_religion",
-      // "class_title",
       "guardian_annual_income",
       "permanent_address",
       "permanent_address_nearest_policestation",
@@ -399,8 +400,17 @@ const Nursery_Admission_Form = () => {
 
       const response = await executeMutation(CREATE_NURSERY_ADMISSION_LIST_MUTATION, mutationData);
 
-      if (response?.errors || response?.error_msg) {
-        const errorMessage = response?.error_msg || response?.errors[0]?.message || "An error occurred.";
+      // Debug: Log the full response to inspect the structure
+      console.log("Mutation Response:", JSON.stringify(response, null, 2));
+
+      if (response?.errors || response?.createNurseryAdmissionList?.error_msg) {
+        const errorMessage =
+          response?.createNurseryAdmissionList?.error_msg ||
+          response?.errors?.[0]?.message ||
+          "An error occurred.";
+        setPopupMessage(errorMessage);
+        setIsSuccess(false);
+        setShowPopup(true);
         toast.error(errorMessage, {
           position: "top-right",
           autoClose: 3000,
@@ -408,11 +418,27 @@ const Nursery_Admission_Form = () => {
         return;
       }
 
-      const studentIdFromResponse = response?.createNurseryAdmissionList?.student_id || "N/A";
+      const successMessage = response?.createNurseryAdmissionList?.success_msg || "Admission form submitted successfully!";
+      // Try alternative field names for student_id
+      const studentIdFromResponse =
+        response?.createNurseryAdmissionList?.student_id ||
+        response?.createNurseryAdmissionList?.studentId ||
+        response?.createNurseryAdmissionList?.id ||
+        "N/A";
+
+      // Warn if student_id is not found
+      if (studentIdFromResponse === "N/A") {
+        console.warn(
+          "Student ID is missing or null in the response. Checked fields: student_id, studentId, id. Please verify the GraphQL response structure."
+        );
+      }
+
       setStudentId(studentIdFromResponse);
+      setPopupMessage(successMessage);
+      setIsSuccess(true);
       setShowPopup(true);
 
-      toast.success(response?.success_msg || "Admission form submitted successfully!", {
+      toast.success(successMessage, {
         position: "top-right",
         autoClose: 3000,
       });
@@ -464,7 +490,7 @@ const Nursery_Admission_Form = () => {
         mother_aadhar_front: "",
         mother_aadhar_back: "",
         student_birth_certificate: "",
-        class_title: ""
+        class_title: "",
       });
       setPermanentState("");
       setCurrentState("");
@@ -475,7 +501,11 @@ const Nursery_Admission_Form = () => {
       setPermanentPincode("");
       setCurrentPincode("");
     } catch (error) {
-      toast.error(error.message || "Error submitting form.", {
+      const errorMessage = error.message || "Error submitting form.";
+      setPopupMessage(errorMessage);
+      setIsSuccess(false);
+      setShowPopup(true);
+      toast.error(errorMessage, {
         position: "top-right",
         autoClose: 3000,
       });
@@ -485,6 +515,8 @@ const Nursery_Admission_Form = () => {
   const closePopup = () => {
     setShowPopup(false);
     setStudentId("");
+    setPopupMessage("");
+    setIsSuccess(true);
   };
 
   const copyStudentId = () => {
@@ -1281,40 +1313,114 @@ const Nursery_Admission_Form = () => {
       </form>
 
       {showPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 transition-opacity duration-300">
-          <div className="bg-white p-8 rounded-xl shadow-2xl max-w-lg w-full text-center transform scale-95 animate-pop-in">
-            <div className="flex justify-center mb-4">
-              <svg className="w-16 h-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-            </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Congratulations!</h2>
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <p className="text-lg font-semibold text-gray-700">Student ID: {studentId}</p>
-              <button
-                onClick={copyStudentId}
-                className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors duration-200"
-                title="Copy Student ID"
-              >
-                <FaCopy className="text-gray-600" />
-              </button>
-            </div>
-            <p className="text-gray-600 mb-8">
-              Your online admission registration has been successfully completed. For the next step, please proceed to make the admission payment.
-            </p>
-            <div className="flex justify-center gap-4">
-              <Link href="/Admission_Forms_All/Admission_payment">
-                <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2 px-6 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
-                  Proceed to Admission Payment
-                </button>
-              </Link>
-              <button
-                onClick={closePopup}
-                className="bg-gray-200 text-gray-700 py-2 px-6 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-300"
-              >
-                Close
-              </button>
-            </div>
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 transition-opacity duration-500">
+          <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 m-4 transform transition-all duration-300 animate-slide-in">
+            {/* Success Popup */}
+            {isSuccess ? (
+              <>
+                <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl -z-10"></div>
+                <div className="flex justify-center mb-4">
+                  <div className="bg-green-100 p-3 rounded-full">
+                    <svg
+                      className="w-12 h-12 text-green-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-green-800 text-center mb-4">
+                  Registration Successful!
+                </h2>
+                {studentId && studentId !== "N/A" ? (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 flex items-center justify-between">
+                    <p className="text-lg font-semibold text-gray-800">
+                      Student ID: <span className="text-green-600">{studentId}</span>
+                    </p>
+                    <button
+                      onClick={copyStudentId}
+                      className="p-2 bg-green-100 rounded-full hover:bg-green-200 transition-colors duration-200"
+                      title="Copy Student ID"
+                    >
+                      <FaCopy className="text-green-600" />
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-red-600 mb-4 text-center">
+                    Student ID not available. Please contact support.
+                  </p>
+                )}
+                <div className="bg-white border border-green-200 rounded-lg p-4 mb-6 text-left text-gray-700">
+                  <p className="text-sm sm:text-base">
+                    Please copy your Student ID. The Student ID has also been sent to your email at{" "}
+                    <span className="font-semibold text-green-600">{formData.guardian_email_id}</span>. You can check
+                    your email or copy it from here.
+                  </p>
+                  <p className="mt-2 text-sm sm:text-base">
+                    The next step is the payment process. After completing the payment, your admission will be confirmed.
+                    Thank you!
+                  </p>
+                  <p className="mt-2 text-sm sm:text-base font-semibold text-red-600">
+                    Please complete the payment within 24 hours, otherwise, your registration will be rejected.
+                  </p>
+                </div>
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
+                  <Link href="/Admission_Forms_All/Admission_payment">
+                    <button className="w-full sm:w-auto bg-gradient-to-r from-green-500 to-green-600 text-white py-2 px-6 rounded-lg hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-300">
+                      Proceed to Payment
+                    </button>
+                  </Link>
+                  <button
+                    onClick={closePopup}
+                    className="w-full sm:w-auto bg-gray-200 text-gray-700 py-2 px-6 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-300"
+                  >
+                    Close
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-red-100 rounded-2xl -z-10"></div>
+                <div className="flex justify-center mb-4">
+                  <div className="bg-red-100 p-3 rounded-full">
+                    <svg
+                      className="w-12 h-12 text-red-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-red-800 text-center mb-4">
+                  Submission Failed
+                </h2>
+                <p className="text-red-600 mb-6 text-center text-sm sm:text-base">{popupMessage}</p>
+                <div className="flex justify-center">
+                  <button
+                    onClick={closePopup}
+                    className="bg-gray-200 text-gray-700 py-2 px-6 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-300"
+                  >
+                    Close
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
