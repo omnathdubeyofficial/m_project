@@ -1,17 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { executeQuery, executeMutation } from "../../graphqlClient";
 import { UPDATE_NURSERY_ADMISSION_LIST_MUTATION } from "../../mutation/NurseryAdmissionMutation/updateNurseryAdmissionMutation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaSpinner, FaCheckCircle, FaDownload } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
-// Updated GraphQL query with consistent field names
+// GraphQL query with class_title
 const GET_NURSERY_ADMISSION_DATA = `
   query {
     getNurseryAdmissionList {
-       z_id
+      z_id
       student_id
       first_name
       middle_name
@@ -72,11 +73,12 @@ const GET_NURSERY_ADMISSION_DATA = `
       utime
       success_msg
       error_msg
+      class_title
     }
   }
 `;
 
-// Hardcoded fee structure for different classes
+// Hardcoded fee structure
 const CLASS_FEES = {
   Nursery: { tuition: 10000, admission: 5000, uniform: 2000, books: 1500, gstPercentage: 18 },
   LKG: { tuition: 12000, admission: 5500, uniform: 2200, books: 1700, gstPercentage: 18 },
@@ -95,9 +97,9 @@ const CLASS_FEES = {
   "12th": { tuition: 28000, admission: 8500, uniform: 3000, books: 3200, gstPercentage: 18 },
 };
 
-// Calculate fees for a given class
+// Calculate fees
 const calculateFees = (className) => {
-  const fees = CLASS_FEES[className];
+  const fees = CLASS_FEES[className] || CLASS_FEES["Nursery"];
   const subtotal = fees.tuition + fees.admission + fees.uniform + fees.books;
   const gst = (subtotal * fees.gstPercentage) / 100;
   const grandTotal = subtotal + gst;
@@ -116,12 +118,16 @@ const AdmissionPayment = () => {
   const [studentData, setStudentData] = useState(null);
   const [allStudents, setAllStudents] = useState([]);
   const [errors, setErrors] = useState({});
-  const [selectedClass, setSelectedClass] = useState("Nursery");
   const [paymentProcessed, setPaymentProcessed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [paymentDetails, setPaymentDetails] = useState(null);
 
   // Fetch all student data on page load
   useEffect(() => {
     const fetchAllStudents = async () => {
+      setIsLoading(true);
       try {
         const response = await executeQuery(GET_NURSERY_ADMISSION_DATA);
         const students = response?.getNurseryAdmissionList || [];
@@ -132,13 +138,18 @@ const AdmissionPayment = () => {
           position: "top-right",
           autoClose: 3000,
         });
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchAllStudents();
   }, []);
 
-  // Fetch student details from local data
-  const handleFetchStudent = (e) => {
+  // Validate student ID
+  const isValidStudentId = (id) => /^[A-Za-z0-9]+$/.test(id);
+
+  // Fetch student details
+  const handleFetchStudent = async (e) => {
     e.preventDefault();
     if (!studentId) {
       setErrors({ studentId: "Student ID is required." });
@@ -148,7 +159,16 @@ const AdmissionPayment = () => {
       });
       return;
     }
+    if (!isValidStudentId(studentId)) {
+      setErrors({ studentId: "Student ID must be alphanumeric." });
+      toast.error("Student ID must be alphanumeric.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
 
+    setIsFetching(true);
     const student = allStudents.find((s) => s.student_id === studentId);
     if (!student) {
       setErrors({ studentId: "No student found with this ID." });
@@ -156,6 +176,7 @@ const AdmissionPayment = () => {
         position: "top-right",
         autoClose: 3000,
       });
+      setIsFetching(false);
       return;
     }
 
@@ -165,6 +186,7 @@ const AdmissionPayment = () => {
       position: "top-right",
       autoClose: 3000,
     });
+    setIsFetching(false);
   };
 
   // Handle payment processing
@@ -185,7 +207,13 @@ const AdmissionPayment = () => {
       return;
     }
 
-    const fees = calculateFees(selectedClass);
+    setShowModal(true);
+  };
+
+  const confirmPayment = async () => {
+    setIsLoading(true);
+    const classTitle = studentData.class_title || "Nursery";
+    const fees = calculateFees(classTitle);
     const paymentData = {
       payment_id: `PAY${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
       payment_status: "Completed",
@@ -210,6 +238,8 @@ const AdmissionPayment = () => {
           position: "top-right",
           autoClose: 3000,
         });
+        setIsLoading(false);
+        setShowModal(false);
         return;
       }
 
@@ -218,6 +248,7 @@ const AdmissionPayment = () => {
       setAllStudents((prev) =>
         prev.map((s) => (s.student_id === studentData.student_id ? { ...s, ...paymentData } : s))
       );
+      setPaymentDetails(paymentData);
       toast.success(`Payment successful! Payment ID: ${paymentData.payment_id}`, {
         position: "top-right",
         autoClose: 3000,
@@ -228,149 +259,317 @@ const AdmissionPayment = () => {
         position: "top-right",
         autoClose: 3000,
       });
+    } finally {
+      setIsLoading(false);
+      setShowModal(false);
     }
   };
 
-  const fees = calculateFees(selectedClass);
+  // Download receipt
+  const downloadReceipt = () => {
+    if (!paymentDetails) return;
+    const receiptContent = `
+      Payment Receipt
+      Student ID: ${studentData.student_id}
+      Student Name: ${studentData.first_name} ${studentData.last_name}
+      Class: ${studentData.class_title || "Nursery"}
+      Payment ID: ${paymentDetails.payment_id}
+      Transaction ID: ${paymentDetails.payment_transaction_id}
+      Date: ${paymentDetails.payment_date}
+      Total Amount: ₹${paymentDetails.total_fees}
+      Status: ${paymentDetails.payment_status}
+    `;
+    const blob = new Blob([receiptContent], { type: "text/plain" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `receipt_${paymentDetails.payment_id}.txt`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  // Memoize fees calculation
+  const fees = useMemo(
+    () => calculateFees(studentData?.class_title || "Nursery"),
+    [studentData?.class_title]
+  );
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4 flex justify-center mt-32">
-      <ToastContainer />
-      <div className="max-w-7xl w-full bg-white p-8 shadow-xl border border-gray-200">
-        <div className="flex items-center justify-between gap-4 mb-10">
-          <button
-            onClick={() => window.history.back()}
-            className="flex items-center gap-1 p-2 pr-4 bg-red-500 text-white hover:bg-red-600 transition"
-          >
-            <FaArrowLeft size={20} />
-            Go Back
-          </button>
-          <h1 className="text-2xl font-semibold">Admission Payment</h1>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 py-12 px-4 sm:px-6 mt-16 lg:px-8 flex justify-center items-center">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="mt-16 max-w-5xl w-full bg-white/80 backdrop-blur-md shadow-2xl p-8 sm:p-10 border border-gray-100/50"
+      >
+{/* Header */}
+<div className="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    onClick={() => window.history.back()}
+    className="flex items-center gap-1.5 px-2.5 py-1.5 bg-red-500 text-white hover:bg-red-600 transition-all duration-200 text-xs sm:text-sm"
+    aria-label="Go back"
+  >
+    <FaArrowLeft size={14} className="sm:size-[16px]" />
+    <span className="font-medium">Go Back</span>
+  </motion.button>
+
+  <h1 className="text-xl sm:text-3xl font-semibold text-gray-900 tracking-tight">
+    Admission Payment
+  </h1>
+</div>
 
         {/* Fetch Student Form */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">Fetch Student Details</h2>
-          <form onSubmit={handleFetchStudent} className="flex gap-4 items-center">
-            <div className="w-full md:w-1/3">
-              <label className="block text-sm font-medium text-gray-600">
-                Student ID<span className="text-red-600">*</span>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="mb-12"
+        >
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Fetch Student Details</h2>
+          <form onSubmit={handleFetchStudent} className="flex flex-col sm:flex-row gap-4 items-start sm:items-end">
+            <div className="w-full sm:w-1/2">
+              <label htmlFor="studentId" className="block text-sm font-medium text-gray-700 mb-2">
+                Student ID <span className="text-red-500">*</span>
               </label>
-              <input
+              <motion.input
+                whileFocus={{ scale: 1.02 }}
+                id="studentId"
                 type="text"
                 value={studentId}
                 onChange={(e) => setStudentId(e.target.value)}
-                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                className={`w-full p-3 border ${
+                  errors.studentId ? "border-red-500" : "border-gray-300"
+                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 bg-white/50`}
                 placeholder="Enter Student ID"
+                aria-invalid={!!errors.studentId}
+                aria-describedby={errors.studentId ? "studentId-error" : undefined}
               />
-              {errors.studentId && <p className="text-red-600 mt-1">{errors.studentId}</p>}
+              {errors.studentId && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-red-500 text-sm mt-1"
+                  id="studentId-error"
+                >
+                  {errors.studentId}
+                </motion.p>
+              )}
             </div>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               type="submit"
-              className="mt-6 bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 transition duration-300"
+              className="w-full sm:w-auto bg-blue-600 text-white py-3 px-6 hover:bg-blue-700 transition-all duration-200 flex items-center justify-center disabled:bg-blue-400"
+              disabled={isFetching}
             >
-              Fetch Details
-            </button>
+              {isFetching ? (
+                <>
+                  <FaSpinner className="animate-spin mr-2" />
+                  Fetching...
+                </>
+              ) : (
+                "Fetch Details"
+              )}
+            </motion.button>
           </form>
-        </div>
+        </motion.div>
+
+        {/* Loading State */}
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex justify-center items-center py-10"
+          >
+            <FaSpinner className="animate-spin text-blue-500 text-4xl" />
+          </motion.div>
+        )}
 
         {/* Student Details */}
-        {studentData && (
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">Student Details</h2>
+        {studentData && !isLoading && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="mb-12"
+          >
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Student Details</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-600">Full Name</label>
-                <p className="mt-2 p-3 bg-gray-100 rounded-md">
-                  {studentData.first_name} {studentData.middle_name} {studentData.last_name}
-                </p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600">Date of Birth</label>
-                <p className="mt-2 p-3 bg-gray-100 rounded-md">{studentData.date_of_birth}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600">Gender</label>
-                <p className="mt-2 p-3 bg-gray-100 rounded-md">{studentData.gender}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600">Aadhar Number</label>
-                <p className="mt-2 p-3 bg-gray-100 rounded-md">{studentData.adhar_no}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600">Caste</label>
-                <p className="mt-2 p-3 bg-gray-100 rounded-md">{studentData.category}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600">Religion</label>
-                <p className="mt-2 p-3 bg-gray-100 rounded-md">{studentData.country}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600">Father's Name</label>
-                <p className="mt-2 p-3 bg-gray-100 rounded-md">{studentData.father_full_name}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600">Mother's Name</label>
-                <p className="mt-2 p-3 bg-gray-100 rounded-md">{studentData.mother_full_name}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600">Father's Email</label>
-                <p className="mt-2 p-3 bg-gray-100 rounded-md">{studentData.guardian_email_id}</p>
-              </div>
+              {[
+                { label: "Full Name", value: `${studentData.first_name} ${studentData.middle_name} ${studentData.last_name}` },
+                { label: "Date of Birth", value: studentData.date_of_birth },
+                { label: "Gender", value: studentData.gender },
+                { label: "Aadhar Number", value: studentData.adhar_no },
+                { label: "Caste", value: studentData.category },
+                { label: "Religion", value: studentData.country },
+                { label: "Father's Name", value: studentData.father_full_name },
+                { label: "Mother's Name", value: studentData.mother_full_name },
+                { label: "Guardian's Email", value: studentData.guardian_email_id },
+                { label: "Class", value: studentData.class_title || "Nursery" },
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 * index, duration: 0.3 }}
+                >
+                  <label className="block text-sm font-medium text-gray-700">{item.label}</label>
+                  <p className="mt-2 p-3 bg-gray-100/50 text-gray-800 border border-gray-200">{item.value || "N/A"}</p>
+                </motion.div>
+              ))}
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* Fee Structure */}
-        {studentData && (
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">Admission Fee Payment</h2>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-600">
-                Select Class<span className="text-red-600">*</span>
-              </label>
-              <select
-                value={selectedClass}
-                onChange={(e) => setSelectedClass(e.target.value)}
-                className="w-full md:w-1/3 p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-              >
-                {Object.keys(CLASS_FEES).map((className) => (
-                  <option key={className} value={className}>
-                    {className}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="border p-6 bg-gray-50">
+        {studentData && !isLoading && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+            className="mb-12"
+          >
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Admission Fee Payment</h2>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="border border-gray-200 p-6 bg-white/50 backdrop-blur-sm"
+            >
               {["Tuition", "Admission", "Uniform", "Books"].map((item, index) => (
-                <div key={index} className="flex justify-between mb-2 text-lg">
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 * index, duration: 0.3 }}
+                  className="flex justify-between mb-3 text-lg text-gray-700"
+                >
                   <span>{item} Fee</span>
-                  <span>₹{fees[item.toLowerCase()]}</span>
-                </div>
+                  <span>₹{fees[item.toLowerCase()].toLocaleString()}</span>
+                </motion.div>
               ))}
-              <div className="flex justify-between mb-2 text-lg">
-                <span>GST ({CLASS_FEES[selectedClass].gstPercentage}%)</span>
-                <span>₹{fees.gst}</span>
-              </div>
-              <div className="border-t border-dashed border-gray-400 my-4"></div>
-              <div className="flex justify-between text-2xl font-bold text-green-600">
-                <span>Grand Total</span>
-                <span>₹{fees.grandTotal}</span>
-              </div>
-            </div>
-            <div className="flex justify-center">
-              <button
-                type="button"
-                className="mt-6 w-full md:w-1/3 bg-green-500 text-white py-2 rounded-md shadow-lg text-base hover:bg-green-600 transition duration-200 disabled:bg-gray-400"
-                onClick={handlePayNow}
-                disabled={paymentProcessed || studentData?.payment_status === "Completed"}
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4, duration: 0.3 }}
+                className="flex justify-between mb-3 text-lg text-gray-700"
               >
-                {paymentProcessed || studentData?.payment_status === "Completed" ? "Payment Completed" : "Pay Now"}
-              </button>
+                <span>GST ({CLASS_FEES[studentData?.class_title || "Nursery"].gstPercentage}%)</span>
+                <span>₹{fees.gst.toLocaleString()}</span>
+              </motion.div>
+              <div className="border-t border-dashed border-gray-300 my-4"></div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.3 }}
+                className="flex justify-between text-2xl font-semibold text-green-600"
+              >
+                <span>Grand Total</span>
+                <span>₹{fees.grandTotal.toLocaleString()}</span>
+              </motion.div>
+            </motion.div>
+            <div className="flex justify-center mt-8 gap-4">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                type="button"
+                className="w-full sm:w-1/3 bg-green-500 text-white py-3 shadow-lg text-lg font-medium hover:bg-green-600 transition-all duration-200 flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed"
+                onClick={handlePayNow}
+                disabled={paymentProcessed || studentData?.payment_status === "Completed" || isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <FaSpinner className="animate-spin mr-2" />
+                    Processing...
+                  </>
+                ) : paymentProcessed || studentData?.payment_status === "Completed" ? (
+                  <>
+                    <FaCheckCircle className="mr-2" />
+                    Payment Completed
+                  </>
+                ) : (
+                  "Pay Now"
+                )}
+              </motion.button>
+              {paymentProcessed && paymentDetails && (
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={downloadReceipt}
+                  className="w-full sm:w-1/3 bg-blue-500 text-white py-3 shadow-lg text-lg font-medium hover:bg-blue-600 transition-all duration-200 flex items-center justify-center"
+                >
+                  <FaDownload className="mr-2" />
+                  Download Receipt
+                </motion.button>
+              )}
             </div>
-          </div>
+          </motion.div>
         )}
-      </div>
+
+        {/* Payment Confirmation Modal */}
+        <AnimatePresence>
+          {showModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+            >
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                className="bg-white p-8 max-w-md w-full shadow-2xl"
+              >
+                <h3 className="text-2xl font-semibold text-gray-800 mb-4">Confirm Payment</h3>
+                <p className="text-gray-600 mb-6">
+                  You are about to pay ₹{fees.grandTotal.toLocaleString()} for {studentData.first_name}{" "}
+                  {studentData.last_name}'s admission to {studentData.class_title || "Nursery"}. Proceed?
+                </p>
+                <div className="flex justify-end gap-4">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setShowModal(false)}
+                    className="px-4 py-2 bg-gray-300 text-gray-800 hover:bg-gray-400 transition-all duration-200"
+                  >
+                    Cancel
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={confirmPayment}
+                    className="px-4 py-2 bg-green-500 text-white hover:bg-green-600 transition-all duration-200 flex items-center"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <FaSpinner className="animate-spin mr-2" />
+                        Processing...
+                      </>
+                    ) : (
+                      "Confirm"
+                    )}
+                  </motion.button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 };
