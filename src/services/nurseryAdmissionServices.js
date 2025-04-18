@@ -183,12 +183,12 @@ const createNurseryAdmissionList = async ({
     return { ...created, success_msg: 'Nursery admission created successfully' };
 
   } catch (error) {
-    console.error('Error creating nursery admission:', {
-      message: error.message,
-      stack: error.stack,
-      class_title,
-      operation: 'createNurseryAdmissionList',
-    });
+    // console.error('Error creating nursery admission:', {
+    //   message: error.message,
+    //   stack: error.stack,
+    //   class_title,
+    //   operation: 'createNurseryAdmissionList',
+    // });
     return { error_msg: error.message };
   } finally {
     await prisma.$disconnect();
