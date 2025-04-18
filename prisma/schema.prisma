@@ -835,4 +835,5 @@ model nursery_admissions {
   ctime                                   String? @db.VarChar(500)
   udate                                   String? @db.VarChar(500)
   utime                                   String? @db.VarChar(500)
+  class_title                             String? @db.VarChar(255)
 }

@@ -62,6 +62,7 @@ const nurseryAdmissionListType = gql`
     ctime: String
     udate: String
     utime: String
+    class_title: String
     success_msg: String
     error_msg: String
   }
@@ -126,6 +127,7 @@ const nurseryAdmissionListType = gql`
       payment_date: String
       total_fees: String
       paid_amount: String
+      class_title: String
       payment_method: String
     ): nurseryAdmissionListTypes
 
@@ -175,6 +177,7 @@ const nurseryAdmissionListType = gql`
       father_aadhar_front: String
       father_aadhar_back: String
       mother_aadhar_front: String
+      class_title: String
       mother_aadhar_back: String
       student_birth_certificate: String
       payment_id: String

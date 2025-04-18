@@ -18,6 +18,7 @@ const Nursery_Admission_Form = () => {
     blood_group: "",
     adhar_no: "",
     category: "",
+    class_title: "",
     mother_tangue: "",
     father_full_name: "",
     mother_full_name: "",
@@ -299,6 +300,7 @@ const Nursery_Admission_Form = () => {
       "guardian_mobile_number",
       "guardian_email_id",
       "guardian_religion",
+      // "class_title",
       "guardian_annual_income",
       "permanent_address",
       "permanent_address_nearest_policestation",
@@ -390,6 +392,7 @@ const Nursery_Admission_Form = () => {
         current_address_post_office: formData.current_address_post_office || null,
         current_address_type: formData.current_address_type || null,
         country: formData.country || null,
+        class_title: formData.class_title || "Nursery",
       };
 
       console.log("Mutation Data:", mutationData);
@@ -461,6 +464,7 @@ const Nursery_Admission_Form = () => {
         mother_aadhar_front: "",
         mother_aadhar_back: "",
         student_birth_certificate: "",
+        class_title: ""
       });
       setPermanentState("");
       setCurrentState("");

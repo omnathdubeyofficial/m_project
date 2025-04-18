@@ -8,6 +8,7 @@ export const CREATE_NURSERY_ADMISSION_LIST_MUTATION = `
     $blood_group: String
     $adhar_no: String
     $category: String
+    $class_title: String
     $mother_tangue: String
     $father_full_name: String
     $mother_full_name: String
@@ -63,6 +64,7 @@ export const CREATE_NURSERY_ADMISSION_LIST_MUTATION = `
       blood_group: $blood_group
       adhar_no: $adhar_no
       category: $category
+       class_title: $class_title
       mother_tangue: $mother_tangue
       father_full_name: $father_full_name
       mother_full_name: $mother_full_name
@@ -113,6 +115,7 @@ export const CREATE_NURSERY_ADMISSION_LIST_MUTATION = `
       student_id
       first_name
       middle_name
+      class_title
       last_name
       gender
       date_of_birth
