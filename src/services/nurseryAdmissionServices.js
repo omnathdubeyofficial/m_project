@@ -113,7 +113,7 @@ const createNurseryAdmissionList = async ({
       }
 
       // Create the nursery admission
-      const createdData = await prisma.nursery_admissions.create({
+      await tx.nursery_admissions.create({
         data: {
           z_id: uuidv4(),
           student_id: unique_id(first_name),
@@ -170,12 +170,12 @@ const createNurseryAdmissionList = async ({
           total_fees,
           paid_amount,
           payment_method,
+          class_title,
           cdate: setUserDate(),
           ctime: setUserTime(),
         },
       });
-  
-  
+
       // Update filled_seats to total count of admissions
       const newAdmissionsCount = (currentAdmissionsCount + 1).toString();
       await tx.classes_data.update({
