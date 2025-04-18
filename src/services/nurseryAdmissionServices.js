@@ -75,45 +75,40 @@ const createNurseryAdmissionList = async ({
   class_title,
 }) => {
   try {
-    // Validate required fields
+    // ✅ Required field validation
     if (!first_name || !last_name || !date_of_birth || !class_title) {
       throw new Error('First name, last name, date of birth, and class title are required');
     }
 
-    // Use transaction for atomicity
+    let created = null; // ✅ Declare here to use outside transaction
+
     await prisma.$transaction(async (tx) => {
-      // Check if class_title exists in classes_data
+      // ✅ Check if class_title exists
       const classData = await tx.classes_data.findFirst({
         where: { class_title },
       });
 
       if (!classData) {
-        throw new Error(`Class title ${class_title} does not exist in classes_data`);
+        throw new Error(`Class title "${class_title}" does not exist in classes_data`);
       }
 
-      // Validate total_seats
-      const totalSeats = classData.total_seats;
-      if (!totalSeats || isNaN(parseInt(totalSeats)) || parseInt(totalSeats) < 0) {
-        throw new Error(`Invalid or missing total_seats for class ${class_title}`);
+      // ✅ Validate total seats
+      const totalSeats = parseInt(classData.total_seats);
+      if (isNaN(totalSeats) || totalSeats <= 0) {
+        throw new Error(`Invalid or missing total_seats for class "${class_title}"`);
       }
 
-      // Check current number of admissions for this class_title
+      // ✅ Check current admission count
       const currentAdmissionsCount = await tx.nursery_admissions.count({
         where: { class_title },
       });
 
-      const currentAdmissionsCountStr = currentAdmissionsCount.toString();
-
-      // Log for debugging
-      console.log(`Current admissions for ${class_title}: ${currentAdmissionsCountStr}, Total seats: ${totalSeats}`);
-
-      // Check if adding a new admission exceeds total_seats
-      if (parseInt(currentAdmissionsCountStr) >= parseInt(totalSeats)) {
-        throw new Error(`No more seats available for class ${class_title}`);
+      if (currentAdmissionsCount >= totalSeats) {
+        throw new Error(`No more seats available for class "${class_title}"`);
       }
 
-      // Create the nursery admission
-      await tx.nursery_admissions.create({
+      // ✅ Create admission
+      created = await tx.nursery_admissions.create({
         data: {
           z_id: uuidv4(),
           student_id: unique_id(first_name),
@@ -176,17 +171,17 @@ const createNurseryAdmissionList = async ({
         },
       });
 
-      // Update filled_seats to total count of admissions
-      const newAdmissionsCount = (currentAdmissionsCount + 1).toString();
+      // ✅ Update filled_seats
       await tx.classes_data.update({
         where: { z_id: classData.z_id },
         data: {
-          filled_seats: newAdmissionsCount,
+          filled_seats: (currentAdmissionsCount + 1).toString(),
         },
       });
     });
 
-    return { success_msg: 'Nursery admission created successfully' };
+    return { ...created, success_msg: 'Nursery admission created successfully' };
+
   } catch (error) {
     console.error('Error creating nursery admission:', {
       message: error.message,
@@ -199,7 +194,6 @@ const createNurseryAdmissionList = async ({
     await prisma.$disconnect();
   }
 };
-
 // Update an existing nursery admission by ID
 const updateNurseryAdmissionList = async ({
   z_id,
