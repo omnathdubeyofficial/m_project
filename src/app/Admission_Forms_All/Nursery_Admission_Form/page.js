@@ -492,7 +492,7 @@ const Nursery_Admission_Form = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4 flex justify-center mt-32">
+    <div className="min-h-screen bg-gray-100 py-8 px-4 flex justify-center mt-28">
       <ToastContainer />
       <form onSubmit={handleSubmit} className="max-w-7xl w-full bg-white p-8 shadow-xl border border-gray-200">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
