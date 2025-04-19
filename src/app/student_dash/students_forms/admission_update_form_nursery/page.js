@@ -118,15 +118,6 @@ const Nursery_Admission_Form = () => {
       },
     },
   };
-
-
-  const formatDate = (rawDate) => {
-    if (!rawDate || rawDate.length !== 8) return '';
-    const year = rawDate.slice(0, 4);
-    const month = rawDate.slice(4, 6);
-    const day = rawDate.slice(6, 8);
-    return `${day}-${month}-${year}`;
-  };
   
   const fileInputRefs = {
     student_profile_image: useRef(null),
@@ -139,101 +130,112 @@ const Nursery_Admission_Form = () => {
     student_birth_certificate: useRef(null),
   };
 
-  // Fetch data for the given z_id when in update mode
-  useEffect(() => {
-    if (z_id) {
-      const fetchAdmissionData = async () => {
-        try {
-          // Assuming GET_NURSERY_ADMISSION_DATA accepts a z_id variable
-          const response = await executeQuery(GET_NURSERY_ADMISSION_DATA, { z_id });
-          const admissionData = response?.getNurseryAdmissionList?.find(
-            (item) => item.z_id === z_id
-          );
+// Update the formatDate function to return YYYY-MM-DD for the input field
+const formatDate = (rawDate) => {
+  if (!rawDate || rawDate.length !== 8) return '';
+  const year = rawDate.slice(0, 4);
+  const month = rawDate.slice(4, 6);
+  const day = rawDate.slice(6, 8);
+  return `${year}-${month}-${day}`; // Return YYYY-MM-DD
+};
 
-          if (admissionData) {
-            // Populate formData with fetched data
-            setFormData({
-              first_name: admissionData.first_name || "",
-              middle_name: admissionData.middle_name || "",
-              last_name: admissionData.last_name || "",
-              gender: admissionData.gender || "",
-              date_of_birth: admissionData.date_of_birth || "",
-              blood_group: admissionData.blood_group || "",
-              adhar_no: admissionData.adhar_no || "",
-              category: admissionData.category || "",
-              class_title: admissionData.class_title || "Nursery",
-              mother_tangue: admissionData.mother_tangue || "",
-              father_full_name: admissionData.father_full_name || "",
-              mother_full_name: admissionData.mother_full_name || "",
-              father_work: admissionData.father_work || "",
-              mother_work: admissionData.mother_work || "",
-              guardian_whatsapp_number: admissionData.guardian_whatsapp_number || "",
-              guardian_mobile_number: admissionData.guardian_mobile_number || "",
-              guardian_email_id: admissionData.guardian_email_id || "",
-              guardian_religion: admissionData.guardian_religion || "",
-              guardian_annual_income: admissionData.guardian_annual_income || "",
-              permanent_address: admissionData.permanent_address || "",
-              permanent_address_nearest_policestation:
-                admissionData.permanent_address_nearest_policestation || "",
-              permanent_address_nearest_landmark:
-                admissionData.permanent_address_nearest_landmark || "",
-              permanent_address_state: admissionData.permanent_address_state || "",
-              permanent_address_district: admissionData.permanent_address_district || "",
-              permanent_address_tehsil: admissionData.permanent_address_tehsil || "",
-              permanent_address_post_office: admissionData.permanent_address_post_office || "",
-              permanent_address_pincode: admissionData.permanent_address_pincode || "",
-              permanent_address_type: admissionData.permanent_address_type || "",
-              nationality: admissionData.nationality || "",
-              current_address: admissionData.current_address || "",
-              current_address_nearest_policestation:
-                admissionData.current_address_nearest_policestation || "",
-              current_address_nearest_landmark:
-                admissionData.current_address_nearest_landmark || "",
-              current_address_state: admissionData.current_address_state || "",
-              current_address_district: admissionData.current_address_district || "",
-              current_address_tehsil: admissionData.current_address_tehsil || "",
-              current_address_post_office: admissionData.current_address_post_office || "",
-              current_address_pincode: admissionData.current_address_pincode || "",
-              current_address_type: admissionData.current_address_type || "",
-              country: admissionData.country || "",
-              student_profile_image: admissionData.student_profile_image || "",
-              student_aadhar_front: admissionData.student_aadhar_front || "",
-              student_aadhar_back: admissionData.student_aadhar_back || "",
-              father_aadhar_front: admissionData.father_aadhar_front || "",
-              father_aadhar_back: admissionData.father_aadhar_back || "",
-              mother_aadhar_front: admissionData.mother_aadhar_front || "",
-              mother_aadhar_back: admissionData.mother_aadhar_back || "",
-              student_birth_certificate: admissionData.student_birth_certificate || "",
-            });
+// Inside the useEffect where data is fetched
+useEffect(() => {
+  if (z_id) {
+    const fetchAdmissionData = async () => {
+      try {
+        const response = await executeQuery(GET_NURSERY_ADMISSION_DATA, { z_id });
+        const admissionData = response?.getNurseryAdmissionList?.find(
+          (item) => item.z_id === z_id
+        );
 
-            // Set state for dependent fields
-            setPermanentState(admissionData.permanent_address_state || "");
-            setCurrentState(admissionData.current_address_state || "");
-            setPermanentDistrict(admissionData.permanent_address_district || "");
-            setCurrentDistrict(admissionData.current_address_district || "");
-            setPermanentPostOffice(admissionData.permanent_address_post_office || "");
-            setCurrentPostOffice(admissionData.current_address_post_office || "");
-            setPermanentPincode(admissionData.permanent_address_pincode || "");
-            setCurrentPincode(admissionData.current_address_pincode || "");
-            setStudentId(admissionData.student_id || "N/A");
-          } else {
-            toast.error("No data found for the provided z_id.", {
-              position: "top-right",
-              autoClose: 3000,
-            });
-          }
-        } catch (error) {
-          console.error("Error fetching admission data:", error);
-          toast.error("Failed to fetch admission data.", {
+        if (admissionData) {
+          // Convert date_of_birth from YYYYMMDD to YYYY-MM-DD
+          const formattedDateOfBirth = formatDate(admissionData.date_of_birth);
+
+          // Populate formData with fetched data
+          setFormData({
+            first_name: admissionData.first_name || "",
+            middle_name: admissionData.middle_name || "",
+            last_name: admissionData.last_name || "",
+            gender: admissionData.gender || "",
+            date_of_birth: formattedDateOfBirth, // Use formatted date
+            blood_group: admissionData.blood_group || "",
+            adhar_no: admissionData.adhar_no || "",
+            category: admissionData.category || "",
+            class_title: admissionData.class_title || "Nursery",
+            mother_tangue: admissionData.mother_tangue || "",
+            father_full_name: admissionData.father_full_name || "",
+            mother_full_name: admissionData.mother_full_name || "",
+            father_work: admissionData.father_work || "",
+            mother_work: admissionData.mother_work || "",
+            guardian_whatsapp_number: admissionData.guardian_whatsapp_number || "",
+            guardian_mobile_number: admissionData.guardian_mobile_number || "",
+            guardian_email_id: admissionData.guardian_email_id || "",
+            guardian_religion: admissionData.guardian_religion || "",
+            guardian_annual_income: admissionData.guardian_annual_income || "",
+            permanent_address: admissionData.permanent_address || "",
+            permanent_address_nearest_policestation:
+              admissionData.permanent_address_nearest_policestation || "",
+            permanent_address_nearest_landmark:
+              admissionData.permanent_address_nearest_landmark || "",
+            permanent_address_state: admissionData.permanent_address_state || "",
+            permanent_address_district: admissionData.permanent_address_district || "",
+            permanent_address_tehsil: admissionData.permanent_address_tehsil || "",
+            permanent_address_post_office: admissionData.permanent_address_post_office || "",
+            permanent_address_pincode: admissionData.permanent_address_pincode || "",
+            permanent_address_type: admissionData.permanent_address_type || "",
+            nationality: admissionData.nationality || "",
+            current_address: admissionData.current_address || "",
+            current_address_nearest_policestation:
+              admissionData.current_address_nearest_policestation || "",
+            current_address_nearest_landmark:
+              admissionData.current_address_nearest_landmark || "",
+            current_address_state: admissionData.current_address_state || "",
+            current_address_district: admissionData.current_address_district || "",
+            current_address_tehsil: admissionData.current_address_tehsil || "",
+            current_address_post_office: admissionData.current_address_post_office || "",
+            current_address_pincode: admissionData.current_address_pincode || "",
+            current_address_type: admissionData.current_address_type || "",
+            country: admissionData.country || "",
+            student_profile_image: admissionData.student_profile_image || "",
+            student_aadhar_front: admissionData.student_aadhar_front || "",
+            student_aadhar_back: admissionData.student_aadhar_back || "",
+            father_aadhar_front: admissionData.father_aadhar_front || "",
+            father_aadhar_back: admissionData.father_aadhar_back || "",
+            mother_aadhar_front: admissionData.mother_aadhar_front || "",
+            mother_aadhar_back: admissionData.mother_aadhar_back || "",
+            student_birth_certificate: admissionData.student_birth_certificate || "",
+          });
+
+          // Set state for dependent fields
+          setPermanentState(admissionData.permanent_address_state || "");
+          setCurrentState(admissionData.current_address_state || "");
+          setPermanentDistrict(admissionData.permanent_address_district || "");
+          setCurrentDistrict(admissionData.current_address_district || "");
+          setPermanentPostOffice(admissionData.permanent_address_post_office || "");
+          setCurrentPostOffice(admissionData.current_address_post_office || "");
+          setPermanentPincode(admissionData.permanent_address_pincode || "");
+          setCurrentPincode(admissionData.current_address_pincode || "");
+          setStudentId(admissionData.student_id || "N/A");
+        } else {
+          toast.error("No data found for the provided z_id.", {
             position: "top-right",
             autoClose: 3000,
           });
         }
-      };
+      } catch (error) {
+        console.error("Error fetching admission data:", error);
+        toast.error("Failed to fetch admission data.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+    };
 
-      fetchAdmissionData();
-    }
-  }, [z_id]);
+    fetchAdmissionData();
+  }
+}, [z_id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
