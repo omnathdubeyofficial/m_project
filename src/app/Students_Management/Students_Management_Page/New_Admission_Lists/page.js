@@ -23,6 +23,15 @@ const New_Admission_Lists = () => {
   const [updateConfirm, setUpdateConfirm] = useState({ show: false, z_id: null, field: null, value: null });
   const adminsPerPage = 10;
 
+  // Function to format date from YYYYMMDD to DD-MM-YYYY
+  const formatDate = (dateStr) => {
+    if (!dateStr || dateStr.length !== 8 || isNaN(dateStr)) return "N/A";
+    const year = dateStr.substring(0, 4);
+    const month = dateStr.substring(4, 6);
+    const day = dateStr.substring(6, 8);
+    return `${day}-${month}-${year}`;
+  };
+
   // Fetch nursery admission data
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -159,7 +168,8 @@ const New_Admission_Lists = () => {
       Name: `${admin.first_name} ${admin.middle_name || ''} ${admin.last_name}`,
       Class: admin.class_title,
       Gender: admin.gender,
-      DOB: admin.date_of_birth,
+      DOB: formatDate(admin.date_of_birth),
+      Cdate: formatDate(admin.cdate),
       Blood_Group: admin.blood_group,
       Aadhaar: admin.adhar_no,
       Category: admin.category,
@@ -206,14 +216,15 @@ const New_Admission_Lists = () => {
     doc.text("Nursery Admission List", 20, 10);
     doc.autoTable({
       head: [
-        ["Student ID", "Name", "Class", "Gender", "DOB", "Aadhaar", "Father", "Mother", "Admission Status", "Profile Verification"],
+        ["Student ID", "Name", "Class", "Gender", "DOB", "Cdate", "Aadhaar", "Father", "Mother", "Admission Status", "Profile Verification"],
       ],
       body: currentAdmins.map(admin => [
         admin.student_id || "N/A",
         `${admin.first_name} ${admin.middle_name || ''} ${admin.last_name}`,
         admin.class_title || "N/A",
         admin.gender || "N/A",
-        admin.date_of_birth || "N/A",
+        formatDate(admin.date_of_birth) || "N/A",
+        formatDate(admin.cdate) || "N/A",
         admin.adhar_no || "N/A",
         admin.father_full_name || "N/A",
         admin.mother_full_name || "N/A",
@@ -305,6 +316,7 @@ const New_Admission_Lists = () => {
                 <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Class</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Gender</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">DOB</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Date</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Blood Group</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Aadhaar</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Category</th>
@@ -367,7 +379,7 @@ const New_Admission_Lists = () => {
             <tbody className="divide-y divide-gray-200">
               {currentAdmins.length === 0 ? (
                 <tr>
-                  <td colSpan="63" className="px-4 py-6 text-center text-gray-500">
+                  <td colSpan="64" className="px-4 py-6 text-center text-gray-500">
                     No data available.
                   </td>
                 </tr>
@@ -388,7 +400,8 @@ const New_Admission_Lists = () => {
                     <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{`${admin.first_name} ${admin.middle_name || ''} ${admin.last_name}`}</td>
                     <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{admin.class_title || "N/A"}</td>
                     <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{admin.gender || "N/A"}</td>
-                    <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{admin.date_of_birth || "N/A"}</td>
+                    <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{formatDate(admin.date_of_birth) || "N/A"}</td>
+                    <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{formatDate(admin.cdate) || "N/A"}</td>
                     <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{admin.blood_group || "N/A"}</td>
                     <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{admin.adhar_no || "N/A"}</td>
                     <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{admin.category || "N/A"}</td>
