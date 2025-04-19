@@ -119,6 +119,16 @@ const Nursery_Admission_Form = () => {
     },
   };
 
+
+  const formatForDateInput = (rawDate) => {
+    if (!rawDate || rawDate.length !== 8) return '';
+    const year = rawDate.slice(0, 4);
+    const month = rawDate.slice(4, 6);
+    const day = rawDate.slice(6, 8);
+    return `${year}-${month}-${day}`;
+  };
+  
+  
   const fileInputRefs = {
     student_profile_image: useRef(null),
     student_aadhar_front: useRef(null),
@@ -722,13 +732,14 @@ const Nursery_Admission_Form = () => {
                 Date of Birth<span className="text-red-600">*</span>
               </label>
               <input
-                type="date"
-                name="date_of_birth"
-                value={formData.date_of_birth}
-                onChange={handleChange}
-                required
-                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-              />
+  type="date"
+  name="date_of_birth"
+  value={formatForDateInput(formData.date_of_birth)}
+  onChange={handleChange}
+  required
+  className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+/>
+
               {errors.date_of_birth && <p className="text-red-600 mt-1">{errors.date_of_birth}</p>}
             </div>
             <div>
