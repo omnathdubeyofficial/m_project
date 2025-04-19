@@ -1,7 +1,8 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useSearchParams } from "next/navigation"; // To get z_id from URL
+import { useSearchParams } from "next/navigation";
 import { executeQuery, executeMutation } from "../../../graphqlClient";
 import { GET_NURSERY_ADMISSION_DATA } from "../../../query/NurseryAdmissionQuery/fetchNurseryAdmission";
 import { CREATE_NURSERY_ADMISSION_LIST_MUTATION } from "../../../mutation/NurseryAdmissionMutation/createNurseryAdmissionListMutation";
@@ -13,7 +14,7 @@ import Link from "next/link";
 
 const Nursery_Admission_Form = () => {
   const searchParams = useSearchParams();
-  const z_id = searchParams.get("z_id"); // Get z_id from URL
+  const z_id = searchParams.get("z_id");
 
   const [formData, setFormData] = useState({
     first_name: "",
@@ -24,7 +25,7 @@ const Nursery_Admission_Form = () => {
     blood_group: "",
     adhar_no: "",
     category: "",
-    class_title: "Nursery", // Default to Nursery
+    class_title: "Nursery",
     mother_tangue: "",
     father_full_name: "",
     mother_full_name: "",
@@ -78,7 +79,7 @@ const Nursery_Admission_Form = () => {
   const [studentId, setStudentId] = useState("");
   const [popupMessage, setPopupMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(true);
-  const [isUpdateMode, setIsUpdateMode] = useState(!!z_id); // Determine if in update mode
+  const [isUpdateMode, setIsUpdateMode] = useState(!!z_id);
 
   const stateDistrictData = {
     "Uttar Pradesh": {
@@ -119,16 +120,6 @@ const Nursery_Admission_Form = () => {
     },
   };
 
-
-  const formatForDateInput = (rawDate) => {
-    if (!rawDate || rawDate.length !== 8) return '';
-    const year = rawDate.slice(0, 4);
-    const month = rawDate.slice(4, 6);
-    const day = rawDate.slice(6, 8);
-    return `${year}-${month}-${day}`;
-  };
-  
-  
   const fileInputRefs = {
     student_profile_image: useRef(null),
     student_aadhar_front: useRef(null),
@@ -140,25 +131,85 @@ const Nursery_Admission_Form = () => {
     student_birth_certificate: useRef(null),
   };
 
+  // Format date from YYYYMMDD to YYYY-MM-DD for input display
+  const formatForDateInput = (rawDate) => {
+    if (!rawDate || typeof rawDate !== "string") {
+      console.warn("Invalid rawDate:", rawDate);
+      return "";
+    }
+    // Handle YYYYMMDD format
+    if (rawDate.length === 8 && /^\d{8}$/.test(rawDate)) {
+      const year = rawDate.slice(0, 4);
+      const month = rawDate.slice(4, 6);
+      const day = rawDate.slice(6, 8);
+      return `${year}-${month}-${day}`;
+    }
+    // If already in YYYY-MM-DD, return as is
+    if (/^\d{4}-\d{2}-\d{2}$/.test(rawDate)) {
+      return rawDate;
+    }
+    console.warn("Unrecognized date format:", rawDate);
+    return "";
+  };
+
+  // Format date from YYYY-MM-DD to YYYYMMDD for backend
+  const formatForBackend = (date) => {
+    if (!date || typeof date !== "string") {
+      console.warn("Invalid date for backend:", date);
+      return null;
+    }
+    // Handle YYYY-MM-DD format from input
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      const [year, month, day] = date.split("-");
+      // Validate date
+      const dateObj = new Date(date);
+      if (
+        dateObj.getFullYear() === parseInt(year) &&
+        dateObj.getMonth() + 1 === parseInt(month) &&
+        dateObj.getDate() === parseInt(day)
+      ) {
+        return `${year}${month.padStart(2, "0")}${day.padStart(2, "0")}`;
+      }
+      console.warn("Invalid date:", date);
+      return null;
+    }
+    // If already in YYYYMMDD, validate and return
+    if (/^\d{8}$/.test(date)) {
+      const year = date.slice(0, 4);
+      const month = date.slice(4, 6);
+      const day = date.slice(6, 8);
+      const dateObj = new Date(`${year}-${month}-${day}`);
+      if (
+        dateObj.getFullYear() === parseInt(year) &&
+        dateObj.getMonth() + 1 === parseInt(month) &&
+        dateObj.getDate() === parseInt(day)
+      ) {
+        return date;
+      }
+      console.warn("Invalid date in YYYYMMDD format:", date);
+      return null;
+    }
+    console.warn("Unrecognized date format for backend:", date);
+    return null;
+  };
+
   // Fetch data for the given z_id when in update mode
   useEffect(() => {
     if (z_id) {
       const fetchAdmissionData = async () => {
         try {
-          // Assuming GET_NURSERY_ADMISSION_DATA accepts a z_id variable
           const response = await executeQuery(GET_NURSERY_ADMISSION_DATA, { z_id });
           const admissionData = response?.getNurseryAdmissionList?.find(
             (item) => item.z_id === z_id
           );
 
           if (admissionData) {
-            // Populate formData with fetched data
             setFormData({
               first_name: admissionData.first_name || "",
               middle_name: admissionData.middle_name || "",
               last_name: admissionData.last_name || "",
               gender: admissionData.gender || "",
-              date_of_birth: admissionData.date_of_birth || "",
+              date_of_birth: formatForDateInput(admissionData.date_of_birth) || "",
               blood_group: admissionData.blood_group || "",
               adhar_no: admissionData.adhar_no || "",
               category: admissionData.category || "",
@@ -207,7 +258,6 @@ const Nursery_Admission_Form = () => {
               student_birth_certificate: admissionData.student_birth_certificate || "",
             });
 
-            // Set state for dependent fields
             setPermanentState(admissionData.permanent_address_state || "");
             setCurrentState(admissionData.current_address_state || "");
             setPermanentDistrict(admissionData.permanent_address_district || "");
@@ -242,6 +292,8 @@ const Nursery_Admission_Form = () => {
       ...prev,
       [name]: value ?? "",
     }));
+    // Clear error for the field when user starts typing
+    setErrors((prev) => ({ ...prev, [name]: null }));
   };
 
   const handlePermanentStateChange = (e) => {
@@ -468,6 +520,28 @@ const Nursery_Admission_Form = () => {
       newErrors.guardian_mobile_number = "Mobile number must be 10 digits.";
     }
 
+    // Validate date_of_birth
+    if (formData.date_of_birth) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(formData.date_of_birth)) {
+        newErrors.date_of_birth = "Date of birth must be in YYYY-MM-DD format.";
+      } else {
+        const dateObj = new Date(formData.date_of_birth);
+        const [year, month, day] = formData.date_of_birth.split("-");
+        if (
+          isNaN(dateObj.getTime()) ||
+          dateObj.getFullYear() !== parseInt(year) ||
+          dateObj.getMonth() + 1 !== parseInt(month) ||
+          dateObj.getDate() !== parseInt(day)
+        ) {
+          newErrors.date_of_birth = "Please enter a valid date of birth.";
+        } else if (dateObj > new Date()) {
+          newErrors.date_of_birth = "Date of birth cannot be in the future.";
+        }
+      }
+    } else {
+      newErrors.date_of_birth = "Date of birth is required.";
+    }
+
     return newErrors;
   };
 
@@ -485,8 +559,18 @@ const Nursery_Admission_Form = () => {
     }
 
     try {
+      // Format date_of_birth for backend (YYYYMMDD)
+      const formattedDateOfBirth = formatForBackend(formData.date_of_birth);
+
+      if (!formattedDateOfBirth) {
+        throw new Error("Invalid date of birth format. Please enter a valid date.");
+      }
+
+      console.log("Submitting date_of_birth:", formattedDateOfBirth); // Debugging
+
       const mutationData = {
         ...formData,
+        date_of_birth: formattedDateOfBirth,
         gender: formData.gender.toLowerCase() ?? "other",
         blood_group: formData.blood_group || null,
         mother_tangue: formData.mother_tangue || null,
@@ -509,15 +593,15 @@ const Nursery_Admission_Form = () => {
         class_title: formData.class_title || "Nursery",
       };
 
+      console.log("Mutation Data:", JSON.stringify(mutationData, null, 2)); // Debugging
+
       let response;
       if (isUpdateMode) {
-        // Update mutation
         response = await executeMutation(UPDATE_NURSERY_ADMISSION_LIST_MUTATION, {
           z_id,
           ...mutationData,
         });
       } else {
-        // Create mutation
         response = await executeMutation(CREATE_NURSERY_ADMISSION_LIST_MUTATION, mutationData);
       }
 
@@ -544,7 +628,7 @@ const Nursery_Admission_Form = () => {
         ? response?.updateNurseryAdmissionList?.success_msg || "Admission form updated successfully!"
         : response?.createNurseryAdmissionList?.success_msg || "Admission form submitted successfully!";
       const studentIdFromResponse = isUpdateMode
-        ? studentId // Keep existing studentId in update mode
+        ? studentId
         : response?.createNurseryAdmissionList?.student_id ||
           response?.createNurseryAdmissionList?.studentId ||
           response?.createNurseryAdmissionList?.id ||
@@ -567,7 +651,6 @@ const Nursery_Admission_Form = () => {
       });
 
       if (!isUpdateMode) {
-        // Reset form only for create mode
         setFormData({
           first_name: "",
           middle_name: "",
@@ -723,7 +806,7 @@ const Nursery_Admission_Form = () => {
                 <option value="">Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
-                <option value="Other">Other</option>
+                <option value="other">Other</option>
               </select>
               {errors.gender && <p className="text-red-600 mt-1">{errors.gender}</p>}
             </div>
@@ -732,14 +815,13 @@ const Nursery_Admission_Form = () => {
                 Date of Birth<span className="text-red-600">*</span>
               </label>
               <input
-  type="date"
-  name="date_of_birth"
-  value={formatForDateInput(formData.date_of_birth)}
-  onChange={handleChange}
-  required
-  className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-/>
-
+                type="date"
+                name="date_of_birth"
+                value={formData.date_of_birth}
+                onChange={handleChange}
+                required
+                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+              />
               {errors.date_of_birth && <p className="text-red-600 mt-1">{errors.date_of_birth}</p>}
             </div>
             <div>
@@ -1444,7 +1526,6 @@ const Nursery_Admission_Form = () => {
       {showPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 transition-opacity duration-500">
           <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 m-4 transform transition-all duration-300 animate-slide-in">
-            {/* Success Popup */}
             {isSuccess ? (
               <>
                 <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl -z-10"></div>
