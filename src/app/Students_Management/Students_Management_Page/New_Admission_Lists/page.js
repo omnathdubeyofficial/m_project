@@ -7,6 +7,7 @@ import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { GET_NURSERY_ADMISSION_DATA } from "../../../query/NurseryAdmissionQuery/fetchNurseryAdmission";
+import { UPDATE_NURSERY_ADMISSION_LIST_MUTATION } from "../../../mutation/NurseryAdmissionMutation/updateNurseryAdmissionMutation";
 import { DELETE_NURSERY_ADMISSION_LIST_MUTATION } from "../../../mutation/NurseryAdmissionMutation/deleteNurseryAdmissionMutation";
 import { executeQuery, executeMutation } from "../../../graphqlClient";
 import Link from "next/link";
@@ -19,6 +20,7 @@ const New_Admission_Lists = () => {
   const [popupMessage, setPopupMessage] = useState({ text: "", type: "" });
   const [modalImage, setModalImage] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState({ show: false, id: null });
+  const [updateConfirm, setUpdateConfirm] = useState({ show: false, z_id: null, field: null, value: null });
   const adminsPerPage = 10;
 
   // Fetch nursery admission data
@@ -56,6 +58,41 @@ const New_Admission_Lists = () => {
     const indexOfFirstAdmin = indexOfLastAdmin - adminsPerPage;
     return filteredAdmins.slice(indexOfFirstAdmin, indexOfLastAdmin);
   }, [currentPage, filteredAdmins]);
+
+  // Handle status/verification update with confirmation
+  const handleStatusUpdate = useCallback(async (z_id, field, value) => {
+    try {
+      const response = await executeMutation(UPDATE_NURSERY_ADMISSION_LIST_MUTATION, {
+        z_id,
+        [field]: value,
+      });
+      if (response?.updateNurseryAdmissionList?.success_msg) {
+        setAdmins(prev =>
+          prev.map(admin =>
+            admin.z_id === z_id ? { ...admin, [field]: value } : admin
+          )
+        );
+        setPopupMessage({ text: `Successfully updated ${field.replace(/_/g, " ")}.`, type: "success" });
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 3000);
+      } else {
+        setPopupMessage({ text: response?.updateNurseryAdmissionList?.error_msg || "Failed to update.", type: "error" });
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 3000);
+      }
+    } catch (error) {
+      console.error(`Error updating ${field}:`, error);
+      setPopupMessage({ text: `Error updating ${field.replace(/_/g, " ")}.`, type: "error" });
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 3000);
+    }
+    setUpdateConfirm({ show: false, z_id: null, field: null, value: null });
+  }, []);
+
+  // Show confirmation for status/verification update
+  const confirmStatusUpdate = (z_id, field, value) => {
+    setUpdateConfirm({ show: true, z_id, field, value });
+  };
 
   // Handle delete with confirmation
   const handleDelete = useCallback(async (id) => {
@@ -144,6 +181,18 @@ const New_Admission_Lists = () => {
       Total_Fees: admin.total_fees,
       Paid_Amount: admin.paid_amount,
       Payment_Method: admin.payment_method,
+      Admission_Status: admin.admission_status,
+      Profile_Verification: admin.profile_verification,
+      Student_Aadhaar_Front_Verification: admin.student_aadhar_front_verification,
+      Student_Aadhaar_Back_Verification: admin.student_aadhar_back_verification,
+      Father_Aadhaar_Front_Verification: admin.father_aadhar_front_verification,
+      Father_Aadhaar_Back_Verification: admin.father_aadhar_back_verification,
+      Mother_Aadhaar_Front_Verification: admin.mother_aadhar_front_verification,
+      Mother_Aadhaar_Back_Verification: admin.mother_aadhar_back_verification,
+      Birth_Certificate_Verification: admin.birth_certificate_verification,
+      Mobile_Number_Verification: admin.mobile_number_verification,
+      Email_Verification: admin.email_verification,
+      WhatsApp_Number_Verification: admin.whatsapp_number_verification,
     })));
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Admissions");
@@ -157,7 +206,7 @@ const New_Admission_Lists = () => {
     doc.text("Nursery Admission List", 20, 10);
     doc.autoTable({
       head: [
-        ["Student ID", "Name", "Class", "Gender", "DOB", "Aadhaar", "Father", "Mother", "Status"],
+        ["Student ID", "Name", "Class", "Gender", "DOB", "Aadhaar", "Father", "Mother", "Admission Status", "Profile Verification"],
       ],
       body: currentAdmins.map(admin => [
         admin.student_id || "N/A",
@@ -168,7 +217,8 @@ const New_Admission_Lists = () => {
         admin.adhar_no || "N/A",
         admin.father_full_name || "N/A",
         admin.mother_full_name || "N/A",
-        admin.payment_status || "N/A",
+        admin.admission_status || "N/A",
+        admin.profile_verification || "N/A",
       ]),
       theme: "striped",
       headStyles: { fillColor: [59, 130, 246], textColor: [255, 255, 255] },
@@ -177,9 +227,23 @@ const New_Admission_Lists = () => {
     doc.save("admissions.pdf");
   };
 
+  // Function to determine dropdown classes based on value
+  const getDropdownClasses = (value) => {
+    switch (value) {
+      case "Approved":
+      case "Verified":
+        return "bg-green-500 text-white border-green-600 hover:bg-green-600 focus:ring-green-600";
+      case "Rejected":
+        return "bg-red-500 text-white border-red-600 hover:bg-red-600 focus:ring-red-600";
+      case "Pending":
+      default:
+        return "bg-orange-600 text-white border-orange-600 hover:bg-orange-600 focus:ring-orange-600";
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
-      <main className="max-w-[90vw] mx-auto mt-32 bg-white  shadow-lg p-6">
+      <main className="max-w-[90vw] mx-auto mt-32 bg-white shadow-lg p-6">
         {/* Popup Notification */}
         {showPopup && (
           <div className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg text-white flex items-center gap-2 shadow-lg
@@ -193,7 +257,7 @@ const New_Admission_Lists = () => {
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
           <button
             onClick={() => window.history.back()}
-            className="bg-blue-600 text-white px-4 py-2  flex items-center gap-2 hover:bg-blue-700 transition"
+            className="bg-blue-600 text-white px-4 py-2 flex items-center gap-2 hover:bg-blue-700 transition"
           >
             <FaArrowLeft /> Go Back
           </button>
@@ -204,26 +268,26 @@ const New_Admission_Lists = () => {
               <input
                 type="text"
                 placeholder="Search by Student ID or Name..."
-                className="w-full pl-10 pr-4 py-2 border  focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-2 border focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
             <button
               onClick={handleDownloadExcel}
-              className="bg-green-500 text-white px-4 py-2  flex items-center gap-2 hover:bg-green-600 transition"
+              className="bg-green-500 text-white px-4 py-2 flex items-center gap-2 hover:bg-green-600 transition"
             >
               <FaDownload /> Excel
             </button>
             <button
               onClick={handleDownloadPDF}
-              className="bg-red-500 text-white px-4 py-2  flex items-center gap-2 hover:bg-red-600 transition"
+              className="bg-red-500 text-white px-4 py-2 flex items-center gap-2 hover:bg-red-600 transition"
             >
               <FaDownload /> PDF
             </button>
             <Link
               href="/student_dash/students_forms/admission_update_form_nursery"
-              className="bg-blue-500 text-white px-4 py-2  flex items-center gap-2 hover:bg-blue-600 transition"
+              className="bg-blue-500 text-white px-4 py-2 flex items-center gap-2 hover:bg-blue-600 transition"
             >
               <FaPlus /> Add New
             </Link>
@@ -231,7 +295,7 @@ const New_Admission_Lists = () => {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto  border border-gray-200">
+        <div className="overflow-x-auto border border-gray-200">
           <table className="min-w-full bg-white">
             <thead className="bg-blue-600 text-white">
               <tr>
@@ -285,13 +349,25 @@ const New_Admission_Lists = () => {
                 <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Total Fees</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Paid Amount</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Payment Method</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Admission Status</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Profile Verification</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Student Aadhaar Front Verif.</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Student Aadhaar Back Verif.</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Father Aadhaar Front Verif.</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Father Aadhaar Back Verif.</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Mother Aadhaar Front Verif.</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Mother Aadhaar Back Verif.</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Birth Certificate Verif.</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Mobile Number Verif.</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">Email Verification</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap">WhatsApp Number Verif.</th>
                 <th className="px-4 py-3 text-center text-sm font-semibold whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {currentAdmins.length === 0 ? (
                 <tr>
-                  <td colSpan="51" className="px-4 py-6 text-center text-gray-500">
+                  <td colSpan="63" className="px-4 py-6 text-center text-gray-500">
                     No data available.
                   </td>
                 </tr>
@@ -420,22 +496,154 @@ const New_Admission_Lists = () => {
                     <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{admin.total_fees || "N/A"}</td>
                     <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{admin.paid_amount || "N/A"}</td>
                     <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{admin.payment_method || "N/A"}</td>
+                    <td className="px-4 py-3">
+                      <select
+                        value={admin.admission_status || "Pending"}
+                        onChange={(e) => confirmStatusUpdate(admin.z_id, "admission_status", e.target.value)}
+                        className={`w-full p-1 rounded focus:outline-none transition ${getDropdownClasses(admin.admission_status || "Pending")}`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-3">
+                      <select
+                        value={admin.profile_verification || "Pending"}
+                        onChange={(e) => confirmStatusUpdate(admin.z_id, "profile_verification", e.target.value)}
+                        className={`w-full p-1 rounded focus:outline-none transition ${getDropdownClasses(admin.profile_verification || "Pending")}`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Verified">Verified</option>
+                        <option value="Rejected">Rejected</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-3">
+                      <select
+                        value={admin.student_aadhar_front_verification || "Pending"}
+                        onChange={(e) => confirmStatusUpdate(admin.z_id, "student_aadhar_front_verification", e.target.value)}
+                        className={`w-full p-1 rounded focus:outline-none transition ${getDropdownClasses(admin.student_aadhar_front_verification || "Pending")}`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Verified">Verified</option>
+                        <option value="Rejected">Rejected</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-3">
+                      <select
+                        value={admin.student_aadhar_back_verification || "Pending"}
+                        onChange={(e) => confirmStatusUpdate(admin.z_id, "student_aadhar_back_verification", e.target.value)}
+                        className={`w-full p-1 rounded focus:outline-none transition ${getDropdownClasses(admin.student_aadhar_back_verification || "Pending")}`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Verified">Verified</option>
+                        <option value="Rejected">Rejected</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-3">
+                      <select
+                        value={admin.father_aadhar_front_verification || "Pending"}
+                        onChange={(e) => confirmStatusUpdate(admin.z_id, "father_aadhar_front_verification", e.target.value)}
+                        className={`w-full p-1 rounded focus:outline-none transition ${getDropdownClasses(admin.father_aadhar_front_verification || "Pending")}`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Verified">Verified</option>
+                        <option value="Rejected">Rejected</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-3">
+                      <select
+                        value={admin.father_aadhar_back_verification || "Pending"}
+                        onChange={(e) => confirmStatusUpdate(admin.z_id, "father_aadhar_back_verification", e.target.value)}
+                        className={`w-full p-1 rounded focus:outline-none transition ${getDropdownClasses(admin.father_aadhar_back_verification || "Pending")}`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Verified">Verified</option>
+                        <option value="Rejected">Rejected</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-3">
+                      <select
+                        value={admin.mother_aadhar_front_verification || "Pending"}
+                        onChange={(e) => confirmStatusUpdate(admin.z_id, "mother_aadhar_front_verification", e.target.value)}
+                        className={`w-full p-1 rounded focus:outline-none transition ${getDropdownClasses(admin.mother_aadhar_front_verification || "Pending")}`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Verified">Verified</option>
+                        <option value="Rejected">Rejected</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-3">
+                      <select
+                        value={admin.mother_aadhar_back_verification || "Pending"}
+                        onChange={(e) => confirmStatusUpdate(admin.z_id, "mother_aadhar_back_verification", e.target.value)}
+                        className={`w-full p-1 rounded focus:outline-none transition ${getDropdownClasses(admin.mother_aadhar_back_verification || "Pending")}`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Verified">Verified</option>
+                        <option value="Rejected">Rejected</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-3">
+                      <select
+                        value={admin.birth_certificate_verification || "Pending"}
+                        onChange={(e) => confirmStatusUpdate(admin.z_id, "birth_certificate_verification", e.target.value)}
+                        className={`w-full p-1 rounded focus:outline-none transition ${getDropdownClasses(admin.birth_certificate_verification || "Pending")}`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Verified">Verified</option>
+                        <option value="Rejected">Rejected</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-3">
+                      <select
+                        value={admin.mobile_number_verification || "Pending"}
+                        onChange={(e) => confirmStatusUpdate(admin.z_id, "mobile_number_verification", e.target.value)}
+                        className={`w-full p-1 rounded focus:outline-none transition ${getDropdownClasses(admin.mobile_number_verification || "Pending")}`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Verified">Verified</option>
+                        <option value="Rejected">Rejected</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-3">
+                      <select
+                        value={admin.email_verification || "Pending"}
+                        onChange={(e) => confirmStatusUpdate(admin.z_id, "email_verification", e.target.value)}
+                        className={`w-full p-1 rounded focus:outline-none transition ${getDropdownClasses(admin.email_verification || "Pending")}`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Verified">Verified</option>
+                        <option value="Rejected">Rejected</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-3">
+                      <select
+                        value={admin.whatsapp_number_verification || "Pending"}
+                        onChange={(e) => confirmStatusUpdate(admin.z_id, "whatsapp_number_verification", e.target.value)}
+                        className={`w-full p-1 rounded focus:outline-none transition ${getDropdownClasses(admin.whatsapp_number_verification || "Pending")}`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Verified">Verified</option>
+                        <option value="Rejected">Rejected</option>
+                      </select>
+                    </td>
                     <td className="px-4 py-3 text-center">
-  <div className="flex justify-center gap-2">
-    <Link
-      href={`/student_dash/students_forms/admission_update_form_nursery?z_id=${admin.z_id}`}
-      className="text-blue-500 hover:text-blue-700"
-    >
-      <FaEdit size={16} />
-    </Link>
-    <button
-      onClick={() => confirmDelete(admin.z_id)}
-      className="text-red-500 hover:text-red-700"
-    >
-      <FaTrash size={16} />
-    </button>
-  </div>
-</td>
+                      <div className="flex justify-center gap-2">
+                        <Link
+                          href={`/student_dash/students_forms/admission_update_form_nursery?z_id=${admin.z_id}`}
+                          className="text-blue-500 hover:text-blue-700"
+                        >
+                          <FaEdit size={16} />
+                        </Link>
+                        <button
+                          onClick={() => confirmDelete(admin.z_id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <FaTrash size={16} />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))
               )}
@@ -461,6 +669,32 @@ const New_Admission_Lists = () => {
                   className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
                 >
                   Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Update Confirmation Modal */}
+        {updateConfirm.show && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded-lg max-w-sm w-full">
+              <h2 className="text-lg font-semibold text-gray-800">Confirm Update</h2>
+              <p className="mt-2 text-gray-600">
+                Are you sure you want to update <strong>{updateConfirm.field.replace(/_/g, " ")}</strong> to <strong>{updateConfirm.value}</strong>?
+              </p>
+              <div className="mt-6 flex justify-end gap-3">
+                <button
+                  onClick={() => setUpdateConfirm({ show: false, z_id: null, field: null, value: null })}
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleStatusUpdate(updateConfirm.z_id, updateConfirm.field, updateConfirm.value)}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                >
+                  Confirm
                 </button>
               </div>
             </div>
