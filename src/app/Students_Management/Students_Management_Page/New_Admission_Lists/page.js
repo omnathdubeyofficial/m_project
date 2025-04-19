@@ -19,7 +19,7 @@ const New_Admission_Lists = () => {
   const [popupMessage, setPopupMessage] = useState({ text: "", type: "" });
   const [modalImage, setModalImage] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState({ show: false, id: null });
-  const adminsPerPage = 5;
+  const adminsPerPage = 10;
 
   // Fetch nursery admission data
   useEffect(() => {

@@ -65,6 +65,18 @@ const nurseryAdmissionListType = gql`
     class_title: String
     success_msg: String
     error_msg: String
+    admission_status: String
+  profile_verification: String
+  student_aadhar_front_verification: String
+  student_aadhar_back_verification: String
+  father_aadhar_front_verification: String
+  father_aadhar_back_verification: String
+  mother_aadhar_front_verification: String
+  mother_aadhar_back_verification: String
+  birth_certificate_verification: String
+  mobile_number_verification: String
+  email_verification: String
+  whatsapp_number_verification: String  
   }
 
   # Query type for fetching nursery admissions
@@ -129,6 +141,18 @@ const nurseryAdmissionListType = gql`
       paid_amount: String
       class_title: String
       payment_method: String
+      admission_status: String
+  profile_verification: String
+  student_aadhar_front_verification: String
+  student_aadhar_back_verification: String
+  father_aadhar_front_verification: String
+  father_aadhar_back_verification: String
+  mother_aadhar_front_verification: String
+  mother_aadhar_back_verification: String
+  birth_certificate_verification: String
+  mobile_number_verification: String
+  email_verification: String
+  whatsapp_number_verification: String 
     ): nurseryAdmissionListTypes
 
     updateNurseryAdmissionList(
@@ -187,6 +211,18 @@ const nurseryAdmissionListType = gql`
       total_fees: String
       paid_amount: String
       payment_method: String
+      admission_status: String
+  profile_verification: String
+  student_aadhar_front_verification: String
+  student_aadhar_back_verification: String
+  father_aadhar_front_verification: String
+  father_aadhar_back_verification: String
+  mother_aadhar_front_verification: String
+  mother_aadhar_back_verification: String
+  birth_certificate_verification: String
+  mobile_number_verification: String
+  email_verification: String
+  whatsapp_number_verification: String 
     ): nurseryAdmissionListTypes
 
     deleteNurseryAdmissionList(z_id: String): nurseryAdmissionListTypes

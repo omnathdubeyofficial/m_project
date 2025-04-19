@@ -63,6 +63,19 @@ query {
       utime
       success_msg
       error_msg
+      admission_status  
+profile_verification  
+student_aadhar_front_verification  
+student_aadhar_back_verification  
+father_aadhar_front_verification  
+father_aadhar_back_verification  
+mother_aadhar_front_verification  
+mother_aadhar_back_verification  
+birth_certificate_verification  
+mobile_number_verification  
+email_verification  
+whatsapp_number_verification  
+
     }
   }
 `;

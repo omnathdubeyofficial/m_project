@@ -73,6 +73,18 @@ const createNurseryAdmissionList = async ({
   payment_method,
   date_of_birth,
   class_title,
+  admission_status  ,
+  profile_verification  ,
+  student_aadhar_front_verification  ,
+  student_aadhar_back_verification  ,
+  father_aadhar_front_verification  ,
+  father_aadhar_back_verification  ,
+  mother_aadhar_front_verification  ,
+  mother_aadhar_back_verification  ,
+  birth_certificate_verification , 
+  mobile_number_verification  ,
+  email_verification  ,
+  whatsapp_number_verification  
 }) => {
   try {
     // ✅ Required field validation
@@ -168,6 +180,18 @@ const createNurseryAdmissionList = async ({
           class_title,
           cdate: setUserDate(),
           ctime: setUserTime(),
+          admission_status  ,
+          profile_verification  ,
+          student_aadhar_front_verification  ,
+          student_aadhar_back_verification  ,
+          father_aadhar_front_verification  ,
+          father_aadhar_back_verification  ,
+          mother_aadhar_front_verification  ,
+          mother_aadhar_back_verification  ,
+          birth_certificate_verification , 
+          mobile_number_verification  ,
+          email_verification  ,
+          whatsapp_number_verification  
         },
       });
 
@@ -250,6 +274,18 @@ const updateNurseryAdmissionList = async ({
   paid_amount,
   payment_method,
   date_of_birth,
+  admission_status  ,
+  profile_verification  ,
+  student_aadhar_front_verification  ,
+  student_aadhar_back_verification  ,
+  father_aadhar_front_verification  ,
+  father_aadhar_back_verification  ,
+  mother_aadhar_front_verification  ,
+  mother_aadhar_back_verification  ,
+  birth_certificate_verification , 
+  mobile_number_verification  ,
+  email_verification  ,
+  whatsapp_number_verification  
 }) => {
   try {
     // Validate z_id
@@ -315,6 +351,18 @@ const updateNurseryAdmissionList = async ({
         date_of_birth: date_of_birth ? setDateFormat(date_of_birth) : undefined,
         udate: setUserDate(),
         utime: setUserTime(),
+        admission_status  ,
+        profile_verification  ,
+        student_aadhar_front_verification  ,
+        student_aadhar_back_verification  ,
+        father_aadhar_front_verification  ,
+        father_aadhar_back_verification  ,
+        mother_aadhar_front_verification  ,
+        mother_aadhar_back_verification  ,
+        birth_certificate_verification , 
+        mobile_number_verification  ,
+        email_verification  ,
+        whatsapp_number_verification  
       },
     });
 

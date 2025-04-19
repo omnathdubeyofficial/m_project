@@ -54,6 +54,19 @@ export const CREATE_NURSERY_ADMISSION_LIST_MUTATION = `
     $total_fees: String
     $paid_amount: String
     $payment_method: String
+    $admission_status: String   
+$profile_verification: String  
+$student_aadhar_front_verification: String  
+$student_aadhar_back_verification: String  
+$father_aadhar_front_verification: String  
+$father_aadhar_back_verification: String  
+$mother_aadhar_front_verification: String  
+$mother_aadhar_back_verification: String  
+$birth_certificate_verification: String  
+$mobile_number_verification: String  
+$email_verification: String  
+$whatsapp_number_verification: String  
+
   ) {
     createNurseryAdmissionList(
       first_name: $first_name
@@ -110,6 +123,19 @@ export const CREATE_NURSERY_ADMISSION_LIST_MUTATION = `
       total_fees: $total_fees
       paid_amount: $paid_amount
       payment_method: $payment_method
+      admission_status :$admission_status
+profile_verification:$profile_verification
+student_aadhar_front_verification:$student_aadhar_front_verification
+student_aadhar_back_verification  :$student_aadhar_back_verification
+father_aadhar_front_verification  :$father_aadhar_front_verification
+father_aadhar_back_verification  :$father_aadhar_back_verification
+mother_aadhar_front_verification  :$mother_aadhar_front_verification
+mother_aadhar_back_verification:$  mother_aadhar_back_verification
+birth_certificate_verification  :$birth_certificate_verification
+mobile_number_verification  :$mobile_number_verification
+email_verification  :$email_verification
+whatsapp_number_verification  :$whatsapp_number_verification
+
     ) {
       z_id
       student_id
@@ -173,6 +199,19 @@ export const CREATE_NURSERY_ADMISSION_LIST_MUTATION = `
       utime
       success_msg
       error_msg
+      admission_status  
+profile_verification  
+student_aadhar_front_verification  
+student_aadhar_back_verification  
+father_aadhar_front_verification  
+father_aadhar_back_verification  
+mother_aadhar_front_verification  
+mother_aadhar_back_verification  
+birth_certificate_verification  
+mobile_number_verification  
+email_verification  
+whatsapp_number_verification  
+
     }
   }
 `;
