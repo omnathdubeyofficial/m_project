@@ -8,7 +8,6 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { GET_NURSERY_ADMISSION_DATA } from "../../../query/NurseryAdmissionQuery/fetchNurseryAdmission";
 import { DELETE_NURSERY_ADMISSION_LIST_MUTATION } from "../../../mutation/NurseryAdmissionMutation/deleteNurseryAdmissionMutation";
-import { UPDATE_NURSERY_ADMISSION_LIST_MUTATION } from "../../../mutation/NurseryAdmissionMutation/updateNurseryAdmissionMutation";
 import { executeQuery, executeMutation } from "../../../graphqlClient";
 import Link from "next/link";
 
@@ -223,7 +222,7 @@ const New_Admission_Lists = () => {
               <FaDownload /> PDF
             </button>
             <Link
-              href="/student_dash/students_forms/admission_form"
+              href="/student_dash/students_forms/admission_update_form_nursery"
               className="bg-blue-500 text-white px-4 py-2  flex items-center gap-2 hover:bg-blue-600 transition"
             >
               <FaPlus /> Add New
@@ -422,21 +421,21 @@ const New_Admission_Lists = () => {
                     <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{admin.paid_amount || "N/A"}</td>
                     <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{admin.payment_method || "N/A"}</td>
                     <td className="px-4 py-3 text-center">
-                      <div className="flex justify-center gap-2">
-                        <Link
-                          href={`/student_dash/students_forms/edit/${admin.z_id}`}
-                          className="text-blue-500 hover:text-blue-700"
-                        >
-                          <FaEdit size={16} />
-                        </Link>
-                        <button
-                          onClick={() => confirmDelete(admin.z_id)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <FaTrash size={16} />
-                        </button>
-                      </div>
-                    </td>
+  <div className="flex justify-center gap-2">
+    <Link
+      href={`/student_dash/students_forms/admission_update_form_nursery?z_id=${admin.z_id}`}
+      className="text-blue-500 hover:text-blue-700"
+    >
+      <FaEdit size={16} />
+    </Link>
+    <button
+      onClick={() => confirmDelete(admin.z_id)}
+      className="text-red-500 hover:text-red-700"
+    >
+      <FaTrash size={16} />
+    </button>
+  </div>
+</td>
                   </tr>
                 ))
               )}
