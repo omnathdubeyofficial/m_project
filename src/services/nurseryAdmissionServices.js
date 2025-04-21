@@ -73,18 +73,18 @@ const createNurseryAdmissionList = async ({
   payment_method,
   date_of_birth,
   class_title,
-  admission_status  ,
-  profile_verification  ,
-  student_aadhar_front_verification  ,
-  student_aadhar_back_verification  ,
-  father_aadhar_front_verification  ,
-  father_aadhar_back_verification  ,
-  mother_aadhar_front_verification  ,
-  mother_aadhar_back_verification  ,
-  birth_certificate_verification , 
-  mobile_number_verification  ,
-  email_verification  ,
-  whatsapp_number_verification  
+  admission_status,
+  profile_verification,
+  student_aadhar_front_verification,
+  student_aadhar_back_verification,
+  father_aadhar_front_verification,
+  father_aadhar_back_verification,
+  mother_aadhar_front_verification,
+  mother_aadhar_back_verification,
+  birth_certificate_verification,
+  mobile_number_verification,
+  email_verification,
+  whatsapp_number_verification
 }) => {
   try {
     // ✅ Required field validation
@@ -180,18 +180,18 @@ const createNurseryAdmissionList = async ({
           class_title,
           cdate: setUserDate(),
           ctime: setUserTime(),
-          admission_status  ,
-          profile_verification  ,
-          student_aadhar_front_verification  ,
-          student_aadhar_back_verification  ,
-          father_aadhar_front_verification  ,
-          father_aadhar_back_verification  ,
-          mother_aadhar_front_verification  ,
-          mother_aadhar_back_verification  ,
-          birth_certificate_verification , 
-          mobile_number_verification  ,
-          email_verification  ,
-          whatsapp_number_verification  
+          admission_status,
+          profile_verification,
+          student_aadhar_front_verification,
+          student_aadhar_back_verification,
+          father_aadhar_front_verification,
+          father_aadhar_back_verification,
+          mother_aadhar_front_verification,
+          mother_aadhar_back_verification,
+          birth_certificate_verification,
+          mobile_number_verification,
+          email_verification,
+          whatsapp_number_verification
         },
       });
 
@@ -207,17 +207,12 @@ const createNurseryAdmissionList = async ({
     return { ...created, success_msg: 'Nursery admission created successfully' };
 
   } catch (error) {
-    // console.error('Error creating nursery admission:', {
-    //   message: error.message,
-    //   stack: error.stack,
-    //   class_title,
-    //   operation: 'createNurseryAdmissionList',
-    // });
     return { error_msg: error.message };
   } finally {
     await prisma.$disconnect();
   }
 };
+
 // Update an existing nursery admission by ID
 const updateNurseryAdmissionList = async ({
   z_id,
@@ -274,18 +269,18 @@ const updateNurseryAdmissionList = async ({
   paid_amount,
   payment_method,
   date_of_birth,
-  admission_status  ,
-  profile_verification  ,
-  student_aadhar_front_verification  ,
-  student_aadhar_back_verification  ,
-  father_aadhar_front_verification  ,
-  father_aadhar_back_verification  ,
-  mother_aadhar_front_verification  ,
-  mother_aadhar_back_verification  ,
-  birth_certificate_verification , 
-  mobile_number_verification  ,
-  email_verification  ,
-  whatsapp_number_verification  
+  admission_status,
+  profile_verification,
+  student_aadhar_front_verification,
+  student_aadhar_back_verification,
+  father_aadhar_front_verification,
+  father_aadhar_back_verification,
+  mother_aadhar_front_verification,
+  mother_aadhar_back_verification,
+  birth_certificate_verification,
+  mobile_number_verification,
+  email_verification,
+  whatsapp_number_verification
 }) => {
   try {
     // Validate z_id
@@ -351,18 +346,18 @@ const updateNurseryAdmissionList = async ({
         date_of_birth: date_of_birth ? setDateFormat(date_of_birth) : undefined,
         udate: setUserDate(),
         utime: setUserTime(),
-        admission_status  ,
-        profile_verification  ,
-        student_aadhar_front_verification  ,
-        student_aadhar_back_verification  ,
-        father_aadhar_front_verification  ,
-        father_aadhar_back_verification  ,
-        mother_aadhar_front_verification  ,
-        mother_aadhar_back_verification  ,
-        birth_certificate_verification , 
-        mobile_number_verification  ,
-        email_verification  ,
-        whatsapp_number_verification  
+        admission_status,
+        profile_verification,
+        student_aadhar_front_verification,
+        student_aadhar_back_verification,
+        father_aadhar_front_verification,
+        father_aadhar_back_verification,
+        mother_aadhar_front_verification,
+        mother_aadhar_back_verification,
+        birth_certificate_verification,
+        mobile_number_verification,
+        email_verification,
+        whatsapp_number_verification
       },
     });
 
@@ -388,8 +383,43 @@ const deleteNurseryAdmissionList = async ({ z_id }) => {
       throw new Error('z_id is required for deletion');
     }
 
-    const deletedData = await prisma.nursery_admissions.delete({
-      where: { z_id },
+    let deletedData = null;
+
+    await prisma.$transaction(async (tx) => {
+      // Fetch the admission to get class_title
+      const admission = await tx.nursery_admissions.findUnique({
+        where: { z_id },
+        select: { class_title: true },
+      });
+
+      if (!admission) {
+        throw new Error('Admission not found');
+      }
+
+      // Fetch class data
+      const classData = await tx.classes_data.findFirst({
+        where: { class_title: admission.class_title },
+      });
+
+      if (!classData) {
+        throw new Error(`Class title "${admission.class_title}" does not exist in classes_data`);
+      }
+
+      // Delete the admission
+      deletedData = await tx.nursery_admissions.delete({
+        where: { z_id },
+      });
+
+      // Update filled_seats
+      const currentFilledSeats = parseInt(classData.filled_seats) || 0;
+      if (currentFilledSeats > 0) {
+        await tx.classes_data.update({
+          where: { z_id: classData.z_id },
+          data: {
+            filled_seats: (currentFilledSeats - 1).toString(),
+          },
+        });
+      }
     });
 
     return {
