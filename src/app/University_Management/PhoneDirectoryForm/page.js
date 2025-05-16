@@ -5,7 +5,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { executeMutation } from "../../graphqlClient";
 import SchoolNavbar from "../../navbar/page";
-import { CREATE_PHONE_DIRECTORY_MUTATION } from "../../../mutation/phoneDirectoryMutation/createPhoneDirectoryMutation";
+// import { CREATE_PHONE_DIRECTORY_MUTATION } from "../../../mutation/phoneDirectoryMutation/createPhoneDirectoryMutation";
 
 const PhoneDirectoryForm = () => {
   const router = useRouter();
