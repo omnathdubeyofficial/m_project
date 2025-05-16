@@ -1,11 +1,11 @@
 'use client';
 
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
+import { motion } from "framer-motion";
+// import Image from "next/image";
 import Link from 'next/link';
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { FaHome, FaTachometerAlt, FaArrowLeft } from 'react-icons/fa';
+import { FaHome,  FaArrowLeft } from 'react-icons/fa';
 export default function Home() {
   const [activeSection, setActiveSection] = useState("overview");
   const [circles, setCircles] = useState([]); // Store circle data

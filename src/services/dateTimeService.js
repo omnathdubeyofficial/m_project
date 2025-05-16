@@ -2,8 +2,8 @@
  * @author 
  */
 
-import { ThirdPartyDraggable } from '@fullcalendar/interaction/index.js';
-import { error } from 'console';
+// import { ThirdPartyDraggable } from '@fullcalendar/interaction/index.js';
+// import { error } from 'console';
 import moment from 'moment';
 
 const sysdate_yyyymmdd = () => moment().format("YYYYMMDD");

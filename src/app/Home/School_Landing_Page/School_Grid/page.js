@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function School_Grid() {
     return (
       <div className="bg-gray-50 py-24 sm:py-32">
@@ -20,7 +22,7 @@ export default function School_Grid() {
                 </div>
                 <div className="@container relative min-h-[30rem] w-full grow max-lg:mx-auto max-lg:max-w-sm">
                   <div className="absolute inset-x-10 top-10 bottom-0 overflow-hidden rounded-t-[12cqw] border-x-[3cqw] border-t-[3cqw] border-gray-700 bg-gray-900 shadow-2xl">
-                    <img
+                    <Image
                       className="size-full object-cover object-top"
                       src="https://tailwindcss.com/plus-assets/img/component-images/bento-03-mobile-friendly.png"
                       alt=""
@@ -40,7 +42,7 @@ export default function School_Grid() {
                   </p>
                 </div>
                 <div className="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 lg:pb-2">
-                  <img
+                  <Image
                     className="w-full max-lg:max-w-xs"
                     src="https://tailwindcss.com/plus-assets/img/component-images/bento-03-performance.png"
                     alt=""
@@ -59,7 +61,7 @@ export default function School_Grid() {
                   </p>
                 </div>
                 <div className="@container flex flex-1 items-center max-lg:py-6 lg:pb-2">
-                  <img
+                  <Image
                     className="h-[min(152px,40cqw)] object-cover"
                     src="https://tailwindcss.com/plus-assets/img/component-images/bento-03-security.png"
                     alt=""

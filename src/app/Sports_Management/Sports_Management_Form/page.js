@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Navbar from "../../navbar/page";
+import Image from "next/image";
+// import Navbar from "../../navbar/page";
 
 const Sports_Management_Form = () => {
   const router = useRouter();
@@ -122,7 +123,7 @@ const Sports_Management_Form = () => {
               </label>
               {formData.sportBanner && (
                 <div className="relative mt-2">
-                  <img src={formData.sportBanner} className="w-32 h-32 border object-cover" alt="Sport Banner" />
+                  <Image src={formData.sportBanner} className="w-32 h-32 border object-cover" alt="Sport Banner" />
                   <button
                     type="button"
                     onClick={handleClearFile}

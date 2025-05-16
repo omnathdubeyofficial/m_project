@@ -88,7 +88,7 @@ export default function AdmissionEnquiry() {
         message: "",
       });
       setErrors({});
-    } catch (error) {
+    } catch  {
       setFormStatus({ type: "error", message: "Failed to submit enquiry. Please try again." });
     }
   };

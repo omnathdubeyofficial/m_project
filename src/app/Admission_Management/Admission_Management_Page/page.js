@@ -1,7 +1,7 @@
 "use client";
 
 import { 
-  FaUserPlus, FaClipboardList, FaUsers, FaClipboard, FaBullhorn, FaFileSignature, FaUserCheck, FaUserTimes
+  FaUserPlus, FaClipboardList, FaUsers, FaFileSignature, FaUserCheck, FaUserTimes
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Link from "next/link";

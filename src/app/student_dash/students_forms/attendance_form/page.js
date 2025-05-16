@@ -20,9 +20,9 @@ const TeacherAttendancePage = () => {
 
   const [selectedRole, setSelectedRole] = useState("Class Teacher"); // Role selection (Class Teacher or Subject Teacher)
   const [selectedSubject, setSelectedSubject] = useState("Mathematics"); // Subject selection for subject teachers
-  const [selectedClass, setSelectedClass] = useState("Class 1"); // Class/Section selection
+  const [ setSelectedClass] = useState("Class 1"); // Class/Section selection
   const [selectedDate, setSelectedDate] = useState("");
-  const [selectedDivision, setSelectedDivision] = useState("A");
+  const [ setSelectedDivision] = useState("A");
 
 
   const handleAttendanceChange = (studentId, subject, status) => {
@@ -74,7 +74,7 @@ const TeacherAttendancePage = () => {
         {/* Teacher's Name Input */}
         <div className="mb-6">
           <div className="w-full max-w-xs">
-            <label className="block text-sm font-medium text-gray-600 mb-2">Teacher's Name</label>
+            <label className="block text-sm font-medium text-gray-600 mb-2">Teacher Name</label>
             <input
               type="text"
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

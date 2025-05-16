@@ -2,16 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Doughnut, Pie, Line, Bar } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { FaBook, FaUsers, FaBookReader, FaPlus,FaUserPlus,FaBookOpen, FaClipboardList, FaChartLine, FaMoneyBillWave } from "react-icons/fa";
 import "tailwindcss/tailwind.css";
-import SchoolNavbar from "../../navbar/page";
-
+// import SchoolNavbar from "../../navbar/page";
 Chart.register(...registerables);
 
 const LibraryDashboard = () => {
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     totalBooks: 5000,
     availableBooks: 3500,
     issuedBooks: 1200,
@@ -25,7 +24,7 @@ const LibraryDashboard = () => {
   const router = useRouter();
 
 
-  const [libraryData, setLibraryData] = useState({
+  const [libraryData] = useState({
     categoryDistribution: {
       labels: ["Fiction", "Non-Fiction", "Science", "History", "Technology"],
       datasets: [

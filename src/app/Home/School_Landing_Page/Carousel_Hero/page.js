@@ -18,7 +18,7 @@ const HeroSection = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [expanded, setExpanded] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
 
 
 

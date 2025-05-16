@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { executeMutation } from "../../graphqlClient";
-import SchoolNavbar from "../../navbar/page";
-// import { CREATE_PHONE_DIRECTORY_MUTATION } from "../../../mutation/phoneDirectoryMutation/createPhoneDirectoryMutation";
+// import SchoolNavbar from "../../navbar/page";// import { CREATE_PHONE_DIRECTORY_MUTATION } from "../../../mutation/phoneDirectoryMutation/createPhoneDirectoryMutation";
 
 const PhoneDirectoryForm = () => {
   const router = useRouter();
@@ -55,7 +54,7 @@ const PhoneDirectoryForm = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <SchoolNavbar />
+      {/* <SchoolNavbar /> */}
       <div className="mt-16 flex flex-col items-center justify-center py-10 px-6">
         <div className="w-full max-w-5xl bg-white p-8 shadow-xl border border-gray-200 rounded-lg">
           <div className="flex justify-between items-center mb-6">

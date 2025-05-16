@@ -7,6 +7,7 @@ import { FaArrowLeft, FaUpload, FaTimes, FaCopy } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
+import Image from "next/image";
 
 const Nursery_Admission_Form = () => {
   const [formData, setFormData] = useState({
@@ -263,7 +264,7 @@ const Nursery_Admission_Form = () => {
           autoClose: 3000,
         });
       }
-    } catch (error) {
+    } catch  {
       setErrors((prev) => ({ ...prev, [name]: "Error uploading file." }));
       toast.error("Error uploading file for " + name.replace(/_/g, " "), {
         position: "top-right",
@@ -543,7 +544,7 @@ const Nursery_Admission_Form = () => {
         </div>
 
         <div className="mb-8 mt-10">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-6">Child's Personal Information</h2>
+          <h2 className="text-2xl font-semibold text-gray-700 mb-6">Child Personal Information</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-600">
@@ -730,7 +731,7 @@ const Nursery_Admission_Form = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-600">
-                Father's Work<span className="text-red-600">*</span>
+                Father Work<span className="text-red-600">*</span>
               </label>
               <select
                 name="father_work"
@@ -748,7 +749,7 @@ const Nursery_Admission_Form = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-600">
-                Mother's Work<span className="text-red-600">*</span>
+                Mother Work<span className="text-red-600">*</span>
               </label>
               <select
                 name="mother_work"
@@ -1280,7 +1281,7 @@ const Nursery_Admission_Form = () => {
                 {errors[key] && <p className="text-red-600 mt-1">{errors[key]}</p>}
                 {formData[key] && (
                   <div className="relative mt-2">
-                    <img src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" />
+              <Image src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" width={500} height={300} />
                     <button
                       type="button"
                       onClick={() => handleClearFile(key)}

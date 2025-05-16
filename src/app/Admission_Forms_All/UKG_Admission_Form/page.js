@@ -3,9 +3,10 @@
 import { useState, useRef } from "react";
 import { executeMutation } from "../../graphqlClient";
 import { CREATE_STUDENT_REGISTRATION_MUTATION } from "../../mutation/studentRegistrationMutations/createStudentRegistration";
-import { ArrowLeft, FileText, File, Trash2, Edit, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Select from 'react-select';
-import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
+import { FaUpload, FaTimes,} from "react-icons/fa";
+import Image from "next/image";
 
 const Two_Admission_Form = () => {
   const [formData, setFormData] = useState({
@@ -78,15 +79,15 @@ const Two_Admission_Form = () => {
     });
   };
 
-  const [paymentId, setPaymentId] = useState(null);
+  const [ setPaymentId] = useState(null);
 
-  const handleSubmitpay = () => {
-    if (!paymentId) {
-      alert('Please complete the payment before submitting the application.');
-      return;
-    }
-    alert('Application Submitted Successfully!');
-  };
+  // const handleSubmitpay = () => {
+  //   if (!paymentId) {
+  //     alert('Please complete the payment before submitting the application.');
+  //     return;
+  //   }
+  //   alert('Application Submitted Successfully!');
+  // };
 
   const handlePayNow = () => {
     // Hardcoded payment ID for now
@@ -332,7 +333,7 @@ const Two_Admission_Form = () => {
 
 
   const [selectedClass, setSelectedClass] = useState('');
-  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [ setSelectedSubjects] = useState([]);
 
 
 
@@ -680,7 +681,7 @@ const Two_Admission_Form = () => {
 
      {/* Father Work */}
      <div>
-       <label className="block text-sm font-medium text-gray-600">Father's Work *</label>
+       <label className="block text-sm font-medium text-gray-600">Father Work *</label>
        <select
          name="father_occupation"
          required
@@ -696,7 +697,7 @@ const Two_Admission_Form = () => {
 
      {/* Mother Work */}
      <div>
-       <label className="block text-sm font-medium text-gray-600">Mother's Work *</label>
+       <label className="block text-sm font-medium text-gray-600">Mother Work *</label>
        <select
          name="mother_occupation"
          required
@@ -1138,7 +1139,7 @@ const Two_Admission_Form = () => {
           {errors[key] && <p className="text-red-600 mt-1">{errors[key]}</p>}
           {formData[key] && (
             <div className="relative mt-2">
-              <img src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" />
+              <Image src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" width={500} height={300} />
               <button
                 type="button"
                 onClick={() => handleClearFile(key)}

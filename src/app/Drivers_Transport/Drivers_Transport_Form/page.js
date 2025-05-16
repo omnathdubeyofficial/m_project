@@ -3,7 +3,8 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
-import Navbar from "../../navbar/page";
+import Image from "next/image";
+// import Navbar from "../../navbar/page";
 
 const Drivers_Transport_Form = () => {
   const router = useRouter();
@@ -117,7 +118,7 @@ const Drivers_Transport_Form = () => {
                   </label>
                   {formData[key] && (
                     <div className="relative mt-2">
-                      <img src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" />
+                      <Image src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" />
                       <button
                         type="button"
                         onClick={() => handleClearFile(key)}

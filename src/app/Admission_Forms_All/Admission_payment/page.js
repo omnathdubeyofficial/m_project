@@ -537,7 +537,7 @@ const AdmissionPayment = () => {
                 <h3 className="text-2xl font-semibold text-gray-800 mb-4">Confirm Payment</h3>
                 <p className="text-gray-600 mb-6">
                   You are about to pay ₹{fees.grandTotal.toLocaleString()} for {studentData.first_name}{" "}
-                  {studentData.last_name}'s admission to {studentData.class_title || "Nursery"}. Proceed?
+                  {studentData.last_name} admission to {studentData.class_title || "Nursery"}. Proceed?
                 </p>
                 <div className="flex justify-end gap-4">
                   <motion.button

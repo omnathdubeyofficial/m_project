@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
-import DatePicker from 'react-datepicker';
+// import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import Image from 'next/image';
 
 const InvoiceGenerator = () => {
     const [formData, setFormData] = useState({
@@ -166,7 +167,7 @@ const InvoiceGenerator = () => {
                             {/* Header Section */}
                             <div className="flex items-center justify-between mb-6">
                                 <div className="flex items-center">
-                                    <img src="/images/logo/image.png" alt="School Logo" className="h-24 mr-4" />
+                                    <Image src="/images/logo/image.png" alt="School Logo" className="h-24 mr-4" />
                                     <div>
                                         <h1 className="text-4xl font-bold text-blue-800">Greenwood High School</h1>
                                         <p className="text-gray-600">123 School Road, Education City, India</p>
@@ -228,7 +229,7 @@ const InvoiceGenerator = () => {
                             <div className="mt-6 border-t pt-6">
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <img src="/images/logo/image.png" alt="School Stamp" className="h-24" />
+                                        <Image src="/images/logo/image.png" alt="School Stamp" className="h-24" />
                                         <p className="mt-2 text-gray-600">Authorized Signature</p>
                                     </div>
                                     <p className="text-gray-600">Thank you for your payment!</p>

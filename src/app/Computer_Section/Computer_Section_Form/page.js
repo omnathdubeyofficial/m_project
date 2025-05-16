@@ -3,7 +3,8 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
-import Navbar from "../../navbar/page";
+import Image from "next/image";
+// import Navbar from "../../navbar/page";
 
 const ComputerSectionForm = () => {
   const router = useRouter();
@@ -106,7 +107,7 @@ const ComputerSectionForm = () => {
                 </label>
                 {formData.computerImage && (
                   <div className="relative mt-2">
-                    <img src={formData.computerImage} alt="Computer" className="w-32 h-32 rounded-lg border object-cover" />
+                    <Image src={formData.computerImage} alt="Computer" className="w-32 h-32 rounded-lg border object-cover" />
                     <button
                       type="button"
                       onClick={handleClearFile}

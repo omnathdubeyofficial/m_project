@@ -11,6 +11,7 @@ import { executeQuery, executeMutation } from "../../../graphqlClient";
 import Select from "react-select";
 import Panel_Header from "../../../dashboard/panel_header";
 import Loading from "../../../Loader/page";
+import Image from "next/image";
 
 export default function ClassForm() {
   const initialFormState = {
@@ -156,7 +157,7 @@ export default function ClassForm() {
         setIsSuccess(false);
         setMessage(response.createClassesData.error_msg);
       }
-    } catch (error) {
+    } catch  {
       setIsSuccess(false);
       setMessage("An error occurred while submitting the form.");
     }
@@ -203,7 +204,7 @@ export default function ClassForm() {
         setIsSuccess(false);
         setMessage(response.updateClassesData.error_msg);
       }
-    } catch (error) {
+    } catch  {
       setIsSuccess(false);
       setMessage("An error occurred while updating the class.");
     }
@@ -253,7 +254,7 @@ export default function ClassForm() {
         setIsSuccess(false);
         setMessage(response.deleteClassesData.error_msg);
       }
-    } catch (error) {
+    } catch  {
       setIsSuccess(false);
       setMessage("An error occurred while deleting the class.");
     }
@@ -398,7 +399,7 @@ export default function ClassForm() {
             </label>
             {formData.image && (
               <div className="mt-2">
-                <img src={formData.image} alt="Uploaded" className="w-32 h-32 rounded border" />
+                <Image src={formData.image} alt="Uploaded" className="w-32 h-32 rounded border" />
                 <button
                   type="button"
                   className="text-white mt-2 bg-red-900 p-1 rounded-xl"
@@ -508,7 +509,7 @@ export default function ClassForm() {
                       </div>
                       <div className="md:col-span-2">
                         <p className="text-xs text-blue-500 font-semibold uppercase">Image</p>
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.class_title}
                           className="w-16 h-16 rounded border cursor-pointer"
@@ -548,7 +549,7 @@ export default function ClassForm() {
       {popupImage && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-4 rounded-lg shadow-lg relative">
-            <img src={popupImage} alt="Full Size" className="max-w-full max-h-[80vh]" />
+            <Image src={popupImage} alt="Full Size" className="max-w-full max-h-[80vh]" />
             <button
               onClick={handleClosePopup}
               className="absolute top-2 right-2 text-white bg-red-600 p-2 rounded-full"

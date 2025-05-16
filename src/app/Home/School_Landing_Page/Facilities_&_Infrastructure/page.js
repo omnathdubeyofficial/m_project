@@ -94,7 +94,7 @@ export default function FacilitiesInfrastructure() {
       );
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  });
 
   return (
     <section className="lg:py-20 py-10 bg-gradient-to-r from-[#001F3F] to-[#003366]/80 text-white">

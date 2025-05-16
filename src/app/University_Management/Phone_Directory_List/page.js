@@ -10,7 +10,7 @@ import { GET_PHONE_DIRECTORY_DATA } from "../../query/PhoneDirectoryQuery/fetchP
 import { DELETE_PHONE_DIRECTORY_MUTATION } from "../../mutation/PhoneDirectoryMutation/deletePhoneDirectoryMutation";
 import { executeQuery, executeMutation } from "../../graphqlClient";
 import Link from "next/link";
-import Navbar from "../../navbar/page";
+// import Navbar from "../../navbar/page";
 
 const Holiday_List = () => {
   const [admins, setAdmins] = useState([]);
@@ -140,9 +140,9 @@ const Holiday_List = () => {
           <button onClick={handleDownloadPDF} className="bg-red-600 text-white px-4 py-2  flex items-center gap-2 hover:bg-red-700 transition">
             <FaDownload /> PDF
           </button>
-          {/* <Link href="/University_Management/PhoneDirectoryForm" className="bg-blue-600 text-white flex items-center px-4 py-2  hover:bg-blue-700 transition">
+          <Link href="/University_Management/PhoneDirectoryForm" className="bg-blue-600 text-white flex items-center px-4 py-2  hover:bg-blue-700 transition">
             <FaPlus className="mr-2" /> Add New
-          </Link> */}
+          </Link>
         </div>
 
       </div>

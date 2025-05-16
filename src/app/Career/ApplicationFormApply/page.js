@@ -62,7 +62,8 @@ export default function JobApplicationForm() {
         setPopupMessage("Resume upload failed.");
         setPopupType("error");
       }
-    } catch (error) {
+    } 
+    catch  {
       setPopupMessage("Error uploading resume.");
       setPopupType("error");
     }

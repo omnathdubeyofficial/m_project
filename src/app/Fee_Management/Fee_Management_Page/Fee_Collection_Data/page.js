@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import { ArrowLeft, FileText, File, Trash2, Edit,Eye, ChevronLeft, ChevronRight } from 'lucide-react';
-import { FaWhatsapp, FaEnvelope,FaCreditCard, FaMoneyBillWave, FaFileInvoice } from "react-icons/fa";
+import { ArrowLeft, FileText, File,Eye, ChevronLeft, ChevronRight } from 'lucide-react';
+// import { FaWhatsapp, FaEnvelope,FaCreditCard, FaMoneyBillWave, FaFileInvoice } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import * as XLSX from 'xlsx';
 
@@ -303,7 +303,7 @@ const downloadExcel = () => {
           <div className="bg-white p-6 shadow-lg w-3/4 max-h-[80vh] mt-32 overflow-y-auto">
               {selectedStudent && (
                   <>
-                      <h2 className="text-2xl mb-4">{selectedStudent.name}'s Details</h2>
+                      <h2 className="text-2xl mb-4">{selectedStudent.name} Details</h2>
                       <p><strong>Roll Number:</strong> {selectedStudent.rollNumber}</p>
                       <p><strong>Class:</strong> {selectedStudent.class}</p>
                       <p><strong>Parent Name:</strong> {selectedStudent.parentName}</p>

@@ -1,8 +1,8 @@
 // pages/StudentDashboard.js
 "use client";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
-import { ClipboardList, BookOpen, MessageSquare, Calendar, Medal, Users, FileCheck, AlertCircle } from 'lucide-react';
-import Navber from "../navbar/page";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+// import { ClipboardList, BookOpen, MessageSquare, Calendar, Medal, Users, FileCheck, AlertCircle } from 'lucide-react';
+// import Navber from "../navbar/page";
 
 const attendanceData = [
   { name: 'Jan', Attendance: 20 },

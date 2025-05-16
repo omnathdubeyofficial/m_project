@@ -44,7 +44,7 @@ const services = {
     { title: "School Website", description: "Professional website for your institution.", icon: <Globe size={40} className="text-white mx-auto" /> },
     { title: "Online Admission Portal", description: "Digitalize the admission process.", icon: <UserCheck size={40} className="text-white mx-auto" /> },
     { title: "Events & Announcements", description: "Showcase upcoming school events.", icon: <CalendarCheck size={40} className="text-white mx-auto" /> },
-    { title: "Gallery & Media", description: "Display school images and videos.", icon: <Image size={40} className="text-white mx-auto" /> },
+    { title: "Gallery & Media", description: "Display school images and videos.", icon: <Image size={40} className="text-white mx-auto" alt="" /> },
     { title: "Blogs & News", description: "Share updates, achievements, and more.", icon: <FileText size={40} className="text-white mx-auto" /> },
     { title: "Alumni Portal", description: "Connect with past students and alumni.", icon: <Users size={40} className="text-white mx-auto" /> }
   ],

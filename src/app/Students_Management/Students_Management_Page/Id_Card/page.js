@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import html2canvas from "html2canvas";
 import { Search, ChevronDown, CheckSquare, Square, FileDown, FileArchive } from "lucide-react"
-import { FaSearch, FaEdit, FaTrash,FaPrint,  FaChevronRight, FaChevronLeft, FaPlus, FaArrowLeft, FaDownload, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import {  FaArrowLeft } from "react-icons/fa";
 
 import jsPDF from "jspdf";
+import Image from "next/image";
 
 const students = [
   {
@@ -251,7 +252,7 @@ const IDCard = () => {
   }}
 >
   <div className="text-center bg-[#001F3F] bg-opacity-90 p-4 text-white">
-    <img
+    <Image
       src={student.schoolLogo}
       width={80}
       height={80}
@@ -271,7 +272,7 @@ const IDCard = () => {
       IDENTITY CARD
     </h3>
     <div className="flex justify-center mt-3">
-      <img
+      <Image
         src={student.profileImage}
         width={85}
         height={85}
@@ -321,7 +322,7 @@ const IDCard = () => {
 >
   {/* School Logo and Title */}
   <div className="text-center mb-4">
-    <img src={student.schoolLogo} width={60} height={60} className="mx-auto" alt="School Logo" />
+    <Image src={student.schoolLogo} width={60} height={60} className="mx-auto" alt="School Logo" />
     <h2 className="text-lg font-bold text-blue-900 mt-2">SCHOOL IDENTITY CARD</h2>
   </div>
 

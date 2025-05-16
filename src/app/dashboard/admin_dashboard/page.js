@@ -1,13 +1,13 @@
 // pages/AdminDashboard.js
 "use client";
-import { BarChart, Bar, XAxis,  YAxis, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis,  YAxis, Tooltip, ResponsiveContainer, LineChart, Line, } from 'recharts';
 import { 
-    FaUniversity, FaUserGraduate,FaBookOpen, FaHourglassHalf,FaArrowLeft, FaChalkboardTeacher,FaFileInvoice, FaUsers, FaFileAlt, 
-    FaUserTie, FaCogs, FaBook,FaBus,FaBed,FaUtensils,FaUserCog, FaFlask, FaDesktop, FaBroom, FaShieldAlt, FaClipboardCheck, 
-    FaCalendarAlt, FaFutbol, FaTrophy, FaBell,FaSchool,FaTools,FaCalendarCheck,FaClipboardList, FaUserPlus, FaMoneyBillWave 
+    FaUniversity, FaUserGraduate,FaBookOpen, FaHourglassHalf, FaChalkboardTeacher,FaFileInvoice, FaUsers,
+    FaUserTie,  FaBook,FaBus,FaBed,FaUtensils,FaUserCog, FaFlask,FaClipboardCheck, 
+     FaFutbol, FaTrophy, FaSchool,FaTools,FaCalendarCheck,FaClipboardList, FaUserPlus, FaMoneyBillWave 
   } from 'react-icons/fa';
-import Navber from "../../navbar/page";
-import Link from 'next/link';
+// import Navber from "../../navbar/page";
+// import Link from 'next/link';
 
 
 // Sample data for fees, salary, and other metrics

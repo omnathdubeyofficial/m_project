@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Bar, Doughnut, Line, Radar, Pie } from "react-chartjs-2";
+import { Doughnut, Pie } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
-import { FaUserGraduate, FaChalkboardTeacher, FaMoneyBillWave, FaClipboardList, FaBell, FaSchool, FaBookOpen } from "react-icons/fa";
+import { FaUserGraduate, FaChalkboardTeacher, FaMoneyBillWave, FaClipboardList, FaSchool, FaBookOpen } from "react-icons/fa";
 import "tailwindcss/tailwind.css";
 
 Chart.register(...registerables);
 
 const Dashboard = () => {
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     students: 1200,
     teachers: 75,
     feesCollected: 500000,
@@ -18,7 +18,7 @@ const Dashboard = () => {
     courses: 25,
   });
 
-  const [classData, setClassData] = useState({
+  const [classData] = useState({
     performance: {
       labels: ["Math", "Science", "English", "History", "Geography"],
       datasets: [

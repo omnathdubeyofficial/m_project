@@ -29,7 +29,7 @@ async function verifyPassword(plainPassword, hashedPassword) {
   return isMatch;
 }
 
-const login = async (_, { userid, password }, { res }) => {
+const login = async (_, { userid, password }) => {
   try {
     console.log("🔹 Login attempt for userid:", userid);
 

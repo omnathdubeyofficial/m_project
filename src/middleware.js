@@ -32,7 +32,7 @@ export async function middleware(req) {
         if (payload) {
           return NextResponse.redirect(new URL(ROLE_DASHBOARD[payload.role], req.url));
         }
-      } catch (error) {
+      } catch  {
         // Invalid token - Allow login
       }
     }
@@ -54,7 +54,7 @@ export async function middleware(req) {
     if (!ROLE_PERMISSIONS[userRole]?.has(pathname)) {
       return NextResponse.redirect(new URL("/unauthorized", req.url));
     }
-  } catch (error) {
+  } catch  {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 

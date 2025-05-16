@@ -105,7 +105,7 @@ const validatePassword = (password) => {
       } else {
         setErrorMsg(response?.error_msg || "Failed to send OTP. Please try again.");
       }
-    } catch (error) {
+    } catch {
       setErrorMsg("An error occurred. Please check your connection and try again.");
     } finally {
       setLoading(false);
@@ -156,7 +156,7 @@ const validatePassword = (password) => {
       } else {
         setErrorMsg(response?.error_msg || "Invalid OTP or failed to reset password.");
       }
-    } catch (error) {
+    } catch  {
       setErrorMsg("An error occurred during password reset.");
     } finally {
       setLoading(false);

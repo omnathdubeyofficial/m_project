@@ -3,7 +3,8 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
-import Navbar from "../../navbar/page";
+import Image from "next/image";
+// import Navbar from "../../navbar/page";
 
 const Event_Management_Form = () => {
   const router = useRouter();
@@ -107,7 +108,7 @@ const Event_Management_Form = () => {
               </label>
               {formData.eventBanner && (
                 <div className="relative mt-2">
-                  <img src={formData.eventBanner} className="w-32 h-32 border object-cover" alt="Event Banner" />
+                  <Image src={formData.eventBanner} className="w-32 h-32 border object-cover" alt="Event Banner" />
                   <button
                     type="button"
                     onClick={handleClearFile}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+// import { useState } from "react";
 
 const academicHistory = {
   "2025-26": "This is the history of the academic year 2025-26. It includes major achievements, milestones, and key events that took place throughout the year.",

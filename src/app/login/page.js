@@ -86,9 +86,10 @@ const Login = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-white">
-      <img 
+      <Image 
         src="/gif_loading/loader_block.gif" 
         alt="Loading..." 
+        width={500} height={300}
       />
     </div>
     

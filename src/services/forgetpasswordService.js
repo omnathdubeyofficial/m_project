@@ -53,7 +53,7 @@ const sendOtpForPasswordReset = async (args = {}) => {
         where: { z_id: user.z_id },
         data: { otp, otpExpiry },
       });
-    } catch (updateError) {
+    } catch  {
       // console.error("❌ [Database Update Error] Failed to store OTP:", updateError.message || updateError);
       return {
         success_msg: null,

@@ -9,7 +9,7 @@ import {
   FaPlus,
   FaSave,
 } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { CREATE_CLASS_SUBJECTS_MUTATION } from "../../../mutation/classSubjectMutation/createclassSubjectMutation";
 import { UPDATE_CLASS_SUBJECTS_MUTATION } from "../../../mutation/classSubjectMutation/updateclassSubjectMutation";
 import { DELETE_CLASS_SUBJECTS_MUTATION } from "../../../mutation/classSubjectMutation/deleteclassSubjectMutation";
@@ -19,8 +19,8 @@ import Panel_Header from "../../../dashboard/panel_header";
 import Loading from "../../../Loader/page";
 
 const Class_Subject_Form = () => {
-  const router = useRouter();
-  const [firstName] = useState("");
+  // const router = useRouter();
+  // const [firstName] = useState("");
   const [logoutMessage, setLogoutMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [isError, setIsError] = useState(false);

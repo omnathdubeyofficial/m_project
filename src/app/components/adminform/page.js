@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { FaSave, FaArrowLeft, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Navbar from "../../navbar/page";
+// import Navbar from "../../navbar/page";
 import { executeMutation } from "../../graphqlClient";
 import { CREATE_USER_MANAGEMENT_DATA_MUTATION } from "../../mutation/createUserManagementData";
 
@@ -78,7 +78,7 @@ const AdminRegistrationPage = () => {
         password: "",
         confirm_password: ""
       });
-    } catch (error) {
+    } catch  {
       setMessage({ type: "error", text: "Failed to create admin. Please try again." });
       setTimeout(() => setMessage(null), 3000);
     }

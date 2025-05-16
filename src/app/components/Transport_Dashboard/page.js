@@ -2,16 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Doughnut, Pie, Line, Bar } from "react-chartjs-2";
+import {  Bar } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
-import { FaBus, FaUsers, FaRoute, FaPlus, FaUserPlus, FaBusAlt, FaClipboardList, FaChartLine, FaMoneyBillWave } from "react-icons/fa";
+import { FaBus, FaUsers, FaRoute, FaBusAlt, FaClipboardList, FaChartLine, FaMoneyBillWave } from "react-icons/fa";
 import "tailwindcss/tailwind.css";
-import SchoolNavbar from "../../navbar/page";
-
+// import SchoolNavbar from "../../navbar/page";
 Chart.register(...registerables);
 
 const TransportManagementDashboard = () => {
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     totalVehicles: 50,
     availableVehicles: 35,
     activeRoutes: 20,
@@ -24,7 +23,7 @@ const TransportManagementDashboard = () => {
 
   const router = useRouter();
 
-  const [transportData, setTransportData] = useState({
+  const [transportData] = useState({
     vehicleDistribution: {
       labels: ["Buses", "Vans", "Mini Buses", "Cars"],
       datasets: [

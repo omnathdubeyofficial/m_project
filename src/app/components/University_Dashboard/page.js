@@ -1,12 +1,11 @@
 "use client";
 
 import { 
-  FaSearch, FaCalendarAlt, FaUsers, FaRegCalendarAlt, 
-  FaTrophy, FaHeartbeat, FaArrowLeft, FaClipboardList, FaGraduationCap, FaClipboard 
+  FaCalendarAlt, FaUsers, FaRegCalendarAlt,  FaArrowLeft, FaClipboardList
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Navber from "../../navbar/page";
+// import Navber from "../../navbar/page";
 
 const UniversityPage = () => {
   const router = useRouter();

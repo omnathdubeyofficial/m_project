@@ -11,7 +11,7 @@ import { GET_TOKAN_MANAGEMENT_DATA } from "../query/authTokanQuery";
 import {LOGOUT_MUTATION} from "../mutation/logoutMutation/logoutMutation"
 import { executeQuery,executeMutation } from "../graphqlClient";
 
-export default function SchoolNavbar({ role }) {
+export default function SchoolNavbar({  }) {
   const router = useRouter();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);

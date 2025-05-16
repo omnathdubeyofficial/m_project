@@ -10,7 +10,7 @@ import { GET_SECURITY_FORM_DATA } from "../../query/SecurityFormQuery/fetchSecur
 import { DELETE_SECURITY_FORM_MUTATION } from "../../mutation/SecurityFormMutation/deleteSecurityForm";
 import { executeQuery, executeMutation } from "../../graphqlClient";
 import Link from "next/link";
-import Navbar from "../../navbar/page";
+// import Navbar from "../../navbar/page";
 
 const TransportVehiclesData = () => {
   const [admins, setAdmins] = useState([]);

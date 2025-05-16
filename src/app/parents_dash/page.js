@@ -2,7 +2,7 @@
 "use client";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { ClipboardList, BookOpen, MessageSquare, Calendar, Medal, Users, FileCheck, AlertCircle, FileX } from 'lucide-react';
-import Navber from "../navbar/page";
+// // import Navber from "../navbar/page";
 
 const sampleData = [
   { name: 'Jan', Attendance: 20 },
@@ -80,7 +80,7 @@ export default function ParentsDashboard() {
         </div>
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold flex items-center gap-2"><FileCheck className="w-5 h-5" /> Exam Results</h2>
-          <p className="mt-2 text-sm">View your child's exam scores and progress.</p>
+          <p className="mt-2 text-sm">View your child exam scores and progress.</p>
         </div>
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold flex items-center gap-2"><AlertCircle className="w-5 h-5" /> Complaints</h2>

@@ -90,7 +90,7 @@ export default function ScheduleSchoolVisit() {
         message: "",
       });
       setErrors({});
-    } catch (error) {
+    } catch  {
       setFormStatus({ type: "error", message: "Failed to schedule visit. Please try again." });
     }
   };

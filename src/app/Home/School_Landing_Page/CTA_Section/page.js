@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function CTA_Section() {
   return (
     <div className="bg-white w-full">
@@ -36,7 +38,7 @@ export default function CTA_Section() {
             </div>
           </div>
           <div className="relative mt-16 h-80 lg:mt-8 w-full">
-            <img
+            <Image
               alt="App screenshot"
               src="https://tailwindcss.com/plus-assets/img/component-images/dark-project-app-screenshot.png"
               width={1824}

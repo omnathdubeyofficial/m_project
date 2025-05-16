@@ -9,7 +9,7 @@ const getAdmissionForm = async () => {
 };
 
 // Create a new user
-const createAdmissionForm = async ({ student_name, adhar_number, pan_number, email, profile_img, contact_number, date_of_birth, gender, address, city, state, pincode, nationality, course_applied, education_qualification, percentage, bank_name, bank_account_holder_name, bank_branch, account_number, ifsc_code, adhar_card_img, pan_card_img, prev_marksheet, passbook, guardian_name, guardian_contact, admission_status, submission_date, admission_fee, cdate, ctime }) => {
+const createAdmissionForm = async ({ student_name, adhar_number, pan_number, email, profile_img, contact_number, date_of_birth, gender, address, city, state, pincode, nationality, course_applied, education_qualification, percentage, bank_name, bank_account_holder_name, bank_branch, account_number, ifsc_code, adhar_card_img, pan_card_img, prev_marksheet, passbook, guardian_name, guardian_contact, admission_status, submission_date, admission_fee }) => {
   try {
 
     const createdData = await prisma.admission_form.create({

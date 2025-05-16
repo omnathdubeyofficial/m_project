@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
-import Navbar from "../../navbar/page";
+// import Navbar from "../../navbar/page";
+import Image from "next/image";
 
 const Students_Management_Form = () => {
-  const router = useRouter();
+  // const router = useRouter();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -66,7 +67,7 @@ const Students_Management_Form = () => {
           <form onSubmit={handleSubmit} className="grid gap-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
-                { name: "name", label: "Student's Name" },
+                { name: "name", label: "Students Name" },
                 { name: "phone", label: "Phone Number" },
                 { name: "email", label: "Email Address" },
                 { name: "address", label: "Address" },
@@ -109,7 +110,7 @@ const Students_Management_Form = () => {
                   </label>
                   {formData[key] && (
                     <div className="relative mt-2">
-                      <img src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" />
+                      <Image src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" width={500} height={300}/>
                       <button
                         type="button"
                         onClick={() => handleClearFile(key)}

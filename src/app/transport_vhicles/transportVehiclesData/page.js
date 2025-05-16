@@ -10,7 +10,7 @@ import { GET_USER_MANAGEMENT_DATA } from "../../query/userManagementDataQuery";
 import { DELETE_USER_MANAGEMENT_DATA_MUTATION } from "../../mutation/deleteUserManagementData";
 import { executeQuery, executeMutation } from "../../graphqlClient";
 import Link from "next/link";
-import Navbar from "../../navbar/page";
+// import Navbar from "../../navbar/page";
 
 const TransportVehiclesData = () => {
   const [admins, setAdmins] = useState([]);

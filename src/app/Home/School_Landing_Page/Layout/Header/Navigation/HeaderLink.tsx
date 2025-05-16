@@ -3,7 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IconType } from "react-icons";
-import { FaBook, FaChalkboardTeacher, FaUsers, FaCalendarAlt, FaHome, FaInfoCircle, FaAngleRight } from "react-icons/fa";
+import { FaAngleRight } from "react-icons/fa";
 
 const HeaderLink: React.FC<{ item: HeaderItem & { icon?: IconType } }> = ({ item }) => {
   const [submenuOpen, setSubmenuOpen] = useState(false);

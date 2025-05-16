@@ -129,7 +129,7 @@ export default function NoticeBoardForm() {
         setPopupMessage("File upload failed");
         setPopupType("error");
       }
-    } catch (error) {
+    } catch  {
       setPopupMessage("Error uploading file");
       setPopupType("error");
     }
@@ -169,7 +169,7 @@ export default function NoticeBoardForm() {
         setPopupType("error");
       }
       setFormData(initialFormData);
-    } catch (error) {
+    } catch  {
       setPopupMessage("Operation failed");
       setPopupType("error");
     }
@@ -212,7 +212,7 @@ export default function NoticeBoardForm() {
         setPopupMessage(response.deleteNoticeBoardLists.error_msg || "Delete failed");
         setPopupType("error");
       }
-    } catch (error) {
+    } catch  {
       setPopupMessage("Delete operation failed");
       setPopupType("error");
     }

@@ -11,7 +11,7 @@ import { DELETE_ACADEMIC_CALENDAR_MUTATION } from "../../../mutation/AcademicCal
 import { UPDATE_ACADEMIC_CALENDAR_MUTATION } from "../../../mutation/AcademicCalendarMutation/updateAcademicCalendardMutation";
 import { executeQuery, executeMutation } from "../../../graphqlClient";
 import Link from "next/link";
-import Navbar from "../../../navbar/page";
+// import Navbar from "../../../navbar/page";
 
 const Academic_Calendar_List = () => {
   const [admins, setAdmins] = useState([]);

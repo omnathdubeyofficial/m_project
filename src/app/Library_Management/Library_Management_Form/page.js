@@ -3,7 +3,8 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
-import Navbar from "../../navbar/page";
+import Image from "next/image";
+// import Navbar from "../../navbar/page";
 
 const LibraryManagementForm = () => {
   const router = useRouter();
@@ -102,7 +103,7 @@ const LibraryManagementForm = () => {
                 </label>
                 {formData.bookCover && (
                   <div className="relative mt-2">
-                    <img src={formData.bookCover} alt="Book Cover" className="w-32 h-32 rounded-lg border object-cover" />
+                    <Image src={formData.bookCover} alt="Book Cover" className="w-32 h-32 rounded-lg border object-cover" />
                     <button
                       type="button"
                       onClick={handleClearFile}

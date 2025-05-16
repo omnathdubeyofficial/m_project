@@ -10,7 +10,6 @@ import {
   FaLanguage,
   FaUsers,
   FaHome,
-  FaTachometerAlt,
   FaArrowLeft,
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
@@ -27,10 +26,10 @@ const staggerChildren = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.4 } },
 };
-const glowEffect = {
-  hidden: { scale: 0.9, opacity: 0 },
-  visible: { scale: 1, opacity: 1, transition: { duration: 1.2 } },
-};
+// const glowEffect = {
+//   hidden: { scale: 0.9, opacity: 0 },
+//   visible: { scale: 1, opacity: 1, transition: { duration: 1.2 } },
+// };
 
 const CareerPage = () => {
   const [circles, setCircles] = useState([]);

@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Doughnut, Pie, Line, Bar } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
-import { FaVial, FaMicroscope, FaFlask, FaPlus, FaUserPlus, FaClipboardList, FaChartLine, FaMoneyBillWave } from "react-icons/fa";
+import { FaVial, FaMicroscope, FaFlask, FaPlus, FaClipboardList, FaChartLine, FaMoneyBillWave } from "react-icons/fa";
 import "tailwindcss/tailwind.css";
-import SchoolNavbar from "../../navbar/page";
-
+// import SchoolNavbar from "../../navbar/page";
 Chart.register(...registerables);
 
 const LabDashboard = () => {
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     totalExperiments: 500,
     availableExperiments: 350,
     conductedExperiments: 120,
@@ -24,7 +23,7 @@ const LabDashboard = () => {
 
   const router = useRouter();
 
-  const [labData, setLabData] = useState({
+  const [labData] = useState({
     experimentTypes: {
       labels: ["Chemistry", "Biology", "Physics", "Microbiology", "Technology"],
       datasets: [

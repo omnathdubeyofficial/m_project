@@ -9,7 +9,7 @@ import { UPDATE_FACULTY_MUTATION } from "../../mutation/facultyMembersMutation/u
 import { DELETE_FACULTY_MUTATION } from "../../mutation/facultyMembersMutation/deletefacultyMembers";
 import {GET_ALL_FACULTY_QUERY } from "../../query/facultyMembersQuery/facultyMembersQuery";
 import Panel_Header from '../../dashboard/panel_header';
-
+import Image from 'next/image';
 export default function FacultyApplicationForm() {
   const initialFormData = {
     z_id: null,
@@ -317,10 +317,11 @@ export default function FacultyApplicationForm() {
                 <FaTimes size={18} />
               </button>
             </div>
-            <img
+            <Image
               src={showImagePopup}
               alt="Profile Image"
               className="w-full max-h-[70vh] object-contain rounded"
+               width={32} height={32}
             />
           </div>
         </div>
@@ -429,10 +430,11 @@ export default function FacultyApplicationForm() {
             </label>
             {formData.profile_image && (
               <div className="mt-2 flex items-center gap-2">
-                <img
+                <Image
                   src={formData.profile_image}
                   alt="Uploaded"
                   className="w-32 h-32 rounded border object-cover"
+                  width={32} height={32}
                 />
                 <button
                   type="button"
@@ -550,11 +552,12 @@ export default function FacultyApplicationForm() {
                 >
                   <div className="p-4 border-b border-gray-200 bg-gradient-to-br from-teal-50 to-gray-50 flex items-center gap-4">
                     {item.profile_image && (
-                      <img
+                      <Image
                         src={item.profile_image}
                         alt="Profile"
                         className="w-12 h-12 object-cover rounded-full cursor-pointer"
                         onClick={() => setShowImagePopup(item.profile_image)}
+                         width={32} height={32}
                       />
                     )}
                     <h3 className="text-md text-gray-800">

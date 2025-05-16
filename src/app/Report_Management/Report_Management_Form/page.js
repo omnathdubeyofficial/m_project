@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Navbar from "../../navbar/page";
+// import Navbar from "../../navbar/page";
 
 const Report_Management_Form = () => {
   const router = useRouter();

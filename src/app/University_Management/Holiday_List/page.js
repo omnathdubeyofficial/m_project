@@ -10,7 +10,7 @@ import { GET_HOLIDAY_LISTS_DATA } from "../../query/HolidayListQuery/fetchHolida
 import { DELETE_HOLIDAY_LIST_MUTATION } from "../../mutation/holidayListsMutation/deleteHolidayListMutation";
 import { executeQuery, executeMutation } from "../../graphqlClient";
 import Link from "next/link";
-import Navbar from "../../navbar/page";
+// import Navbar from "../../navbar/page";
 
 const Holiday_List = () => {
   const [admins, setAdmins] = useState([]);

@@ -100,7 +100,7 @@ export default function AdmissionProcess() {
         grade: "",
         message: "",
       });
-    } catch (error) {
+    } catch  {
       setFormStatus({ type: "error", message: "Failed to submit inquiry. Please try again." });
     }
   };

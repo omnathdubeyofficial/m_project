@@ -3,9 +3,10 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { FaUpload, FaSave, FaTimes, FaArrowLeft } from "react-icons/fa";
-import Navbar from "../../navbar/page";
+// import Navbar from "../../navbar/page";
 import { CREATE_SECURITY_FORM_MUTATION } from "../../mutation/SecurityFormMutation/createSecurityForm";
 import { executeMutation } from "../../graphqlClient";
+import Image from "next/image";
 
 const Security_Staff_Form = () => {
   const router = useRouter();
@@ -201,7 +202,7 @@ const Security_Staff_Form = () => {
                   </label>
                   {formData[key] && (
                     <div className="relative mt-2">
-                      <img src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" />
+                      <Image src={formData[key]} alt={label} className="w-32 h-32 rounded-lg border object-cover" />
                       <button
                         type="button"
                         onClick={() => handleClearFile(key)}

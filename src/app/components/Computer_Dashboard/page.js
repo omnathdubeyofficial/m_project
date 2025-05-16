@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Bar } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
-import { FaDesktop, FaServer, FaLaptop, FaPlus, FaUserPlus, FaClipboardList, FaChartLine, FaMoneyBillWave } from "react-icons/fa";
+import { FaDesktop, FaServer, FaLaptop, FaPlus, FaClipboardList, FaChartLine, FaMoneyBillWave } from "react-icons/fa";
 import "tailwindcss/tailwind.css";
-import SchoolNavbar from "../../navbar/page";
-
+// import SchoolNavbar from "../../navbar/page";
 Chart.register(...registerables);
 
 const ComputerDashboard = () => {
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     totalComputers: 200,
     availableComputers: 150,
     usedComputers: 40,
@@ -24,7 +23,7 @@ const ComputerDashboard = () => {
 
   const router = useRouter();
 
-  const [computerData, setComputerData] = useState({
+  const [computerData] = useState({
     deviceTypes: {
       labels: ["Desktops", "Laptops", "Servers", "Tablets"],
       datasets: [

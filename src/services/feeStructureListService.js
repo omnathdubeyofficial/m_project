@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import { setUserDate, setUserTime, setDateFormat } from './dateTimeService.js';
+import { setUserDate, setUserTime } from './dateTimeService.js';
 import { v4 as uuidv4 } from 'uuid';
 
 // Get all users

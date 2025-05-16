@@ -4,8 +4,7 @@ import { useState,useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { executeMutation } from "../../graphqlClient";
-import SchoolNavbar from "../../navbar/page";
-import { CREATE_HOLIDAY_LIST_MUTATION } from "../../mutation/holidayListsMutation/createHolidayListMutation";
+// import SchoolNavbar from "../../navbar/page";import { CREATE_HOLIDAY_LIST_MUTATION } from "../../mutation/holidayListsMutation/createHolidayListMutation";
 
 const HolidayForm = () => {
   const router = useRouter();
@@ -54,7 +53,7 @@ const HolidayForm = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <SchoolNavbar />
+      {/* <SchoolNavbar /> */}
       <div className="mt-16 flex flex-col items-center justify-center py-10 px-6">
         <div className="w-full max-w-2xl bg-white p-8 shadow-xl border border-gray-200 rounded-lg">
           <div className="flex justify-between items-center mb-6">
