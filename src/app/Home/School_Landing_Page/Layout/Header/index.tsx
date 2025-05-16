@@ -113,27 +113,27 @@ const SchoolHeader: React.FC = () => {
   };
 
   // Close dropdown and mobile menu when clicking outside
-  const handleClickOutside = (event: MouseEvent) => {
-    // Check for mobile menu
-    if (
-      mobileMenuRef.current &&
-      !mobileMenuRef.current.contains(event.target as Node) &&
-      isMenuOpen
-    ) {
-      setIsMenuOpen(false);
-      setActiveDropdown(null); // Close any open dropdown
-    }
+  // const handleClickOutside = (event: MouseEvent) => {
+  //   // Check for mobile menu
+  //   if (
+  //     mobileMenuRef.current &&
+  //     !mobileMenuRef.current.contains(event.target as Node) &&
+  //     isMenuOpen
+  //   ) {
+  //     setIsMenuOpen(false);
+  //     setActiveDropdown(null); // Close any open dropdown
+  //   }
 
-    // Check for desktop dropdowns
-    if (
-      activeDropdown &&
-      !dropdownRefs.current.some(
-        (ref) => ref && ref.contains(event.target as Node)
-      )
-    ) {
-      setActiveDropdown(null);
-    }
-  };
+  //   // Check for desktop dropdowns
+  //   if (
+  //     activeDropdown &&
+  //     !dropdownRefs.current.some(
+  //       (ref) => ref && ref.contains(event.target as Node)
+  //     )
+  //   ) {
+  //     setActiveDropdown(null);
+  //   }
+  // };
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
