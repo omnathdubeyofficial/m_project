@@ -348,6 +348,8 @@ const SchoolHeader: React.FC = () => {
                 src="/images/logo/image.png"
                 alt="School Logo"
                 className="h-16"
+                width={62}
+                height={55}
               />
               <button
                 onClick={() => setIsMenuOpen(false)}
