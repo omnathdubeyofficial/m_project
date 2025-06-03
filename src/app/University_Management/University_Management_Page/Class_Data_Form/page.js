@@ -395,11 +395,12 @@ export default function ClassForm() {
                 className="hidden"
                 accept="image/*"
                 onChange={handleFileChange}
-              />
+                width={300}
+                height={400}              />
             </label>
             {formData.image && (
               <div className="mt-2">
-                <Image src={formData.image} alt="Uploaded" className="w-32 h-32 rounded border" />
+                <Image src={formData.image} alt="Uploaded" className="w-32 h-32 rounded border" height={400} width={300}/>
                 <button
                   type="button"
                   className="text-white mt-2 bg-red-900 p-1 rounded-xl"
@@ -514,6 +515,8 @@ export default function ClassForm() {
                           alt={item.class_title}
                           className="w-16 h-16 rounded border cursor-pointer"
                           onClick={() => handleImageClick(item.image)}
+                          width={400}
+                          height={400}
                         />
                       </div>
                       <div className="md:col-span-1">
@@ -549,7 +552,7 @@ export default function ClassForm() {
       {popupImage && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-4 rounded-lg shadow-lg relative">
-            <Image src={popupImage} alt="Full Size" className="max-w-full max-h-[80vh]" />
+            <Image src={popupImage} alt="Full Size" className="max-w-full max-h-[80vh]" width={300} height={400} />
             <button
               onClick={handleClosePopup}
               className="absolute top-2 right-2 text-white bg-red-600 p-2 rounded-full"
