@@ -36,7 +36,7 @@
     "app/dashboard/page.js",
     "app/student_dash/page.js",
     "src/app/query/attendanceQuery/fetchAttendance.js"
-  ],
+, "tailwind.config.js"  ],
   "exclude": [
     "node_modules"
   ]
