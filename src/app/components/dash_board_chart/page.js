@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Doughnut, Pie } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { FaUserGraduate, FaChalkboardTeacher, FaMoneyBillWave, FaClipboardList, FaSchool, FaBookOpen } from "react-icons/fa";
-import "tailwindcss/tailwind.css";
+// import "tailwindcss/tailwind.css";
 
 Chart.register(...registerables);
 

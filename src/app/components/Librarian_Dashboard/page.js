@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Bar } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { FaBook, FaUsers, FaBookReader, FaPlus,FaUserPlus,FaBookOpen, FaClipboardList, FaChartLine, FaMoneyBillWave } from "react-icons/fa";
-import "tailwindcss/tailwind.css";
+// import "tailwindcss/tailwind.css";
 // import SchoolNavbar from "../../navbar/page";
 Chart.register(...registerables);
 
