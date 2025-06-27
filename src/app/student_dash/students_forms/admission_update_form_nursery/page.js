@@ -1566,8 +1566,7 @@
 
 // export default Nursery_Admission_Form;
 
-
-import React from 'react';
+'use client';
 
 function page() {
   return (
