@@ -1,18 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  /* config options here */
   images: {
-    domains: ["res.cloudinary.com"],
-  },
-
-  // ✅ Ignore ESLint build errors temporarily on Vercel
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-
-  // ✅ Ignore TypeScript build errors temporarily
-  typescript: {
-    ignoreBuildErrors: true,
+    domains: ["res.cloudinary.com"], // ✅ Cloudinary
   },
 };
 

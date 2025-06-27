@@ -33,9 +33,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/dashboard/page.js",
-    "app/student_dash/page.js",
-    "src/app/query/attendanceQuery/fetchAttendance.js"
+    "app_data/dashboard/page.js",
+    "app_data/student_dash/page.js",
+    "src/app_data/query/attendanceQuery/fetchAttendance.js"
 , "tailwind.config.js"  ],
   "exclude": [
     "node_modules"
