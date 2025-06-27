@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"next dev\" \"nodemon src/index.js\"",
+    "postinstall": "npm install tailwindcss postcss autoprefixer",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
