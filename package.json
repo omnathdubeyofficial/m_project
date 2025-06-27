@@ -4,10 +4,13 @@
   "private": true,
 
   "scripts": {
-    "dev": "concurrently \"next dev\" ",
-    "build": "next build",
+    "dev": "concurrently \"next dev\"",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
+  },
+  "engines": {
+    "node": "20.x"
   },
   "dependencies": {
     "@apollo/client": "^3.12.7",
