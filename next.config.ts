@@ -5,15 +5,15 @@ const nextConfig: NextConfig = {
     domains: ["res.cloudinary.com"],
   },
 
-  // ✅ Ignore ESLint build errors temporarily on Vercel
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // // ✅ Ignore ESLint build errors temporarily on Vercel
+  // eslint: {
+  //   ignoreDuringBuilds: true,
+  // },
 
-  // ✅ Ignore TypeScript build errors temporarily
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  // // ✅ Ignore TypeScript build errors temporarily
+  // typescript: {
+  //   ignoreBuildErrors: true,
+  // },
 };
 
 export default nextConfig;
