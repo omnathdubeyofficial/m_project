@@ -1,6 +1,14 @@
-import { HeaderItem } from "@/types/menu";
+import { IconType } from "react-icons";
 
-export const headerData: HeaderItem[] = [
+// ✅ Local interface used (no need to import from "@/types/menu")
+export interface MenuItem {
+  label: string;
+  href: string;
+  icon?: IconType;
+  submenu?: MenuItem[];
+}
+
+export const headerData: MenuItem[] = [
   { label: "Home", href: "/" },
   { label: "History", href: "/history" },
   { label: "Class Rooms", href: "/class" },
@@ -10,11 +18,15 @@ export const headerData: HeaderItem[] = [
     submenu: [
       { label: "Curriculum", href: "#curriculum-section" },
       { label: "Classes", href: "#classes-section" },
-      { label: "Exams & Results", href: "#exams-section", submenu: [
+      {
+        label: "Exams & Results",
+        href: "#exams-section",
+        submenu: [
           { label: "Term 1", href: "#term1-section" },
           { label: "Term 2", href: "#term2-section" },
           { label: "Final Exams", href: "#final-exams-section" },
-        ] },
+        ],
+      },
       { label: "Library", href: "#library-section" },
     ],
   },
@@ -24,20 +36,28 @@ export const headerData: HeaderItem[] = [
     submenu: [
       { label: "Admission Process", href: "#admission-process-section" },
       { label: "Fees Structure", href: "#fees-section" },
-      { label: "Apply Now", href: "#apply-section", submenu: [
+      {
+        label: "Apply Now",
+        href: "#apply-section",
+        submenu: [
           { label: "Online Application", href: "#online-application-section" },
           { label: "Offline Application", href: "#offline-application-section" },
-        ] },
+        ],
+      },
     ],
   },
   {
     label: "Staff",
     href: "#staff-section",
     submenu: [
-      { label: "Teaching Staff", href: "#teaching-staff-section", submenu: [
+      {
+        label: "Teaching Staff",
+        href: "#teaching-staff-section",
+        submenu: [
           { label: "Primary Teachers", href: "#primary-teachers-section" },
           { label: "Secondary Teachers", href: "#secondary-teachers-section" },
-        ] },
+        ],
+      },
       { label: "Non-Teaching Staff", href: "#non-teaching-staff-section" },
     ],
   },
@@ -47,10 +67,14 @@ export const headerData: HeaderItem[] = [
     submenu: [
       { label: "Attendance", href: "#attendance-section" },
       { label: "Timetable", href: "#timetable-section" },
-      { label: "Assignments", href: "#assignments-section", submenu: [
+      {
+        label: "Assignments",
+        href: "#assignments-section",
+        submenu: [
           { label: "Pending Assignments", href: "#pending-assignments-section" },
           { label: "Completed Assignments", href: "#completed-assignments-section" },
-        ] },
+        ],
+      },
     ],
   },
   {
@@ -58,10 +82,14 @@ export const headerData: HeaderItem[] = [
     href: "#events-section",
     submenu: [
       { label: "Upcoming Events", href: "#upcoming-events-section" },
-      { label: "Past Events", href: "#past-events-section", submenu: [
+      {
+        label: "Past Events",
+        href: "#past-events-section",
+        submenu: [
           { label: "2024 Events", href: "#2024-events-section" },
           { label: "2023 Events", href: "#2023-events-section" },
-        ] },
+        ],
+      },
       { label: "Photo Gallery", href: "#gallery-section" },
     ],
   },

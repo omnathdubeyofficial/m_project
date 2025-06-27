@@ -5,7 +5,15 @@ import { usePathname } from "next/navigation";
 import { IconType } from "react-icons";
 import { FaAngleRight } from "react-icons/fa";
 
-const HeaderLink: React.FC<{ item: HeaderItem & { icon?: IconType } }> = ({ item }) => {
+// ✅ Define the HeaderItem interface
+interface HeaderItem {
+  label: string;
+  href: string;
+  icon?: IconType;
+  submenu?: HeaderItem[];
+}
+
+const HeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const path = usePathname();
 
@@ -55,9 +63,10 @@ const HeaderLink: React.FC<{ item: HeaderItem & { icon?: IconType } }> = ({ item
           </svg>
         )}
       </Link>
+
       {submenuOpen && item.submenu && (
         <div
-          className="absolute py-2 left-0 mt-0.5 w-60 bg-white  "
+          className="absolute py-2 left-0 mt-0.5 w-60 bg-white"
           data-aos="fade-up"
           data-aos-duration="500"
         >
@@ -77,8 +86,9 @@ const HeaderLink: React.FC<{ item: HeaderItem & { icon?: IconType } }> = ({ item
                 </div>
                 {subItem.submenu && <FaAngleRight />}
               </Link>
+
               {subItem.submenu && (
-                <div className="absolute top-0 left-full hidden group-hover:block w-60 bg-white  ">
+                <div className="absolute top-0 left-full hidden group-hover:block w-60 bg-white">
                   {subItem.submenu.map((nestedItem, nestedIndex) => (
                     <Link
                       key={nestedIndex}
@@ -89,7 +99,9 @@ const HeaderLink: React.FC<{ item: HeaderItem & { icon?: IconType } }> = ({ item
                           : "text-black hover:bg-primary hover:text-white"
                       }`}
                     >
-                      {nestedItem.icon && <nestedItem.icon className="mr-2" />}
+                      {nestedItem.icon && (
+                        <nestedItem.icon className="mr-2" />
+                      )}
                       {nestedItem.label}
                     </Link>
                   ))}

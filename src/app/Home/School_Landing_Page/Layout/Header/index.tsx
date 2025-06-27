@@ -255,7 +255,9 @@ const SchoolHeader: React.FC = () => {
               <div
                 key={index}
                 className="relative group"
-                ref={(el) => (dropdownRefs.current[index] = el)}
+               ref={(el) => {
+  dropdownRefs.current[index] = el;
+}}
               >
                 {item.dropdown ? (
                   <>

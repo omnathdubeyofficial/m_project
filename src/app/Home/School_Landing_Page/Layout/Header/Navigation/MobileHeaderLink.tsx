@@ -1,93 +1,55 @@
+"use client";
 import { useState } from "react";
 import Link from "next/link";
-import { HeaderItem } from "../../../../types/menu";
+import { IconType } from "react-icons";
+// ✅ Local HeaderItem interface defined
+interface HeaderItem {
+  label: string;
+  href: string;
+  icon?: IconType;
+  submenu?: HeaderItem[];
+}
 
 const MobileHeaderLink: React.FC<{ item: HeaderItem }> = ({ item }) => {
   const [submenuOpen, setSubmenuOpen] = useState(false);
-  const [nestedMenuOpen, setNestedMenuOpen] = useState<{
-    [key: number]: boolean;
-  }>({});
 
-  const handleToggle = () => {
-    setSubmenuOpen(!submenuOpen);
-  };
-
-  const handleNestedToggle = (index: number) => {
-    setNestedMenuOpen((prev) => ({
-      ...prev,
-      [index]: !prev[index],
-    }));
+  const toggleSubmenu = () => {
+    setSubmenuOpen((prev) => !prev);
   };
 
   return (
-    <div className="relative w-full">
-      <button
-        onClick={handleToggle}
-        className="flex items-center justify-between w-full py-2 px-4 text-muted focus:outline-none hover:bg-primary hover:text-white transition-colors duration-300"
+    <div className="w-full">
+      <div
+        className="flex items-center justify-between px-4 py-2 text-black font-medium cursor-pointer hover:bg-gray-100"
+        onClick={toggleSubmenu}
       >
-        {item.label}
+        <Link href={item.href} className="flex-1">
+          {item.label}
+        </Link>
         {item.submenu && (
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1.5em"
-            height="1.5em"
+            className={`w-4 h-4 ml-2 transition-transform ${
+              submenuOpen ? "rotate-90" : ""
+            }`}
+            fill="none"
+            stroke="currentColor"
             viewBox="0 0 24 24"
-            className={`transition-transform duration-300 ${submenuOpen ? "rotate-90" : "rotate-0"}`}
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              fill="none"
-              stroke="currentColor"
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth="1.5"
-              d="m7 10l5 5l5-5"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
             />
           </svg>
         )}
-      </button>
+      </div>
 
       {submenuOpen && item.submenu && (
-        <div className="bg-white pl-4 w-full border-l-2 border-primary">
+        <div className="ml-4 border-l border-gray-200">
           {item.submenu.map((subItem, index) => (
-            <div key={index} className="relative">
-              <button
-                onClick={() => handleNestedToggle(index)}
-                className="flex items-center justify-between w-full py-2 px-4 text-gray-600 hover:bg-primary hover:text-white focus:outline-none transition-colors duration-300"
-              >
-                {subItem.label}
-                {subItem.submenu && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1.5em"
-                    height="1.5em"
-                    viewBox="0 0 24 24"
-                    className={`transition-transform duration-300 ${nestedMenuOpen[index] ? "rotate-90" : "rotate-0"}`}
-                  >
-                    <path
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="1.5"
-                      d="m7 10l5 5l5-5"
-                    />
-                  </svg>
-                )}
-              </button>
-              {nestedMenuOpen[index] && subItem.submenu && (
-                <div className="bg-gray-100 pl-4 w-full border-l-2 border-primary">
-                  {subItem.submenu.map((nestedItem, nestedIndex) => (
-                    <Link
-                      key={nestedIndex}
-                      href={nestedItem.href}
-                      className="block py-2 px-4 text-gray-600 hover:bg-primary hover:text-white transition-colors duration-300"
-                    >
-                      {nestedItem.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+            <MobileHeaderLink key={index} item={subItem} />
           ))}
         </div>
       )}
