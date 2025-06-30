@@ -2,10 +2,11 @@
   "name": "m_project",
   "version": "0.1.0",
   "private": true,
+
   "scripts": {
-    "dev": "concurrently \"next dev -p 3001\" \"nodemon src/index.js\"",
+    "dev": "concurrently \"next dev\" \"nodemon src/index.js\"",
     "build": "next build",
-    "start": "concurrently \"next start -p 3000\" \"nodemon src/index.js\"",
+    "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
