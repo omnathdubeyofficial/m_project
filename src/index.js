@@ -77,7 +77,7 @@ const nextApp = next({ dev: process.env.NODE_ENV !== 'production' });
 const handle = nextApp.getRequestHandler();
 // ✅ CORS Configuration (Allow Credentials for Cookies)
 app.use(cors({
-  origin: 'http://localhost:3000', // Allow frontend origin
+ origin: ['http://localhost:3000', 'https://m-project-feee.onrender.com'],// Allow frontend origin
   credentials: true, // Allow cookies
 }));
 
