@@ -6,7 +6,7 @@
   "scripts": {
   "dev": "concurrently \"next dev -p 3000\" \"nodemon src/index.js\"",
   "build": "next build",
-  "start": "concurrently \"next start -p 3000\" \"nodemon src/index.js\"",
+  "start": "concurrently \"next start -p 3000\" \"node src/index.js\"",
   "lint": "next lint"
   },
   "dependencies": {
