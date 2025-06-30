@@ -4,7 +4,6 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import cors from 'cors';
 import cookieParser from 'cookie-parser'; // Import cookie parser
 import dotenv from 'dotenv';
-import next from 'next';
 dotenv.config();
 
 import userType from './types/userType.js';
@@ -71,71 +70,78 @@ import jobApplicationType from './types/jobApplicationType.js';
 import jobApplicationResolver from './resolvers/jobApplicationResolver.js';
 import facultyMembersTypes from './types/facultyMembersTypes.js';
 import facultyMembersResolver from './resolvers/facultyMembersResolver.js';
+import next from 'next';
 
 const app = express();
-
-const dev = process.env.NODE_ENV !== 'production';
-const nextApp = next({ dev });
+const nextApp = next({ dev: process.env.NODE_ENV !== 'production' });
 const handle = nextApp.getRequestHandler();
+// ✅ CORS Configuration (Allow Credentials for Cookies)
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow frontend origin
+  credentials: true, // Allow cookies
+}));
+
+// ✅ Middleware for Cookies
+app.use(cookieParser());
+app.use(express.json());
+
+// ✅ GraphQL Schema
+const schema = makeExecutableSchema({
+  typeDefs: [
+    userType, userDataType, adminDataType, userManagementType,
+    studentRegistrationTypes, attendanceTypes, admissionFormType,
+    authTokantTypes, securityType, transportVehicleRegistrationType,
+    logoutTypes, holidayListType, phoneDirectoryType, academicCalendarType,
+    driversListType, addNewBookType, issuedBookType, housekeepingListType,
+    blogListType, eventCreationType, eventRegistrationFormType,
+    feeStructureDataType, noticeBoardType, classesDataType, nurseryAdmissionListType,forgetpasswordTypes,classSubjectsTypes,studentRatingTypes,parentRatingTypes,schoolCareersType,jobApplicationType,facultyMembersTypes
+  ],
+  resolvers: [
+    userResolver, userDataResolver, adminDataResolver,
+    userManagementResolver, studentRegistrationResolver, attendanceResolver,
+    admssionFormResolver, authTokanResolver, securityResolver,
+    transportVehicleResolver, logoutResolver, holidayListResolver,
+    phoneDirectoryResolver, academicCalendarResolver, driversListResolver,
+    addNewBookResolver, issuedBookResolver, housekeepingListResolver,
+    blogListResolver, eventCreationResolver, eventRegistrationResolver,
+    feeStructureListResolver, noticeBoardResolver, classesDataResolver,
+    nurseryAdmissionResolver,forgetpasswordResolver,classSubjectsResolver,studentRatingResolver,parentRatingResolver,schoolCareersResolver,jobApplicationResolver,facultyMembersResolver
+  ],
+});
+
+app.use(
+  '/graphql',
+  graphqlHTTP((req, res) => {
+    console.log("🟢 Incoming GraphQL Request...");
+    console.log("🍪 Cookies Received:", req.cookies);
+
+    // Check if authToken is present in cookies
+    const authToken = req.cookies.authToken || null;
+    console.log("🔑 Extracted authToken from Cookies:", authToken);
+
+    // Return the schema and context
+    return {
+      schema,
+      graphiql: true,
+      context: { req, res, authToken }, // Ensure context is being set correctly
+    };
+  })
+);
+
+
+
+
+
 
 nextApp.prepare().then(() => {
-  const app = express();
-
-  // Middleware
-  app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-  app.use(cookieParser());
-  app.use(express.json());
-
-  // GraphQL Setup
-  const schema = makeExecutableSchema({
-    typeDefs: [
-      userType, userDataType, adminDataType, userManagementType,
-      studentRegistrationTypes, attendanceTypes, admissionFormType,
-      authTokantTypes, securityType, transportVehicleRegistrationType,
-      logoutTypes, holidayListType, phoneDirectoryType, academicCalendarType,
-      driversListType, addNewBookType, issuedBookType, housekeepingListType,
-      blogListType, eventCreationType, eventRegistrationFormType,
-      feeStructureDataType, noticeBoardType, classesDataType,
-      nurseryAdmissionListType, forgetpasswordTypes, classSubjectsTypes,
-      studentRatingTypes, parentRatingTypes, schoolCareersType,
-      jobApplicationType, facultyMembersTypes,
-    ],
-    resolvers: [
-      userResolver, userDataResolver, adminDataResolver,
-      userManagementResolver, studentRegistrationResolver, attendanceResolver,
-      admssionFormResolver, authTokanResolver, securityResolver,
-      transportVehicleResolver, logoutResolver, holidayListResolver,
-      phoneDirectoryResolver, academicCalendarResolver, driversListResolver,
-      addNewBookResolver, issuedBookResolver, housekeepingListResolver,
-      blogListResolver, eventCreationResolver, eventRegistrationResolver,
-      feeStructureListResolver, noticeBoardResolver, classesDataResolver,
-      nurseryAdmissionResolver, forgetpasswordResolver, classSubjectsResolver,
-      studentRatingResolver, parentRatingResolver, schoolCareersResolver,
-      jobApplicationResolver, facultyMembersResolver,
-    ],
-  });
-
-  app.use(
-    '/graphql',
-    graphqlHTTP((req, res) => {
-      const authToken = req.cookies.authToken || null;
-      return {
-        schema,
-        graphiql: true,
-        context: { req, res, authToken },
-      };
-    })
-  );
-
-  // Handle Next.js pages (very important)
+  // Add this to serve Next.js frontend
   app.all('*', (req, res) => {
     return handle(req, res);
   });
 
-  const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 4000;
   app.listen(PORT, () => {
     console.log(`🚀 GraphQL: http://localhost:${PORT}/graphql`);
     console.log(`🌐 Frontend: http://localhost:${PORT}`);
   });
 });
-
