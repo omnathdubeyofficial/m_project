@@ -177,44 +177,47 @@ const SchoolHeader: React.FC = () => {
       >
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-2">
           <div className="flex flex-wrap items-center gap-3 text-xs">
-            <div className="flex items-center gap-1">
-              <Icon icon="mdi:school" className="text-white" width={16} />
-              <span>SchoolShopper</span>
-            </div>
+       <div className="flex items-center gap-1">
+  <Icon icon="mdi:cart" className="text-white" width={16} />
+  <span>School Shop</span>
+</div>
+
             <div className="flex items-center gap-1">
               <Icon icon="mdi:email" className="text-white" width={16} />
-              <span>foe.bh@ariseinternational.in</span>
+              <span>info@vaekoninfotech.com</span>
             </div>
             <div className="flex items-center gap-1">
               <Icon icon="mdi:phone" className="text-white" width={16} />
-              <span>+91-99665795376</span>
+              <span>+91-9838381169</span>
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
+       <button
+  onClick={() => router.push("/Enquiry_Pages/Admission_Enquiry_Form")}
+  className="bg-gray-300 text-gray-800 px-3 py-1 rounded-full flex items-center gap-1 hover:bg-gray-400 transition-all duration-300 w-full md:w-auto justify-center text-xs"
+  aria-label="Admission Enquiry"
+>
+  <Icon icon="mdi:account-question" width={16} />
+  <span className="font-medium">Admission Enquiry</span>
+</button>
+
             <button
-              onClick={() => router.push("/admissions/enquiry")}
-              className="bg-gray-300 text-gray-800 px-3 py-1 rounded-full flex items-center gap-1 hover:bg-gray-400 transition-all duration-300 w-full md:w-auto justify-center text-xs"
-              aria-label="Admission Enquiry"
-            >
-              <Icon icon="mdi:information" width={16} />
-              <span className="font-medium">Admission Enquiry</span>
-            </button>
-            <button
-              onClick={() => router.push("/fees/payment")}
+              onClick={() => router.push("/Admission_Forms_All/Admission_payment")}
               className="bg-[#8B0000] text-white px-3 py-1 rounded-full flex items-center gap-1 hover:bg-[#6B0000] transition-all duration-300 border border-white w-full md:w-auto justify-center text-xs"
               aria-label="Online Fee Payment"
             >
               <Icon icon="mdi:credit-card" width={16} />
-              <span className="font-medium">Online Fee Payment</span>
+              <span className="font-medium">One Click Fee Payment</span>
             </button>
-            <button
-              onClick={() => router.push("/login")}
-              className="bg-blue-600 text-white px-3 py-1 rounded-full flex items-center gap-1 hover:bg-blue-700 transition-all duration-300 w-full md:w-auto justify-center text-xs"
-              aria-label="Edunext ERP Login"
-            >
-              <Icon icon="mdi:login" width={16} />
-              <span className="font-medium">Edunext ERP™ Login</span>
-            </button>
+  <button
+  onClick={() => router.push("/login")}
+  className="bg-blue-600 text-white px-3 py-1 rounded-full flex items-center gap-1 hover:bg-blue-700 transition-all duration-300 w-full md:w-auto justify-center text-xs"
+  aria-label="Edunext ERP Login"
+>
+  <Icon icon="mdi:lock-open-outline" width={16} />
+  <span className="font-medium">Login Dashboard</span>
+</button>
+
           </div>
         </div>
       </div>
@@ -230,7 +233,7 @@ const SchoolHeader: React.FC = () => {
           <div className="flex items-center gap-2">
             <Image
               src="/images/logo/image.png"
-              alt="Arise International School Logo"
+              alt="VaeKon School Logo"
               width={isSticky ? 40 : 50}
               height={isSticky ? 40 : 50}
               className="object-contain transition-all duration-300"
@@ -241,10 +244,10 @@ const SchoolHeader: React.FC = () => {
                   isSticky ? "text-lg" : "text-xl"
                 }`}
               >
-                Arise International School
+                VaeKon School
               </h1>
               <p className={`text-[10px] text-gray-600`}>
-                CBSE Affiliation No. 1131036
+                CBSE Affiliation No. 3466677
               </p>
             </div>
           </div>
@@ -445,7 +448,7 @@ const SchoolHeader: React.FC = () => {
                   aria-label="Edunext ERP Login"
                 >
                   <Icon icon="mdi:login" width={18} />
-                  <span className="font-medium">Edunext ERP™ Login</span>
+                  <span className="font-medium">Login</span>
                 </button>
               </div>
             </nav>

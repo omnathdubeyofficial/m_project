@@ -74,7 +74,16 @@ export default function PrimeScholarsAcademy() {
   <div className="bg-[#D1C4E9]py-20 sm:py-32">
     <div className="max-w-7xl mx-auto px-6 lg:px-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-      
+       <div className="relative">
+          <Image
+            alt="Prime Scholars Academy Campus"
+            src="/img/sexc.jpg"
+            width={800}
+            height={500}
+            className="rounded-3xl shadow-lg"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#8E24AA] to-transparent opacity-20 rounded-3xl" />
+        </div>
         <div className="text-left">
           <h2 className="text-lg font-semibold text-[#8E24AA]">Shaping Tomorrow’s Leaders</h2>
           <p className="mt-4 text-4xl font-semibold text-[#3B3B3B] sm:text-5xl">Prime Scholars Academy - Excellence & Innovation</p>
@@ -90,16 +99,7 @@ export default function PrimeScholarsAcademy() {
 
           
         </div>
-        <div className="relative">
-          <Image
-            alt="Prime Scholars Academy Campus"
-            src="/img/sexc.jpg"
-            width={800}
-            height={500}
-            className="rounded-3xl shadow-lg"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#8E24AA] to-transparent opacity-20 rounded-3xl" />
-        </div>
+       
       </div>
     </div>
     

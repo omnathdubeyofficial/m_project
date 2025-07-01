@@ -112,14 +112,14 @@ const Login = () => {
           <div className="flex flex-col items-center justify-center flex-grow">
             <Image
               src="/images/logo/image.png"
-              alt="Arise International School Logo"
+              alt="VaeKon School Logo"
               width={100}
               height={100}
               className="rounded-full shadow-lg mb-4"
             />
             <div className="text-center">
-              <h1 className="text-3xl font-serif">Arise International School</h1>
-              <p className="text-sm opacity-80 mt-2">CBSE Affiliation No. 1131036</p>
+              <h1 className="text-3xl font-serif">VaeKon School</h1>
+              <p className="text-sm opacity-80 mt-2">CBSE Affiliation No. 3466677</p>
             </div>
           </div>
           <div className="flex justify-center space-x-4">

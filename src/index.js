@@ -70,14 +70,12 @@ import jobApplicationType from './types/jobApplicationType.js';
 import jobApplicationResolver from './resolvers/jobApplicationResolver.js';
 import facultyMembersTypes from './types/facultyMembersTypes.js';
 import facultyMembersResolver from './resolvers/facultyMembersResolver.js';
-import next from 'next';
 
 const app = express();
-const nextApp = next({ dev: process.env.NODE_ENV !== 'production' });
-const handle = nextApp.getRequestHandler();
+
 // ✅ CORS Configuration (Allow Credentials for Cookies)
 app.use(cors({
- origin: ['http://localhost:3000', 'https://m-project-feee.onrender.com'],// Allow frontend origin
+  origin: 'http://localhost:3000', // Allow frontend origin
   credentials: true, // Allow cookies
 }));
 
@@ -133,15 +131,8 @@ app.use(
 
 
 
-nextApp.prepare().then(() => {
-  // Add this to serve Next.js frontend
-  app.all('*', (req, res) => {
-    return handle(req, res);
-  });
-
-  const PORT = process.env.PORT || 4000;
-  app.listen(PORT, () => {
-    console.log(`🚀 GraphQL: http://localhost:${PORT}/graphql`);
-    console.log(`🌐 Frontend: http://localhost:${PORT}`);
-  });
+// ✅ Start Server
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}/graphql`);
 });

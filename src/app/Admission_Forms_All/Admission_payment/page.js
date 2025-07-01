@@ -295,7 +295,7 @@ const AdmissionPayment = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 py-12 px-4 sm:px-6 mt-16 lg:px-8 flex justify-center items-center">
+       <div className="min-h-screen font-thin bg-gradient-to-br from-blue-100 via-gray-50 to-teal-50 py-12 mt-28 px-4 sm:px-6 lg:px-8 flex justify-center items-center font-sans">
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -311,58 +311,55 @@ const AdmissionPayment = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mt-16 max-w-5xl w-full bg-white/80 backdrop-blur-md shadow-2xl p-8 sm:p-10 border border-gray-100/50"
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="max-w-6xl w-full bg-white/90 backdrop-blur-lg shadow-xl  p-8 sm:p-12 border border-gray-200/50"
       >
-{/* Header */}
-<div className="flex items-center justify-between flex-wrap gap-2 mb-6">
-  <motion.button
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-    onClick={() => window.history.back()}
-    className="flex items-center gap-1.5 px-2.5 py-1.5 bg-red-500 text-white hover:bg-red-600 transition-all duration-200 text-xs sm:text-sm"
-    aria-label="Go back"
-  >
-    <FaArrowLeft size={14} className="sm:size-[16px]" />
-    <span className="font-medium">Go Back</span>
-  </motion.button>
-
-  <h1 className="text-xl sm:text-3xl font-semibold text-gray-900 tracking-tight">
-    Admission Payment
-  </h1>
-</div>
+        {/* Header */}
+        <div className="flex items-center justify-between flex-wrap gap-4 mb-8">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => window.history.back()}
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white  hover:bg-red-700 transition-all duration-300 shadow-md text-sm font-medium"
+            aria-label="Go back"
+          >
+            <FaArrowLeft size={16} />
+            <span>Back</span>
+          </motion.button>
+          <h1 className="text-3xl sm:text-4xl font-serif text-gray-900 tracking-tight">
+            Admission Payment
+          </h1>
+        </div>
 
         {/* Fetch Student Form */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
           className="mb-12"
         >
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Fetch Student Details & Pay Admission Fee</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Fetch Student Details</h2>
           <form onSubmit={handleFetchStudent} className="flex flex-col sm:flex-row gap-4 items-start sm:items-end">
             <div className="w-full sm:w-1/2">
               <label htmlFor="studentId" className="block text-sm font-medium text-gray-700 mb-2">
                 Student ID <span className="text-red-500">*</span>
               </label>
               <motion.input
-                whileFocus={{ scale: 1.02 }}
+                whileFocus={{ scale: 1.01, borderColor: '#3B82F6' }}
                 id="studentId"
                 type="text"
                 value={studentId}
                 onChange={(e) => setStudentId(e.target.value)}
-                className={`w-full p-3 border ${
-                  errors.studentId ? "border-red-500" : "border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 bg-white/50`}
+                className={`w-full p-3 border ${errors.studentId ? 'border-red-500' : 'border-gray-300'}  focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 bg-white/70 shadow-sm`}
                 placeholder="Enter Student ID"
                 aria-invalid={!!errors.studentId}
-                aria-describedby={errors.studentId ? "studentId-error" : undefined}
+                aria-describedby={errors.studentId ? 'studentId-error' : undefined}
               />
               {errors.studentId && (
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-red-500 text-sm mt-1"
+                  className="text-red-500 text-sm mt-2"
                   id="studentId-error"
                 >
                   {errors.studentId}
@@ -373,7 +370,7 @@ const AdmissionPayment = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               type="submit"
-              className="w-full sm:w-auto bg-blue-600 text-white py-3 px-6 hover:bg-blue-700 transition-all duration-200 flex items-center justify-center disabled:bg-blue-400"
+              className="w-full sm:w-auto bg-green-600 text-white py-3 px-8  hover:bg-green-700 transition-all duration-300 shadow-md font-semibold disabled:bg-blue-400 disabled:cursor-not-allowed"
               disabled={isFetching}
             >
               {isFetching ? (
@@ -382,7 +379,7 @@ const AdmissionPayment = () => {
                   Fetching...
                 </>
               ) : (
-                "Fetch Details"
+                'Fetch Details'
               )}
             </motion.button>
           </form>
@@ -393,9 +390,9 @@ const AdmissionPayment = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex justify-center items-center py-10"
+            className="flex justify-center items-center py-12"
           >
-            <FaSpinner className="animate-spin text-blue-500 text-4xl" />
+            <FaSpinner className="animate-spin text-blue-600 text-5xl" />
           </motion.div>
         )}
 
@@ -407,19 +404,19 @@ const AdmissionPayment = () => {
             transition={{ delay: 0.3, duration: 0.5 }}
             className="mb-12"
           >
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Student Details</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b-2 border-blue-200 pb-2">Student Details</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { label: "Full Name", value: `${studentData.first_name} ${studentData.middle_name} ${studentData.last_name}` },
-                { label: "Date of Birth", value: studentData.date_of_birth },
-                { label: "Gender", value: studentData.gender },
-                { label: "Aadhar Number", value: studentData.adhar_no },
-                { label: "Caste", value: studentData.category },
-                { label: "Religion", value: studentData.country },
-                { label: "Father's Name", value: studentData.father_full_name },
-                { label: "Mother's Name", value: studentData.mother_full_name },
-                { label: "Guardian's Email", value: studentData.guardian_email_id },
-                { label: "Class", value: studentData.class_title || "Nursery" },
+                { label: 'Full Name', value: `${studentData.first_name} ${studentData.middle_name} ${studentData.last_name}` },
+                { label: 'Date of Birth', value: studentData.date_of_birth },
+                { label: 'Gender', value: studentData.gender },
+                { label: 'Aadhar Number', value: studentData.adhar_no },
+                { label: 'Caste', value: studentData.category },
+                { label: 'Religion', value: studentData.country },
+                { label: 'Father’s Name', value: studentData.father_full_name },
+                { label: 'Mother’s Name', value: studentData.mother_full_name },
+                { label: 'Guardian’s Email', value: studentData.guardian_email_id },
+                { label: 'Class', value: studentData.class_title || 'Nursery' },
               ].map((item, index) => (
                 <motion.div
                   key={index}
@@ -428,7 +425,7 @@ const AdmissionPayment = () => {
                   transition={{ delay: 0.1 * index, duration: 0.3 }}
                 >
                   <label className="block text-sm font-medium text-gray-700">{item.label}</label>
-                  <p className="mt-2 p-3 bg-gray-100/50 text-gray-800 border border-gray-200">{item.value || "N/A"}</p>
+                  <p className="mt-2 p-3 bg-gray-50/80 text-gray-800 border border-gray-200 shadow-sm">{item.value || 'N/A'}</p>
                 </motion.div>
               ))}
             </div>
@@ -443,21 +440,21 @@ const AdmissionPayment = () => {
             transition={{ delay: 0.4, duration: 0.5 }}
             className="mb-12"
           >
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Admission Fee Payment</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b-2 border-blue-200 pb-2">Admission Fee Payment</h2>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="border border-gray-200 p-6 bg-white/50 backdrop-blur-sm"
+              className="border border-gray-200  p-8 bg-white/70 backdrop-blur-sm shadow-lg"
             >
-              {["Tuition", "Admission", "Uniform", "Books"].map((item, index) => (
+              {['Tuition', 'Admission', 'Uniform', 'Books'].map((item, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 * index, duration: 0.3 }}
-                  className="flex justify-between mb-3 text-lg text-gray-700"
+                  className="flex justify-between mb-4 text-lg text-gray-700"
                 >
-                  <span>{item} Fee</span>
+                  <span className="font-medium">{item} Fee</span>
                   <span>₹{fees[item.toLowerCase()].toLocaleString()}</span>
                 </motion.div>
               ))}
@@ -465,43 +462,43 @@ const AdmissionPayment = () => {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4, duration: 0.3 }}
-                className="flex justify-between mb-3 text-lg text-gray-700"
+                className="flex justify-between mb-4 text-lg text-gray-700"
               >
-                <span>GST ({CLASS_FEES[studentData?.class_title || "Nursery"].gstPercentage}%)</span>
+                <span className="font-medium">GST ({CLASS_FEES[studentData?.class_title || 'Nursery'].gstPercentage}%)</span>
                 <span>₹{fees.gst.toLocaleString()}</span>
               </motion.div>
-              <div className="border-t border-dashed border-gray-300 my-4"></div>
+              <div className="border-t border-dashed border-gray-300 my-6"></div>
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5, duration: 0.3 }}
-                className="flex justify-between text-2xl font-semibold text-green-600"
+                className="flex justify-between text-2xl font-bold text-blue-600"
               >
                 <span>Grand Total</span>
                 <span>₹{fees.grandTotal.toLocaleString()}</span>
               </motion.div>
             </motion.div>
-            <div className="flex justify-center mt-8 gap-4">
+            <div className="flex flex-col sm:flex-row justify-center mt-8 gap-4">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 type="button"
-                className="w-full sm:w-1/3 bg-green-500 text-white py-3 shadow-lg text-lg font-medium hover:bg-green-600 transition-all duration-200 flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="w-full sm:w-1/3 bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-lg shadow-lg text-lg font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed"
                 onClick={handlePayNow}
-                disabled={paymentProcessed || studentData?.payment_status === "Completed" || isLoading}
+                disabled={paymentProcessed || studentData?.payment_status === 'Completed' || isLoading}
               >
                 {isLoading ? (
                   <>
                     <FaSpinner className="animate-spin mr-2" />
                     Processing...
                   </>
-                ) : paymentProcessed || studentData?.payment_status === "Completed" ? (
+                ) : paymentProcessed || studentData?.payment_status === 'Completed' ? (
                   <>
                     <FaCheckCircle className="mr-2" />
                     Payment Completed
                   </>
                 ) : (
-                  "Pay Now"
+                  'Pay Now'
                 )}
               </motion.button>
               {paymentProcessed && paymentDetails && (
@@ -509,7 +506,7 @@ const AdmissionPayment = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={downloadReceipt}
-                  className="w-full sm:w-1/3 bg-blue-500 text-white py-3 shadow-lg text-lg font-medium hover:bg-blue-600 transition-all duration-200 flex items-center justify-center"
+                  className="w-full sm:w-1/3 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-lg shadow-lg text-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 flex items-center justify-center"
                 >
                   <FaDownload className="mr-2" />
                   Download Receipt
@@ -526,25 +523,28 @@ const AdmissionPayment = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+              className="fixed inset-0 bg-black/60 flex justify-center items-center z-50"
             >
               <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
+                initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                className="bg-white p-8 max-w-md w-full shadow-2xl"
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl border border-gray-200/50"
               >
-                <h3 className="text-2xl font-semibold text-gray-800 mb-4">Confirm Payment</h3>
-                <p className="text-gray-600 mb-6">
-                  You are about to pay ₹{fees.grandTotal.toLocaleString()} for {studentData.first_name}{" "}
-                  {studentData.last_name} admission to {studentData.class_title || "Nursery"}. Proceed?
+                <h3 className="text-2xl font-bold text-gray-800 mb-4">Confirm Payment</h3>
+                <p className="text-gray-600 mb-6 leading-relaxed">
+                  You are about to pay <span className="font-semibold">₹{fees.grandTotal.toLocaleString()}</span> for{' '}
+                  <span className="font-semibold">
+                    {studentData.first_name} {studentData.last_name}
+                  </span>{' '}
+                  admission to <span className="font-semibold">{studentData.class_title || 'Nursery'}</span>. Proceed?
                 </p>
                 <div className="flex justify-end gap-4">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setShowModal(false)}
-                    className="px-4 py-2 bg-gray-300 text-gray-800 hover:bg-gray-400 transition-all duration-200"
+                    className="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-all duration-200 font-medium"
                   >
                     Cancel
                   </motion.button>
@@ -552,7 +552,7 @@ const AdmissionPayment = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={confirmPayment}
-                    className="px-4 py-2 bg-green-500 text-white hover:bg-green-600 transition-all duration-200 flex items-center"
+                    className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 font-medium flex items-center"
                     disabled={isLoading}
                   >
                     {isLoading ? (
@@ -561,7 +561,7 @@ const AdmissionPayment = () => {
                         Processing...
                       </>
                     ) : (
-                      "Confirm"
+                      'Confirm'
                     )}
                   </motion.button>
                 </div>

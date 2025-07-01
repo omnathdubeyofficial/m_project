@@ -366,14 +366,7 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gray-50 p-8 pt-28">
       {/* <Navber /> */}
 
-      {/* <Link href="/dashboard" passHref>
-  <div
-    className="bg-blue-500 text-white px-4 py-2 shadow-md hover:bg-blue-600 transition duration-200 flex items-center gap-2"
-  >
-    <FaArrowLeft className="text-white" />
-    Go Back
-  </div>
-</Link>   */}
+
 
  <div className="flex flex-col flex-1 ">
         <div className="w-full mx-auto p-8">
