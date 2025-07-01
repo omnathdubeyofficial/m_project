@@ -177,10 +177,7 @@ const SchoolHeader: React.FC = () => {
       >
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-2">
           <div className="flex flex-wrap items-center gap-3 text-xs">
-       <div className="flex items-center gap-1">
-  <Icon icon="mdi:cart" className="text-white" width={16} />
-  <span>School Shop</span>
-</div>
+    
 
             <div className="flex items-center gap-1">
               <Icon icon="mdi:email" className="text-white" width={16} />
@@ -192,6 +189,15 @@ const SchoolHeader: React.FC = () => {
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
+
+                  <button
+  onClick={() => router.push("/Enquiry_Pages/Admission_Enquiry_Form")}
+  className="bg-gray-300 text-gray-800 px-3 py-1 rounded-full flex items-center gap-1 hover:bg-gray-400 transition-all duration-300 w-full md:w-auto justify-center text-xs"
+  aria-label="Admission Enquiry"
+>
+  <Icon icon="mdi:cart" width={16} />
+  <span className="font-medium">School Shop</span>
+</button>
        <button
   onClick={() => router.push("/Enquiry_Pages/Admission_Enquiry_Form")}
   className="bg-gray-300 text-gray-800 px-3 py-1 rounded-full flex items-center gap-1 hover:bg-gray-400 transition-all duration-300 w-full md:w-auto justify-center text-xs"

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
+import { ArrowLeftCircleIcon } from '@heroicons/react/24/solid';
 export default function AdmissionEnquiryForm() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -98,10 +98,20 @@ export default function AdmissionEnquiryForm() {
 
 
       <main className="w-full md:w-3/4  p-4 sm:p-6 md:p-8">
-        <nav className="bg-blue-600 text-white p-4 mb-6  shadow-md flex justify-between items-center">
-          <h2 className="text-xl font-semibold">Enquiry Form</h2>
-          {/* <span className="text-sm">Last Updated: July 01, 2025, 03:16 PM IST</span> */}
-        </nav>
+      <nav className="bg-blue-600 text-white p-4 mb-6 shadow-md flex justify-between items-center">
+  {/* Left Side - Title */}
+    <button
+    onClick={() => window.history.back()}
+    className="flex items-center space-x-1 hover:text-gray-200 transition"
+  >
+    <ArrowLeftCircleIcon className="h-5 w-5" />
+    <span className="text-sm">Back</span>
+  </button>
+
+
+  {/* Right Side - Back Button */}
+  <h2 className="text-xl font-semibold">Enquiry Form</h2>
+</nav>
         <div className="bg-white p-6  shadow-2xl">
           <h2 className="text-2xl font-bold text-blue-900 mb-6 border-b-2 border-blue-200 pb-2">STUDENT DETAILS :</h2>
           <form onSubmit={handleSubmit} className="space-y-6">
