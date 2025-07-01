@@ -12,7 +12,7 @@ const Dashboard = () => {
   const menuItems = [
     { name: 'Dashboard', icon: FaChartBar, link: '/dashboard/admin_dashboard' },
     { name: 'University Management', icon: FaUniversity, link: '/University_Management/University_Management_Page' },
-    { name: 'Students Management', icon: FaUserGraduate, link: '/Students_Management/Students_Management_Page' },
+    { name: 'Admission Management', icon: FaUserGraduate, link: '/Students_Management/Students_Management_Page' },
     { name: 'Parents Management', icon: FaUserTie, link: '/Parents_Management/Parents_Management_Page' },
     { name: 'Transport Management', icon: FaCogs, link: '/Transport_Management/Transport_Management_Page' },
     { name: 'Library Management', icon: FaBook, link: '/Library_Management/Library_Management_Page' },
