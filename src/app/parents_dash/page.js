@@ -212,13 +212,13 @@ export default function ParentDashboard() {
             </div>
           </div>
           {/* Center: Chat Section */}
-          <div className="lg:w-6/12 w-full h-[calc(100vh-6rem)] bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl p-6 flex flex-col border border-gray-200 transition-all">
+          <div className="lg:w-6/12 w-full h-[calc(100vh-6rem)] bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl p-4 flex flex-col border border-gray-200 transition-all">
             <h2 className="text-2xl font-semibold text-blue-900 mb-6 flex items-center gap-2">
               <MessageSquare className="w-6 h-6 text-blue-600" />
               Chat with Teachers
             </h2>
             {/* Selected Teacher Profile */}
-            <div className="mb-5 flex items-center gap-4 p-4 bg-blue-50/50 rounded-xl shadow-sm border border-blue-100">
+            <div className="mb-2 flex items-center gap-4 p-2 bg-blue-50/50 rounded-xl shadow-sm border border-blue-100">
               <Image
                 src={teachers.find((t) => t.name === selectedTeacher).profilePicture}
                 alt="Teacher Profile"
@@ -228,12 +228,12 @@ export default function ParentDashboard() {
               />
               <div>
                 <p className="text-base font-semibold text-gray-800">{selectedTeacher}</p>
-                <p className="text-sm text-gray-600">{teachers.find((t) => t.name === selectedTeacher).subject}</p>
-                <p className="text-sm text-gray-600">ID: {teachers.find((t) => t.name === selectedTeacher).id}</p>
+                <p className="text-sm text-gray-600">{teachers.find((t) => t.name === selectedTeacher).subject} <span>ID: {teachers.find((t) => t.name === selectedTeacher).id}</span></p>
+               
               </div>
             </div>
             {/* Teacher Selection Dropdown */}
-            <div className="mb-4">
+            <div className="mb-2">
               <label className="block text-gray-700 font-medium mb-2">Select Teacher</label>
               <select
                 value={selectedTeacher}
@@ -248,36 +248,39 @@ export default function ParentDashboard() {
               </select>
             </div>
             {/* Chat Messages */}
-            <div className="flex-1 overflow-y-auto bg-gray-50 rounded-xl p-4 border border-gray-200 space-y-3">
-              {chatMessages[selectedTeacher].messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`p-3 rounded-xl text-sm shadow-sm max-w-[75%] ${
-                    msg.sender === "Vikas Mishra"
-                      ? "ml-auto bg-blue-100 text-right"
-                      : "bg-white border"
-                  }`}
-                >
-                  <p className="font-semibold text-blue-800">{msg.sender}</p>
-                  {msg.type === "text" ? (
-                    <p className="text-gray-700 mt-1">{msg.content}</p>
-                  ) : (
-                    <a
-                      href={msg.content.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline flex items-center justify-start mt-1"
-                    >
-                      <File className="w-4 h-4 mr-1" />
-                      {msg.content.name}
-                    </a>
-                  )}
-                  <p className="text-[11px] text-gray-500 mt-2">{new Date(msg.timestamp).toLocaleTimeString()}</p>
-                </div>
-              ))}
-            </div>
+       <div className="flex-1 overflow-y-auto bg-gray-50 rounded-xl p-4 border border-gray-200 space-y-3">
+  {chatMessages[selectedTeacher].messages.map((msg, index) => (
+    <div
+      key={index}
+      className={`p-3 rounded-xl text-sm shadow-sm max-w-[75%] break-words whitespace-pre-wrap word-break break-all ${
+        msg.sender === "Vikas Mishra"
+          ? "ml-auto bg-blue-100 text-right"
+          : "bg-white border"
+      }`}
+    >
+      <p className="font-semibold text-blue-800">{msg.sender}</p>
+      {msg.type === "text" ? (
+        <p className="text-gray-700 mt-1 break-words whitespace-pre-wrap">{msg.content}</p>
+      ) : (
+        <a
+          href={msg.content.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 underline flex items-center justify-start mt-1"
+        >
+          <File className="w-4 h-4 mr-1" />
+          {msg.content.name}
+        </a>
+      )}
+      <p className="text-[11px] text-gray-500 mt-2">
+        {new Date(msg.timestamp).toLocaleTimeString()}
+      </p>
+    </div>
+  ))}
+</div>
+
             {/* Message Input Area */}
-            <div className="mt-4 flex gap-2 items-center">
+            <div className="mt-4 flex gap-1 items-center">
               <input
                 type="text"
                 value={newMessage}

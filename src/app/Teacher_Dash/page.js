@@ -1,79 +1,81 @@
 "use client";
 import { useState } from 'react';
-import { User, ClipboardList, BookOpen, Calendar, Medal, Users, FileCheck, Edit, Send, Library, MessageSquare, Book, FileText, Clock, Award, Bell, HelpCircle, Settings, UserCheck, Star, File, BookMarked, GraduationCap, Briefcase, Paperclip } from 'lucide-react';
+import { User, ClipboardList, BookOpen, Calendar, Users, FileCheck, Edit, Send, Library, MessageSquare, Book, FileText, Clock, Bell, HelpCircle, Settings, UserCheck, Star, File, BookMarked, GraduationCap, Briefcase, Paperclip } from 'lucide-react';
 import Link from 'next/link';
 import { FaSignOutAlt, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { LOGOUT_MUTATION } from '../mutation/logoutMutation/logoutMutation';
-import { executeQuery, executeMutation } from '../graphqlClient';
+import { executeMutation } from '../graphqlClient';
 import { useRouter } from 'next/navigation';
 import { LayoutDashboard } from 'lucide-react';
 import Image from 'next/image';
 
-// Sample student profile data
-const studentProfile = {
-  name: "Veer Mishra",
-  id: "PR12345",
-  email: "vikasmishra@example.com",
-  profilePicture: "https://images.pexels.com/photos/4815046/pexels-photo-4815046.jpeg",
-  childName: "Veer Mishra",
-  childGrade: "10th",
+// Sample teacher profile data
+const teacherProfile = {
+  name: "Mr. Smith",
+  id: "TCH001",
+  email: "smith@example.com",
+  subject: "Mathematics",
+  profilePicture: "https://images.pexels.com/photos/6147153/pexels-photo-6147153.jpeg",
 };
 
-// Menu items tailored for students
+// Menu items tailored for teachers
 const menuItems = [
-  { name: "Dashboard", icon: Book, path: "/student/dashboard" },
-  { name: "Child's Attendance", icon: ClipboardList, path: "/student/attendance" },
-  { name: "Child's Grades", icon: BookOpen, path: "/student/grades" },
-  { name: "Assignments", icon: FileCheck, path: "/student/assignments" },
-  { name: "School Calendar", icon: Calendar, path: "/student/calendar" },
-  { name: "Child's Achievements", icon: Medal, path: "/student/achievements" },
-  { name: "Clubs & Activities", icon: Users, path: "/student/clubs" },
-  { name: "Library Records", icon: Library, path: "/student/library" },
-  { name: "Messages", icon: MessageSquare, path: "/student/messages" },
-  { name: "Exams Schedule", icon: FileText, path: "/student/exams" },
-  { name: "Timetable", icon: Clock, path: "/student/timetable" },
-  { name: "Certificates", icon: Award, path: "/student/certificates" },
-  { name: "Notifications", icon: Bell, path: "/student/notifications" },
-  { name: "Help & Support", icon: HelpCircle, path: "/student/help" },
-  { name: "Settings", icon: Settings, path: "/student/settings" },
-  { name: "Profile", icon: UserCheck, path: "/student/profile" },
-  { name: "student Feedback", icon: Star, path: "/student/feedback" },
+  { name: "Dashboard", icon: Book, path: "/teacher/dashboard" },
+  { name: "Student Attendance", icon: ClipboardList, path: "/teacher/attendance" },
+  { name: "Grade Management", icon: BookOpen, path: "/teacher/grades" },
+  { name: "Assignments", icon: FileCheck, path: "/teacher/assignments" },
+  { name: "School Calendar", icon: Calendar, path: "/teacher/calendar" },
+  { name: "Class Activities", icon: Users, path: "/teacher/activities" },
+  { name: "Library Records", icon: Library, path: "/teacher/library" },
+  { name: "Messages", icon: MessageSquare, path: "/teacher/messages" },
+  { name: "Exam Schedule", icon: FileText, path: "/teacher/exams" },
+  { name: "Timetable", icon: Clock, path: "/teacher/timetable" },
+  { name: "Notifications", icon: Bell, path: "/teacher/notifications" },
+  { name: "Help & Support", icon: HelpCircle, path: "/teacher/help" },
+  { name: "Settings", icon: Settings, path: "/teacher/settings" },
+  { name: "Profile", icon: UserCheck, path: "/teacher/profile" },
+  { name: "Feedback", icon: Star, path: "/teacher/feedback" },
 ];
 
-// Sample teacher data with subjects, unique profile pictures, and teacher IDs
-const teachers = [
-  { name: "Mr. Smith", subject: "Math", id: "TCH001", profilePicture: "https://images.pexels.com/photos/6147153/pexels-photo-6147153.jpeg" },
-  { name: "Ms. Johnson", subject: "Science", id: "TCH002", profilePicture: "https://images.pexels.com/photos/13743196/pexels-photo-13743196.jpeg" },
-  { name: "Mrs. Brown", subject: "English", id: "TCH003", profilePicture: "https://images.pexels.com/photos/845434/pexels-photo-845434.jpeg" },
-  { name: "Mr. Davis", subject: "History", id: "TCH004", profilePicture: "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg" },
-  { name: "Ms. Wilson", subject: "Geography", id: "TCH005", profilePicture: "https://images.pexels.com/photos/3763188/pexels-photo-3763188.jpeg" },
+// Sample contacts (students, parents, admin team) for chat
+const contacts = [
+  { name: "Veer Mishra (Student)", type: "student", id: "STU001", profilePicture: "https://images.pexels.com/photos/4815046/pexels-photo-4815046.jpeg" },
+  { name: "Mrs. Mishra (Parent)", type: "parent", id: "PAR001", profilePicture: "https://images.pexels.com/photos/3763188/pexels-photo-3763188.jpeg" },
+  { name: "Admin Team", type: "admin", id: "ADM001", profilePicture: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg" },
+  { name: "John Doe (Student)", type: "student", id: "STU002", profilePicture: "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg" },
+  { name: "Ms. Doe (Parent)", type: "parent", id: "PAR002", profilePicture: "https://images.pexels.com/photos/845434/pexels-photo-845434.jpeg" },
 ];
 
-// Sample chat messages for each teacher with file support and unread status
+// Sample chat messages for each contact
 const initialChatData = {
-  "Mr. Smith": {
+  "Veer Mishra (Student)": {
     messages: [
-      { sender: "Mr. Smith", type: "text", content: "Hi Veer Mishra, John needs to submit his Math assignment by tomorrow.", timestamp: "2025-07-02T10:00:00" },
-      { sender: "Veer Mishra", type: "text", content: "Thanks for the reminder, I'll ensure he submits it.", timestamp: "2025-07-02T10:05:00" },
-      { sender: "Mr. Smith", type: "file", content: { name: "Math_Assignment_Guidelines.pdf", url: "https://via.placeholder.com/math.pdf" }, timestamp: "2025-07-02T10:10:00" },
+      { sender: "Mr. Smith", type: "text", content: "Hi Veer, please submit your Math assignment by tomorrow.", timestamp: "2025-07-02T10:00:00" },
+      { sender: "Veer Mishra (Student)", type: "text", content: "Thanks for the reminder, I'll submit it.", timestamp: "2025-07-02T10:05:00" },
+      { sender: "Mr. Smith", type: "file", content: { name: "Math_Assignment.pdf", url: "https://via.placeholder.com/math.pdf" }, timestamp: "2025-07-02T10:10:00" },
     ],
     unread: true,
   },
-  "Ms. Johnson": {
+  "Mrs. Mishra (Parent)": {
     messages: [
-      { sender: "Ms. Johnson", type: "text", content: "Veer Mishra, John did exceptionally well in the Science project!", timestamp: "2025-07-02T09:00:00" },
-      { sender: "Veer Mishra", type: "text", content: "That's great to hear, thank you!", timestamp: "2025-07-02T09:05:00" },
+      { sender: "Mr. Smith", type: "text", content: "Mrs. Mishra, Veer is doing well in Math!", timestamp: "2025-07-02T09:00:00" },
+      { sender: "Mrs. Mishra (Parent)", type: "text", content: "Thank you for the update!", timestamp: "2025-07-02T09:05:00" },
     ],
     unread: false,
   },
-  "Mrs. Brown": { messages: [], unread: false },
-  "Mr. Davis": { messages: [], unread: false },
-  "Ms. Wilson": { messages: [], unread: false },
+  "Admin Team": {
+    messages: [
+      { sender: "Admin Team", type: "text", content: "Please submit the quarterly report by Friday.", timestamp: "2025-07-02T08:00:00" },
+    ],
+    unread: true,
+  },
+  "John Doe (Student)": { messages: [], unread: false },
+  "Ms. Doe (Parent)": { messages: [], unread: false },
 };
 
-export default function studentDashboard() {
+export default function TeacherDashboard() {
   const router = useRouter();
-  const [selectedTeacher, setSelectedTeacher] = useState(teachers[0].name);
+  const [selectedContact, setSelectedContact] = useState(contacts[0].name);
   const [chatMessages, setChatMessages] = useState(initialChatData);
   const [newMessage, setNewMessage] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -86,10 +88,10 @@ export default function studentDashboard() {
     if (newMessage.trim()) {
       setChatMessages((prev) => ({
         ...prev,
-        [selectedTeacher]: {
+        [selectedContact]: {
           messages: [
-            ...prev[selectedTeacher].messages,
-            { sender: "Veer Mishra", type: "text", content: newMessage, timestamp: new Date().toISOString() },
+            ...prev[selectedContact].messages,
+            { sender: "Mr. Smith", type: "text", content: newMessage, timestamp: new Date().toISOString() },
           ],
           unread: false,
         },
@@ -135,11 +137,11 @@ export default function studentDashboard() {
     if (file) {
       setChatMessages((prev) => ({
         ...prev,
-        [selectedTeacher]: {
+        [selectedContact]: {
           messages: [
-            ...prev[selectedTeacher].messages,
+            ...prev[selectedContact].messages,
             {
-              sender: "Veer Mishra",
+              sender: "Mr. Smith",
               type: "file",
               content: { name: file.name, url: URL.createObjectURL(file) },
               timestamp: new Date().toISOString(),
@@ -153,13 +155,13 @@ export default function studentDashboard() {
     }
   };
 
-  // Clear unread status when selecting a teacher
-  const handleTeacherSelect = (teacherName) => {
-    setSelectedTeacher(teacherName);
+  // Clear unread status when selecting a contact
+  const handleContactSelect = (contactName) => {
+    setSelectedContact(contactName);
     setChatMessages((prev) => ({
       ...prev,
-      [teacherName]: {
-        ...prev[teacherName],
+      [contactName]: {
+        ...prev[contactName],
         unread: false,
       },
     }));
@@ -196,7 +198,7 @@ export default function studentDashboard() {
           <div className="lg:w-3/12 w-full h-[calc(100vh-6rem)] px-4 py-6 bg-white/60 backdrop-blur-lg border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-xl overflow-y-auto transition-all duration-300">
             <h2 className="text-2xl font-semibold text-blue-900 mb-6 flex items-center gap-3">
               <LayoutDashboard className="w-6 h-6 text-blue-700" />
-              Menu
+              Teacher Menu
             </h2>
             <div className="flex flex-col space-y-3">
               {menuItems.map((item, index) => (
@@ -215,70 +217,68 @@ export default function studentDashboard() {
           <div className="lg:w-6/12 w-full h-[calc(100vh-6rem)] bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl p-4 flex flex-col border border-gray-200 transition-all">
             <h2 className="text-2xl font-semibold text-blue-900 mb-6 flex items-center gap-2">
               <MessageSquare className="w-6 h-6 text-blue-600" />
-              Chat with Teachers
+              Chat with Students, Parents, and Admins
             </h2>
-            {/* Selected Teacher Profile */}
+            {/* Selected Contact Profile */}
             <div className="mb-2 flex items-center gap-4 p-2 bg-blue-50/50 rounded-xl shadow-sm border border-blue-100">
               <Image
-                src={teachers.find((t) => t.name === selectedTeacher).profilePicture}
-                alt="Teacher Profile"
+                src={contacts.find((c) => c.name === selectedContact).profilePicture}
+                alt="Contact Profile"
                 width={48}
                 height={48}
                 className="w-12 h-12 rounded-full border-2 border-white shadow-md"
               />
               <div>
-                <p className="text-base font-semibold text-gray-800">{selectedTeacher}</p>
-                <p className="text-sm text-gray-600">{teachers.find((t) => t.name === selectedTeacher).subject} <span>ID: {teachers.find((t) => t.name === selectedTeacher).id}</span></p>
-               
+                <p className="text-base font-semibold text-gray-800">{selectedContact}</p>
+                <p className="text-sm text-gray-600">{contacts.find((c) => c.name === selectedContact).type} <span>ID: {contacts.find((c) => c.name === selectedContact).id}</span></p>
               </div>
             </div>
-            {/* Teacher Selection Dropdown */}
+            {/* Contact Selection Dropdown */}
             <div className="mb-2">
-              <label className="block text-gray-700 font-medium mb-2">Select Teacher</label>
+              <label className="block text-gray-700 font-medium mb-2">Select Contact</label>
               <select
-                value={selectedTeacher}
-                onChange={(e) => handleTeacherSelect(e.target.value)}
+                value={selectedContact}
+                onChange={(e) => handleContactSelect(e.target.value)}
                 className="w-full p-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               >
-                {teachers.map((teacher) => (
-                  <option key={teacher.id} value={teacher.name}>
-                    {teacher.name} ({teacher.subject}){chatMessages[teacher.name].unread ? ' ●' : ''}
+                {contacts.map((contact) => (
+                  <option key={contact.id} value={contact.name}>
+                    {contact.name} ({contact.type}){chatMessages[contact.name].unread ? ' ●' : ''}
                   </option>
                 ))}
               </select>
             </div>
             {/* Chat Messages */}
-       <div className="flex-1 overflow-y-auto bg-gray-50 rounded-xl p-4 border border-gray-200 space-y-3">
-  {chatMessages[selectedTeacher].messages.map((msg, index) => (
-    <div
-      key={index}
-      className={`p-3 rounded-xl text-sm shadow-sm max-w-[75%] break-words whitespace-pre-wrap word-break break-all ${
-        msg.sender === "Veer Mishra"
-          ? "ml-auto bg-blue-100 text-right"
-          : "bg-white border"
-      }`}
-    >
-      <p className="font-semibold text-blue-800">{msg.sender}</p>
-      {msg.type === "text" ? (
-        <p className="text-gray-700 mt-1 break-words whitespace-pre-wrap">{msg.content}</p>
-      ) : (
-        <a
-          href={msg.content.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 underline flex items-center justify-start mt-1"
-        >
-          <File className="w-4 h-4 mr-1" />
-          {msg.content.name}
-        </a>
-      )}
-      <p className="text-[11px] text-gray-500 mt-2">
-        {new Date(msg.timestamp).toLocaleTimeString()}
-      </p>
-    </div>
-  ))}
-</div>
-
+            <div className="flex-1 overflow-y-auto bg-gray-50 rounded-xl p-4 border border-gray-200 space-y-3">
+              {chatMessages[selectedContact].messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`p-3 rounded-xl text-sm shadow-sm max-w-[75%] break-words whitespace-pre-wrap word-break break-all ${
+                    msg.sender === "Mr. Smith"
+                      ? "ml-auto bg-blue-100 text-right"
+                      : "bg-white border"
+                  }`}
+                >
+                  <p className="font-semibold text-blue-800">{msg.sender}</p>
+                  {msg.type === "text" ? (
+                    <p className="text-gray-700 mt-1 break-words whitespace-pre-wrap">{msg.content}</p>
+                  ) : (
+                    <a
+                      href={msg.content.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline flex items-center justify-start mt-1"
+                    >
+                      <File className="w-4 h-4 mr-1" />
+                      {msg.content.name}
+                    </a>
+                  )}
+                  <p className="text-[11px] text-gray-500 mt-2">
+                    {new Date(msg.timestamp).toLocaleTimeString()}
+                  </p>
+                </div>
+              ))}
+            </div>
             {/* Message Input Area */}
             <div className="mt-4 flex gap-1 items-center">
               <input
@@ -304,7 +304,7 @@ export default function studentDashboard() {
           <div className="lg:w-3/12 w-full bg-white/70 backdrop-blur-lg border border-gray-200 shadow-xl rounded-2xl p-6 h-[calc(100vh-6rem)] flex flex-col items-center transition-all duration-300">
             <div className="flex flex-col items-center justify-center mb-4">
               <Image
-                src={studentProfile.profilePicture}
+                src={teacherProfile.profilePicture}
                 alt="Profile"
                 width={144}
                 height={144}
@@ -312,27 +312,23 @@ export default function studentDashboard() {
                 unoptimized={false}
                 className="w-36 h-36 rounded-full border-4 border-white shadow-md object-cover"
               />
-              <h2 className="text-2xl font-semibold text-blue-900 mt-4">{studentProfile.name}</h2>
+              <h2 className="text-2xl font-semibold text-blue-900 mt-4">{teacherProfile.name}</h2>
             </div>
             <div className="w-full space-y-3 text-sm text-gray-700">
               <div className="flex items-left gap-1 bg-gray-50 p-3 rounded-lg shadow-sm border border-gray-100">
-                <span className="text-blue-600 font-semibold">Student ID:</span>
-                <span className="text-gray-800 font-medium">{studentProfile.id}</span>
+                <span className="text-blue-600 font-semibold">Teacher ID:</span>
+                <span className="text-gray-800 font-medium">{teacherProfile.id}</span>
               </div>
               <div className="flex items-left gap-1 bg-gray-50 p-3 rounded-lg shadow-sm border border-gray-100">
                 <span className="text-blue-600 font-semibold">Email:</span>
-                <span className="text-gray-800 font-medium">{studentProfile.email}</span>
+                <span className="text-gray-800 font-medium">{teacherProfile.email}</span>
               </div>
               <div className="flex items-left gap-1 bg-gray-50 p-3 rounded-lg shadow-sm border border-gray-100">
-                <span className="text-blue-600 font-semibold">Child:</span>
-                <span className="text-gray-800 font-medium">{studentProfile.childName}</span>
-              </div>
-              <div className="flex items-left gap-1 bg-gray-50 p-3 rounded-lg shadow-sm border border-gray-100">
-                <span className="text-blue-600 font-semibold">Grade:</span>
-                <span className="text-gray-800 font-medium">{studentProfile.childGrade}</span>
+                <span className="text-blue-600 font-semibold">Subject:</span>
+                <span className="text-gray-800 font-medium">{teacherProfile.subject}</span>
               </div>
             </div>
-            <Link href="/ProfilePage_Management/Admin_Profile" className="w-full mt-6">
+            <Link href="/teacher/profile" className="w-full mt-6">
               <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors duration-200 shadow-sm">
                 <Edit className="w-5 h-5" /> Edit Profile
               </button>

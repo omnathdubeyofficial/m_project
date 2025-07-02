@@ -6,7 +6,7 @@ const ROLE_DASHBOARD = {
   admin: "/dashboard",
   student: "/student_dash",
   parent: "/parents_dash",
-  teacher: "/teacher_dash",
+  teacher: "/Teacher_Dash",
   staff: "/staff_dash",
 };
 
@@ -14,7 +14,7 @@ const ROLE_PERMISSIONS = {
   admin: new Set(["/dashboard","/ProfilePage_Management/Admin_Profile","/Security_Staff/Security_Staff_Page", "/dashboard/admin_dashboard", "/student_dash/students_forms/admission_form", "/student_dash/students_forms/attendance_form", "/student_dash/students_forms/holiday_list", "/components/University_Dashboard", "/Exam_Management/Exam_Management_Page","/Event_Management/Event_Management_Page", "/Sports_Management/Sports_Management_Page","/Competition_Management/Competition_Management_Page","/components/University_Dashboard","/Lab_Management/Lab_Management_Page","/Library_Management/Library_Management_Page","/Transport_Management/Transport_Management_Page", "/Parents_Management/Parents_Management_Page", "/Students_Management/Students_Management_Page","/Computer_Section/Computer_Management_Page", "/Housekeeping_Staff/Housekeeping_Staff_Page", "/Report_Management/Report_Management_Page", "/Notification_Management/Notification_Management_Page", "/Fee_Management/Fee_Management_Page", "/Admission_Management/Admission_Management_Page", "/Event_Management/Event_Management_Page/Event_Creation_Form","/Fee_Management/Fee_Management_Page/Generator_Invoice","/Fee_Management/Fee_Management_Page/Student_Fee_Record_Data","/Fee_Management/Fee_Management_Page/Fee_Structure_Management","/Fee_Management/Fee_Management_Page/Fee_Collection_Data","/Fee_Management/Fee_Management_Page/Fee_Structure_List","/Students_Management/New_Admission_Lists","/student_dash/students_forms/admission_update_form_nursery","/Students_Management/Students_Management_Page/Id_Card","/Students_Management/Students_Management_Page/New_Admission_Lists","/Students_Management/Students_Management_Page/Admission_Completed_List","/Notic_Board_Dash/Notice_Board_Form"]),
   student: new Set(["/student_dash","/ProfilePage_Management/Admin_Profile", "/view_courses"]),
   parent: new Set(["/parents_dash","/ProfilePage_Management/Admin_Profile", "/child_progress"]),
-  teacher: new Set(["/teacher_dash","/ProfilePage_Management/Admin_Profile", "/manage_classes"]),
+  teacher: new Set(["/Teacher_Dash","/ProfilePage_Management/Admin_Profile", "/manage_classes"]),
   staff: new Set(["/staff_dash","/ProfilePage_Management/Admin_Profile", "/attendance"]),
 };
 
@@ -95,7 +95,7 @@ export const config = {
     "/view_courses/:path*",
     "/parents_dash/:path*",
     "/child_progress/:path*",
-    "/teacher_dash/:path*",
+    "/Teacher_Dash/:path*",
     "/manage_classes/:path*",
     "/staff_dash/:path*",
     "/attendance/:path*",
