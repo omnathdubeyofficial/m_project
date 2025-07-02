@@ -9,7 +9,7 @@ import { FaCheckCircle, FaEdit, FaSave, FaTimesCircle } from "react-icons/fa";
 import Loading from '../../Loader/page'; 
 
 export default function ProfilePage() {
-  const [setProfile] = useState(null);
+ const [profile, setProfile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [message, setMessage] = useState('');

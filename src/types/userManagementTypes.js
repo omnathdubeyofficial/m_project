@@ -33,6 +33,8 @@ const userDataType = gql`
     adhar_card_front_img: String
     adhar_card_back_img: String
     pan_card_img: String
+         success_msg: String
+      error_msg: String
     cdate: String
     ctime: String
     udate: String
@@ -83,6 +85,8 @@ const userDataType = gql`
       address: String
       nationality: String
       profile_img: String
+           success_msg: String
+      error_msg: String
       adhar_card_front_img: String
       adhar_card_back_img: String
       pan_card_img: String
@@ -123,6 +127,8 @@ const userDataType = gql`
       adhar_card_front_img: String
       adhar_card_back_img: String
       pan_card_img: String
+        success_msg: String
+      error_msg: String
       cdate: String
       ctime: String
       udate: String

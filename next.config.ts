@@ -1,17 +1,18 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  //  output: "export",
   images: {
-    domains: ["res.cloudinary.com"],
+    domains: [
+      "res.cloudinary.com",
+      "images.pexels.com",
+      "via.placeholder.com"
+    ],
   },
 
-  // // ✅ Ignore ESLint build errors temporarily on Vercel
+  // Optional: Uncomment if needed
   // eslint: {
   //   ignoreDuringBuilds: true,
   // },
-
-  // // ✅ Ignore TypeScript build errors temporarily
   // typescript: {
   //   ignoreBuildErrors: true,
   // },
