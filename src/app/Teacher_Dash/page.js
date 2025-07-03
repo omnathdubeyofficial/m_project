@@ -20,8 +20,8 @@ const teacherProfile = {
 
 // Menu items tailored for teachers
 const menuItems = [
-  { name: "Dashboard", icon: Book, path: "/teacher/dashboard" },
-  { name: "Student Attendance", icon: ClipboardList, path: "/teacher/attendance" },
+  { name: "Dashboard", icon: Book, path: "/Teacher_Dash/Teacher_Dashboard" },
+  { name: "Student Attendance", icon: ClipboardList, path: "/Teacher_Dash/StudentAttendance" },
   { name: "Grade Management", icon: BookOpen, path: "/teacher/grades" },
   { name: "Assignments", icon: FileCheck, path: "/teacher/assignments" },
   { name: "School Calendar", icon: Calendar, path: "/teacher/calendar" },
