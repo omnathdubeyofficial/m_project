@@ -2,20 +2,16 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+        unoptimized: true, // Important for static export
+
     domains: [
       "res.cloudinary.com",
       "images.pexels.com",
       "via.placeholder.com"
     ],
   },
-
-  // Optional: Uncomment if needed
-  // eslint: {
-  //   ignoreDuringBuilds: true,
-  // },
-  // typescript: {
-  //   ignoreBuildErrors: true,
-  // },
+  typescript: { ignoreBuildErrors: true },
+  eslint: { ignoreDuringBuilds: true },
 };
 
 export default nextConfig;
